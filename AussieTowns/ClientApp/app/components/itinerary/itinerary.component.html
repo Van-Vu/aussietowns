@@ -1,0 +1,9 @@
+﻿<aside draggable="true" id="dragme" (dragstart)="onStart($event)" (dragend)="onDragend($event)"  (dragover)="onDragover($event)" (drop)="onDrop($event)">
+    This is an aside, drag me.
+    <button (click)="calculateTotalDistance()"> Calculate </button>
+    <ul>
+        <li *ngFor="let suburb of suburbs ">
+            <p>{{ suburb }}</p>
+        </li>
+    </ul>
+</aside>
