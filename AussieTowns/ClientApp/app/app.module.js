@@ -19,6 +19,10 @@ var suburbinfocard_component_1 = require("./components/map/suburbinfocard.compon
 var itinerary_component_1 = require("./components/itinerary/itinerary.component");
 var itinerary_bridge_1 = require("./services/itinerary.bridge");
 var map_bridge_1 = require("./services/map.bridge");
+var ng2_completer_1 = require("ng2-completer");
+var forms_1 = require("@angular/forms");
+var registrationform_component_1 = require("./components/forms/registrationform.component");
+var modalframe_component_1 = require("./components/forms/modalframe.component");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -35,10 +39,15 @@ AppModule = __decorate([
             map_component_1.MapComponent,
             home_component_1.HomeComponent,
             suburbinfocard_component_1.SuburbInforCardComponent,
-            itinerary_component_1.ItineraryComponent
+            itinerary_component_1.ItineraryComponent,
+            registrationform_component_1.RegistrationFormComponent,
+            modalframe_component_1.ModalFrameComponent
         ],
         imports: [
             angular2_universal_1.UniversalModule,
+            ng2_completer_1.Ng2CompleterModule,
+            forms_1.FormsModule,
+            forms_1.ReactiveFormsModule,
             router_1.RouterModule.forRoot([
                 { path: '', redirectTo: 'home', pathMatch: 'full' },
                 { path: 'home', component: home_component_1.HomeComponent },

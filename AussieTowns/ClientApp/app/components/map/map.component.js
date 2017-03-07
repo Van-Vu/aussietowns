@@ -11,12 +11,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var search_service_1 = require("../../services/search.service");
 var map_bridge_1 = require("../../services/map.bridge");
+var ng2_completer_1 = require("ng2-completer");
 var MapComponent = (function () {
-    function MapComponent(searchService, mapBridge) {
+    function MapComponent(searchService, mapBridge, completerService) {
         this.searchService = searchService;
         this.mapBridge = mapBridge;
+        this.completerService = completerService;
         this.map = null;
         this.totalDistance = 0;
+        this.searchData = [
+            { color: 'red', value: '#f00' },
+            { color: 'green', value: '#0f0' },
+            { color: 'blue', value: '#00f' },
+            { color: 'cyan', value: '#0ff' },
+            { color: 'magenta', value: '#f0f' },
+            { color: 'yellow', value: '#ff0' },
+            { color: 'black', value: '#000' }
+        ];
+        //this.dataService = completerService.local(this.searchData, 'color', 'color');
+        this.dataService = completerService.local(this.searchData, 'color', 'color');
+        this.dataRemote2 = completerService.remote(null, "detail", "detail");
+        this.dataRemote2.urlFormater(function (term) {
+            return "/api/search/autocomplete/" + term;
+        });
+        //this.dataRemote2.dataField("detail");
+        //this.dataRemote2.headers(new Headers({ "My-Header": "Hello World!" }));
+        //this.dataRemote2 = completerService.remote(
+        //    null,
+        //    null,
+        //    "formatted_address");
+        //this.dataRemote2.urlFormater(term => {
+        //    return `https://maps.googleapis.com/maps/api/geocode/json?address=${term}`;
+        //});
+        //this.dataRemote2.dataField("results");
     }
     MapComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -95,7 +122,7 @@ MapComponent = __decorate([
         template: require('./map.component.html'),
         styles: [require('./map.component.css')]
     }),
-    __metadata("design:paramtypes", [search_service_1.SearchService, map_bridge_1.MapBridge])
+    __metadata("design:paramtypes", [search_service_1.SearchService, map_bridge_1.MapBridge, ng2_completer_1.CompleterService])
 ], MapComponent);
 exports.MapComponent = MapComponent;
 //# sourceMappingURL=map.component.js.map

@@ -34,5 +34,19 @@ namespace AussieTowns.Controllers
 
             //return null;
         }
+
+        [HttpGet]
+        [Route("autocomplete/{postcode}")]
+        public SuburbDetail[] GetAutocomplete(int postCode)
+        {
+            return new[]
+            {
+                new SuburbDetail { Detail = "this search in string 2000"},
+                new SuburbDetail { Detail = "200"},
+                new SuburbDetail { Detail = "20"}
+            };
+
+            //return null;
+        }
     }
 }

@@ -12,7 +12,11 @@ import { SuburbInforCardComponent } from './components/map/suburbinfocard.compon
 import { ItineraryComponent } from './components/itinerary/itinerary.component';
 import { ItineraryBridge } from './services/itinerary.bridge';
 import { MapBridge } from './services/map.bridge';
+import { Ng2CompleterModule } from "ng2-completer";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RegistrationFormComponent } from './components/forms/registrationform.component';
 
+import { ModalFrameComponent } from './components/forms/modalframe.component';
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -24,10 +28,15 @@ import { MapBridge } from './services/map.bridge';
         MapComponent,
         HomeComponent,
         SuburbInforCardComponent,
-        ItineraryComponent
+        ItineraryComponent,
+        RegistrationFormComponent,
+        ModalFrameComponent
     ],
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
+        Ng2CompleterModule,
+        FormsModule,
+        ReactiveFormsModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
@@ -40,4 +49,4 @@ import { MapBridge } from './services/map.bridge';
     providers: [SearchService, ItineraryBridge, MapBridge]
 })
 
-export class AppModule{}
+export class AppModule {}
