@@ -21,7 +21,10 @@
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
-    "SapientGuardian.EntityFrameworkCore.MySql": "7.1.18"
+    "SapientGuardian.EntityFrameworkCore.MySql": "7.1.18",
+    "Microsoft.IdentityModel.Tokens": "5.1.0",
+    "System.IdentityModel.Tokens.Jwt": "5.1.0",
+    "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0"
   },
 
   "tools": {

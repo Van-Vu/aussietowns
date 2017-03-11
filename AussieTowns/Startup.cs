@@ -2,16 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AussieTowns.Auth;
 using AussieTowns.DataAccess;
+using AussieTowns.Model;
 using AussieTowns.Repository;
 using AussieTowns.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using MySQL.Data.Entity.Extensions;
+using Newtonsoft.Json;
 
 namespace AussieTowns
 {
@@ -36,6 +44,15 @@ namespace AussieTowns
             // Add framework services.
             services.AddMvc();
 
+            // Enable the use of an [Authorize("Bearer")] attribute on methods and classes to protect.
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer",
+                  policy =>
+                  {
+                      policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser();
+                  });
+            });
 
             //Use a MySQL database
             var sqlConnectionString = Configuration.GetConnectionString("DataAccessMySqlProvider");
@@ -45,7 +62,9 @@ namespace AussieTowns
             );
 
             services.AddSingleton<ISearchService, SearchService>();
+            services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<ILocationRepository, LocationRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +87,60 @@ namespace AussieTowns
             }
 
             app.UseStaticFiles();
+
+            #region Handle Exception 
+            app.UseExceptionHandler(appBuilder =>
+            {
+                appBuilder.Use(async (context, next) =>
+                {
+                    var error = context.Features[typeof(IExceptionHandlerFeature)] as IExceptionHandlerFeature;
+
+                    if (error != null && error.Error is SecurityTokenExpiredException)
+                    {
+                        context.Response.StatusCode = 401;
+                        context.Response.ContentType = "application/json";
+
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(new RequestResult
+                        {
+                            State = RequestState.NotAuth,
+                            Msg = "token expired"
+                        }));
+                    }
+                    else if (error != null && error.Error != null)
+                    {
+                        context.Response.StatusCode = 500;
+                        context.Response.ContentType = "application/json";
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(new RequestResult
+                        {
+                            State = RequestState.Failed,
+                            Msg = error.Error.Message
+                        }));
+                    }
+                    else await next();
+                });
+            });
+            #endregion
+
+            #region UseJwtBearerAuthentication
+            app.UseJwtBearerAuthentication(new JwtBearerOptions()
+            {
+                TokenValidationParameters = new TokenValidationParameters()
+                {
+                    IssuerSigningKey = TokenAuthOption.Key,
+                    ValidAudience = TokenAuthOption.Audience,
+                    ValidIssuer = TokenAuthOption.Issuer,
+                    // When receiving a token, check that we've signed it.
+                    ValidateIssuerSigningKey = true,
+                    // When receiving a token, check that it is still valid.
+                    ValidateLifetime = true,
+                    // This defines the maximum allowable clock skew - i.e. provides a tolerance on the token expiry time 
+                    // when validating the lifetime. As we're creating the tokens locally and validating them on the same 
+                    // machines which should have synchronised time, this can be set to zero. Where external tokens are
+                    // used, some leeway here could be useful.
+                    ClockSkew = TimeSpan.FromMinutes(0)
+                }
+            });
+            #endregion
 
             app.UseMvc(routes =>
             {

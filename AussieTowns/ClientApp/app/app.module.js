@@ -23,6 +23,9 @@ var ng2_completer_1 = require("ng2-completer");
 var forms_1 = require("@angular/forms");
 var registrationform_component_1 = require("./components/forms/registrationform.component");
 var modalframe_component_1 = require("./components/forms/modalframe.component");
+var user_service_1 = require("./services/user.service");
+var alert_service_1 = require("./services/alert.service");
+var authentication_service_1 = require("./services/authentication.service");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -57,7 +60,7 @@ AppModule = __decorate([
                 { path: '**', redirectTo: 'home' }
             ])
         ],
-        providers: [search_service_1.SearchService, itinerary_bridge_1.ItineraryBridge, map_bridge_1.MapBridge]
+        providers: [search_service_1.SearchService, itinerary_bridge_1.ItineraryBridge, map_bridge_1.MapBridge, user_service_1.UserService, alert_service_1.AlertService, authentication_service_1.AuthenticationService]
     })
 ], AppModule);
 exports.AppModule = AppModule;

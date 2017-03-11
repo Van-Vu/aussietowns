@@ -1,13 +1,17 @@
 ﻿import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { User } from '../../model/user'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { CompleterService, CompleterData, RemoteData } from 'ng2-completer';
 
-
 import { ModalFrameComponent } from './modalframe.component';
 
 import { forbiddenNameValidator } from '../../shared/email.validator';
+
+import { AlertService } from "../../services/alert.service";
+import { UserService } from '../../services/user.service';
 
 @Component({
     selector: 'registrationform',
@@ -21,6 +25,7 @@ export class RegistrationFormComponent{
     powers = ['Really Smart', 'Super Flexible',
         'Super Hot', 'Weather Changer'];
     model: FormGroup;
+    loading = false;
 
     private searchStr: string;
     private dataService: CompleterData;
@@ -34,17 +39,19 @@ export class RegistrationFormComponent{
         { color: 'black', value: '#000' }
     ];
 
-    constructor(private fb: FormBuilder, private completerService: CompleterService) {
+    constructor(private fb: FormBuilder, private completerService: CompleterService,
+        private userService: UserService, private alertService: AlertService, private router: Router) {
         this.dataService = completerService.local(this.searchData, 'color', 'color');     
     }
 
     ngOnInit() {
         this.model = this.fb.group({
-            firstName: ['', [Validators.required, Validators.minLength(2)]],
-            lastName: ['', [Validators.required, Validators.minLength(2)]],
-            location: ['', [Validators.required, Validators.minLength(2)]],
-            email: ['', [forbiddenNameValidator()]],
-            phone: ['', [Validators.required, Validators.minLength(2)]]
+            FirstName: ['', [Validators.required, Validators.minLength(2)]],
+            LastName: ['', [Validators.required, Validators.minLength(2)]],
+            Location: ['', [Validators.required, Validators.minLength(2)]],
+            Email: ['', [forbiddenNameValidator()]],
+            Password: ['', [Validators.required, Validators.minLength(7)]],
+            Phone: ['', [Validators.required, Validators.minLength(2)]]
         });
 
         this.model.valueChanges
@@ -54,18 +61,36 @@ export class RegistrationFormComponent{
     }
 
     submitted = false;
-    onSubmit({ value, valid }: { value: User, valid: boolean }) {
+    onRegistration({ value, valid }: { value: User, valid: boolean }) {
         this.submitted = true;
-        console.log(value, valid);
+        //console.log(value, valid);
+        this.loading = true;
+        this.userService.create(this.model.value)
+            .subscribe(
+            data => {
+                this.alertService.success('Registration successful', true);
+                this.router.navigate(['/login']);
+            },
+            error => {
+                this.alertService.error(error._body);
+                this.loading = false;
+            });
+
+        this.userService.getUserInfo().subscribe(
+            data => {
+                var abc = data;
+            }
+        );
     }
 
     newHero() {
         this.model = this.fb.group({
-            firstName: ['', [Validators.required, Validators.minLength(2)]],
-            lastName: ['', [Validators.required, Validators.minLength(2)]],
-            location: ['', [Validators.required, Validators.minLength(2)]],
-            email: ['', [Validators.required, Validators.minLength(2)]],
-            phone: ['', [Validators.required, Validators.minLength(2)]]
+            FirstName: ['', [Validators.required, Validators.minLength(2)]],
+            LastName: ['', [Validators.required, Validators.minLength(2)]],
+            Location: ['', [Validators.required, Validators.minLength(2)]],
+            Email: ['', [forbiddenNameValidator()]],
+            Password: ['', [Validators.required, Validators.minLength(7)]],
+            Phone: ['', [Validators.required, Validators.minLength(2)]]
         });
     }
 
@@ -89,12 +114,11 @@ export class RegistrationFormComponent{
     }
 
     formErrors = {
-        'email': '',
-        'power': ''
+        'Email': ''
     };
 
     validationMessages = {
-        'email': {
+        'Email': {
             'required': 'Name is required.',
             'minlength': 'Name must be at least 4 characters long.',
             'maxlength': 'Name cannot be more than 24 characters long.',

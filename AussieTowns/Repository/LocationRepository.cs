@@ -7,7 +7,7 @@ namespace AussieTowns.Repository
 {
     public class LocationRepository: ILocationRepository
     {
-        private AussieTownDBContext _context;
+        private readonly AussieTownDBContext _context;
 
         public LocationRepository(AussieTownDBContext context)
         {

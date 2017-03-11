@@ -12,6 +12,8 @@ namespace AussieTowns.DataAccess
 
         public DbSet<SuburbDetail> SuburbDetails { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<SuburbDetail>().HasKey(m => m.Id);

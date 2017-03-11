@@ -21,6 +21,17 @@
                         <span class='glyphicon glyphicon-th-list'></span> Map
                     </a>
                 </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/login']">
+                        <span class='glyphicon glyphicon-th-list'></span> Login
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/signup']">
+                        <span class='glyphicon glyphicon-th-list'></span> Signup
+                    </a>
+                </li>
             </ul>
     </div>
 </div>
+<registrationform></registrationform>

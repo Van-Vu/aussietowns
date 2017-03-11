@@ -18,6 +18,10 @@ import { RegistrationFormComponent } from './components/forms/registrationform.c
 
 import { ModalFrameComponent } from './components/forms/modalframe.component';
 
+import { UserService } from  './services/user.service';
+import { AlertService } from './services/alert.service';
+import { AuthenticationService }  from './services/authentication.service';
+
 @NgModule({
     bootstrap: [ AppComponent ],
     declarations: [
@@ -46,7 +50,7 @@ import { ModalFrameComponent } from './components/forms/modalframe.component';
             { path: '**', redirectTo: 'home' }
         ])
     ],
-    providers: [SearchService, ItineraryBridge, MapBridge]
+    providers: [SearchService, ItineraryBridge, MapBridge, UserService, AlertService, AuthenticationService]
 })
 
 export class AppModule {}

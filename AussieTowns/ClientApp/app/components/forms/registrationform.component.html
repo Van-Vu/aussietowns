@@ -6,16 +6,39 @@
     <div class="app-modal-body">
         <div [hidden]="submitted">
             <h1>Hero Form</h1>
-            <form (ngSubmit)="onSubmit(model)" [formGroup]="model">
+            <form (ngSubmit)="onRegistration(model)" [formGroup]="model">
                 <div class="form-group">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="text" class="form-control" id="email"
+                               placeholder="Your email address"
+                               formControlName="Email">
+
+                        <div *ngIf="formErrors.Email" class="alert alert-danger">
+                            {{ formErrors.Email }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="text" class="form-control" id="password"
+                               placeholder="Your password"
+                               formControlName="Password">
+
+                        <div class="alert alert-danger" *ngIf="model.get('Password').hasError('required') && model.get('Password').touched">
+                            Password is required
+                        </div>
+                        <div class="alert alert-danger" *ngIf="model.get('Password').hasError('minlength') && model.get('Password').touched">
+                            Minimum of 7 characters
+                        </div>
+                    </div>
                     <label for="firstName">First Name</label>
                     <input type="text" class="form-control" id="firstName"
                            placeholder="Your first name"
-                           formControlName="firstName">
-                    <div class="alert alert-danger" *ngIf="model.get('firstName').hasError('required') && model.get('firstName').touched">
+                           formControlName="FirstName">
+                    <div class="alert alert-danger" *ngIf="model.get('FirstName').hasError('required') && model.get('FirstName').touched">
                         Name is required
                     </div>
-                    <div class="alert alert-danger" *ngIf="model.get('firstName').hasError('minlength') && model.get('firstName').touched">
+                    <div class="alert alert-danger" *ngIf="model.get('FirstName').hasError('minlength') && model.get('FirstName').touched">
                         Minimum of 2 characters
                     </div>
 
@@ -28,11 +51,11 @@
                     <label for="lastName">Last Name</label>
                     <input type="text" class="form-control" id="lastName"
                            placeholder="Your last name"
-                           formControlName="lastName">
-                    <div class="alert alert-danger" *ngIf="model.get('lastName').hasError('required') && model.get('lastName').touched">
+                           formControlName="LastName">
+                    <div class="alert alert-danger" *ngIf="model.get('LastName').hasError('required') && model.get('LastName').touched">
                         Name is required
                     </div>
-                    <div class="alert alert-danger" *ngIf="model.get('lastName').hasError('minlength') && model.get('lastName').touched">
+                    <div class="alert alert-danger" *ngIf="model.get('LastName').hasError('minlength') && model.get('LastName').touched">
                         Minimum of 2 characters
                     </div>
                 </div>
@@ -40,36 +63,25 @@
                     <label for="location">Origin location</label>
                     <ng2-completer id="location"
                                    placeholder="Your origin location"
-                                   formControlName="location" [(ngModel)]="searchStr" [dataService]="dataService" [minSearchLength]="2"
-                                   [textSearching]="'Please wait...'"></ng2-completer>
+                                   formControlName="Location" [(ngModel)]="searchStr" [dataService]="dataService" [minSearchLength]="2"
+                                   [textSearching]="'Please wait...'" [overrideSuggested]="true"></ng2-completer>
 
-                    <div class="alert alert-danger" *ngIf="model.get('location').hasError('required') && model.get('location').touched">
+                    <div class="alert alert-danger" *ngIf="model.get('Location').hasError('required') && model.get('Location').touched">
                         Location is required
                     </div>
-                    <div class="alert alert-danger" *ngIf="model.get('location').hasError('minlength') && model.get('location').touched">
+                    <div class="alert alert-danger" *ngIf="model.get('Location').hasError('minlength') && model.get('Location').touched">
                         Minimum of 2 characters
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="text" class="form-control" id="email"
-                           placeholder="Your email address"
-                           formControlName="email">
-
-                    <div *ngIf="formErrors.email" class="alert alert-danger">
-                        {{ formErrors.email }}
-                    </div>
-
                 </div>
                 <div class="form-group">
                     <label for="phoneNumber">Phone Number</label>
                     <input type="text" class="form-control" id="phoneNumber"
                            placeholder="Your phone number"
-                           formControlName="phone">
-                    <div class="alert alert-danger" *ngIf="model.get('phone').hasError('required') && model.get('phone').touched">
+                           formControlName="Phone">
+                    <div class="alert alert-danger" *ngIf="model.get('Phone').hasError('required') && model.get('Phone').touched">
                         Name is required
                     </div>
-                    <div class="alert alert-danger" *ngIf="model.get('phone').hasError('minlength') && model.get('phone').touched">
+                    <div class="alert alert-danger" *ngIf="model.get('Phone').hasError('minlength') && model.get('Phone').touched">
                         Minimum of 2 characters
                     </div>
                 </div>

@@ -9,16 +9,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
 var forms_1 = require("@angular/forms");
 var ng2_completer_1 = require("ng2-completer");
 var modalframe_component_1 = require("./modalframe.component");
 var email_validator_1 = require("../../shared/email.validator");
+var alert_service_1 = require("../../services/alert.service");
+var user_service_1 = require("../../services/user.service");
 var RegistrationFormComponent = (function () {
-    function RegistrationFormComponent(fb, completerService) {
+    function RegistrationFormComponent(fb, completerService, userService, alertService, router) {
         this.fb = fb;
         this.completerService = completerService;
+        this.userService = userService;
+        this.alertService = alertService;
+        this.router = router;
         this.powers = ['Really Smart', 'Super Flexible',
             'Super Hot', 'Weather Changer'];
+        this.loading = false;
         this.searchData = [
             { color: 'red', value: '#f00' },
             { color: 'green', value: '#0f0' },
@@ -30,11 +37,10 @@ var RegistrationFormComponent = (function () {
         ];
         this.submitted = false;
         this.formErrors = {
-            'email': '',
-            'power': ''
+            'Email': ''
         };
         this.validationMessages = {
-            'email': {
+            'Email': {
                 'required': 'Name is required.',
                 'minlength': 'Name must be at least 4 characters long.',
                 'maxlength': 'Name cannot be more than 24 characters long.',
@@ -49,28 +55,43 @@ var RegistrationFormComponent = (function () {
     RegistrationFormComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.model = this.fb.group({
-            firstName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
-            lastName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
-            location: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
-            email: ['', [email_validator_1.forbiddenNameValidator()]],
-            phone: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]]
+            FirstName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
+            LastName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
+            Location: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
+            Email: ['', [email_validator_1.forbiddenNameValidator()]],
+            Password: ['', [forms_1.Validators.required, forms_1.Validators.minLength(7)]],
+            Phone: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]]
         });
         this.model.valueChanges
             .subscribe(function (data) { return _this.onValueChanged(data); });
         this.onValueChanged(); // (re)set validation messages now
     };
-    RegistrationFormComponent.prototype.onSubmit = function (_a) {
+    RegistrationFormComponent.prototype.onRegistration = function (_a) {
+        var _this = this;
         var value = _a.value, valid = _a.valid;
         this.submitted = true;
-        console.log(value, valid);
+        //console.log(value, valid);
+        this.loading = true;
+        this.userService.create(this.model.value)
+            .subscribe(function (data) {
+            _this.alertService.success('Registration successful', true);
+            _this.router.navigate(['/login']);
+        }, function (error) {
+            _this.alertService.error(error._body);
+            _this.loading = false;
+        });
+        this.userService.getUserInfo().subscribe(function (data) {
+            var abc = data;
+        });
     };
     RegistrationFormComponent.prototype.newHero = function () {
         this.model = this.fb.group({
-            firstName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
-            lastName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
-            location: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
-            email: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
-            phone: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]]
+            FirstName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
+            LastName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
+            Location: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
+            Email: ['', [email_validator_1.forbiddenNameValidator()]],
+            Password: ['', [forms_1.Validators.required, forms_1.Validators.minLength(7)]],
+            Phone: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]]
         });
     };
     RegistrationFormComponent.prototype.onValueChanged = function (data) {
@@ -102,7 +123,8 @@ RegistrationFormComponent = __decorate([
         template: require('./registrationform.component.html'),
         styles: [require('./registrationform.component.css')]
     }),
-    __metadata("design:paramtypes", [forms_1.FormBuilder, ng2_completer_1.CompleterService])
+    __metadata("design:paramtypes", [forms_1.FormBuilder, ng2_completer_1.CompleterService,
+        user_service_1.UserService, alert_service_1.AlertService, router_1.Router])
 ], RegistrationFormComponent);
 exports.RegistrationFormComponent = RegistrationFormComponent;
 //# sourceMappingURL=registrationform.component.js.map
