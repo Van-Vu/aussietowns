@@ -18,9 +18,9 @@ namespace AussieTowns.Repository
             _context = context;
         }
 
-        public IList<User> GetAll()
+        public IEnumerable<User> GetAll()
         {
-            return _context.Users.ToList();
+            return _context.Users.AsEnumerable();
         }
 
         public Task<User> GetById(int id)

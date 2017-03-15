@@ -1,0 +1,127 @@
+﻿<form (ngSubmit)="onRegistration(model)" [formGroup]="model">
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="text" class="form-control" id="email"
+               placeholder="Your email address"
+               [textMask]="{mask: myEmailMask, guide: false, keepCharPositions: true}"
+               formControlName="Email">
+
+        <div *ngIf="formErrors.Email" class="alert alert-danger">
+            {{ formErrors.Email }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="text" class="form-control" id="password"
+               placeholder="Your password"
+               formControlName="Password">
+
+        <div class="alert alert-danger" *ngIf="model.get('Password').hasError('required') && model.get('Password').touched">
+            Password is required
+        </div>
+        <div class="alert alert-danger" *ngIf="model.get('Password').hasError('minlength') && model.get('Password').touched">
+            Minimum of 7 characters
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" class="form-control" id="firstName"
+               placeholder="Your first name"
+               formControlName="FirstName">
+        <div class="alert alert-danger" *ngIf="model.get('FirstName').hasError('required') && model.get('FirstName').touched">
+            Name is required
+        </div>
+        <div class="alert alert-danger" *ngIf="model.get('FirstName').hasError('minlength') && model.get('FirstName').touched">
+            Minimum of 2 characters
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" class="form-control" id="lastName"
+               placeholder="Your last name"
+               formControlName="LastName">
+        <div class="alert alert-danger" *ngIf="model.get('LastName').hasError('required') && model.get('LastName').touched">
+            Name is required
+        </div>
+        <div class="alert alert-danger" *ngIf="model.get('LastName').hasError('minlength') && model.get('LastName').touched">
+            Minimum of 2 characters
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="location">Origin location</label>
+        <ng2-completer id="location"
+                       placeholder="Your origin location"
+                       formControlName="Location" [(ngModel)]="searchStr" [dataService]="dataService" [minSearchLength]="2"
+                       [textSearching]="'Please wait...'" [overrideSuggested]="true"></ng2-completer>
+
+        <div class="alert alert-danger" *ngIf="model.get('Location').hasError('required') && model.get('Location').touched">
+            Location is required
+        </div>
+        <div class="alert alert-danger" *ngIf="model.get('Location').hasError('minlength') && model.get('Location').touched">
+            Minimum of 2 characters
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="text" class="form-control" id="phoneNumber"
+               placeholder="Your phone number"
+               [textMask]="{mask: phoneNumberMask}"
+               formControlName="Phone">
+        <div class="alert alert-danger" *ngIf="model.get('Phone').hasError('required') && model.get('Phone').touched">
+            Name is required
+        </div>
+        <div class="alert alert-danger" *ngIf="model.get('Phone').hasError('minlength') && model.get('Phone').touched">
+            Minimum of 2 characters
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender" class="form-control" formControlName="Gender">
+            <option value="" selected="selected">Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="birthday">Birthday</label>
+        <input type="text" class="form-control" id="birthday"
+               placeholder="mm/dd/yyyy"
+               [textMask]="{mask: dateMask, guide: false, keepCharPositions: false, pipe: autoCorrectedDatePipe}"
+               formControlName="Birthday">
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea type="text" class="form-control" id="description"
+               placeholder="Short description about yourself"
+               formControlName="Description" cols="40" rows="5"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" class="form-control" id="address"
+               placeholder="Your current address"
+               formControlName="Address">
+    </div>
+    <div class="form-group">
+        <label for="emergencyContact">Emergency contact</label>
+        <input type="text" class="form-control" id="emergencyContact"
+               placeholder="Your emergency contact"
+               formControlName="EmergencyContact">
+    </div>
+    <div class="form-group">
+        <label for="photo">Photo</label>
+    </div>
+    <div class="form-group">
+        <label for="video">Video</label>
+        <h2>webcam:</h2>
+        <!-- Define <video> object to hold webcam image -->
+        <video [src]="videosrc" style="width: 480px; height: 480px;"></video>
+
+        <p>See app/webcam/webcam.html for HTML, see app/webcam/webcam.css for CSS. </p>
+        <p>Automatic streaming is enabled. </p>
+
+        <canvas></canvas>
+        <label role="button" (click)="capture()">Capture</label>
+    </div>
+    <button type="submit" class="btn btn-success" [disabled]="model.invalid">Update</button>
+</form>

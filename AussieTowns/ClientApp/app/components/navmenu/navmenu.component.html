@@ -21,17 +21,37 @@
                         <span class='glyphicon glyphicon-th-list'></span> Map
                     </a>
                 </li>
+
                 <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/login']">
-                        <span class='glyphicon glyphicon-th-list'></span> Login
+                    <a [routerLink]="['/test']" (click)="onTest()">
+                        <span class='glyphicon glyphicon-th-list'></span> Test
                     </a>
                 </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/signup']">
-                        <span class='glyphicon glyphicon-th-list'></span> Signup
+                <li *ngIf="!isLoggedin" [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/login']" (click)="loginModal.show()">
+                        <span class='glyphicon glyphicon-th-list'></span> Log in
+                    </a>
+                </li>
+                <li *ngIf="!isLoggedin" [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/register']" (click)="registerModal.show()">
+                        <span class='glyphicon glyphicon-th-list'></span> Register
+                    </a>
+                </li>
+
+                <li *ngIf="isLoggedin" [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/profile']">
+                        <span class='glyphicon glyphicon-th-list'></span> Hi {{name}}
+                    </a>
+                </li>
+
+                <li *ngIf="isLoggedin" [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/logout']" (click)="onLogout()">
+                        <span class='glyphicon glyphicon-th-list'></span> Log out
                     </a>
                 </li>
             </ul>
     </div>
+    
 </div>
 <registrationform></registrationform>
+<loginform (isLoggedIn)="handleLoggedIn($event)"></loginform>

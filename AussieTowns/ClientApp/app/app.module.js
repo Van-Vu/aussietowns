@@ -22,10 +22,16 @@ var map_bridge_1 = require("./services/map.bridge");
 var ng2_completer_1 = require("ng2-completer");
 var forms_1 = require("@angular/forms");
 var registrationform_component_1 = require("./components/forms/registrationform.component");
+var profileform_component_1 = require("./components/forms/profileform.component");
+var loginform_component_1 = require("./components/forms/loginform.component");
 var modalframe_component_1 = require("./components/forms/modalframe.component");
 var user_service_1 = require("./services/user.service");
 var alert_service_1 = require("./services/alert.service");
 var authentication_service_1 = require("./services/authentication.service");
+var angular2_text_mask_1 = require("angular2-text-mask");
+var ng2_imageupload_1 = require("ng2-imageupload");
+var miniprofile_component_1 = require("./components/shared/miniprofile.component");
+var tourdetailform_component_1 = require("./components/forms/tourdetailform.component");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -44,19 +50,26 @@ AppModule = __decorate([
             suburbinfocard_component_1.SuburbInforCardComponent,
             itinerary_component_1.ItineraryComponent,
             registrationform_component_1.RegistrationFormComponent,
-            modalframe_component_1.ModalFrameComponent
+            loginform_component_1.LoginFormComponent,
+            profileform_component_1.ProfileFormComponent,
+            modalframe_component_1.ModalFrameComponent,
+            miniprofile_component_1.MiniProfilecomponent,
+            tourdetailform_component_1.TourDetailformcomponent
         ],
         imports: [
             angular2_universal_1.UniversalModule,
             ng2_completer_1.Ng2CompleterModule,
             forms_1.FormsModule,
             forms_1.ReactiveFormsModule,
+            angular2_text_mask_1.TextMaskModule,
+            ng2_imageupload_1.ImageUploadModule,
             router_1.RouterModule.forRoot([
                 { path: '', redirectTo: 'home', pathMatch: 'full' },
                 { path: 'home', component: home_component_1.HomeComponent },
                 { path: 'counter', component: counter_component_1.CounterComponent },
                 { path: 'fetch-data', component: fetchdata_component_1.FetchDataComponent },
                 { path: 'map', component: map_component_1.MapComponent },
+                { path: 'profile', component: profileform_component_1.ProfileFormComponent },
                 { path: '**', redirectTo: 'home' }
             ])
         ],

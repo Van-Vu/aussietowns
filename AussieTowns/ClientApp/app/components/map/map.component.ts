@@ -20,6 +20,8 @@ import { Http, Headers } from "@angular/http";
 })
 
 export class MapComponent implements OnInit, OnDestroy, IMessageReceivedCallBack {
+    //Bodom: doesn't work on refresh
+
     lat: number;
     lng: number;
     map: any = null;

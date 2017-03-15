@@ -15,12 +15,20 @@ import { MapBridge } from './services/map.bridge';
 import { Ng2CompleterModule } from "ng2-completer";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistrationFormComponent } from './components/forms/registrationform.component';
+import { ProfileFormComponent } from './components/forms/profileform.component';
+import { LoginFormComponent } from './components/forms/loginform.component';
 
 import { ModalFrameComponent } from './components/forms/modalframe.component';
 
 import { UserService } from  './services/user.service';
 import { AlertService } from './services/alert.service';
-import { AuthenticationService }  from './services/authentication.service';
+import { AuthenticationService } from './services/authentication.service';
+
+import { TextMaskModule } from 'angular2-text-mask';
+
+import { ImageUploadModule } from 'ng2-imageupload';
+import { MiniProfilecomponent } from './components/shared/miniprofile.component';
+import { TourDetailformcomponent } from './components/forms/tourdetailform.component';
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -34,19 +42,26 @@ import { AuthenticationService }  from './services/authentication.service';
         SuburbInforCardComponent,
         ItineraryComponent,
         RegistrationFormComponent,
-        ModalFrameComponent
+        LoginFormComponent,
+        ProfileFormComponent,
+        ModalFrameComponent,
+        MiniProfilecomponent,
+        TourDetailformcomponent
     ],
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
         Ng2CompleterModule,
         FormsModule,
         ReactiveFormsModule,
+        TextMaskModule,
+        ImageUploadModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'map', component: MapComponent },
+            { path: 'profile', component: ProfileFormComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ],

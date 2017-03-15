@@ -76,13 +76,16 @@ var RegistrationFormComponent = (function () {
             .subscribe(function (data) {
             _this.alertService.success('Registration successful', true);
             _this.router.navigate(['/login']);
+            _this.modal.hide();
         }, function (error) {
             _this.alertService.error(error._body);
             _this.loading = false;
         });
-        this.userService.getUserInfo().subscribe(function (data) {
-            var abc = data;
-        });
+        //this.userService.getUserInfo().subscribe(
+        //    data => {
+        //        var abc = data;
+        //    }
+        //);
     };
     RegistrationFormComponent.prototype.newHero = function () {
         this.model = this.fb.group({
@@ -93,6 +96,9 @@ var RegistrationFormComponent = (function () {
             Password: ['', [forms_1.Validators.required, forms_1.Validators.minLength(7)]],
             Phone: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]]
         });
+    };
+    RegistrationFormComponent.prototype.show = function () {
+        this.modal.show();
     };
     RegistrationFormComponent.prototype.onValueChanged = function (data) {
         if (!this.model) {

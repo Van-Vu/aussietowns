@@ -1,11 +1,15 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Threading.Tasks;
 using AussieTowns.Auth;
 using AussieTowns.Model;
 using AussieTowns.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -18,10 +22,12 @@ namespace AussieTowns.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IHostingEnvironment _hostingEnv;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IHostingEnvironment hostingEnv)
         {
             _userService = userService;
+            _hostingEnv = hostingEnv;
         }
 
         [HttpPost("register")]
@@ -30,8 +36,34 @@ namespace AussieTowns.Controllers
             var a = string.Empty;
             try
             {
-                //_userService.Register(user);
+                _userService.Register(user);
                 return GenerateToken(user);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost("login")]
+        public object Login([FromBody] User user)
+        {
+            try
+            {
+                var existedUser = _userService.GetByEmailAndPassword(user.Email, user.Password);
+                if (existedUser != null)
+                {
+                    return GenerateToken(existedUser);
+                }
+                else
+                {
+                    return JsonConvert.SerializeObject(new RequestResult
+                    {
+                        State = RequestState.Failed,
+                        Msg = "Username or password is invalid"
+                    });
+                }
+                
             }
             catch (Exception ex)
             {
@@ -50,9 +82,35 @@ namespace AussieTowns.Controllers
                 State = RequestState.Success,
                 Data = new
                 {
-                    UserName = claimsIdentity.Name
+                    username = claimsIdentity.Name
                 }
             });
+        }
+
+
+        [HttpPost("profileimage")]
+        public async Task<ActionResult> Post(IFormFile file)
+        {
+            try
+            {
+                if (file != null && file.Length > 0)
+                {
+                    var savePath = Path.Combine(_hostingEnv.WebRootPath, "uploads", file.FileName);
+
+                    using (var fileStream = new FileStream(savePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+
+                    return Created(savePath, file);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
         }
 
         private string GenerateToken(User user)
@@ -66,10 +124,11 @@ namespace AussieTowns.Controllers
                 State = RequestState.Success,
                 Data = new
                 {
-                    requertAt = requestAt,
+                    requestAt = requestAt,
                     expiresIn = TokenAuthOption.ExpiresSpan.TotalSeconds,
                     tokeyType = TokenAuthOption.TokenType,
-                    accessToken = token
+                    accessToken = token,
+                    username = user.FirstName
                 }
             });
         }
@@ -79,7 +138,7 @@ namespace AussieTowns.Controllers
             var handler = new JwtSecurityTokenHandler();
 
             ClaimsIdentity identity = new ClaimsIdentity(
-                new GenericIdentity(user.Email, "TokenAuth"),
+                new GenericIdentity(user.FirstName, "TokenAuth"),
                 new[] {
                     new Claim("ID", user.Id.ToString())
                 }

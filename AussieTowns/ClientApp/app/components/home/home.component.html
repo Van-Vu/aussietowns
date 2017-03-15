@@ -15,5 +15,25 @@
     <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and the <code>webpack</code> build tool produces minified static CSS and JavaScript files.</li>
 </ul>
 
-<registrationform></registrationform>
+<!--<div ng2FileDrop
+     [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+     (fileOver)="fileOverBase($event)"
+     [uploader]="uploader"
+     class="well my-drop-zone">
+    Base drop zone
+</div>-->
+
+<input id="user_profile_pic" #fileInput type="file" style="display: none;" accept="image/jpeg, image/png"/>
+<label class="btn btn-block btn-large" for="user_profile_pic2" role="button">Upload a file from your computer</label>
+
+<button (click)="addFile()">Add</button>
+
+
+
+<img [src]="src" [hidden]="!src"><br>
+<input id="user_profile_pic2" type="file" image-upload style="display: none;"
+       (imageSelected)="selected($event)"
+       [resizeOptions]="resizeOptions">
+
+
 

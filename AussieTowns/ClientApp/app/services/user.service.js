@@ -32,6 +32,17 @@ var UserService = (function () {
         })
             .catch(this.handleError);
     };
+    UserService.prototype.login = function (user) {
+        return this.http.post('api/user/login', { email: user.Email, password: user.Password }, this.jwt()).map(function (response) {
+            var result = response.json();
+            if (result.State == 1) {
+                var json = result.Data;
+                ng2_cookies_1.Cookie.set("token", json.accessToken);
+            }
+            return result;
+        })
+            .catch(this.handleError);
+    };
     UserService.prototype.getUserInfo = function () {
         return this.http.get('api/user/info', this.jwt())
             .map(function (response) { return response.json(); })
@@ -44,13 +55,19 @@ var UserService = (function () {
         return this.http.delete('/users/' + _id, this.jwt());
     };
     // private helper methods
+    UserService.prototype.upload = function (fileToUpload) {
+        var input = new FormData();
+        input.append("file", fileToUpload);
+        return this.http
+            .post("/api/user/profileimage", input);
+    };
     UserService.prototype.jwt = function () {
         // create authorization header with jwt token
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
-        var token = ng2_cookies_1.Cookie.get("token");
+        var token = ng2_cookies_1.Cookie.check("token");
         if (token) {
-            headers.append('Authorization', 'Bearer ' + token);
+            headers.append('Authorization', 'Bearer ' + ng2_cookies_1.Cookie.get("token"));
         }
         return new http_1.RequestOptions({ headers: headers });
     };

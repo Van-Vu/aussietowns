@@ -70,17 +70,18 @@ export class RegistrationFormComponent{
             data => {
                 this.alertService.success('Registration successful', true);
                 this.router.navigate(['/login']);
+                this.modal.hide();
             },
             error => {
                 this.alertService.error(error._body);
                 this.loading = false;
             });
 
-        this.userService.getUserInfo().subscribe(
-            data => {
-                var abc = data;
-            }
-        );
+        //this.userService.getUserInfo().subscribe(
+        //    data => {
+        //        var abc = data;
+        //    }
+        //);
     }
 
     newHero() {
@@ -94,6 +95,9 @@ export class RegistrationFormComponent{
         });
     }
 
+    public show(): void {
+        this.modal.show();
+    }
 
     onValueChanged(data?: any) {
         if (!this.model) { return; }

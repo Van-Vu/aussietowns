@@ -19,13 +19,19 @@ namespace AussieTowns.Services
 
         public IList<User> GetAll()
         {
-            return _userRepository.GetAll();
+            return _userRepository.GetAll().ToList();
         }
 
         public async Task<User> GetById(int id)
         {
             return await _userRepository.GetById(id);
         }
+
+        public User GetByEmailAndPassword(string email, string password)
+        {
+            return _userRepository.GetAll().FirstOrDefault(x => x.Email == email && x.Password == password);
+        }
+
 
         public bool Register(User user)
         {

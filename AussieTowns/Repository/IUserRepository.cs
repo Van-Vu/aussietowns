@@ -8,7 +8,7 @@ namespace AussieTowns.Repository
 {
     public interface IUserRepository
     {
-        IList<User> GetAll();
+        IEnumerable<User> GetAll();
         Task<User> GetById(int id);
         bool Register(User user);
         bool Update(User user);

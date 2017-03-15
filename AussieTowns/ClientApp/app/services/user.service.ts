@@ -32,6 +32,20 @@ export class UserService {
         .catch(this.handleError);
     }
 
+    login(user) {
+        return this.http.post('api/user/login', { email: user.Email, password: user.Password }, this.jwt()).map(response => {
+            let result = response.json() as RequestResult;
+            if (result.State == 1) {
+                let json = result.Data as any;
+
+                Cookie.set("token", json.accessToken);
+                //sessionStorage.setItem("token", json.accessToken);
+            }
+            return result;
+        })
+            .catch(this.handleError);
+    }
+
     getUserInfo() {
         return this.http.get('api/user/info', this.jwt())
             .map(response => response.json() as RequestResult)
@@ -48,15 +62,23 @@ export class UserService {
 
     // private helper methods
 
+    upload(fileToUpload: any) {
+        let input = new FormData();
+        input.append("file", fileToUpload);
+
+        return this.http
+            .post("/api/user/profileimage", input);
+    }
+
     private jwt() {
         // create authorization header with jwt token
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
         
 
-        let token = Cookie.get("token");
+        let token = Cookie.check("token");
         if (token) {
-            headers.append('Authorization', 'Bearer ' + token);
+            headers.append('Authorization', 'Bearer ' + Cookie.get("token"));
         }
 
         return new RequestOptions({ headers: headers });

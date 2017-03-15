@@ -10,6 +10,7 @@ namespace AussieTowns.Services
     {
         IList<User> GetAll();
         Task<User> GetById(int id);
+        User GetByEmailAndPassword(string email, string password);
         bool Register(User user);
         bool Update(User user);
         bool Delete(int id);
