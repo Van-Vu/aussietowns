@@ -28,7 +28,7 @@ export class NavMenuComponent {
             this.userService.getUserInfo().subscribe(
                 data => {
                     this.isLoggedin = true;
-                    this.name = data.Data.username;
+                    this.name = data.Data.FirstName;
                 });
         }
 

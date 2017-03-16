@@ -52,8 +52,10 @@ export class UserService {
             .catch(this.handleError);
     }
 
-    update(user: User) {
-        return this.http.put('/users/' + user._id, user, this.jwt());
+    update(user: any) {
+        return this.http.put('api/user/' + user.Id, user, this.jwt())
+            .map(response => response.json() as RequestResult)
+            .catch(this.handleError);
     }
 
     delete(_id: string) {

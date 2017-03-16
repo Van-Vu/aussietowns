@@ -27,8 +27,8 @@ import { AuthenticationService } from './services/authentication.service';
 import { TextMaskModule } from 'angular2-text-mask';
 
 import { ImageUploadModule } from 'ng2-imageupload';
-import { MiniProfilecomponent } from './components/shared/miniprofile.component';
-import { TourDetailformcomponent } from './components/forms/tourdetailform.component';
+import { MiniProfileComponent } from './components/shared/miniprofile.component';
+import { TourDetailFormComponent } from './components/forms/tourdetailform.component';
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -45,8 +45,8 @@ import { TourDetailformcomponent } from './components/forms/tourdetailform.compo
         LoginFormComponent,
         ProfileFormComponent,
         ModalFrameComponent,
-        MiniProfilecomponent,
-        TourDetailformcomponent
+        MiniProfileComponent,
+        TourDetailFormComponent
     ],
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
@@ -62,6 +62,7 @@ import { TourDetailformcomponent } from './components/forms/tourdetailform.compo
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'map', component: MapComponent },
             { path: 'profile', component: ProfileFormComponent },
+            { path: 'tourdetail', component: TourDetailFormComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ],

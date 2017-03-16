@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -76,15 +77,49 @@ namespace AussieTowns.Controllers
         public string GetUserInfo()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
+            if (claimsIdentity != null)
+            {
+                var userId = Convert.ToInt32(claimsIdentity.Claims.FirstOrDefault(x=>x.Type=="userId")?.Value);
+                var email = claimsIdentity.Name;
+                var user = _userService.GetById(userId);
+                if (user?.Result?.Email == email)
+                {
+                    return JsonConvert.SerializeObject(new RequestResult
+                    {
+                        State = RequestState.Success,
+                        Data = user?.Result
+                    });
+                }
+            }
 
             return JsonConvert.SerializeObject(new RequestResult
             {
-                State = RequestState.Success,
-                Data = new
-                {
-                    username = claimsIdentity.Name
-                }
+                State = RequestState.Failed,
+                Data = "Can't find user"
             });
+        }
+
+        [HttpPut("{id}")]
+        [Authorize("Bearer")]
+        public string Update(int id,[FromBody] User userRequest)
+        {
+            try
+            {
+                _userService.Update(userRequest);
+                return JsonConvert.SerializeObject(new RequestResult
+                {
+                    State = RequestState.Success,
+                    Data = "Update successful"
+                });
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new RequestResult
+                {
+                    State = RequestState.Failed,
+                    Data = "Update failed"
+                });
+            }
         }
 
 
@@ -138,9 +173,9 @@ namespace AussieTowns.Controllers
             var handler = new JwtSecurityTokenHandler();
 
             ClaimsIdentity identity = new ClaimsIdentity(
-                new GenericIdentity(user.FirstName, "TokenAuth"),
+                new GenericIdentity(user.Email, "TokenAuth"),
                 new[] {
-                    new Claim("ID", user.Id.ToString())
+                    new Claim("userId", user.Id.ToString())
                 }
             );
 

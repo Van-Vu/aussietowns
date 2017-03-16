@@ -18,14 +18,14 @@ namespace AussieTowns.Repository
             _context = context;
         }
 
-        public IEnumerable<User> GetAll()
+        public IQueryable<User> GetAll()
         {
-            return _context.Users.AsEnumerable();
+            return _context.Users.AsNoTracking();
         }
 
         public Task<User> GetById(int id)
         {
-            return _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+            return _context.Users.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public bool Register(User user)
@@ -47,8 +47,12 @@ namespace AussieTowns.Repository
         {
             try
             {
-                _context.Users.Update(user);
+                _context.Entry(user).State = EntityState.Modified;
+
                 _context.SaveChanges();
+
+                // Reset the state in case of multiple Update
+                _context.Entry(user).State = EntityState.Detached;
             }
             catch (Exception ex)
             {

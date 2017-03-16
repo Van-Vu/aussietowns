@@ -48,7 +48,8 @@ var ProfileFormComponent = (function () {
     ProfileFormComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.model = this.fb.group({
-            Email: ['', [email_validator_1.forbiddenNameValidator()]],
+            Id: [''],
+            Email: ["asdfadsfa@adfasd.com", [email_validator_1.forbiddenNameValidator()]],
             Password: ['', [forms_1.Validators.required, forms_1.Validators.minLength(7)]],
             FirstName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
             LastName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
@@ -68,7 +69,30 @@ var ProfileFormComponent = (function () {
         this.phoneNumberMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
         this.myEmailMask = emailMask_js_1.default;
         if (angular2_universal_1.isBrowser) {
-            this.showCam();
+        }
+    };
+    ProfileFormComponent.prototype.ngAfterViewInit = function () {
+        var _this = this;
+        if (angular2_universal_1.isBrowser) {
+            this.userService.getUserInfo().subscribe(function (data) {
+                _this.user = data.Data;
+                _this.model = _this.fb.group({
+                    Id: [data.Data.Id],
+                    Email: [data.Data.Email, [email_validator_1.forbiddenNameValidator()]],
+                    Password: [data.Data.Password, [forms_1.Validators.required, forms_1.Validators.minLength(7)]],
+                    FirstName: [data.Data.FirstName, [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
+                    LastName: [data.Data.LastName, [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
+                    Phone: [data.Data.Phone],
+                    Location: [data.Data.Location],
+                    Gender: [data.Data.Gender],
+                    Birthday: [data.Data.Birthday],
+                    Description: [data.Data.Description],
+                    Address: [data.Data.Address],
+                    EmergencyContact: [data.Data.EmergencyContact],
+                    Photo: [data.Data.PhotoUrl],
+                    Video: [data.Data.VideoUrl]
+                });
+            });
         }
     };
     ProfileFormComponent.prototype.showCam = function () {
@@ -117,8 +141,8 @@ var ProfileFormComponent = (function () {
             canvas.getContext('2d').drawImage(video, 0, 0);
         }
     };
-    ProfileFormComponent.prototype.onLogin = function () {
-        this.userService.login(this.model.value)
+    ProfileFormComponent.prototype.onUpdate = function () {
+        this.userService.update(this.model.value)
             .subscribe(function (data) {
             if (data.State == 1) {
             }

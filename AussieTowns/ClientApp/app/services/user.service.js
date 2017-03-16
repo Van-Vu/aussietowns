@@ -49,7 +49,9 @@ var UserService = (function () {
             .catch(this.handleError);
     };
     UserService.prototype.update = function (user) {
-        return this.http.put('/users/' + user._id, user, this.jwt());
+        return this.http.put('api/user/' + user.Id, user, this.jwt())
+            .map(function (response) { return response.json(); })
+            .catch(this.handleError);
     };
     UserService.prototype.delete = function (_id) {
         return this.http.delete('/users/' + _id, this.jwt());

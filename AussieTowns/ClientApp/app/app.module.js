@@ -53,8 +53,8 @@ AppModule = __decorate([
             loginform_component_1.LoginFormComponent,
             profileform_component_1.ProfileFormComponent,
             modalframe_component_1.ModalFrameComponent,
-            miniprofile_component_1.MiniProfilecomponent,
-            tourdetailform_component_1.TourDetailformcomponent
+            miniprofile_component_1.MiniProfileComponent,
+            tourdetailform_component_1.TourDetailFormComponent
         ],
         imports: [
             angular2_universal_1.UniversalModule,
@@ -70,6 +70,7 @@ AppModule = __decorate([
                 { path: 'fetch-data', component: fetchdata_component_1.FetchDataComponent },
                 { path: 'map', component: map_component_1.MapComponent },
                 { path: 'profile', component: profileform_component_1.ProfileFormComponent },
+                { path: 'tourdetail', component: tourdetailform_component_1.TourDetailFormComponent },
                 { path: '**', redirectTo: 'home' }
             ])
         ],

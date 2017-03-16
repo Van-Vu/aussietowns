@@ -21,7 +21,11 @@
                         <span class='glyphicon glyphicon-th-list'></span> Map
                     </a>
                 </li>
-
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/tourdetail']">
+                        <span class='glyphicon glyphicon-th-list'></span> Tour Detail
+                    </a>
+                </li>
                 <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['/test']" (click)="onTest()">
                         <span class='glyphicon glyphicon-th-list'></span> Test

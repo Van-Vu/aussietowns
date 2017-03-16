@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef} from '@angular/core';
+﻿import { Component, ElementRef, AfterViewInit} from '@angular/core';
 import { isBrowser } from 'angular2-universal';
 import { User } from '../../model/user'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -18,7 +18,7 @@ import { DomSanitizer } from '@angular/platform-browser';
     styles: [require('./profileform.component.css')]
 })
 
-export class ProfileFormComponent {
+export class ProfileFormComponent implements AfterViewInit{
     //Bodom: doesn't work on refresh'
 
     model: FormGroup;
@@ -26,12 +26,14 @@ export class ProfileFormComponent {
     public get autoCorrectedDatePipe(): any { return createAutoCorrectedDatePipe('mm/dd/yyyy'); }
     myEmailMask: any;
     phoneNumberMask: any;
+    user: User;
 
     constructor(private fb: FormBuilder, private userService: UserService, private sanitizer: DomSanitizer, private element: ElementRef) { }
 
     ngOnInit() {
         this.model = this.fb.group({
-            Email: ['', [forbiddenNameValidator()]],
+            Id: [''],
+            Email: ["asdfadsfa@adfasd.com", [forbiddenNameValidator()]],
             Password: ['', [Validators.required, Validators.minLength(7)]],
             FirstName: ['', [Validators.required, Validators.minLength(2)]],
             LastName: ['', [Validators.required, Validators.minLength(2)]],
@@ -54,7 +56,32 @@ export class ProfileFormComponent {
         this.phoneNumberMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
         this.myEmailMask = emailMask;
         if (isBrowser) {
-            this.showCam();
+            //this.showCam();
+        }
+    }
+
+    ngAfterViewInit() {
+        if (isBrowser) {
+            this.userService.getUserInfo().subscribe(
+                data => {
+                    this.user = data.Data;
+                    this.model = this.fb.group({
+                        Id: [data.Data.Id],
+                        Email: [data.Data.Email, [forbiddenNameValidator()]],
+                        Password: [data.Data.Password, [Validators.required, Validators.minLength(7)]],
+                        FirstName: [data.Data.FirstName, [Validators.required, Validators.minLength(2)]],
+                        LastName: [data.Data.LastName, [Validators.required, Validators.minLength(2)]],
+                        Phone: [data.Data.Phone],
+                        Location: [data.Data.Location],
+                        Gender: [data.Data.Gender],
+                        Birthday: [data.Data.Birthday],
+                        Description: [data.Data.Description],
+                        Address: [data.Data.Address],
+                        EmergencyContact: [data.Data.EmergencyContact],
+                        Photo: [data.Data.PhotoUrl],
+                        Video: [data.Data.VideoUrl]
+                    });
+                });
         }
     }
 
@@ -115,8 +142,8 @@ export class ProfileFormComponent {
     }
 
     submitted = false;
-    onLogin() {
-        this.userService.login(this.model.value)
+    onUpdate() {
+        this.userService.update(this.model.value)
             .subscribe(
             data => {
                 if (data.State == 1) {

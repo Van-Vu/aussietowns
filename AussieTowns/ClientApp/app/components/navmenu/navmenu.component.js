@@ -23,7 +23,7 @@ var NavMenuComponent = (function () {
         if (angular2_universal_1.isBrowser) {
             this.userService.getUserInfo().subscribe(function (data) {
                 _this.isLoggedin = true;
-                _this.name = data.Data.username;
+                _this.name = data.Data.FirstName;
             });
         }
     }

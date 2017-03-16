@@ -1,2 +1,9 @@
-﻿body {
+﻿.photo_wrapper {
+    width: 50px;
+    display: inline-block;   
+}
+
+.text_wrapper {
+    width: 250px;
+    display: inline-block; 
 }

@@ -29,7 +29,7 @@ namespace AussieTowns.Services
 
         public User GetByEmailAndPassword(string email, string password)
         {
-            return _userRepository.GetAll().FirstOrDefault(x => x.Email == email && x.Password == password);
+            return _userRepository.GetAll()?.SingleOrDefault(x => x.Email == email && x.Password == password);
         }
 
 
