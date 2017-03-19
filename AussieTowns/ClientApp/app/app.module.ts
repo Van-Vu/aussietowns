@@ -29,6 +29,9 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { ImageUploadModule } from 'ng2-imageupload';
 import { MiniProfileComponent } from './components/shared/miniprofile.component';
 import { TourDetailFormComponent } from './components/forms/tourdetailform.component';
+import { MyDatePickerModule } from 'mydatepicker';
+import { TourRequestFormComponent } from './components/forms/tourrequestform.component';
+import { TourService } from './services/tour.service';
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -46,7 +49,8 @@ import { TourDetailFormComponent } from './components/forms/tourdetailform.compo
         ProfileFormComponent,
         ModalFrameComponent,
         MiniProfileComponent,
-        TourDetailFormComponent
+        TourDetailFormComponent,
+        TourRequestFormComponent
     ],
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
@@ -55,6 +59,7 @@ import { TourDetailFormComponent } from './components/forms/tourdetailform.compo
         ReactiveFormsModule,
         TextMaskModule,
         ImageUploadModule,
+        MyDatePickerModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
@@ -62,11 +67,14 @@ import { TourDetailFormComponent } from './components/forms/tourdetailform.compo
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'map', component: MapComponent },
             { path: 'profile', component: ProfileFormComponent },
+            { path: 'tourdetail/:id', component: TourDetailFormComponent },
             { path: 'tourdetail', component: TourDetailFormComponent },
+            { path: 'tourrequest/:id', component: TourRequestFormComponent },
+            { path: 'tourrequest', component: TourRequestFormComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ],
-    providers: [SearchService, ItineraryBridge, MapBridge, UserService, AlertService, AuthenticationService]
+    providers: [SearchService, ItineraryBridge, MapBridge, UserService, AlertService, AuthenticationService, TourService]
 })
 
 export class AppModule {}

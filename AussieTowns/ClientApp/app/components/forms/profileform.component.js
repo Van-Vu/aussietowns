@@ -75,7 +75,6 @@ var ProfileFormComponent = (function () {
         var _this = this;
         if (angular2_universal_1.isBrowser) {
             this.userService.getUserInfo().subscribe(function (data) {
-                _this.user = data.Data;
                 _this.model = _this.fb.group({
                     Id: [data.Data.Id],
                     Email: [data.Data.Email, [email_validator_1.forbiddenNameValidator()]],

@@ -95,7 +95,7 @@ namespace AussieTowns.Controllers
             return JsonConvert.SerializeObject(new RequestResult
             {
                 State = RequestState.Failed,
-                Data = "Can't find user"
+                Msg = "Can't find user"
             });
         }
 
@@ -109,7 +109,7 @@ namespace AussieTowns.Controllers
                 return JsonConvert.SerializeObject(new RequestResult
                 {
                     State = RequestState.Success,
-                    Data = "Update successful"
+                    Msg = "Update successful"
                 });
             }
             catch (Exception ex)
@@ -117,7 +117,7 @@ namespace AussieTowns.Controllers
                 return JsonConvert.SerializeObject(new RequestResult
                 {
                     State = RequestState.Failed,
-                    Data = "Update failed"
+                    Msg = "Update failed"
                 });
             }
         }

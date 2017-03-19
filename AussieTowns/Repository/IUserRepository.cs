@@ -10,7 +10,7 @@ namespace AussieTowns.Repository
     {
         IQueryable<User> GetAll();
         Task<User> GetById(int id);
-        bool Register(User user);
+        bool Insert(User user);
         bool Update(User user);
         bool Delete(int id);
     }

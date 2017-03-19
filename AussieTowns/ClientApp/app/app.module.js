@@ -32,6 +32,9 @@ var angular2_text_mask_1 = require("angular2-text-mask");
 var ng2_imageupload_1 = require("ng2-imageupload");
 var miniprofile_component_1 = require("./components/shared/miniprofile.component");
 var tourdetailform_component_1 = require("./components/forms/tourdetailform.component");
+var mydatepicker_1 = require("mydatepicker");
+var tourrequestform_component_1 = require("./components/forms/tourrequestform.component");
+var tour_service_1 = require("./services/tour.service");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -54,7 +57,8 @@ AppModule = __decorate([
             profileform_component_1.ProfileFormComponent,
             modalframe_component_1.ModalFrameComponent,
             miniprofile_component_1.MiniProfileComponent,
-            tourdetailform_component_1.TourDetailFormComponent
+            tourdetailform_component_1.TourDetailFormComponent,
+            tourrequestform_component_1.TourRequestFormComponent
         ],
         imports: [
             angular2_universal_1.UniversalModule,
@@ -63,6 +67,7 @@ AppModule = __decorate([
             forms_1.ReactiveFormsModule,
             angular2_text_mask_1.TextMaskModule,
             ng2_imageupload_1.ImageUploadModule,
+            mydatepicker_1.MyDatePickerModule,
             router_1.RouterModule.forRoot([
                 { path: '', redirectTo: 'home', pathMatch: 'full' },
                 { path: 'home', component: home_component_1.HomeComponent },
@@ -70,11 +75,14 @@ AppModule = __decorate([
                 { path: 'fetch-data', component: fetchdata_component_1.FetchDataComponent },
                 { path: 'map', component: map_component_1.MapComponent },
                 { path: 'profile', component: profileform_component_1.ProfileFormComponent },
+                { path: 'tourdetail/:id', component: tourdetailform_component_1.TourDetailFormComponent },
                 { path: 'tourdetail', component: tourdetailform_component_1.TourDetailFormComponent },
+                { path: 'tourrequest/:id', component: tourrequestform_component_1.TourRequestFormComponent },
+                { path: 'tourrequest', component: tourrequestform_component_1.TourRequestFormComponent },
                 { path: '**', redirectTo: 'home' }
             ])
         ],
-        providers: [search_service_1.SearchService, itinerary_bridge_1.ItineraryBridge, map_bridge_1.MapBridge, user_service_1.UserService, alert_service_1.AlertService, authentication_service_1.AuthenticationService]
+        providers: [search_service_1.SearchService, itinerary_bridge_1.ItineraryBridge, map_bridge_1.MapBridge, user_service_1.UserService, alert_service_1.AlertService, authentication_service_1.AuthenticationService, tour_service_1.TourService]
     })
 ], AppModule);
 exports.AppModule = AppModule;

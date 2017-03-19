@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using AussieTowns.DataAccess;
 
 namespace AussieTowns.Model
 {
-    public class User
+    public class User: IIdentifier
     {
-        // Bodom: mysql doesn't allow 0 in Integer column
         public int Id { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
@@ -25,5 +25,9 @@ namespace AussieTowns.Model
         public string EmergencyContact { get; set; }
         public string PhotoUrl { get; set; }
         public string VideoUrl { get; set; }
+
+        public ICollection<TourRequest> TourRequests { get; set; }
+        public ICollection<TourOperator> TourOperators { get; set; }
+        public ICollection<TourGuest> TourGuests { get; set; }
     }
 }

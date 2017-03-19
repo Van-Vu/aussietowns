@@ -1,10 +1,62 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
+﻿<form [formGroup]="model">
+    <div class="form-group">
+        <label>Participant</label>
+        <miniprofile></miniprofile>
+    </div>
+    <div class="form-group">
+        <label>When</label>
+        <my-date-picker id="beginDate" [options]="beginDatePickerOptions" (dateChanged)="onBeginDateChanged($event)" formControlName="BeginDate"></my-date-picker>
+        <my-date-picker id="endDate" [options]="endDatePickerOptions" formControlName="EndDate"></my-date-picker>
+    </div>
+    <div class="form-group">
+        <label for="location">Where</label>
+        <ng2-completer id="location"
+                       placeholder="Event location"
+                       formControlName="Location" [(ngModel)]="searchStr" [dataService]="dataService" [minSearchLength]="2"
+                       [textSearching]="'Please wait...'" [overrideSuggested]="true"></ng2-completer>
 
-</body>
-</html>
+        <div class="alert alert-danger" *ngIf="model.get('Location').hasError('required') && model.get('Location').touched">
+            Location is required
+        </div>
+
+    </div>
+    <div class="form-group">
+        <label for="budget">Budget</label>
+        <input type="text" class="form-control" id="budget" placeholder="Your budget" formControlName="Budget">
+
+        <div class="alert alert-danger" *ngIf="model.get('Budget').hasError('required') && model.get('Budget').touched">
+            Budget is required
+        </div>
+
+    </div>
+    <div class="form-group">
+        <label for="header">Short description</label>
+        <textarea type="text" class="form-control" id="header"
+                  placeholder="Short description which will appear in as a listing header"
+                  formControlName="Header" cols="40" rows="5"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="expectation">What do you want to do</label>
+        <textarea type="text" class="form-control" id="expectation"
+                  placeholder="Detail description of the event"
+                  formControlName="Description" cols="40" rows="5"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="participants">Minimum participants</label>
+        <select id="participants" class="form-control" formControlName="MinParticipant">
+            <option value="0" selected="selected">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+    </div>
+    <input type="button" (click)="onInsert()" class="btn btn-success" value="Add Tour Request" [disabled]="model.invalid" *ngIf="isNew"/>
+    <input type="button" (click)="onUpdate()" class="btn btn-success" value="Update" [disabled]="model.invalid" *ngIf="!isNew">
+</form>

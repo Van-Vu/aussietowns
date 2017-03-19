@@ -1,4 +1,4 @@
-﻿<form (ngSubmit)="onRegistration(model)" [formGroup]="model">
+﻿<form [formGroup]="model">
     <div class="form-group">
         <label>Host</label>
         <miniprofile></miniprofile>
@@ -25,7 +25,7 @@
     <div class="form-group">
         <label for="hours">Duration</label>
         <div [hidden]="isFullday">
-            <select id="hours" class="form-control" formControlName="Hours">
+            <select id="hours" class="form-control" formControlName="Hour">
                 <option value="0" selected="selected">0</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -39,7 +39,7 @@
                 <option value="10">10</option>
             </select>
             hours
-            <select id="minutes" class="form-control" formControlName="Minutes">
+            <select id="minutes" class="form-control" formControlName="Minute">
                 <option value="0" selected="selected">0</option>
                 <option value="15">15</option>
                 <option value="30">30</option>
@@ -51,6 +51,14 @@
         <label for="fullday">Fullday event</label>
     </div>
     <div class="form-group">
+        <label for="cost">Cost</label>
+        <input type="text" class="form-control" id="cost" placeholder="Your cost per person" formControlName="Cost">
+        <div class="alert alert-danger" *ngIf="model.get('Cost').hasError('required') && model.get('Cost').touched">
+            Cost is required
+        </div>
+
+    </div>
+    <div class="form-group">
         <label for="header">Short description</label>
         <textarea type="text" class="form-control" id="header"
                   placeholder="Short description which will appear in as a header"
@@ -60,17 +68,17 @@
         <label for="expectation">What to expect</label>
         <textarea type="text" class="form-control" id="expectation"
                   placeholder="Detail description of the event"
-                  formControlName="Expectation" cols="40" rows="5"></textarea>
+                  formControlName="Description" cols="40" rows="5"></textarea>
     </div>
     <div class="form-group">
         <label for="requirements">Requirements</label>
         <textarea type="text" class="form-control" id="requirements"
                   placeholder="Requirement for guests"
-                  formControlName="Requirements" cols="40" rows="5"></textarea>
+                  formControlName="Requirement" cols="40" rows="5"></textarea>
     </div>
     <div class="form-group">
         <label for="participants">Minimum participants</label>
-        <select id="participants" class="form-control" formControlName="Participants">
+        <select id="participants" class="form-control" formControlName="MinParticipant">
             <option value="0" selected="selected">0</option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -85,5 +93,7 @@
         </select>
 
     </div>
-    <button type="submit" class="btn btn-success" [disabled]="model.invalid">Update</button>
+
+    <input type="button" (click)="onInsert()" class="btn btn-success" value="Add Tour" [disabled]="model.invalid" *ngIf="isNew" />
+    <input type="button" (click)="onUpdate()" class="btn btn-success" value="Update" [disabled]="model.invalid" *ngIf="!isNew">
 </form>

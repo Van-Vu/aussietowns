@@ -26,7 +26,6 @@ export class ProfileFormComponent implements AfterViewInit{
     public get autoCorrectedDatePipe(): any { return createAutoCorrectedDatePipe('mm/dd/yyyy'); }
     myEmailMask: any;
     phoneNumberMask: any;
-    user: User;
 
     constructor(private fb: FormBuilder, private userService: UserService, private sanitizer: DomSanitizer, private element: ElementRef) { }
 
@@ -64,7 +63,6 @@ export class ProfileFormComponent implements AfterViewInit{
         if (isBrowser) {
             this.userService.getUserInfo().subscribe(
                 data => {
-                    this.user = data.Data;
                     this.model = this.fb.group({
                         Id: [data.Data.Id],
                         Email: [data.Data.Email, [forbiddenNameValidator()]],

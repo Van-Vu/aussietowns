@@ -22,8 +22,14 @@
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/tourdetail']">
+                    <a [routerLink]="['/tourdetail', 6]">
                         <span class='glyphicon glyphicon-th-list'></span> Tour Detail
+                    </a>
+                </li>
+                
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/tourrequest', 1]">
+                        <span class='glyphicon glyphicon-th-list'></span> Tour Request
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">

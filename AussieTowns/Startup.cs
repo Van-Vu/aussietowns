@@ -63,8 +63,10 @@ namespace AussieTowns
 
             services.AddSingleton<ISearchService, SearchService>();
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<ITourService, TourService>();
             services.AddSingleton<ILocationRepository, LocationRepository>();
             services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<ITourRepository, TourRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

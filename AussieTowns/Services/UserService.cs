@@ -35,7 +35,7 @@ namespace AussieTowns.Services
 
         public bool Register(User user)
         {
-            return _userRepository.Register(user);  
+            return _userRepository.Insert(user);  
         }
 
         public bool Update(User user)

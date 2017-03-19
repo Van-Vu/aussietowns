@@ -25,10 +25,11 @@ namespace AussieTowns.Repository
 
         public Task<User> GetById(int id)
         {
-            return _context.Users.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
+            return _context.Users.Include(s => s.TourOperators)
+            .ThenInclude(e => e.TourOffer).SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public bool Register(User user)
+        public bool Insert(User user)
         {
             try
             {
@@ -47,12 +48,11 @@ namespace AussieTowns.Repository
         {
             try
             {
+                _context.DetachEntity<User>(user.Id);
+
                 _context.Entry(user).State = EntityState.Modified;
 
                 _context.SaveChanges();
-
-                // Reset the state in case of multiple Update
-                _context.Entry(user).State = EntityState.Detached;
             }
             catch (Exception ex)
             {
