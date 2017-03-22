@@ -15,5 +15,6 @@ namespace AussieTowns.Services
         bool Update(User user);
         bool Delete(int id);
 
+        ICollection<User> SearchUsers(string term);
     }
 }

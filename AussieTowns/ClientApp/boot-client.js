@@ -4,11 +4,17 @@ var core_1 = require("@angular/core");
 var angular2_universal_1 = require("angular2-universal");
 var app_module_1 = require("./app/app.module");
 require("bootstrap");
-require("jquery");
+var rootElemTagName = 'app'; // Update this if you change your root component selector
 // Enable either Hot Module Reloading or production mode
 if (module['hot']) {
     module['hot'].accept();
-    module['hot'].dispose(function () { platform.destroy(); });
+    module['hot'].dispose(function () {
+        // Before restarting the app, we create a new root element and dispose the old one
+        var oldRootElem = document.querySelector(rootElemTagName);
+        var newRootElem = document.createElement(rootElemTagName);
+        oldRootElem.parentNode.insertBefore(newRootElem, oldRootElem);
+        platform.destroy();
+    });
 }
 else {
     core_1.enableProdMode();

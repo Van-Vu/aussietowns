@@ -9,6 +9,7 @@ import { CompleterService, CompleterData, RemoteData } from 'ng2-completer';
 import { isBrowser } from 'angular2-universal';
 
 import { TourService } from '../../services/tour.service';
+import { User } from '../../model/user';
 
 @Component({
     selector: 'tourdetailform',
@@ -22,12 +23,15 @@ export class TourDetailFormComponent {
     //Bodom: local time conversion: synch server vs client time conversion
 
     model: FormGroup;
-    public get dateMask(): any { return [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/]; }
-    public get autoCorrectedDatePipe(): any { return createAutoCorrectedDatePipe('mm/dd/yyyy hh:mm'); }
+
+    dateMask: any;
+    //public get autoCorrectedDatePipe(): any { return createAutoCorrectedDatePipe('mm/dd/yyyy hh:mm'); }
     isFullday: boolean = false;
     isNew = true;
     private sub: any;
     tourId: number = 0;
+    hostList: User[]=[];
+    guestList: User[]=[];
 
     private searchStr: string;
     private dataService: CompleterData;
@@ -42,13 +46,15 @@ export class TourDetailFormComponent {
     ];
 
     constructor(private fb: FormBuilder, private completerService: CompleterService,
-        private tourService: TourService, private route: ActivatedRoute) {
+        private tourService: TourService, private route: ActivatedRoute, private userService: UserService) {
         this.dataService = completerService.local(this.searchData, 'color', 'color'); 
     }
 
     ngOnInit() {
         this.model = this.fb.group({
             Id: [''],
+            TourOperators: [''],
+            TourGuests: [''],
             Time: ['', [Validators.required]],
             Location: ['', [Validators.required]],
             Cost: ['', [Validators.required]],
@@ -59,6 +65,8 @@ export class TourDetailFormComponent {
             Requirement: [''],
             MinParticipant: ['']
         });
+
+        this.dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/];
 
         this.sub = this.route.params.subscribe(params => {
             this.tourId = +params['id'] | 0; // (+) converts string 'id' to a number
@@ -77,7 +85,14 @@ export class TourDetailFormComponent {
                             this.model.controls['Description'].setValue(data.Data.Description);
                             this.model.controls['Requirement'].setValue(data.Data.Requirement);
                             this.model.controls['MinParticipant'].setValue(data.Data.MinParticipant);
+
+                            this.model.controls['TourOperators'].setValue(this.hostList);
+                            this.model.controls['TourGuests'].setValue(this.guestList);
                         });
+                    //this.userService.getUserInfo().subscribe(
+                    //    data => {
+                    //        this.hostList.push(data.Data);
+                    //    });
                 }
             }
         });

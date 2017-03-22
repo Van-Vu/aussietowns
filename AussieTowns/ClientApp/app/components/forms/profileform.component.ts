@@ -11,6 +11,7 @@ import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrect
 import emailMask from 'text-mask-addons/dist/emailMask.js';
 
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'profileform',
@@ -26,13 +27,16 @@ export class ProfileFormComponent implements AfterViewInit{
     public get autoCorrectedDatePipe(): any { return createAutoCorrectedDatePipe('mm/dd/yyyy'); }
     myEmailMask: any;
     phoneNumberMask: any;
+    private sub: any;
+    profileId: number = 0;
 
-    constructor(private fb: FormBuilder, private userService: UserService, private sanitizer: DomSanitizer, private element: ElementRef) { }
+    constructor(private fb: FormBuilder, private userService: UserService, private route: ActivatedRoute,
+        private sanitizer: DomSanitizer, private element: ElementRef) { }
 
     ngOnInit() {
         this.model = this.fb.group({
             Id: [''],
-            Email: ["asdfadsfa@adfasd.com", [forbiddenNameValidator()]],
+            Email: ['', [forbiddenNameValidator()]],
             Password: ['', [Validators.required, Validators.minLength(7)]],
             FirstName: ['', [Validators.required, Validators.minLength(2)]],
             LastName: ['', [Validators.required, Validators.minLength(2)]],
@@ -59,28 +63,38 @@ export class ProfileFormComponent implements AfterViewInit{
         }
     }
 
+    private ngOnDestroy() {
+        this.sub.unsubscribe();
+    }
+
     ngAfterViewInit() {
-        if (isBrowser) {
-            this.userService.getUserInfo().subscribe(
-                data => {
-                    this.model = this.fb.group({
-                        Id: [data.Data.Id],
-                        Email: [data.Data.Email, [forbiddenNameValidator()]],
-                        Password: [data.Data.Password, [Validators.required, Validators.minLength(7)]],
-                        FirstName: [data.Data.FirstName, [Validators.required, Validators.minLength(2)]],
-                        LastName: [data.Data.LastName, [Validators.required, Validators.minLength(2)]],
-                        Phone: [data.Data.Phone],
-                        Location: [data.Data.Location],
-                        Gender: [data.Data.Gender],
-                        Birthday: [data.Data.Birthday],
-                        Description: [data.Data.Description],
-                        Address: [data.Data.Address],
-                        EmergencyContact: [data.Data.EmergencyContact],
-                        Photo: [data.Data.PhotoUrl],
-                        Video: [data.Data.VideoUrl]
-                    });
-                });
-        }
+        this.sub = this.route.params.subscribe(params => {
+            this.profileId = +params['id'] | 0; // (+) converts string 'id' to a number
+            if (this.profileId > 0) {
+                if (isBrowser) {
+                    this.userService.getUserInfo(this.profileId).subscribe(
+                        data => {
+                            this.model = this.fb.group({
+                                Id: [data.Data.Id],
+                                Email: [data.Data.Email, [forbiddenNameValidator()]],
+                                Password: [data.Data.Password, [Validators.required, Validators.minLength(7)]],
+                                FirstName: [data.Data.FirstName, [Validators.required, Validators.minLength(2)]],
+                                LastName: [data.Data.LastName, [Validators.required, Validators.minLength(2)]],
+                                Phone: [data.Data.Phone],
+                                Location: [data.Data.Location],
+                                Gender: [data.Data.Gender],
+                                Birthday: [data.Data.Birthday],
+                                Description: [data.Data.Description],
+                                Address: [data.Data.Address],
+                                EmergencyContact: [data.Data.EmergencyContact],
+                                Photo: [data.Data.PhotoUrl],
+                                Video: [data.Data.VideoUrl]
+                            });
+                        });
+                }
+            }
+        });
+
     }
 
     public videosrc: any;

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
@@ -8,12 +10,14 @@ using System.Threading.Tasks;
 using AussieTowns.Auth;
 using AussieTowns.Model;
 using AussieTowns.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Remotion.Linq.Clauses.ExpressionVisitors;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,11 +28,13 @@ namespace AussieTowns.Controllers
     {
         private readonly IUserService _userService;
         private readonly IHostingEnvironment _hostingEnv;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserService userService, IHostingEnvironment hostingEnv)
+        public UserController(IUserService userService, IHostingEnvironment hostingEnv, IMapper mapper)
         {
             _userService = userService;
             _hostingEnv = hostingEnv;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
@@ -72,24 +78,28 @@ namespace AussieTowns.Controllers
             }
         }
 
-        [HttpGet("info")]
+        [HttpGet("info/{id}")]
         [Authorize("Bearer")]
-        public string GetUserInfo()
+        public string GetUserInfo(int id)
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
-            if (claimsIdentity != null)
-            {
-                var userId = Convert.ToInt32(claimsIdentity.Claims.FirstOrDefault(x=>x.Type=="userId")?.Value);
-                var email = claimsIdentity.Name;
-                var user = _userService.GetById(userId);
-                if (user?.Result?.Email == email)
+            if (claimsIdentity == null)
+                return JsonConvert.SerializeObject(new RequestResult
                 {
-                    return JsonConvert.SerializeObject(new RequestResult
-                    {
-                        State = RequestState.Success,
-                        Data = user?.Result
-                    });
-                }
+                    State = RequestState.Failed,
+                    Msg = "Can't find user"
+                });
+            
+            //var userId = Convert.ToInt32(claimsIdentity.Claims.FirstOrDefault(x=>x.Type=="userId")?.Value);
+            //var email = claimsIdentity.Name;
+            var user = _userService.GetById(id);
+            if (user!= null)
+            {
+                return JsonConvert.SerializeObject(new RequestResult
+                {
+                    State = RequestState.Success,
+                    Data = user?.Result
+                });
             }
 
             return JsonConvert.SerializeObject(new RequestResult
@@ -97,6 +107,38 @@ namespace AussieTowns.Controllers
                 State = RequestState.Failed,
                 Msg = "Can't find user"
             });
+        }
+
+        [HttpGet("search")]
+        public string SearchUser([FromQuery]string term)
+        {
+            try
+            {
+                var availableUsers = _userService.SearchUsers(term);
+                if (availableUsers?.Count > 0)
+                {
+                    return JsonConvert.SerializeObject(new RequestResult
+                    {
+                        State = RequestState.Success,
+                        Data = availableUsers.Select(user => _mapper.Map<User, MiniProfile>(user))
+                    });
+                }
+
+                return JsonConvert.SerializeObject(new RequestResult
+                {
+                    State = RequestState.Success,
+                    Data = null
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new RequestResult
+                {
+                    State = RequestState.Failed,
+                    Data = "Something is wrong: " + ex.Message
+                });
+            }
         }
 
         [HttpPut("{id}")]
@@ -117,7 +159,7 @@ namespace AussieTowns.Controllers
                 return JsonConvert.SerializeObject(new RequestResult
                 {
                     State = RequestState.Failed,
-                    Msg = "Update failed"
+                    Msg = "Update failed:" + ex.Message
                 });
             }
         }
@@ -163,7 +205,8 @@ namespace AussieTowns.Controllers
                     expiresIn = TokenAuthOption.ExpiresSpan.TotalSeconds,
                     tokeyType = TokenAuthOption.TokenType,
                     accessToken = token,
-                    username = user.FirstName
+                    username = user.FirstName,
+                    userId = user.Id
                 }
             });
         }

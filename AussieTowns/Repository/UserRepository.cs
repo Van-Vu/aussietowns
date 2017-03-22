@@ -25,8 +25,11 @@ namespace AussieTowns.Repository
 
         public Task<User> GetById(int id)
         {
-            return _context.Users.Include(s => s.TourOperators)
-            .ThenInclude(e => e.TourOffer).SingleOrDefaultAsync(x => x.Id == id);
+            //Bodom: cause Self referencing loop detected
+            //return _context.Users.Include(s => s.TourOperators)
+            //.ThenInclude(e => e.TourOffer).SingleOrDefaultAsync(x => x.Id == id);
+
+            return _context.Users.SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public bool Insert(User user)

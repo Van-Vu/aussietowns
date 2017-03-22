@@ -49,7 +49,7 @@
                 </li>
 
                 <li *ngIf="isLoggedin" [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/profile']">
+                    <a [routerLink]="['/profile',id]">
                         <span class='glyphicon glyphicon-th-list'></span> Hi {{name}}
                     </a>
                 </li>

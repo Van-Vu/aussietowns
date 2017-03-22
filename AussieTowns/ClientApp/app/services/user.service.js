@@ -43,8 +43,8 @@ var UserService = (function () {
         })
             .catch(this.handleError);
     };
-    UserService.prototype.getUserInfo = function () {
-        return this.http.get('api/user/info', this.jwt())
+    UserService.prototype.getUserInfo = function (id) {
+        return this.http.get('api/user/info/' + id, this.jwt())
             .map(function (response) { return response.json(); })
             .catch(this.handleError);
     };
@@ -55,6 +55,14 @@ var UserService = (function () {
     };
     UserService.prototype.delete = function (_id) {
         return this.http.delete('/users/' + _id, this.jwt());
+    };
+    UserService.prototype.search = function (term) {
+        return this.http.get('api/user/search/?term=' + term)
+            .map(function (response) {
+            var data = response.json();
+            return data.Data;
+        })
+            .catch(this.handleError);
     };
     // private helper methods
     UserService.prototype.upload = function (fileToUpload) {

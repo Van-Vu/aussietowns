@@ -23,6 +23,42 @@
     Base drop zone
 </div>-->
 
+
+<!--<div class="row">
+    <div  class="col-md-12">
+        <carousel [slides]="slides" [interval]="NextPhotoInterval" [noWrap]="noLoopSlides" >
+        </carousel>
+    </div>
+    <div class="col-md-12">
+        <button type="button" class="btn btn-info"
+                (click)="removeLastSlide()">
+            Remove Last Slide
+        </button>
+    </div>
+</div>-->
+
+<swiper [config]="config" [initialize]="initializeSwiper"  style="width: 500px;">
+    <div class="swiper-wrapper" style="width: 500px;">
+        <div class="swiper-slide" style="width: 500px;">Slide 1</div>
+        <div class="swiper-slide" style="width: 500px;">Slide 2</div>
+        <div class="swiper-slide" style="width: 500px;">Slide 3</div>
+        <div class="swiper-slide" style="width: 500px;">Slide 4</div>
+        <div class="swiper-slide" style="width: 500px;">Slide 5</div>
+        <div class="swiper-slide" style="width: 500px;">Slide 6</div>
+        <div class="swiper-slide" style="width: 500px;">Slide 7</div>
+        <div class="swiper-slide" style="width: 500px;">Slide 8</div>
+        <div class="swiper-slide" style="width: 500px;">Slide 9</div>
+        <div class="swiper-slide" style="width: 500px;">Slide 10</div>
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+    <!-- Add Arrows -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+</swiper>
+
+
+
 <input id="user_profile_pic" #fileInput type="file" style="display: none;" accept="image/jpeg, image/png"/>
 <label class="btn btn-block btn-large" for="user_profile_pic2" role="button">Upload a file from your computer</label>
 

@@ -32,6 +32,10 @@ import { TourDetailFormComponent } from './components/forms/tourdetailform.compo
 import { MyDatePickerModule } from 'mydatepicker';
 import { TourRequestFormComponent } from './components/forms/tourrequestform.component';
 import { TourService } from './services/tour.service';
+import { ProfileSearchComponent } from './components/shared/profilesearch.component';
+import { TourParticipantComponent } from './components/shared/tourparticipant.component';
+
+import { SwiperModule } from 'angular2-useful-swiper';
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -50,29 +54,33 @@ import { TourService } from './services/tour.service';
         ModalFrameComponent,
         MiniProfileComponent,
         TourDetailFormComponent,
-        TourRequestFormComponent
+        TourRequestFormComponent,
+        ProfileSearchComponent,
+        TourParticipantComponent
     ],
     imports: [
-        UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
         Ng2CompleterModule,
         FormsModule,
         ReactiveFormsModule,
         TextMaskModule,
         ImageUploadModule,
         MyDatePickerModule,
+        SwiperModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'map', component: MapComponent },
+            { path: 'profile/:id', component: ProfileFormComponent },
             { path: 'profile', component: ProfileFormComponent },
             { path: 'tourdetail/:id', component: TourDetailFormComponent },
             { path: 'tourdetail', component: TourDetailFormComponent },
             { path: 'tourrequest/:id', component: TourRequestFormComponent },
             { path: 'tourrequest', component: TourRequestFormComponent },
             { path: '**', redirectTo: 'home' }
-        ])
+        ]),
+        UniversalModule // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
     ],
     providers: [SearchService, ItineraryBridge, MapBridge, UserService, AlertService, AuthenticationService, TourService]
 })

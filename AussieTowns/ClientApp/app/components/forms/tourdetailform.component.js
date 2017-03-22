@@ -11,19 +11,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
 var router_1 = require("@angular/router");
-var createAutoCorrectedDatePipe_js_1 = require("text-mask-addons/dist/createAutoCorrectedDatePipe.js");
+var user_service_1 = require("../../services/user.service");
 var ng2_completer_1 = require("ng2-completer");
 var angular2_universal_1 = require("angular2-universal");
 var tour_service_1 = require("../../services/tour.service");
 var TourDetailFormComponent = (function () {
-    function TourDetailFormComponent(fb, completerService, tourService, route) {
+    function TourDetailFormComponent(fb, completerService, tourService, route, userService) {
         this.fb = fb;
         this.completerService = completerService;
         this.tourService = tourService;
         this.route = route;
+        this.userService = userService;
+        //public get autoCorrectedDatePipe(): any { return createAutoCorrectedDatePipe('mm/dd/yyyy hh:mm'); }
         this.isFullday = false;
         this.isNew = true;
         this.tourId = 0;
+        this.hostList = [];
+        this.guestList = [];
         this.searchData = [
             { color: 'red', value: '#f00' },
             { color: 'green', value: '#0f0' },
@@ -35,20 +39,12 @@ var TourDetailFormComponent = (function () {
         ];
         this.dataService = completerService.local(this.searchData, 'color', 'color');
     }
-    Object.defineProperty(TourDetailFormComponent.prototype, "dateMask", {
-        get: function () { return [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/]; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(TourDetailFormComponent.prototype, "autoCorrectedDatePipe", {
-        get: function () { return createAutoCorrectedDatePipe_js_1.default('mm/dd/yyyy hh:mm'); },
-        enumerable: true,
-        configurable: true
-    });
     TourDetailFormComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.model = this.fb.group({
             Id: [''],
+            TourOperators: [''],
+            TourGuests: [''],
             Time: ['', [forms_1.Validators.required]],
             Location: ['', [forms_1.Validators.required]],
             Cost: ['', [forms_1.Validators.required]],
@@ -59,6 +55,7 @@ var TourDetailFormComponent = (function () {
             Requirement: [''],
             MinParticipant: ['']
         });
+        this.dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/];
         this.sub = this.route.params.subscribe(function (params) {
             _this.tourId = +params['id'] | 0; // (+) converts string 'id' to a number
             if (_this.tourId > 0) {
@@ -75,6 +72,8 @@ var TourDetailFormComponent = (function () {
                         _this.model.controls['Description'].setValue(data.Data.Description);
                         _this.model.controls['Requirement'].setValue(data.Data.Requirement);
                         _this.model.controls['MinParticipant'].setValue(data.Data.MinParticipant);
+                        _this.model.controls['TourOperators'].setValue(_this.hostList);
+                        _this.model.controls['TourGuests'].setValue(_this.guestList);
                     });
                 }
             }
@@ -129,7 +128,7 @@ TourDetailFormComponent = __decorate([
         styles: [require('./tourdetailform.component.css')]
     }),
     __metadata("design:paramtypes", [forms_1.FormBuilder, ng2_completer_1.CompleterService,
-        tour_service_1.TourService, router_1.ActivatedRoute])
+        tour_service_1.TourService, router_1.ActivatedRoute, user_service_1.UserService])
 ], TourDetailFormComponent);
 exports.TourDetailFormComponent = TourDetailFormComponent;
 //# sourceMappingURL=tourdetailform.component.js.map

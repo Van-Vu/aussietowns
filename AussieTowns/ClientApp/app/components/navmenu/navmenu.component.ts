@@ -13,7 +13,7 @@ declare var document: any;
 @Component({
     selector: 'nav-menu',
     template: require('./navmenu.component.html'),
-    styles: [require('./navmenu.component.css')]
+    styles: [require('./navmenu.component.scss')]
 })
 export class NavMenuComponent {
     @ViewChild(RegistrationFormComponent) registerModal: RegistrationFormComponent;
@@ -21,23 +21,25 @@ export class NavMenuComponent {
 
     isLoggedin: boolean = false;
     name: string;
+    id: number;
 
     constructor(private userService: UserService) {
         // Bodom: hack from here: https://github.com/aspnet/JavaScriptServices/issues/435
         if (isBrowser) {
-            this.userService.getUserInfo().subscribe(
-                data => {
-                    this.isLoggedin = true;
-                    this.name = data.Data.FirstName;
-                });
+            //this.userService.getUserInfo().subscribe(
+            //    data => {
+            //        this.isLoggedin = true;
+            //        this.name = data.Data.FirstName;
+            //    });
         }
 
     }
 
-    handleLoggedIn(userName: string) {
-        if (userName) {
+    handleLoggedIn(loggedInfo) {
+        if (loggedInfo) {
             this.isLoggedin = true;
-            this.name = userName;
+            this.name = loggedInfo.name;
+            this.id = loggedInfo.id;
         } else {
             this.isLoggedin = false;
         }
@@ -49,7 +51,7 @@ export class NavMenuComponent {
     }
 
     onTest() {
-        this.userService.getUserInfo().subscribe(
+        this.userService.getUserInfo(1).subscribe(
             data => {
                 var abc = data;
             });

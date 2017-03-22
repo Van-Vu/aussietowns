@@ -18,6 +18,7 @@ namespace AussieTowns.Model
         public string Description { get; set; }
         public int MinParticipant { get; set; }
 
+        public int UserId { get; set; }
         public User User { get; set; }
     }
 }

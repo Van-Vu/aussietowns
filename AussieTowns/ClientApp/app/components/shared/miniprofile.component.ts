@@ -7,10 +7,15 @@ import { User } from '../../model/user';
     styles: [require('./miniprofile.component.css')]
 })
 export class MiniProfileComponent {
-    //@Input() user: User;
+    @Input() data: any;
     userId = "test";
     profileUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png";
     profileImageUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png";
-    fullName = "Fullname";
+    fullName: string;
     shortDescription = "This is a short description";
+
+    ngOnInit(): void {
+        this.fullName = this.data.Fullname;
+        this.shortDescription = this.data.ShortDescription;
+    }
 }

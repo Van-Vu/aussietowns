@@ -18,7 +18,7 @@ import { UserService } from '../../services/user.service';
 export class LoginFormComponent {
     @ViewChild(ModalFrameComponent) modal: ModalFrameComponent;
     model: FormGroup;
-    @Output() isLoggedIn = new EventEmitter<string>();
+    @Output() isLoggedIn = new EventEmitter<any>();
 
 
     constructor(private fb: FormBuilder, private userService: UserService) {}
@@ -41,7 +41,7 @@ export class LoginFormComponent {
             .subscribe(
             data => {
                 if (data.State == 1) {
-                    this.isLoggedIn.emit(data.Data.username);
+                    this.isLoggedIn.emit({ id: data.Data.userId, name: data.Data.username });
                     this.modal.hide();
                 }
                 else {

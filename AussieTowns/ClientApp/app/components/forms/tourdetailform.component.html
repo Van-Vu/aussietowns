@@ -1,13 +1,15 @@
 ﻿<form [formGroup]="model">
     <div class="form-group">
         <label>Host</label>
-        <miniprofile></miniprofile>
+        <tourparticipant [participantType]="Host" [users]="hostList"></tourparticipant>
+
+        <tourparticipant [participantType]="Guest" [users]="guestList"></tourparticipant>
     </div>
     <div class="form-group">
         <label for="time">When</label>
         <input type="text" class="form-control" id="time"
                placeholder="mm/dd/yyyy hh:mm"
-               [textMask]="{mask: dateMask, guide: false, keepCharPositions: false, pipe: autoCorrectedDatePipe}"
+               [textMask]="{mask: dateMask, guide: false, keepCharPositions: false}"
                formControlName="Time">
     </div>
     <div class="form-group">

@@ -46,7 +46,7 @@ var LoginFormComponent = (function () {
         this.userService.login(this.model.value)
             .subscribe(function (data) {
             if (data.State == 1) {
-                _this.isLoggedIn.emit(data.Data.username);
+                _this.isLoggedIn.emit({ id: data.Data.userId, name: data.Data.username });
                 _this.modal.hide();
             }
             else {

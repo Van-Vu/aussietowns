@@ -5,6 +5,7 @@ import { Cookie } from 'ng2-cookies';
 
 import { User } from '../model/user';
 import { RequestResult } from '../model/RequestResult';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class UserService {
@@ -46,8 +47,8 @@ export class UserService {
             .catch(this.handleError);
     }
 
-    getUserInfo() {
-        return this.http.get('api/user/info', this.jwt())
+    getUserInfo(id: number) {
+        return this.http.get('api/user/info/' + id, this.jwt())
             .map(response => response.json() as RequestResult)
             .catch(this.handleError);
     }
@@ -60,6 +61,15 @@ export class UserService {
 
     delete(_id: string) {
         return this.http.delete('/users/' + _id, this.jwt());
+    }
+
+    search(term: string): Observable<User[]> {
+        return this.http.get('api/user/search/?term=' + term)
+            .map(response => {
+                var data = response.json() as RequestResult;
+                return data.Data;
+            })
+            .catch(this.handleError);
     }
 
     // private helper methods

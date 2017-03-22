@@ -7,6 +7,7 @@ using AussieTowns.DataAccess;
 using AussieTowns.Model;
 using AussieTowns.Repository;
 using AussieTowns.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -43,6 +44,7 @@ namespace AussieTowns
         {
             // Add framework services.
             services.AddMvc();
+            services.AddAutoMapper();
 
             // Enable the use of an [Authorize("Bearer")] attribute on methods and classes to protect.
             services.AddAuthorization(auth =>

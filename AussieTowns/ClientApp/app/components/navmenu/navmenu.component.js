@@ -16,21 +16,17 @@ var angular2_universal_1 = require("angular2-universal");
 var user_service_1 = require("../../services/user.service");
 var NavMenuComponent = (function () {
     function NavMenuComponent(userService) {
-        var _this = this;
         this.userService = userService;
         this.isLoggedin = false;
         // Bodom: hack from here: https://github.com/aspnet/JavaScriptServices/issues/435
         if (angular2_universal_1.isBrowser) {
-            this.userService.getUserInfo().subscribe(function (data) {
-                _this.isLoggedin = true;
-                _this.name = data.Data.FirstName;
-            });
         }
     }
-    NavMenuComponent.prototype.handleLoggedIn = function (userName) {
-        if (userName) {
+    NavMenuComponent.prototype.handleLoggedIn = function (loggedInfo) {
+        if (loggedInfo) {
             this.isLoggedin = true;
-            this.name = userName;
+            this.name = loggedInfo.name;
+            this.id = loggedInfo.id;
         }
         else {
             this.isLoggedin = false;
@@ -41,7 +37,7 @@ var NavMenuComponent = (function () {
         this.isLoggedin = false;
     };
     NavMenuComponent.prototype.onTest = function () {
-        this.userService.getUserInfo().subscribe(function (data) {
+        this.userService.getUserInfo(1).subscribe(function (data) {
             var abc = data;
         });
     };

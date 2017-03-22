@@ -1,0 +1,15 @@
+﻿<div>
+    <ul>
+        <li *ngFor="let user of users ">
+            <miniprofile [data]="user"></miniprofile>
+        </li>
+    </ul>
+    <div>
+        <button (click)="toggleProfileSearch($event)" class="addParticipant" [hidden]="isAdding">
+            <span>+</span>Add more {{participantType}}
+        </button>
+    </div>
+    <div>
+        <profilesearch (addedUser)="handleUserAdded($event)" [hidden]="!isAdding"></profilesearch>
+    </div>
+</div>

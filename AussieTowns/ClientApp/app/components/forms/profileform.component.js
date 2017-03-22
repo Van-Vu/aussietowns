@@ -16,12 +16,15 @@ var user_service_1 = require("../../services/user.service");
 var createAutoCorrectedDatePipe_js_1 = require("text-mask-addons/dist/createAutoCorrectedDatePipe.js");
 var emailMask_js_1 = require("text-mask-addons/dist/emailMask.js");
 var platform_browser_1 = require("@angular/platform-browser");
+var router_1 = require("@angular/router");
 var ProfileFormComponent = (function () {
-    function ProfileFormComponent(fb, userService, sanitizer, element) {
+    function ProfileFormComponent(fb, userService, route, sanitizer, element) {
         this.fb = fb;
         this.userService = userService;
+        this.route = route;
         this.sanitizer = sanitizer;
         this.element = element;
+        this.profileId = 0;
         this.submitted = false;
         this.formErrors = {
             'Email': ''
@@ -49,7 +52,7 @@ var ProfileFormComponent = (function () {
         var _this = this;
         this.model = this.fb.group({
             Id: [''],
-            Email: ["asdfadsfa@adfasd.com", [email_validator_1.forbiddenNameValidator()]],
+            Email: ['', [email_validator_1.forbiddenNameValidator()]],
             Password: ['', [forms_1.Validators.required, forms_1.Validators.minLength(7)]],
             FirstName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
             LastName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
@@ -71,28 +74,36 @@ var ProfileFormComponent = (function () {
         if (angular2_universal_1.isBrowser) {
         }
     };
+    ProfileFormComponent.prototype.ngOnDestroy = function () {
+        this.sub.unsubscribe();
+    };
     ProfileFormComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
-        if (angular2_universal_1.isBrowser) {
-            this.userService.getUserInfo().subscribe(function (data) {
-                _this.model = _this.fb.group({
-                    Id: [data.Data.Id],
-                    Email: [data.Data.Email, [email_validator_1.forbiddenNameValidator()]],
-                    Password: [data.Data.Password, [forms_1.Validators.required, forms_1.Validators.minLength(7)]],
-                    FirstName: [data.Data.FirstName, [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
-                    LastName: [data.Data.LastName, [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
-                    Phone: [data.Data.Phone],
-                    Location: [data.Data.Location],
-                    Gender: [data.Data.Gender],
-                    Birthday: [data.Data.Birthday],
-                    Description: [data.Data.Description],
-                    Address: [data.Data.Address],
-                    EmergencyContact: [data.Data.EmergencyContact],
-                    Photo: [data.Data.PhotoUrl],
-                    Video: [data.Data.VideoUrl]
-                });
-            });
-        }
+        this.sub = this.route.params.subscribe(function (params) {
+            _this.profileId = +params['id'] | 0; // (+) converts string 'id' to a number
+            if (_this.profileId > 0) {
+                if (angular2_universal_1.isBrowser) {
+                    _this.userService.getUserInfo(_this.profileId).subscribe(function (data) {
+                        _this.model = _this.fb.group({
+                            Id: [data.Data.Id],
+                            Email: [data.Data.Email, [email_validator_1.forbiddenNameValidator()]],
+                            Password: [data.Data.Password, [forms_1.Validators.required, forms_1.Validators.minLength(7)]],
+                            FirstName: [data.Data.FirstName, [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
+                            LastName: [data.Data.LastName, [forms_1.Validators.required, forms_1.Validators.minLength(2)]],
+                            Phone: [data.Data.Phone],
+                            Location: [data.Data.Location],
+                            Gender: [data.Data.Gender],
+                            Birthday: [data.Data.Birthday],
+                            Description: [data.Data.Description],
+                            Address: [data.Data.Address],
+                            EmergencyContact: [data.Data.EmergencyContact],
+                            Photo: [data.Data.PhotoUrl],
+                            Video: [data.Data.VideoUrl]
+                        });
+                    });
+                }
+            }
+        });
     };
     ProfileFormComponent.prototype.showCam = function () {
         var _this = this;
@@ -177,7 +188,8 @@ ProfileFormComponent = __decorate([
         template: require('./profileform.component.html'),
         styles: [require('./profileform.component.css')]
     }),
-    __metadata("design:paramtypes", [forms_1.FormBuilder, user_service_1.UserService, platform_browser_1.DomSanitizer, core_1.ElementRef])
+    __metadata("design:paramtypes", [forms_1.FormBuilder, user_service_1.UserService, router_1.ActivatedRoute,
+        platform_browser_1.DomSanitizer, core_1.ElementRef])
 ], ProfileFormComponent);
 exports.ProfileFormComponent = ProfileFormComponent;
 //# sourceMappingURL=profileform.component.js.map
