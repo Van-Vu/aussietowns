@@ -1,0 +1,19 @@
+﻿// The micro clearfix http://nicolasgallagher.com/micro-clearfix-hack/
+@mixin clearfix() {
+  // scss-lint:disable PropertySpelling
+  *zoom: 1;
+
+  &::before,
+  &::after {
+    display: table;
+    content: '';
+  }
+
+  &::after {
+    clear: both;
+  }
+}
+
+.clearfix {
+  @include clearfix();
+}

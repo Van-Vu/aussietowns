@@ -54,6 +54,7 @@
     "angular2-uuid": "^1.1.1",
     "ng2-completer": "^1.1.0",
     "node-sass": "4.5.1",
-    "sass-loader": "6.0.3"
+    "sass-loader": "6.0.3",
+    "copy-webpack-plugin": "4.0.1"
   }
 }

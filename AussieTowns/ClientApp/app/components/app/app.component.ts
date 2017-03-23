@@ -4,7 +4,7 @@ import { DOCUMENT } from "@angular/platform-browser";
 @Component({
     selector: 'app',
     template: require('./app.component.html'),
-    styles: [require('./app.component.css')]
+    styles: [require('../../../asset/sass/base.scss').toString()]
 })
 export class AppComponent {
 

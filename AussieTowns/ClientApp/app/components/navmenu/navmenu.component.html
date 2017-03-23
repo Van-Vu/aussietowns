@@ -1,67 +1,71 @@
-<div class='main-nav'>
-    <div class='navbar'>
-            <ul class='nav navbar-nav'>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/home']">
-                        <span class='glyphicon glyphicon-home'></span> Home
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/counter']">
-                        <span class='glyphicon glyphicon-education'></span> Counter
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/fetch-data']">
-                        <span class='glyphicon glyphicon-th-list'></span> Fetch data
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/map']">
-                        <span class='glyphicon glyphicon-th-list'></span> Map
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/tourdetail', 6]">
-                        <span class='glyphicon glyphicon-th-list'></span> Tour Detail
-                    </a>
-                </li>
-                
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/tourrequest', 1]">
-                        <span class='glyphicon glyphicon-th-list'></span> Tour Request
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/test']" (click)="onTest()">
-                        <span class='glyphicon glyphicon-th-list'></span> Test
-                    </a>
-                </li>
-                <li *ngIf="!isLoggedin" [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/login']" (click)="loginModal.show()">
-                        <span class='glyphicon glyphicon-th-list'></span> Log in
-                    </a>
-                </li>
-                <li *ngIf="!isLoggedin" [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/register']" (click)="registerModal.show()">
-                        <span class='glyphicon glyphicon-th-list'></span> Register
-                    </a>
-                </li>
+<div class='nav-bar'>
+    <a [routerLink]="['/home']" title="Meet the Local">
+        <div class='nav-bar__logo glyphicon glyphicon-home'></div>
+    </a>
 
-                <li *ngIf="isLoggedin" [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/profile',id]">
-                        <span class='glyphicon glyphicon-th-list'></span> Hi {{name}}
-                    </a>
-                </li>
+    <div class='nav-bar__menu'>
+        <ul>
+            <!--<li [routerLinkActive]="['link-active']">
+                <a [routerLink]="['/counter']">
+                    <span class='glyphicon glyphicon-education'></span> Counter
+                </a>
+            </li>
+            <li [routerLinkActive]="['link-active']">
+                <a [routerLink]="['/fetch-data']">
+                    <span class='glyphicon glyphicon-th-list'></span> Fetch data
+                </a>
+            </li>
+            <li [routerLinkActive]="['link-active']">
+                <a [routerLink]="['/map']">
+                    <span class='glyphicon glyphicon-th-list'></span> Map
+                </a>
+            </li>
+            <li [routerLinkActive]="['link-active']">
+                <a [routerLink]="['/tourdetail', 6]">
+                    <span class='glyphicon glyphicon-th-list'></span> Tour Detail
+                </a>
+            </li>
 
-                <li *ngIf="isLoggedin" [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/logout']" (click)="onLogout()">
-                        <span class='glyphicon glyphicon-th-list'></span> Log out
-                    </a>
-                </li>
-            </ul>
+            <li [routerLinkActive]="['link-active']">
+                <a [routerLink]="['/tourrequest', 1]">
+                    <span class='glyphicon glyphicon-th-list'></span> Tour Request
+                </a>
+            </li>
+            <li [routerLinkActive]="['link-active']">
+                <a [routerLink]="['/test']" (click)="onTest()">
+                    <span class='glyphicon glyphicon-th-list'></span> Test
+                </a>
+            </li>-->
+            <li *ngIf="!isLoggedin" class="nav-bar__menu-item" [routerLinkActive]="['link-active']">
+                <a class="nav-bar__menu-item-link" [routerLink]="['/login']" (click)="loginModal.show()">
+                    <span class='glyphicon glyphicon-th-list'></span> Log in
+                </a>
+            </li>
+            <li *ngIf="!isLoggedin" class="nav-bar__menu-item" [routerLinkActive]="['link-active']">
+                <a class="nav-bar__menu-item-link" [routerLink]="['/register']" (click)="registerModal.show()">
+                    <span class='glyphicon glyphicon-th-list'></span> Sign up
+                </a>
+            </li>
+
+            <li *ngIf="isLoggedin" class="nav-bar__menu-item" [routerLinkActive]="['link-active']">
+                <a class="nav-bar__menu-item-link" [routerLink]="['/profile',id]">
+                    <span class='glyphicon glyphicon-th-list'></span> Hi {{name}}
+                </a>
+            </li>
+
+            <li *ngIf="isLoggedin" class="nav-bar__menu-item" [routerLinkActive]="['link-active']">
+                <a class="nav-bar__menu-item-link" [routerLink]="['/logout']" (click)="onLogout()">
+                    <span class='glyphicon glyphicon-th-list'></span> Log out
+                </a>
+            </li>
+        </ul>
+        <!--<a href="#" class="nav-bar__toggle" title="Navigation Menu" aria-hidden="true">
+            <i class="fa fa-bars"></i>
+        </a>-->
     </div>
-    
+
 </div>
 <registrationform></registrationform>
 <loginform (isLoggedIn)="handleLoggedIn($event)"></loginform>
+
+

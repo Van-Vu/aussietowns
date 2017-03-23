@@ -1,0 +1,16 @@
+﻿//Base rules
+@import 'base/colors';
+@import 'base/effect';
+@import 'base/font';
+@import 'base/size';
+@import 'base/font-awesome';
+@import 'mixins/absolutecenter';
+@import 'mixins/breakpoints';
+@import 'mixins/buttons';
+@import 'mixins/clearfix';
+@import 'mixins/placeholder';
+@import 'mixins/triangles';
+
+//Components
+
+@import 'components/navmenu';

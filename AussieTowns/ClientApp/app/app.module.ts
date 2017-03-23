@@ -59,6 +59,7 @@ import { SwiperModule } from 'angular2-useful-swiper';
         TourParticipantComponent
     ],
     imports: [
+        UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
         Ng2CompleterModule,
         FormsModule,
         ReactiveFormsModule,
@@ -79,8 +80,7 @@ import { SwiperModule } from 'angular2-useful-swiper';
             { path: 'tourrequest/:id', component: TourRequestFormComponent },
             { path: 'tourrequest', component: TourRequestFormComponent },
             { path: '**', redirectTo: 'home' }
-        ]),
-        UniversalModule // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
+        ])
     ],
     providers: [SearchService, ItineraryBridge, MapBridge, UserService, AlertService, AuthenticationService, TourService]
 })

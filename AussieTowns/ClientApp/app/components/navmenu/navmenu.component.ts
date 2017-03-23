@@ -13,7 +13,7 @@ declare var document: any;
 @Component({
     selector: 'nav-menu',
     template: require('./navmenu.component.html'),
-    styles: [require('./navmenu.component.scss')]
+    styles: [require('./navmenu.component.scss').toString()]
 })
 export class NavMenuComponent {
     @ViewChild(RegistrationFormComponent) registerModal: RegistrationFormComponent;

@@ -2,8 +2,11 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 //Bodom: https://github.com/aspnet/JavaScriptServices/issues/99
+//Bodom: need to learn more of vendor.css
 
 module.exports = (env) => {
     // Configuration in common to both client-side and server-side bundles
@@ -11,7 +14,7 @@ module.exports = (env) => {
     const sharedConfig = {
         stats: { modules: false },
         context: __dirname,
-        resolve: { extensions: ['.js', '.ts'] },
+        resolve: { extensions: ['.ts', '.js', '.json', '.scss', '.css', '.html'] },
         output: {
             filename: '[name].js',
             publicPath: '/dist/' // Webpack dev middleware, if enabled, handles requests for this URL prefix
@@ -21,11 +24,28 @@ module.exports = (env) => {
                 { test: /\.ts$/, include: /ClientApp/, use: ['awesome-typescript-loader?silent=true', 'angular2-template-loader'] },
                 { test: /\.html$/, use: 'html-loader?minimize=false' },
                 { test: /\.css$/, use: ['to-string-loader', 'css-loader'] },
-                { test: /\.scss$/, exclude: /node_modules/, loaders: ['raw-loader', 'sass-loader']},
-                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
+                {
+                    test: /\.scss$/, loader: ExtractTextPlugin.extract({
+                        use: [{
+                            loader: "css-loader"
+                        }, {
+                            loader: "sass-loader"
+                        }],
+                        // use style-loader in development 
+                        fallback: "style-loader"
+                    })
+                },
+                { test: /\.(png|jpg|gif|woff|woff2|ttf|svg|eot)$/, use: 'url-loader?limit=25000' }
             ]
         },
-        plugins: [new CheckerPlugin()]
+        plugins: [
+            new ExtractTextPlugin("mystyles.css"),
+            new CheckerPlugin(),
+          new CopyWebpackPlugin([
+              { from: './ClientApp/asset/font', to: '../asset/fonts' },
+              { from: './ClientApp/asset/images', to: '../asset/images' }
+          ])
+        ]
     };
 
     // Configuration for client-side bundle suitable for running in browsers

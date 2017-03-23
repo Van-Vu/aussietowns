@@ -9,8 +9,8 @@ import { User } from '../../model/user';
 export class MiniProfileComponent {
     @Input() data: any;
     userId = "test";
-    profileUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png";
-    profileImageUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png";
+    profileUrl = "test";
+    profileImageUrl = "/asset/images/home-icon.png";
     fullName: string;
     shortDescription = "This is a short description";
 

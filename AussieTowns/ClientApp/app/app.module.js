@@ -37,7 +37,6 @@ var tourrequestform_component_1 = require("./components/forms/tourrequestform.co
 var tour_service_1 = require("./services/tour.service");
 var profilesearch_component_1 = require("./components/shared/profilesearch.component");
 var tourparticipant_component_1 = require("./components/shared/tourparticipant.component");
-var carousel_component_1 = require("./components/shared/carousel.component");
 var angular2_useful_swiper_1 = require("angular2-useful-swiper");
 var AppModule = (function () {
     function AppModule() {
@@ -64,8 +63,7 @@ AppModule = __decorate([
             tourdetailform_component_1.TourDetailFormComponent,
             tourrequestform_component_1.TourRequestFormComponent,
             profilesearch_component_1.ProfileSearchComponent,
-            tourparticipant_component_1.TourParticipantComponent,
-            carousel_component_1.Carousel
+            tourparticipant_component_1.TourParticipantComponent
         ],
         imports: [
             angular2_universal_1.UniversalModule,
