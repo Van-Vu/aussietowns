@@ -623,12 +623,12 @@ $nav-bar-height: 50px;
     border: 1px solid transparent;
     // top: -71px;
     // transition: top 0.2s ease-in-out;
-    @media (min-width: 768px) {
+    @media (min-width: $bp-ipad) {
       .navbar {
         border-radius: 4px;
       }
     }
-
+    
     &__logo {
         position: absolute;
         text-indent: -9999px;
@@ -636,8 +636,9 @@ $nav-bar-height: 50px;
         background-repeat: no-repeat;
         background-position: center;
         background-size: contain;
-        width: 156px;
-        height: 42px;
+        width: 29px;
+        height: 29px;
+        float: left;
         margin-top: 3px;
         margin-left: 18px;
         .nav-bar.is-homepage & {
@@ -697,12 +698,16 @@ $nav-bar-height: 50px;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         -webkit-touch-callout: none;
         -webkit-user-select: none;
+        position: relative;
+        float:left;
+        margin-top: 15px;
+        margin-left: 5px;
+        font-size: 10px;
+        font-weight: bold;
         user-select: none;
-        float: right;
-        font-size: 25px;
-        color: white;
-        padding: 13px 14px;
-        height: $nav-bar-height;
+        //color: white;
+        //padding: 13px 14px;
+        //height: $nav-bar-height;
 
         // &:hover {
         //     // background: #2d2f30;
@@ -748,6 +753,8 @@ $nav-bar-height: 50px;
                 color: $c-brand-orange;
             }
         }
+
+
         // .nav-bar__menu-item.is-active {
         //     a {
         //         // background-color: #111;
@@ -764,13 +771,80 @@ $nav-bar-height: 50px;
         }
         .nav-bar__menu {
             display: none;
+            @media all and (max-width: $bp-small-max-width) {
+                width: 100%;
+                margin-top:-300px;
+            }
+
             &.is-open {
-                display: inline-block;
-                margin-top: $nav-bar-height;
-                width: 250px;
+                display: block;
+
+                @-webkit-keyframes fadeInDown {
+                  0% {
+                    opacity: 0;
+                  }
+                  100% {
+                    opacity: 1;
+                    -webkit-transform: translate3d(0, 250%, 0);
+                    transform: translate3d(0, 250%, 0);
+                  }
+                }
+                @keyframes fadeInDown {
+                  0% {
+                    opacity: 0;
+                  }
+                  100% {
+                    opacity: 1;
+                    -webkit-transform: translate3d(0, 250%, 0);
+                    transform: translate3d(0, 250%, 0);
+                  }
+                }
 
                 @media all and (max-width: $bp-small-max-width) {
-                    width: 100%;
+                    animation-duration: 0.5s;
+                    animation-name: fadeInDown;
+                    animation-fill-mode: forwards;
+                    -webkit-animation-name: fadeInDown;
+                    -webkit-animation-duration: 0.5s;
+                    -webkit-animation-fill-mode: forwards;
+                }
+            }
+
+            &.is-close {
+                display: block;
+
+                @-webkit-keyframes fadeOutUp {
+                  0% {
+                    opacity: 1;
+                    -webkit-transform: translate3d(0, 250%, 0);
+                    transform: translate3d(0, 250%, 0);
+                  }
+                  100% {
+                    opacity: 0;
+                    -webkit-transform: none;
+                    transform: none;
+                  }
+                }
+                @keyframes fadeOutUp {
+                  0% {
+                    opacity: 1;
+                    -webkit-transform: translate3d(0, 250%, 0);
+                    transform: translate3d(0, 250%, 0);
+                  }
+                  100% {
+                    opacity: 0;
+                    -webkit-transform: none;
+                    transform: none;
+                  }
+                }
+
+                @media all and (max-width: $bp-small-max-width) {
+                    animation-duration: 0.5s;
+                    animation-name: fadeOutUp;
+                    animation-fill-mode: forwards;
+                    -webkit-animation-name: fadeOutUp;
+                    -webkit-animation-duration: 0.5s;
+                    -webkit-animation-fill-mode: forwards;
                 }
             }
         }

@@ -60,6 +60,10 @@ export class LoginFormComponent {
         this.modal.show();
     }
 
+    public hide(): void {
+        this.modal.hide();
+    }
+
     onValueChanged(data?: any) {
         if (!this.model) { return; }
         const form = this.model;

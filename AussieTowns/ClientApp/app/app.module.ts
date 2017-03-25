@@ -36,6 +36,7 @@ import { ProfileSearchComponent } from './components/shared/profilesearch.compon
 import { TourParticipantComponent } from './components/shared/tourparticipant.component';
 
 import { SwiperModule } from 'angular2-useful-swiper';
+import { DeviceDetectionService } from './components/shared/devicedetection.service';
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -82,7 +83,7 @@ import { SwiperModule } from 'angular2-useful-swiper';
             { path: '**', redirectTo: 'home' }
         ])
     ],
-    providers: [SearchService, ItineraryBridge, MapBridge, UserService, AlertService, AuthenticationService, TourService]
+    providers: [SearchService, ItineraryBridge, MapBridge, UserService, AlertService, AuthenticationService, TourService, DeviceDetectionService]
 })
 
 export class AppModule {}

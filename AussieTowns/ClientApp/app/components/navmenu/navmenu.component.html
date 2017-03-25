@@ -1,9 +1,16 @@
-<div class='nav-bar'>
-    <a [routerLink]="['/home']" title="Meet the Local">
+<div class='nav-bar' [ngClass]="{ 'is-sticky': isSticky }">
+    <a [routerLink]="['/home']" title="Meet the Local" [hidden]="!hideNavToggle">
         <div class='nav-bar__logo glyphicon glyphicon-home'></div>
     </a>
 
-    <div class='nav-bar__menu'>
+    <a href="#" (click)="onNavToggle()" title="Meet the Local" [hidden]="hideNavToggle">
+        <div class='nav-bar__logo glyphicon glyphicon-home'></div>
+        <div class="nav-bar__toggle">
+            <i class="glyphicon glyphicon-chevron-down"></i>
+        </div>
+    </a>
+
+    <div class='nav-bar__menu' [ngClass]="{'is-open': isMenuOpen, 'is-close': !isMenuOpen}">
         <ul>
             <!--<li [routerLinkActive]="['link-active']">
                 <a [routerLink]="['/counter']">
@@ -36,6 +43,11 @@
                     <span class='glyphicon glyphicon-th-list'></span> Test
                 </a>
             </li>-->
+            <li [routerLinkActive]="['link-active']">
+                <a [routerLink]="['/tourdetail', 6]">
+                    <span class='glyphicon glyphicon-th-list'></span> Tour Detail
+                </a>
+            </li>
             <li *ngIf="!isLoggedin" class="nav-bar__menu-item" [routerLinkActive]="['link-active']">
                 <a class="nav-bar__menu-item-link" [routerLink]="['/login']" (click)="loginModal.show()">
                     <span class='glyphicon glyphicon-th-list'></span> Log in

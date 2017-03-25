@@ -1,8 +1,10 @@
-﻿<div class="modal fade" tabindex="-1" [ngClass]="{'in': visibleAnimate}"
+﻿<!--//Bodom: modal CSS http://stackoverflow.com/questions/17088160/using-just-bootstrap-modal-->
+<div class="modal fade" tabindex="-1" [ngClass]="{'in': visibleAnimate}"
      [ngStyle]="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <button type="button" class="close" (click)="hide()">×</button>
                 <ng-content select=".app-modal-header"></ng-content>
             </div>
             <div class="modal-body">
