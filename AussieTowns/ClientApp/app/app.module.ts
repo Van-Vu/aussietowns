@@ -4,8 +4,6 @@ import { UniversalModule } from 'angular2-universal';
 import { AppComponent } from './components/app/app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
-import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
-import { CounterComponent } from './components/counter/counter.component';
 import { MapComponent } from './components/map/map.component';
 import { SearchService } from './services/search.service';
 import { SuburbInforCardComponent } from './components/map/suburbinfocard.component';
@@ -37,14 +35,14 @@ import { TourParticipantComponent } from './components/shared/tourparticipant.co
 
 import { SwiperModule } from 'angular2-useful-swiper';
 import { DeviceDetectionService } from './components/shared/devicedetection.service';
+import { kpxAutocompleteComponent } from './components/shared/3rdParty/kpx-autocomplete.component';
+import { SliderComponent } from './components/shared/slider.component';
 
 @NgModule({
     bootstrap: [ AppComponent ],
     declarations: [
         AppComponent,
         NavMenuComponent,
-        CounterComponent,
-        FetchDataComponent,
         MapComponent,
         HomeComponent,
         SuburbInforCardComponent,
@@ -57,7 +55,9 @@ import { DeviceDetectionService } from './components/shared/devicedetection.serv
         TourDetailFormComponent,
         TourRequestFormComponent,
         ProfileSearchComponent,
-        TourParticipantComponent
+        TourParticipantComponent,
+        kpxAutocompleteComponent,
+        SliderComponent
     ],
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
@@ -71,8 +71,6 @@ import { DeviceDetectionService } from './components/shared/devicedetection.serv
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
-            { path: 'counter', component: CounterComponent },
-            { path: 'fetch-data', component: FetchDataComponent },
             { path: 'map', component: MapComponent },
             { path: 'profile/:id', component: ProfileFormComponent },
             { path: 'profile', component: ProfileFormComponent },

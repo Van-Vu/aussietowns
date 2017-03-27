@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AussieTowns.Model;
 using AussieTowns.Repository;
 
@@ -19,6 +20,11 @@ namespace AussieTowns.Services
         public IList<SuburbDetail> SearchByBoundingBox()
         {
             return _locationRepository.GetLocationsByBoundingBox();
+        }
+
+        public IList<SuburbDetail> SearchBySuburbName(string name)
+        {
+            return _locationRepository.GetLocationsBySuburbName(name).Take(10).ToList();
         }
     }
 }

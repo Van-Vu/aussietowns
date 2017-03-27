@@ -1,22 +1,7 @@
-﻿/*li .glyphicon {
-    margin-right: 10px;
-}
-
-li.link-active a,
-li.link-active a:hover,
-li.link-active a:focus {
-    background-color: #4189C7;
-    color: white;
-}*/
-
-/* Keep the nav menu independent of scrolling and on top of other items */
-#gmap {
+﻿#gmap {
     position: fixed !important;
     width: 80%; 
     height: 580px;
-    margin-top: 80px;
-    /*width: 0px;
-    height: 0px;*/
     float: left;
 }
 

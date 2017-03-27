@@ -1,0 +1,16 @@
+﻿<div class="sliderWrapper">
+    <div class="slide-button-prev" (click)="onPrev($event)">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+    </div>
+    <swiper #swiper [config]="config" [initialize]="initializeSwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" *ngFor="let slide of slides">
+                <img [src]="slide.imgSrc" />
+                <div>{{slide.text}}</div>
+            </div>
+        </div>
+    </swiper>
+    <div class="slide-button-next" (click)="onNext($event)">
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </div>
+</div>

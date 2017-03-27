@@ -25,5 +25,10 @@ namespace AussieTowns.Repository
             //    new SuburbDetail() {SuburbName = "Pyrmont", Postcode = 2099, Lat = -33.870, Lng = 151.190}
             //};
         }
+
+        public IQueryable<SuburbDetail> GetLocationsBySuburbName(string name)
+        {
+            return _context.SuburbDetails.Where(x => x.SuburbName.Contains(name));
+        }
     }
 }

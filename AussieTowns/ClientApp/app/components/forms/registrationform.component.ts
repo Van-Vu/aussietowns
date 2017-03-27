@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { User } from '../../model/user'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { CompleterService, CompleterData, RemoteData } from 'ng2-completer';
+import { CompleterService, CompleterData, RemoteData, CompleterItem } from 'ng2-completer';
 
 import { ModalFrameComponent } from './modalframe.component';
 
@@ -41,7 +41,7 @@ export class RegistrationFormComponent{
 
     constructor(private fb: FormBuilder, private completerService: CompleterService,
         private userService: UserService, private alertService: AlertService, private router: Router) {
-        this.dataService = completerService.local(this.searchData, 'color', 'color');     
+        this.dataService = completerService.local(this.searchData, 'color', 'color').descriptionField("value");     
     }
 
     ngOnInit() {
@@ -82,6 +82,10 @@ export class RegistrationFormComponent{
         //        var abc = data;
         //    }
         //);
+    }
+
+    public onCountrySelected(selected: CompleterItem) {
+        console.log(selected);
     }
 
     newHero() {

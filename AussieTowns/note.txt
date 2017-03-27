@@ -1,10 +1,20 @@
-﻿Remember action when script doesn't finish loading, still render page then dispaly like facebook
-Commsec show password on un-finish loading
+﻿Bodom tech debt:
+Call hotUpdate many times when start
+Find a Font
 How to deploy
+HTML5: section, article, summary, aside
+
+Nice to have:
+Remember action when script doesn't finish loading, still render page then dispaly like facebook
+Commsec show password on un-finish loading
+
 Goodrepo:
 https://github.com/aspnet/JavaScriptServices/tree/dev/templates/Angular2Spa
 https://github.com/damienbod/Angular2WebpackVisualStudio/blob/master/src/AngularWebpackVisualStudio/webpack.dev.js
 https://gist.github.com/shlomohass/c1c4c27e4dda3de52d57
 https://github.com/kekeh/mydatepicker/wiki/Two-date-pickers-set-options
 
+
+
 Modal-Backdrop CSS: position: fixed;width: 100%;height: 100%;background: rgba(0,0,0,0.7);z-index:10000;
+CSS: position absolute but relative to parent: http://stackoverflow.com/questions/10487292/position-absolute-but-relative-to-parent

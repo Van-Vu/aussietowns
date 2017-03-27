@@ -17,6 +17,11 @@ namespace AussieTowns
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.PhotoUrl))
                 .ForMember(dest => dest.ShortDescription, opts => opts.MapFrom(src => src.Description.PadLeft(30)));
+
+            CreateMap<SuburbDetail, AutoCompleteItem>()
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name,
+                    opts => opts.MapFrom(src => $"{src.SuburbName}, {src.State} ({src.Postcode})"));
         }
     }
 }

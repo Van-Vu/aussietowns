@@ -6,5 +6,7 @@ namespace AussieTowns.Services
     public interface ISearchService
     {
         IList<SuburbDetail> SearchByBoundingBox();
+
+        IList<SuburbDetail> SearchBySuburbName(string name);
     }
 }
