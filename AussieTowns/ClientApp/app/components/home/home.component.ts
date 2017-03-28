@@ -70,7 +70,7 @@ export class HomeComponent implements AfterViewChecked{
     }
     onTest(model) {
         console.log(model.value);
-        this.router.navigate(['map']);
+        this.router.navigate(['search']);
     }
 
     ngAfterViewChecked() {

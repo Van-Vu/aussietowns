@@ -1,4 +1,4 @@
-﻿import { Component, Injectable, OnInit, OnDestroy } from '@angular/core';
+﻿import { Component, Injectable, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { SearchService } from '../../services/search.service'
@@ -11,22 +11,29 @@ import { TripItem } from '../../model/tripItem';
 import { Http, Headers } from "@angular/http";
 import { isBrowser } from 'angular2-universal';
 
+import { TourService } from '../../services/tour.service';
+import { TourRequestModalComponent } from '../forms/tourrequestmodal.component';
+import { TourDetailModalComponent } from '../forms/tourdetailmodal.component';
+
 declare var google: any;
 @Component({
-    selector: "map",
-    template: require('./map.component.html'),
-    styles: [require('./map.component.css')]
+    selector: "search",
+    template: require('./search.component.html'),
 })
 
-export class MapComponent implements OnInit, OnDestroy, IMessageReceivedCallBack {
+export class SearchComponent implements OnInit, OnDestroy, IMessageReceivedCallBack {
+    @ViewChild(TourRequestModalComponent) tourRequestModalComponent: TourRequestModalComponent;
+    @ViewChild(TourDetailModalComponent) tourDetailModalComponent: TourDetailModalComponent;
+
     lat: number;
     lng: number;
     map: any = null;
-    suburbs: SuburbLocation[];
+    //suburbs: SuburbLocation[];
+    listings: any[] = [];
     itinerarySubscription: Subscription;
     totalDistance: number = 0;
 
-    constructor(private searchService: SearchService, private mapBridge: MapBridge) {}
+    constructor(private searchService: SearchService, private mapBridge: MapBridge, private tourService: TourService) {}
 
     ngOnInit() {
         if (isBrowser) {
@@ -44,8 +51,8 @@ export class MapComponent implements OnInit, OnDestroy, IMessageReceivedCallBack
                 this.lng = 1;
             } 
 
-            this.searchService.getSuburbs().subscribe(suburbs => {
-                this.suburbs = suburbs;
+            this.tourService.getAllListingOffer().subscribe(listings => {
+                this.listings = listings;
             });
         }
         //this.map.addListener("bounds_changed", (event) => this.callSomething(event));
@@ -111,6 +118,13 @@ export class MapComponent implements OnInit, OnDestroy, IMessageReceivedCallBack
         //});
     }
 
+    showTourRequest() {
+        this.tourRequestModalComponent.show();
+    }
+
+    showTourDetail() {
+        this.tourDetailModalComponent.show();
+    }
 }
 
 export interface IMessageReceivedCallBack {

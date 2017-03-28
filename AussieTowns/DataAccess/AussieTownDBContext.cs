@@ -37,6 +37,11 @@ namespace AussieTowns.DataAccess
                 .WithOne(e => e.User)
                 .IsRequired();
 
+
+            modelBuilder.Entity<TourOffer>()
+                .HasOne(p => p.Location)
+                .WithMany(b => b.TourOffers);
+
             modelBuilder.Entity<TourOffer>()
                 .HasMany(c => c.TourOperators)
                 .WithOne(e => e.TourOffer)

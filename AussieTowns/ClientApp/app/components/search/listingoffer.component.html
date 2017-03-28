@@ -1,0 +1,26 @@
+﻿<article class="listing-wrapper">
+    <div class="listing-header">
+        <div class="header-text"><h4>{{header}}</h4></div>
+        <div class="listing-cost">A${{cost}}</div>
+    </div>
+    <div class="listing-content">
+        <div class="listing-images">
+            <slider [slides]="slides" [config]="config" [initialize]="initializeSlide"></slider>
+        </div>
+        <div class="listing-description">asdfas {{description}} </div>
+    </div>
+    <div class="listing-footer">
+        <div class="left-panel">
+            <div class="listing-location">{{location}}</div>
+            <div class="listing-host">host by: {{hostName}}</div>
+        </div>
+        <div class="right-panel">
+            <div class="listing-date">{{date}} - {{time}}</div>
+            <div class="listing-review">review star here</div>
+        </div>
+    </div>
+    <div class="tooltip">
+        <div class="rating"></div>
+        <div class="shortlist"></div>
+    </div>
+</article>

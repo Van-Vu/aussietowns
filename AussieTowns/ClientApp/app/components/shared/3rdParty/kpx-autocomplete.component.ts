@@ -6,7 +6,7 @@ import { Headers, Http } from '@angular/http';
 import { Observable } from 'rxjs';
 import { AutocompleteItem, SelectedAutocompleteValue } from './kpx-autocomplete.models';
 import { ControlValueAccessor,FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
-import 'rxjs/add/operator/throttleTime';
+import 'rxjs/add/operator/debounceTime';
 
 import { SearchService } from '../../../services/search.service';
 
@@ -51,7 +51,7 @@ export class kpxAutocompleteComponent implements ControlValueAccessor {
         this.selected = new SelectedAutocompleteValue();
 
          this.term.valueChanges
-             .throttleTime(500)
+             .debounceTime(200)
              .subscribe((term) => {
                  if (term && this.indexSelected < 0) {
                      if (term.length >= this.minChars)

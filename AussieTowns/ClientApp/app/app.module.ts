@@ -4,9 +4,9 @@ import { UniversalModule } from 'angular2-universal';
 import { AppComponent } from './components/app/app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
-import { MapComponent } from './components/map/map.component';
+import { SearchComponent } from './components/search/search.component';
 import { SearchService } from './services/search.service';
-import { SuburbInforCardComponent } from './components/map/suburbinfocard.component';
+import { SuburbInforCardComponent } from './components/search/suburbinfocard.component';
 import { ItineraryComponent } from './components/itinerary/itinerary.component';
 import { ItineraryBridge } from './services/itinerary.bridge';
 import { MapBridge } from './services/map.bridge';
@@ -37,13 +37,16 @@ import { SwiperModule } from 'angular2-useful-swiper';
 import { DeviceDetectionService } from './components/shared/devicedetection.service';
 import { kpxAutocompleteComponent } from './components/shared/3rdParty/kpx-autocomplete.component';
 import { SliderComponent } from './components/shared/slider.component';
+import { ListingOfferComponent } from './components/search/listingoffer.component';
+import { TourRequestModalComponent } from './components/forms/tourrequestmodal.component';
+import { TourDetailModalComponent } from './components/forms/tourdetailmodal.component';
 
 @NgModule({
     bootstrap: [ AppComponent ],
     declarations: [
         AppComponent,
         NavMenuComponent,
-        MapComponent,
+        SearchComponent,
         HomeComponent,
         SuburbInforCardComponent,
         ItineraryComponent,
@@ -57,10 +60,12 @@ import { SliderComponent } from './components/shared/slider.component';
         ProfileSearchComponent,
         TourParticipantComponent,
         kpxAutocompleteComponent,
-        SliderComponent
+        SliderComponent,
+        ListingOfferComponent,
+        TourRequestModalComponent,
+        TourDetailModalComponent
     ],
     imports: [
-        UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
         Ng2CompleterModule,
         FormsModule,
         ReactiveFormsModule,
@@ -71,7 +76,7 @@ import { SliderComponent } from './components/shared/slider.component';
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
-            { path: 'map', component: MapComponent },
+            { path: 'search', component: SearchComponent },
             { path: 'profile/:id', component: ProfileFormComponent },
             { path: 'profile', component: ProfileFormComponent },
             { path: 'tourdetail/:id', component: TourDetailFormComponent },
@@ -79,7 +84,8 @@ import { SliderComponent } from './components/shared/slider.component';
             { path: 'tourrequest/:id', component: TourRequestFormComponent },
             { path: 'tourrequest', component: TourRequestFormComponent },
             { path: '**', redirectTo: 'home' }
-        ])
+        ]),
+        UniversalModule // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
     ],
     providers: [SearchService, ItineraryBridge, MapBridge, UserService, AlertService, AuthenticationService, TourService, DeviceDetectionService]
 })

@@ -4,10 +4,10 @@
     </div>
     <swiper #swiper [config]="config" [initialize]="initializeSwiper">
         <div class="swiper-wrapper">
-            <div class="swiper-slide" *ngFor="let slide of slides">
+            <figure class="swiper-slide" *ngFor="let slide of slides">
                 <img [src]="slide.imgSrc" />
-                <div>{{slide.text}}</div>
-            </div>
+                <figcaption>{{slide.text}}</figcaption>
+            </figure>
         </div>
     </swiper>
     <div class="slide-button-next" (click)="onNext($event)">

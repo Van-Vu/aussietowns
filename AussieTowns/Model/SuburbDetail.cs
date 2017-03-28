@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace AussieTowns.Model
 {
@@ -14,6 +16,8 @@ namespace AussieTowns.Model
         public string Detail { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }
+
+        public ICollection<TourOffer> TourOffers { get; set; }
 
     }
 }

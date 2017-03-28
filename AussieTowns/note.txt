@@ -1,8 +1,17 @@
 ﻿Bodom tech debt:
-Call hotUpdate many times when start
-Find a Font
-How to deploy
-HTML5: section, article, summary, aside
+- Reuse resource in search page
+- Call hotUpdate many times when start
+- Find a Font
+- How to deploy
+- HTML5: section, article, summary, aside
+- Location data: http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.001July%202016?OpenDocument
+- Action return JSonConverter keep Camelcase, return string Lower case
+- JS conversion of datetime base on current location
+- Color pallette: 
+https://designschool.canva.com/blog/website-color-schemes/
+https://designschool.canva.com/blog/100-color-combinations/
+https://www.awwwards.com/trendy-web-color-palettes-and-material-design-color-schemes-tools.html
+- Apple like scrollbar
 
 Nice to have:
 Remember action when script doesn't finish loading, still render page then dispaly like facebook
@@ -15,6 +24,7 @@ https://gist.github.com/shlomohass/c1c4c27e4dda3de52d57
 https://github.com/kekeh/mydatepicker/wiki/Two-date-pickers-set-options
 
 
-
-Modal-Backdrop CSS: position: fixed;width: 100%;height: 100%;background: rgba(0,0,0,0.7);z-index:10000;
-CSS: position absolute but relative to parent: http://stackoverflow.com/questions/10487292/position-absolute-but-relative-to-parent
+Sample solutions:
+- Modal-Backdrop CSS: position: fixed;width: 100%;height: 100%;background: rgba(0,0,0,0.7);z-index:10000;
+- CSS: position absolute but relative to parent: http://stackoverflow.com/questions/10487292/position-absolute-but-relative-to-parent
+- EF Core one to many: TourOffer config (sample: https://docs.microsoft.com/en-us/ef/core/modeling/relationships#foreign-key)

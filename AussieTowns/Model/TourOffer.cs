@@ -10,7 +10,8 @@ namespace AussieTowns.Model
     {
         public int Id { get; set; }
         public DateTime Time { get; set; }
-        public string Location { get; set; }
+        public int LocationId { get; set; }
+        public SuburbDetail Location { get; set; }
         public int Hour { get; set; }
         public int Minute { get; set; }
         public bool IsFullday { get; set; }

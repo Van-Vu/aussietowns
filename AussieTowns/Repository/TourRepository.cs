@@ -24,7 +24,10 @@ namespace AussieTowns.Repository
 
         public TourOffer GetTourOfferById(int id)
         {
-            return _context.TourOffers.AsNoTracking().SingleOrDefault(x => x.Id == id);
+            return _context.TourOffers.AsNoTracking()
+                .Include(x=>x.Location)
+                .Include(x => x.TourOperators).ThenInclude(x=>x.User)
+                .SingleOrDefault(x => x.Id == id);
         }
 
         public bool InsertTourOffer(TourOffer tourOffer)

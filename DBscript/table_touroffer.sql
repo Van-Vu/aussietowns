@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS touroffer;
 CREATE TABLE touroffer (
   id int(11) NOT NULL auto_increment,
   time DATETIME collate utf8_unicode_ci NOT NULL,
-  location varchar(100) collate utf8_unicode_ci default NULL,
+  locationid int default 0 NOT null,
   hour TINYINT collate utf8_unicode_ci NOT NULL,
   minute TINYINT collate utf8_unicode_ci NOT NULL,
   isFullday TINYINT collate utf8_unicode_ci NOT NULL,

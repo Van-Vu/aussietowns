@@ -10,6 +10,7 @@ import { isBrowser } from 'angular2-universal';
 
 import { TourService } from '../../services/tour.service';
 import { User } from '../../model/user';
+import { Utils } from '../../shared/utils';
 
 @Component({
     selector: 'tourdetailform',
@@ -76,7 +77,7 @@ export class TourDetailFormComponent {
                     this.tourService.getOfferById(this.tourId).subscribe(
                         data => {
                             this.model.controls['Id'].setValue(data.Data.Id);
-                            this.model.controls['Time'].setValue(this.transformDateFormat(data.Data.Time));
+                            this.model.controls['Time'].setValue(Utils.getDateTime(data.Data.Time));
                             this.model.controls['Location'].setValue(data.Data.Location);
                             this.model.controls['Cost'].setValue(data.Data.Cost);
                             this.model.controls['Header'].setValue(data.Data.Header);
@@ -140,15 +141,5 @@ export class TourDetailFormComponent {
 
     fulldayChange() {
         this.isFullday = !this.isFullday;
-    }
-
-    transformDateFormat(datetime) {
-        var date = new Date(datetime);
-        return this.ensureTwoDigit(date.getDate()) + '/' + this.ensureTwoDigit((date.getMonth()) + 1) + '/' + date.getFullYear()
-            + ' ' + this.ensureTwoDigit(date.getHours()) + ':' + this.ensureTwoDigit(date.getMinutes());
-    }
-
-    ensureTwoDigit(value) {
-        return ("0" + (value)).slice(-2);
     }
 }

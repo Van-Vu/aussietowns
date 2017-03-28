@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Model;
 using AussieTowns.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -15,22 +16,36 @@ namespace AussieTowns.Controllers
     public class TourController : Controller
     {
         private readonly ITourService _tourService;
+        private readonly IMapper _mapper;
 
-        public TourController(ITourService tourService)
+        public TourController(ITourService tourService, IMapper mapper)
         {
             _tourService = tourService;
+            _mapper = mapper;
         }
 
 
         [HttpGet("offer")]
+        [HttpGet("offer/listing")]
         public object GetTourOffer()
         {
             try
             {
+                var offers = _tourService.GetTourOffers();
+
+                if (Request.Path.Value.IndexOf("listing", 0, StringComparison.CurrentCultureIgnoreCase) > 0)
+                {
+                    return JsonConvert.SerializeObject(new RequestResult
+                    {
+                        State = RequestState.Success,
+                        Data = offers.Select(offer => _mapper.Map<TourOffer, ListingOffer>(offer))
+                    });
+                }
+
                 return JsonConvert.SerializeObject(new RequestResult
                 {
                     State = RequestState.Success,
-                    Data = _tourService.GetTourOffers()
+                    Data = offers
                 });
             }
             catch (Exception)
@@ -45,22 +60,37 @@ namespace AussieTowns.Controllers
         }
 
         [HttpGet("offer/{id}")]
+        [HttpGet("offer/listing/{id}")]
         public object GetTourOfferDetail(int id)
         {
             try
             {
+                var offer = _tourService.GetTourOfferDetail(id);
+
+                if (Request.Path.Value.IndexOf("listing", 0, StringComparison.CurrentCultureIgnoreCase) > 0)
+                {
+                    return JsonConvert.SerializeObject(new RequestResult
+                    {
+                        State = RequestState.Success,
+                        Data = _mapper.Map<TourOffer, ListingOffer>(offer)
+                    });
+                }
+
+                //Bodom: dirty hack
+                var serializerSetting = new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore};
+
                 return JsonConvert.SerializeObject(new RequestResult
                 {
                     State = RequestState.Success,
-                    Data = _tourService.GetTourOfferDetail(id)
-                });
+                    Data = offer
+                }, serializerSetting);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return JsonConvert.SerializeObject(new RequestResult
                 {
                     State = RequestState.Failed,
-                    Msg = "Something is wrong !"
+                    Msg = "Something is wrong :" + ex
                 });
             }
         }
