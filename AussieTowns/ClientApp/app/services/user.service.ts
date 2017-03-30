@@ -59,6 +59,12 @@ export class UserService {
             .catch(this.handleError);
     }
 
+    getToursByUserId(id: number) {
+        return this.http.get('api/user/tour/' + id, this.jwt())
+            .map(response => response.json() as RequestResult)
+            .catch(this.handleError);
+    }
+
     delete(_id: string) {
         return this.http.delete('/users/' + _id, this.jwt());
     }

@@ -163,8 +163,7 @@ namespace AussieTowns.Controllers
                 });
             }
         }
-
-
+        
         [HttpPost("profileimage")]
         public async Task<ActionResult> Post(IFormFile file)
         {

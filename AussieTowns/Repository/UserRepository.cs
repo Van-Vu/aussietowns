@@ -41,7 +41,7 @@ namespace AussieTowns.Repository
             }
             catch (Exception ex)
             {
-                return false;
+                throw ex;
             }
 
             return true;
@@ -59,7 +59,7 @@ namespace AussieTowns.Repository
             }
             catch (Exception ex)
             {
-                return false;
+                throw ex;
             }
 
             return true;
@@ -75,7 +75,7 @@ namespace AussieTowns.Repository
             }
             catch (Exception ex)
             {
-                return false;
+                throw ex;
             }
 
             return true;

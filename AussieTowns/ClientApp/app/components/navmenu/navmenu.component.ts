@@ -1,6 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { RegistrationFormComponent } from '../forms/registrationform.component';
-import { LoginFormComponent } from '../forms/loginform.component';
 import { Observable } from 'rxjs/Observable';
 
 import { Cookie } from 'ng2-cookies';
@@ -12,6 +10,8 @@ import { DeviceDetectionService, DeviceMode } from '../shared/devicedetection.se
 
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/throttleTime';
+import { RegistrationModalComponent } from '../modal/registrationmodal.component';
+import { LoginModalComponent } from '../modal/loginmodal.component';
 
 declare var document: any;
 
@@ -21,8 +21,8 @@ declare var document: any;
     styles: [require('./navmenu.component.scss').toString()]
 })
 export class NavMenuComponent {
-    @ViewChild(RegistrationFormComponent) registerModal: RegistrationFormComponent;
-    @ViewChild(LoginFormComponent) loginModal: LoginFormComponent;
+    @ViewChild(RegistrationModalComponent) registerModal: RegistrationModalComponent;
+    @ViewChild(LoginModalComponent) loginModal: LoginModalComponent;
 
     isLoggedin: boolean = false;
     name: string;
@@ -55,7 +55,6 @@ export class NavMenuComponent {
             Observable.fromEvent(window, 'scroll')
                 .throttleTime(1000)
                 .subscribe(e => {
-                    console.log('throttleTime fired:' + ' ' + new Date().getMinutes().toString() + ':' + new Date().getSeconds().toString() + ':' + new Date().getMilliseconds().toString());
                     this.onWindowScroll();
                 });
             

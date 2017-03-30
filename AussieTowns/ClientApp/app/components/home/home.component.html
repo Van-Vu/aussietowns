@@ -6,9 +6,6 @@
         <article>
             <form (ngSubmit)="onTest(model)" [formGroup]="model" class="searchbar">
                 <kpx-autocomplete id="thebox"
-                                  [id-field]="'id'"
-                                  [description-field]="'detail'"
-                                  [(ngModel)]="searchStr"
                                   [min-chars]="2"
                                   formControlName="test">
                 </kpx-autocomplete>

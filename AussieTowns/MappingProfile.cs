@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AussieTowns.Common;
 using AussieTowns.Model;
 using AutoMapper;
 
@@ -22,13 +23,13 @@ namespace AussieTowns
                 .ForMember(dest => dest.Name,
                     opts => opts.MapFrom(src => $"{src.SuburbName}, {src.State} ({src.Postcode})"));
 
-            CreateMap<TourOffer, ListingOffer>()
+            CreateMap<Listing, ListingSummary>()
                 .ForMember(dest => dest.Location,
                     opts => opts.MapFrom(src => $"{src.Location.SuburbName}, {src.Location.State} ({src.Location.Postcode})"))
                 .ForMember(dest => dest.PrimaryOwner,
-                    opts => opts.MapFrom(src => src.TourOperators.Any() ? src.TourOperators.FirstOrDefault().User.FirstName : string.Empty))
-                .ForMember(dest => dest.Participants,
-                    opts => opts.MapFrom(src => src.TourGuests.Count()));
+                    opts => opts.MapFrom(src => src.TourOperators.Any(x=>x.IsOwner) ? src.TourOperators.SingleOrDefault(x=>x.IsOwner).User.FirstName : string.Empty))
+                .ForMember(dest => dest.MinParticipant,
+                    opts => opts.MapFrom(src => src.Type==ListingType.Offer ? src.MinParticipant : src.TourGuests.Count()));
         }
     }
 }

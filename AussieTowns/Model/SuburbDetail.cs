@@ -17,7 +17,7 @@ namespace AussieTowns.Model
         public double Lat { get; set; }
         public double Lng { get; set; }
 
-        public ICollection<TourOffer> TourOffers { get; set; }
+        public ICollection<Listing> Listings { get; set; }
 
     }
 }

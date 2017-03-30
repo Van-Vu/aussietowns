@@ -15,8 +15,7 @@ namespace AussieTowns.DataAccess
 
         public DbSet<User> Users { get; set; }
 
-        public DbSet<TourOffer> TourOffers { get; set; }
-        public DbSet<TourRequest> TourRequests { get; set; }
+        public DbSet<Listing> Listings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,33 +31,32 @@ namespace AussieTowns.DataAccess
                 .WithOne(e => e.User)
                 .IsRequired();
 
-            modelBuilder.Entity<User>()
-                .HasMany(c => c.TourRequests)
-                .WithOne(e => e.User)
-                .IsRequired();
-
-
-            modelBuilder.Entity<TourOffer>()
+            modelBuilder.Entity<Listing>()
                 .HasOne(p => p.Location)
-                .WithMany(b => b.TourOffers);
+                .WithMany(b => b.Listings);
 
-            modelBuilder.Entity<TourOffer>()
+            modelBuilder.Entity<Listing>()
                 .HasMany(c => c.TourOperators)
-                .WithOne(e => e.TourOffer)
+                .WithOne(e => e.Listing)
                 .IsRequired();
 
-            modelBuilder.Entity<TourOffer>()
+            modelBuilder.Entity<Listing>()
                 .HasMany(c => c.TourGuests)
-                .WithOne(e => e.TourOffer)
+                .WithOne(e => e.Listing)
+                .IsRequired();
+
+            modelBuilder.Entity<Listing>()
+                .HasMany(c => c.Schedules)
+                .WithOne(e => e.Listing)
                 .IsRequired();
 
             modelBuilder.Entity<TourOperator>()
-                .HasKey(to => new { to.TourOfferId, to.UserId });
+                .HasKey(to => new { to.ListingId, to.UserId });
 
             modelBuilder.Entity<TourOperator>()
-                .HasOne(bc => bc.TourOffer)
+                .HasOne(bc => bc.Listing)
                 .WithMany(b => b.TourOperators)
-                .HasForeignKey(bc => bc.TourOfferId);
+                .HasForeignKey(bc => bc.ListingId);
 
             modelBuilder.Entity<TourOperator>()
                 .HasOne(bc => bc.User)
@@ -66,12 +64,12 @@ namespace AussieTowns.DataAccess
                 .HasForeignKey(bc => bc.UserId);
 
             modelBuilder.Entity<TourGuest>()
-                .HasKey(to => new { to.TourOfferId, to.UserId });
+                .HasKey(to => new { to.ListingId, to.UserId });
 
             modelBuilder.Entity<TourGuest>()
-                .HasOne(bc => bc.TourOffer)
+                .HasOne(bc => bc.Listing)
                 .WithMany(b => b.TourGuests)
-                .HasForeignKey(bc => bc.TourOfferId);
+                .HasForeignKey(bc => bc.ListingId);
 
             modelBuilder.Entity<TourGuest>()
                 .HasOne(bc => bc.User)

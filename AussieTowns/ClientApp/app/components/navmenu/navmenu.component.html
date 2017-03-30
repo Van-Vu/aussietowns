@@ -44,7 +44,7 @@
                         <span class='glyphicon glyphicon-th-list'></span> Test
                     </a>
                 </li>-->
-                <li [routerLinkActive]="['link-active']">
+                <li [routerLinkActive]="['link-active']" class="nav-bar__menu-item">
                     <a class="nav-bar__menu-item-link" [routerLink]="['/tourdetail', 6]">
                         <span class='glyphicon glyphicon-th-list'></span> Tour Detail
                     </a>
@@ -78,8 +78,8 @@
         </div>
 
     </div>
-    <registrationform></registrationform>
-    <loginform (isLoggedIn)="handleLoggedIn($event)"></loginform>
+    <registrationmodal></registrationmodal>
+    <loginmodal (isLoggedIn)="handleLoggedIn($event)"></loginmodal>
 </div>
 
 

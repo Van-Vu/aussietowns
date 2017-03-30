@@ -1,9 +1,10 @@
 ﻿//Base rules
+@import 'base/elementatom';
 @import 'base/colors';
 @import 'base/effect';
 @import 'base/font';
 @import 'base/size';
-@import 'base/font-awesome';
+@import 'base/font-glyphincon-halflings';
 @import 'mixins/absolutecenter';
 @import 'mixins/breakpoints';
 @import 'mixins/buttons';
@@ -22,3 +23,5 @@
 @import 'components/slider';
 @import 'components/search';
 @import 'components/listingoffer';
+@import 'components/profile';
+@import 'components/profileform';

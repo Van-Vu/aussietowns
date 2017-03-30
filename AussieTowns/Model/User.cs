@@ -26,7 +26,6 @@ namespace AussieTowns.Model
         public string PhotoUrl { get; set; }
         public string VideoUrl { get; set; }
 
-        public ICollection<TourRequest> TourRequests { get; set; }
         public ICollection<TourOperator> TourOperators { get; set; }
         public ICollection<TourGuest> TourGuests { get; set; }
     }

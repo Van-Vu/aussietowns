@@ -61,12 +61,12 @@ export class HomeComponent implements AfterViewChecked{
     }
 
     model: FormGroup;
-    searchStr: string;
     ngOnInit() {
         this.model = this.fb.group({
             test: ['']
         });
 
+        this.model.controls['test'].setValue({id:'123',name:'Bodom'});
     }
     onTest(model) {
         console.log(model.value);

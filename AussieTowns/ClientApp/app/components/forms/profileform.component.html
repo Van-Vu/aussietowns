@@ -2,9 +2,9 @@
     <div class="form-group">
         <label for="email">Email Address</label>
         <input type="text" class="form-control" id="email"
-               placeholder="Your email address"
-               [textMask]="{mask: myEmailMask, guide: false, keepCharPositions: true}"
-               formControlName="Email">
+                placeholder="Your email address"
+                [textMask]="{mask: myEmailMask, guide: false, keepCharPositions: true}"
+                formControlName="Email">
 
         <div *ngIf="formErrors.Email" class="alert alert-danger">
             {{ formErrors.Email }}
@@ -49,10 +49,7 @@
     </div>
     <div class="form-group">
         <label for="location">Origin location</label>
-        <ng2-completer id="location"
-                       placeholder="Your origin location"
-                       formControlName="Location" [(ngModel)]="searchStr" [dataService]="dataService" [minSearchLength]="2"
-                       [textSearching]="'Please wait...'" [overrideSuggested]="true"></ng2-completer>
+        <kpx-autocomplete [min-chars]="2" formControlName="Location"></kpx-autocomplete>
     </div>
     <div class="form-group">
         <label for="phoneNumber">Phone Number</label>

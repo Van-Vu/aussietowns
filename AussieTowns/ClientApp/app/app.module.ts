@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouteReuseStrategy } from '@angular/router';
 import { UniversalModule } from 'angular2-universal';
 import { AppComponent } from './components/app/app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
@@ -15,9 +15,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistrationFormComponent } from './components/forms/registrationform.component';
 import { ProfileFormComponent } from './components/forms/profileform.component';
 import { LoginFormComponent } from './components/forms/loginform.component';
-
-import { ModalFrameComponent } from './components/forms/modalframe.component';
-
 import { UserService } from  './services/user.service';
 import { AlertService } from './services/alert.service';
 import { AuthenticationService } from './services/authentication.service';
@@ -26,10 +23,8 @@ import { TextMaskModule } from 'angular2-text-mask';
 
 import { ImageUploadModule } from 'ng2-imageupload';
 import { MiniProfileComponent } from './components/shared/miniprofile.component';
-import { TourDetailFormComponent } from './components/forms/tourdetailform.component';
 import { MyDatePickerModule } from 'mydatepicker';
-import { TourRequestFormComponent } from './components/forms/tourrequestform.component';
-import { TourService } from './services/tour.service';
+import { ListingService } from './services/listing.service';
 import { ProfileSearchComponent } from './components/shared/profilesearch.component';
 import { TourParticipantComponent } from './components/shared/tourparticipant.component';
 
@@ -37,9 +32,51 @@ import { SwiperModule } from 'angular2-useful-swiper';
 import { DeviceDetectionService } from './components/shared/devicedetection.service';
 import { kpxAutocompleteComponent } from './components/shared/3rdParty/kpx-autocomplete.component';
 import { SliderComponent } from './components/shared/slider.component';
-import { ListingOfferComponent } from './components/search/listingoffer.component';
-import { TourRequestModalComponent } from './components/forms/tourrequestmodal.component';
-import { TourDetailModalComponent } from './components/forms/tourdetailmodal.component';
+import { ListingOfferCardComponent } from './components/search/listingoffercard.component';
+import { CustomReuseStrategy }from './components/shared/customeReuseStrategy';
+import { ProfileComponent } from './components/profile/profile.component';
+
+import { isBrowser } from 'angular2-universal';
+
+import { TextMaskMockModule } from './components/shared/3rdParty/textmask_Mock';
+import { ListingOfferFormComponent } from './components/forms/listingofferform.component';
+import { ListingRequestFormComponent } from './components/forms/listingrequestform.component';
+import { ModalFrameComponent } from './components/modal/modalframe.component';
+import { ListingRequestModalComponent } from './components/modal/listingrequestmodal.component';
+import { ListingOfferModalComponent } from './components/modal/listingoffermodal.component';
+import { LoginModalComponent } from './components/modal/loginmodal.component';
+import { RegistrationModalComponent } from './components/modal/registrationmodal.component';
+
+
+let imports = [
+    Ng2CompleterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ImageUploadModule,
+    MyDatePickerModule,
+    SwiperModule,
+    RouterModule.forRoot([
+        { path: '', redirectTo: 'home', pathMatch: 'full' },
+        { path: 'home', component: HomeComponent },
+        { path: 'search', component: SearchComponent },
+        { path: 'profile/:id', component: ProfileComponent },
+        { path: 'profile', component: ProfileComponent },
+        { path: 'touroffer/:id', component: ListingOfferFormComponent },
+        { path: 'touroffer', component: ListingOfferFormComponent },
+        { path: 'tourrequest/:id', component: ListingRequestFormComponent },
+        { path: 'tourrequest', component: ListingRequestFormComponent },
+        { path: '**', redirectTo: 'home' }
+    ]),
+    UniversalModule // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
+];
+
+if (isBrowser) {
+    let textMaskModule = TextMaskModule;
+    imports.push(textMaskModule);
+} else {
+    let textMaskMock = TextMaskMockModule;
+    imports.push(textMaskMock);
+}
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -55,39 +92,23 @@ import { TourDetailModalComponent } from './components/forms/tourdetailmodal.com
         ProfileFormComponent,
         ModalFrameComponent,
         MiniProfileComponent,
-        TourDetailFormComponent,
-        TourRequestFormComponent,
+        ListingOfferFormComponent,
+        ListingRequestFormComponent,
         ProfileSearchComponent,
         TourParticipantComponent,
         kpxAutocompleteComponent,
         SliderComponent,
-        ListingOfferComponent,
-        TourRequestModalComponent,
-        TourDetailModalComponent
+        ListingOfferCardComponent,
+        ListingRequestModalComponent,
+        ListingOfferModalComponent,
+        ProfileComponent,
+        LoginModalComponent,
+        RegistrationModalComponent
     ],
-    imports: [
-        Ng2CompleterModule,
-        FormsModule,
-        ReactiveFormsModule,
-        TextMaskModule,
-        ImageUploadModule,
-        MyDatePickerModule,
-        SwiperModule,
-        RouterModule.forRoot([
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'home', component: HomeComponent },
-            { path: 'search', component: SearchComponent },
-            { path: 'profile/:id', component: ProfileFormComponent },
-            { path: 'profile', component: ProfileFormComponent },
-            { path: 'tourdetail/:id', component: TourDetailFormComponent },
-            { path: 'tourdetail', component: TourDetailFormComponent },
-            { path: 'tourrequest/:id', component: TourRequestFormComponent },
-            { path: 'tourrequest', component: TourRequestFormComponent },
-            { path: '**', redirectTo: 'home' }
-        ]),
-        UniversalModule // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
-    ],
-    providers: [SearchService, ItineraryBridge, MapBridge, UserService, AlertService, AuthenticationService, TourService, DeviceDetectionService]
+    imports: imports,
+    providers: [SearchService, ItineraryBridge, MapBridge, UserService, AlertService,
+        AuthenticationService, ListingService, DeviceDetectionService,
+        { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }]
 })
 
 export class AppModule {}

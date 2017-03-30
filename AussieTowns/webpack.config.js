@@ -42,7 +42,7 @@ module.exports = (env) => {
             new ExtractTextPlugin("mystyles.css"),
             new CheckerPlugin(),
           new CopyWebpackPlugin([
-              { from: './ClientApp/asset/font', to: '../asset/fonts' },
+              { from: './ClientApp/asset/fonts', to: '../asset/fonts' },
               { from: './ClientApp/asset/images', to: '../asset/images' }
           ])
         ]

@@ -24,15 +24,11 @@ export class kpxAutocompleteComponent implements ControlValueAccessor {
     }
 
     @Input('key-value') keyValue :string;
-    @Input('data-property') dataPropertyName :string = "";
     @Input('param-get-search') paramGetSearch :string = "search";
-
-    @Input('id-field') nameIDField :string;
-    @Input('description-field') nameDescriptionField :string;
     @Input('min-chars') minChars :number = 1;
     @Input('placeholder') placeholder :string = "";
 
-    @Output('onSelect') onSelect: EventEmitter<string> = new EventEmitter<string>();
+    @Output('onSelect') onSelect: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
     
     private term = new FormControl();
 
@@ -64,14 +60,14 @@ export class kpxAutocompleteComponent implements ControlValueAccessor {
         
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if(changes['textValue']) {
-            this.selected.Description = changes['textValue'].currentValue;
-        }
-        if(changes['keyValue']) {
-            this.selected.Value = changes['keyValue'].currentValue;
-        }
-    }
+    //ngOnChanges(changes: SimpleChanges) {
+    //    if(changes['textValue']) {
+    //        this.selected.Description = changes['textValue'].currentValue;
+    //    }
+    //    if(changes['keyValue']) {
+    //        this.selected.Value = changes['keyValue'].currentValue;
+    //    }
+    //}
   
 
     fetch(search:string):void {
@@ -121,13 +117,14 @@ export class kpxAutocompleteComponent implements ControlValueAccessor {
 
     doSelectIndex(index:number):void {
         this.indexSelected = index;
-        //this.selected.Description = `${this.list[this.indexSelected].ID} - ${this.list[this.indexSelected].Name}`;
+
         this.selected.Description = `${this.list[this.indexSelected].name}`;
         this.selected.Value = this.list[this.indexSelected].id;
 
         this.keyValue = this.selected.Value;
-        this.onChange(this.keyValue);
-        this.onSelect.emit(this.keyValue);
+        this.onChange(this.list[this.indexSelected]);
+
+        this.onSelect.emit(this.list[this.indexSelected]);
 
         this.firstSet = false;
     }
@@ -162,7 +159,8 @@ export class kpxAutocompleteComponent implements ControlValueAccessor {
             console.log(this.selected);
             this.selected.Description = "";
             this.firstSet = false;
-        } 
+        }
+        console.log(value);
     }
 
     registerOnChange(fn: any) {

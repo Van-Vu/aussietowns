@@ -1,12 +1,8 @@
-﻿import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { User } from '../../model/user'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-import { CompleterService, CompleterData, RemoteData, CompleterItem } from 'ng2-completer';
-
-import { ModalFrameComponent } from './modalframe.component';
 
 import { forbiddenNameValidator } from '../../shared/email.validator';
 
@@ -20,29 +16,14 @@ import { UserService } from '../../services/user.service';
 })
 
 export class RegistrationFormComponent{
-    @ViewChild(ModalFrameComponent) modal: ModalFrameComponent;
+    @Output() isRegistered = new EventEmitter<any>();
 
     powers = ['Really Smart', 'Super Flexible',
         'Super Hot', 'Weather Changer'];
     model: FormGroup;
     loading = false;
-
-    private searchStr: string;
-    private dataService: CompleterData;
-    private searchData = [
-        { color: 'red', value: '#f00' },
-        { color: 'green', value: '#0f0' },
-        { color: 'blue', value: '#00f' },
-        { color: 'cyan', value: '#0ff' },
-        { color: 'magenta', value: '#f0f' },
-        { color: 'yellow', value: '#ff0' },
-        { color: 'black', value: '#000' }
-    ];
-
-    constructor(private fb: FormBuilder, private completerService: CompleterService,
-        private userService: UserService, private alertService: AlertService, private router: Router) {
-        this.dataService = completerService.local(this.searchData, 'color', 'color').descriptionField("value");     
-    }
+    
+    constructor(private fb: FormBuilder, private userService: UserService, private alertService: AlertService, private router: Router) {}
 
     ngOnInit() {
         this.model = this.fb.group({
@@ -69,12 +50,13 @@ export class RegistrationFormComponent{
             .subscribe(
             data => {
                 this.alertService.success('Registration successful', true);
-                this.router.navigate(['/login']);
-                this.modal.hide();
+                //this.router.navigate(['/login']);
+                this.isRegistered.emit(true);
             },
             error => {
                 this.alertService.error(error._body);
                 this.loading = false;
+                this.isRegistered.emit(false);
             });
 
         //this.userService.getUserInfo().subscribe(
@@ -97,10 +79,6 @@ export class RegistrationFormComponent{
             Password: ['', [Validators.required, Validators.minLength(7)]],
             Phone: ['', [Validators.required, Validators.minLength(2)]]
         });
-    }
-
-    public show(): void {
-        this.modal.show();
     }
 
     onValueChanged(data?: any) {

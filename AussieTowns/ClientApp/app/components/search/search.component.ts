@@ -11,9 +11,9 @@ import { TripItem } from '../../model/tripItem';
 import { Http, Headers } from "@angular/http";
 import { isBrowser } from 'angular2-universal';
 
-import { TourService } from '../../services/tour.service';
-import { TourRequestModalComponent } from '../forms/tourrequestmodal.component';
-import { TourDetailModalComponent } from '../forms/tourdetailmodal.component';
+import { ListingService } from '../../services/listing.service';
+import { ListingRequestModalComponent } from '../modal/listingrequestmodal.component';
+import { ListingOfferModalComponent } from '../modal/listingoffermodal.component';
 
 declare var google: any;
 @Component({
@@ -22,8 +22,8 @@ declare var google: any;
 })
 
 export class SearchComponent implements OnInit, OnDestroy, IMessageReceivedCallBack {
-    @ViewChild(TourRequestModalComponent) tourRequestModalComponent: TourRequestModalComponent;
-    @ViewChild(TourDetailModalComponent) tourDetailModalComponent: TourDetailModalComponent;
+    @ViewChild(ListingRequestModalComponent) listingRequestModalComponent: ListingRequestModalComponent;
+    @ViewChild(ListingOfferModalComponent) listingOfferModalComponent: ListingOfferModalComponent;
 
     lat: number;
     lng: number;
@@ -33,7 +33,7 @@ export class SearchComponent implements OnInit, OnDestroy, IMessageReceivedCallB
     itinerarySubscription: Subscription;
     totalDistance: number = 0;
 
-    constructor(private searchService: SearchService, private mapBridge: MapBridge, private tourService: TourService) {}
+    constructor(private searchService: SearchService, private mapBridge: MapBridge, private listingService: ListingService) {}
 
     ngOnInit() {
         if (isBrowser) {
@@ -51,9 +51,9 @@ export class SearchComponent implements OnInit, OnDestroy, IMessageReceivedCallB
                 this.lng = 1;
             } 
 
-            this.tourService.getAllListingOffer().subscribe(listings => {
-                this.listings = listings;
-            });
+            //this.listingService.getAllListingOffer().subscribe(listings => {
+            //    this.listings = listings;
+            //});
         }
         //this.map.addListener("bounds_changed", (event) => this.callSomething(event));
         //this.map.addListener("click", (event) => this.callSomething(event));
@@ -119,11 +119,11 @@ export class SearchComponent implements OnInit, OnDestroy, IMessageReceivedCallB
     }
 
     showTourRequest() {
-        this.tourRequestModalComponent.show();
+        this.listingRequestModalComponent.show();
     }
 
     showTourDetail() {
-        this.tourDetailModalComponent.show();
+        this.listingOfferModalComponent.show();
     }
 }
 

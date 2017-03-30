@@ -3,8 +3,6 @@
 import { User } from '../../model/user'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { ModalFrameComponent } from './modalframe.component';
-
 import { forbiddenNameValidator } from '../../shared/email.validator';
 
 import { UserService } from '../../services/user.service';
@@ -16,7 +14,6 @@ import { UserService } from '../../services/user.service';
 })
 
 export class LoginFormComponent {
-    @ViewChild(ModalFrameComponent) modal: ModalFrameComponent;
     model: FormGroup;
     @Output() isLoggedIn = new EventEmitter<any>();
 
@@ -42,7 +39,6 @@ export class LoginFormComponent {
             data => {
                 if (data.State == 1) {
                     this.isLoggedIn.emit({ id: data.Data.userId, name: data.Data.username });
-                    this.modal.hide();
                 }
                 else {
                     this.isLoggedIn.emit(null);
@@ -54,14 +50,6 @@ export class LoginFormComponent {
             error => {
 
             });
-    }
-
-    public show(): void {
-        this.modal.show();
-    }
-
-    public hide(): void {
-        this.modal.hide();
     }
 
     onValueChanged(data?: any) {

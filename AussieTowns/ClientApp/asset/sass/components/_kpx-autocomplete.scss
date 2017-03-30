@@ -1,50 +1,41 @@
-﻿.kpx-autocomplete-main {
-position: relative;
+﻿kpx-autocomplete {
+    position:relative;
 }
 
+.menu {
+    min-width: 200px;
+    padding: 5px 0;
+    box-shadow: 0 9px 20px rgba(0, 0, 0, 0.25);
+    position: absolute;
+    background: #fff;
+    z-index: 1000;
+    overflow: auto;
+    width: 100%;
+    right:0;
 
-.kpx-autocomplete-main  .menu {
-min-width: 190px;
-padding: 12px 0;
-box-shadow: 0 9px 20px rgba(0, 0, 0, 0.25);
-position: absolute;
-top: 100%;
-left: 0;
-background: #fff;
-z-index: 1000;
-max-height: 350px;
-overflow: auto;
+    .menu-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .menu-list-item {
+        font-size: 14px;
+        color: #0c0c0c;
+        padding: 6px 20px;
+
+        &.selected {
+            font-weight: bold;
+            background-color: #f2f4f6;
+        }
+
+        &:hover {
+            background: #f2f4f6;
+        }
+    }
 }
 
 .kpx-autocomplete-main  .col .menu {
 width: 100%;
 }
 
-.kpx-autocomplete-main  .menu-list {
-list-style: none;
-margin: 0;
-padding: 0;
-}
-
-.kpx-autocomplete-main  .menu-list-item {
-font-size: 14px;
-color: #0c0c0c;
-padding: 6px 20px;
-}
-
-.kpx-autocomplete-main  .menu-list-item.selected {
-font-weight: bold;
-background-color: #f2f4f6;
-}
-
-.kpx-autocomplete-main .menu-list-item:hover {
-background: #f2f4f6;
-}
-
-.kpx-autocomplete-main .input{
-    width: 100%;
-    @include input-border;
-    border-radius: 4px 0 0 4px;
-    height: 26px;
-    border-right-width: 0;
-}
