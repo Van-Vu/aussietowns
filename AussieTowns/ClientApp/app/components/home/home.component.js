@@ -10,15 +10,51 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var user_service_1 = require("../../services/user.service");
+var angular2_universal_1 = require("angular2-universal");
 var HomeComponent = (function () {
     function HomeComponent(userService) {
         this.userService = userService;
+        //The time to show the next photo
+        this.NextPhotoInterval = 5000;
+        //Looping or not
+        this.noLoopSlides = true;
+        //Photos
+        this.slides = [];
+        this.initializeSwiper = false;
+        //config: Object = {
+        //    pagination: '.swiper-pagination',
+        //    paginationClickable: true,
+        //    nextButton: '.swiper-button-next',
+        //    prevButton: '.swiper-button-prev',
+        //    spaceBetween: 30
+        //};
+        this.config = {
+            pagination: '.swiper-pagination',
+            nextButton: '.swiper-button-next',
+            prevButton: '.swiper-button-prev',
+            slidesPerView: 1,
+            paginationClickable: true,
+            spaceBetween: 30,
+            loop: true
+        };
         this.src = "";
         this.resizeOptions = {
             resizeMaxHeight: 128,
             resizeMaxWidth: 128
         };
+        this.addNewSlide();
     }
+    HomeComponent.prototype.ngAfterViewChecked = function () {
+        if (angular2_universal_1.isBrowser) {
+            this.initializeSwiper = true;
+        }
+    };
+    HomeComponent.prototype.addNewSlide = function () {
+        this.slides.push({ index: 1, image: 'http://www.angulartypescript.com/wp-content/uploads/2016/03/car1.jpg', text: 'BMW 1' }, { index: 2, image: 'http://www.angulartypescript.com/wp-content/uploads/2016/03/car2.jpg', text: 'BMW 2' });
+    };
+    HomeComponent.prototype.removeLastSlide = function () {
+        this.slides.pop();
+    };
     HomeComponent.prototype.addFile = function () {
         var fi = this.fileInput.nativeElement;
         if (fi.files && fi.files[0]) {

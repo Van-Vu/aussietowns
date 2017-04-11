@@ -35,6 +35,9 @@ var tourdetailform_component_1 = require("./components/forms/tourdetailform.comp
 var mydatepicker_1 = require("mydatepicker");
 var tourrequestform_component_1 = require("./components/forms/tourrequestform.component");
 var tour_service_1 = require("./services/tour.service");
+var profilesearch_component_1 = require("./components/shared/profilesearch.component");
+var tourparticipant_component_1 = require("./components/shared/tourparticipant.component");
+var angular2_useful_swiper_1 = require("angular2-useful-swiper");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -58,7 +61,9 @@ AppModule = __decorate([
             modalframe_component_1.ModalFrameComponent,
             miniprofile_component_1.MiniProfileComponent,
             tourdetailform_component_1.TourDetailFormComponent,
-            tourrequestform_component_1.TourRequestFormComponent
+            tourrequestform_component_1.TourRequestFormComponent,
+            profilesearch_component_1.ProfileSearchComponent,
+            tourparticipant_component_1.TourParticipantComponent
         ],
         imports: [
             angular2_universal_1.UniversalModule,
@@ -68,12 +73,14 @@ AppModule = __decorate([
             angular2_text_mask_1.TextMaskModule,
             ng2_imageupload_1.ImageUploadModule,
             mydatepicker_1.MyDatePickerModule,
+            angular2_useful_swiper_1.SwiperModule,
             router_1.RouterModule.forRoot([
                 { path: '', redirectTo: 'home', pathMatch: 'full' },
                 { path: 'home', component: home_component_1.HomeComponent },
                 { path: 'counter', component: counter_component_1.CounterComponent },
                 { path: 'fetch-data', component: fetchdata_component_1.FetchDataComponent },
                 { path: 'map', component: map_component_1.MapComponent },
+                { path: 'profile/:id', component: profileform_component_1.ProfileFormComponent },
                 { path: 'profile', component: profileform_component_1.ProfileFormComponent },
                 { path: 'tourdetail/:id', component: tourdetailform_component_1.TourDetailFormComponent },
                 { path: 'tourdetail', component: tourdetailform_component_1.TourDetailFormComponent },

@@ -2,24 +2,24 @@
     <div class="form-group">
         <label for="email">Email Address</label>
         <input type="text" class="form-control" id="email"
-               placeholder="Your email address"
-               [textMask]="{mask: myEmailMask, guide: false, keepCharPositions: true}"
-               formControlName="Email">
+                placeholder="Your email address"
+                [textMask]="{mask: myEmailMask, guide: false, keepCharPositions: true}"
+                formControlName="email">
 
-        <div *ngIf="formErrors.Email" class="alert alert-danger">
-            {{ formErrors.Email }}
+        <div *ngIf="formErrors.email" class="alert alert-danger">
+            {{ formErrors.email }}
         </div>
     </div>
     <div class="form-group">
         <label for="password">Password</label>
         <input type="text" class="form-control" id="password"
                placeholder="Your password"
-               formControlName="Password">
+               formControlName="password">
 
-        <div class="alert alert-danger" *ngIf="model.get('Password').hasError('required') && model.get('Password').touched">
+        <div class="alert alert-danger" *ngIf="model.get('password').hasError('required') && model.get('password').touched">
             Password is required
         </div>
-        <div class="alert alert-danger" *ngIf="model.get('Password').hasError('minlength') && model.get('Password').touched">
+        <div class="alert alert-danger" *ngIf="model.get('password').hasError('minlength') && model.get('password').touched">
             Minimum of 7 characters
         </div>
     </div>
@@ -27,11 +27,11 @@
         <label for="firstName">First Name</label>
         <input type="text" class="form-control" id="firstName"
                placeholder="Your first name"
-               formControlName="FirstName">
-        <div class="alert alert-danger" *ngIf="model.get('FirstName').hasError('required') && model.get('FirstName').touched">
+               formControlName="firstName">
+        <div class="alert alert-danger" *ngIf="model.get('firstName').hasError('required') && model.get('firstName').touched">
             Name is required
         </div>
-        <div class="alert alert-danger" *ngIf="model.get('FirstName').hasError('minlength') && model.get('FirstName').touched">
+        <div class="alert alert-danger" *ngIf="model.get('firstName').hasError('minlength') && model.get('firstName').touched">
             Minimum of 2 characters
         </div>
     </div>
@@ -39,31 +39,28 @@
         <label for="lastName">Last Name</label>
         <input type="text" class="form-control" id="lastName"
                placeholder="Your last name"
-               formControlName="LastName">
-        <div class="alert alert-danger" *ngIf="model.get('LastName').hasError('required') && model.get('LastName').touched">
+               formControlName="lastName">
+        <div class="alert alert-danger" *ngIf="model.get('lastName').hasError('required') && model.get('lastName').touched">
             Name is required
         </div>
-        <div class="alert alert-danger" *ngIf="model.get('LastName').hasError('minlength') && model.get('LastName').touched">
+        <div class="alert alert-danger" *ngIf="model.get('lastName').hasError('minlength') && model.get('lastName').touched">
             Minimum of 2 characters
         </div>
     </div>
     <div class="form-group">
         <label for="location">Origin location</label>
-        <ng2-completer id="location"
-                       placeholder="Your origin location"
-                       formControlName="Location" [(ngModel)]="searchStr" [dataService]="dataService" [minSearchLength]="2"
-                       [textSearching]="'Please wait...'" [overrideSuggested]="true"></ng2-completer>
+        <kpx-autocomplete [min-chars]="2" formControlName="locationId" [search-data]="searchLocations" (onSearch)="onLocationSearch($event)"></kpx-autocomplete>
     </div>
     <div class="form-group">
         <label for="phoneNumber">Phone Number</label>
         <input type="text" class="form-control" id="phoneNumber"
                placeholder="Your phone number"
                [textMask]="{mask: phoneNumberMask}"
-               formControlName="Phone">
+               formControlName="phone">
     </div>
     <div class="form-group">
         <label for="gender">Gender</label>
-        <select id="gender" class="form-control" formControlName="Gender">
+        <select id="gender" class="form-control" formControlName="gender">
             <option value="" selected="selected">Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
@@ -75,25 +72,25 @@
         <input type="text" class="form-control" id="birthday"
                placeholder="mm/dd/yyyy"
                [textMask]="{mask: dateMask, guide: false, keepCharPositions: false, pipe: autoCorrectedDatePipe}"
-               formControlName="Birthday">
+               formControlName="birthday">
     </div>
     <div class="form-group">
         <label for="description">Description</label>
         <textarea type="text" class="form-control" id="description"
                placeholder="Short description about yourself"
-               formControlName="Description" cols="40" rows="5"></textarea>
+               formControlName="description" cols="40" rows="5"></textarea>
     </div>
     <div class="form-group">
         <label for="address">Address</label>
         <input type="text" class="form-control" id="address"
                placeholder="Your current address"
-               formControlName="Address">
+               formControlName="address">
     </div>
     <div class="form-group">
         <label for="emergencyContact">Emergency contact</label>
         <input type="text" class="form-control" id="emergencyContact"
                placeholder="Your emergency contact"
-               formControlName="EmergencyContact">
+               formControlName="emergencyContact">
     </div>
     <div class="form-group">
         <label for="photo">Photo</label>

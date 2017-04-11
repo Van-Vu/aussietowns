@@ -11,6 +11,8 @@ import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrect
 import emailMask from 'text-mask-addons/dist/emailMask.js';
 
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
+import { SearchService } from '../../services/search.service';
 
 @Component({
     selector: 'profileform',
@@ -26,25 +28,29 @@ export class ProfileFormComponent implements AfterViewInit{
     public get autoCorrectedDatePipe(): any { return createAutoCorrectedDatePipe('mm/dd/yyyy'); }
     myEmailMask: any;
     phoneNumberMask: any;
+    private sub: any;
+    profileId: number = 0;
+    searchLocations: any;
 
-    constructor(private fb: FormBuilder, private userService: UserService, private sanitizer: DomSanitizer, private element: ElementRef) { }
+    constructor(private fb: FormBuilder, private userService: UserService, private route: ActivatedRoute,
+        private sanitizer: DomSanitizer, private element: ElementRef, private searchService: SearchService) { }
 
     ngOnInit() {
         this.model = this.fb.group({
-            Id: [''],
-            Email: ["asdfadsfa@adfasd.com", [forbiddenNameValidator()]],
-            Password: ['', [Validators.required, Validators.minLength(7)]],
-            FirstName: ['', [Validators.required, Validators.minLength(2)]],
-            LastName: ['', [Validators.required, Validators.minLength(2)]],
-            Phone: [''],
-            Location: [''],
-            Gender: [''],
-            Birthday: [''],
-            Description: [''],
-            Address: [''],
-            EmergencyContact: [''],
-            Photo: [''],
-            Video: ['']
+            id: [''],
+            email: ['', [forbiddenNameValidator()]],
+            password: ['', [Validators.required, Validators.minLength(7)]],
+            firstName: ['', [Validators.required, Validators.minLength(2)]],
+            lastName: ['', [Validators.required, Validators.minLength(2)]],
+            phone: [''],
+            locationId: [''],
+            gender: [''],
+            birthday: [''],
+            aescription: [''],
+            address: [''],
+            emergencyContact: [''],
+            photo: [''],
+            video: ['']
         });
 
         this.model.valueChanges
@@ -59,28 +65,44 @@ export class ProfileFormComponent implements AfterViewInit{
         }
     }
 
+    private ngOnDestroy() {
+        this.sub.unsubscribe();
+    }
+
     ngAfterViewInit() {
-        if (isBrowser) {
-            this.userService.getUserInfo().subscribe(
-                data => {
-                    this.model = this.fb.group({
-                        Id: [data.Data.Id],
-                        Email: [data.Data.Email, [forbiddenNameValidator()]],
-                        Password: [data.Data.Password, [Validators.required, Validators.minLength(7)]],
-                        FirstName: [data.Data.FirstName, [Validators.required, Validators.minLength(2)]],
-                        LastName: [data.Data.LastName, [Validators.required, Validators.minLength(2)]],
-                        Phone: [data.Data.Phone],
-                        Location: [data.Data.Location],
-                        Gender: [data.Data.Gender],
-                        Birthday: [data.Data.Birthday],
-                        Description: [data.Data.Description],
-                        Address: [data.Data.Address],
-                        EmergencyContact: [data.Data.EmergencyContact],
-                        Photo: [data.Data.PhotoUrl],
-                        Video: [data.Data.VideoUrl]
-                    });
-                });
-        }
+        this.sub = this.route.params.subscribe(params => {
+            this.profileId = +params['id'] | 0; // (+) converts string 'id' to a number
+            if (this.profileId > 0) {
+                if (isBrowser) {
+                    this.userService.getUserInfo(this.profileId).subscribe(
+                        data => {
+                            this.model = this.fb.group({
+                                id: [data.Data.Id],
+                                email: [data.Data.Email, [forbiddenNameValidator()]],
+                                password: [data.Data.Password, [Validators.required, Validators.minLength(7)]],
+                                firstName: [data.Data.FirstName, [Validators.required, Validators.minLength(2)]],
+                                lastName: [data.Data.LastName, [Validators.required, Validators.minLength(2)]],
+                                phone: [data.Data.Phone],
+                                locationId: [data.Data.Location],
+                                gender: [data.Data.Gender],
+                                birthday: [data.Data.Birthday],
+                                description: [data.Data.Description],
+                                address: [data.Data.Address],
+                                emergencyContact: [data.Data.EmergencyContact],
+                                photo: [data.Data.PhotoUrl],
+                                video: [data.Data.VideoUrl]
+                            });
+                        });
+                }
+            }
+        });
+
+    }
+
+    onLocationSearch(search) {
+        this.searchService.autoComplete(search).subscribe((response: any) => {
+            this.searchLocations = response;
+        });
     }
 
     public videosrc: any;

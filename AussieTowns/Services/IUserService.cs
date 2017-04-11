@@ -8,12 +8,11 @@ namespace AussieTowns.Services
 {
     public interface IUserService
     {
-        IList<User> GetAll();
         Task<User> GetById(int id);
-        User GetByEmailAndPassword(string email, string password);
-        bool Register(User user);
-        bool Update(User user);
-        bool Delete(int id);
-
+        Task<User> GetByEmailAndPassword(string email, string password);
+        Task<IEnumerable<User>> SearchUser(string searchTerm);
+        Task<int> Register(User user);
+        Task<int> Update(User user);
+        Task<int> Deactivate(int id);
     }
 }

@@ -7,9 +7,9 @@ namespace AussieTowns.Model
 {
     public class TourGuest
     {
-        public int TourOfferId { get; set; }
-        public TourOffer TourOffer { get; set; }
+        public int ListingId { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public bool IsOwner { get; set; }
     }
 }

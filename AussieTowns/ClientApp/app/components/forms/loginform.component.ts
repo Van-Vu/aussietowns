@@ -3,8 +3,6 @@
 import { User } from '../../model/user'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { ModalFrameComponent } from './modalframe.component';
-
 import { forbiddenNameValidator } from '../../shared/email.validator';
 
 import { UserService } from '../../services/user.service';
@@ -16,17 +14,16 @@ import { UserService } from '../../services/user.service';
 })
 
 export class LoginFormComponent {
-    @ViewChild(ModalFrameComponent) modal: ModalFrameComponent;
     model: FormGroup;
-    @Output() isLoggedIn = new EventEmitter<string>();
+    @Output() isLoggedIn = new EventEmitter<any>();
 
 
     constructor(private fb: FormBuilder, private userService: UserService) {}
 
     ngOnInit() {
         this.model = this.fb.group({
-            Email: ['', [forbiddenNameValidator()]],
-            Password: ['', [Validators.required, Validators.minLength(7)]],
+            email: ['', [forbiddenNameValidator()]],
+            password: ['', [Validators.required, Validators.minLength(7)]],
         });
 
         this.model.valueChanges
@@ -39,25 +36,10 @@ export class LoginFormComponent {
     onLogin() {
         this.userService.login(this.model.value)
             .subscribe(
-            data => {
-                if (data.State == 1) {
-                    this.isLoggedIn.emit(data.Data.username);
-                    this.modal.hide();
-                }
-                else {
-                    this.isLoggedIn.emit(null);
-                    alert(data.Msg);
-                }
-
-                console.log(data.Data);
-            },
+            data => this.isLoggedIn.emit({ id: data.userId, name: data.username }),
             error => {
 
             });
-    }
-
-    public show(): void {
-        this.modal.show();
     }
 
     onValueChanged(data?: any) {

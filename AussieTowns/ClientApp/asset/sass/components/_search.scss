@@ -1,0 +1,104 @@
+﻿::-webkit-scrollbar {
+  width: 8px; /* 1px wider than Lion. */
+  /* This is more usable for users trying to click it. */
+  background-color: rgba(0,0,0,0);
+  -webkit-border-radius: 100px;
+}
+/* hover effect for both scrollbar area, and scrollbar 'thumb' */
+::-webkit-scrollbar:hover {
+  background-color: rgba(0, 0, 0, 0.09);
+}
+
+/* The scrollbar 'thumb' ...that marque oval shape in a scrollbar */
+::-webkit-scrollbar-thumb:vertical {
+  /* This is the EXACT color of Mac OS scrollbars. 
+     Yes, I pulled out digital color meter */
+  background: rgba(0,0,0,0.5);
+  -webkit-border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:vertical:active {
+  background: rgba(0,0,0,0.61); /* Some darker color when you click it */
+  -webkit-border-radius: 100px;
+}
+
+
+#gmap {
+  height:100%;
+}
+
+.search-result{
+    width: 40%;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    top: 55px;
+    z-index: 0;
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+    @media all and (max-width: $bp-small-max-width) {
+        width: 100%;
+    }
+}
+
+.map{
+    width: 60%;
+    top: 55px;
+    z-index: 0;
+    display: block;
+    position: fixed;
+    right: 0;
+    left: auto;
+    bottom: 0;
+    @media all and (max-width: $bp-small-max-width) {
+        display:none;
+    }
+}
+.listing-card{
+    background-color: $c-neutral-white;
+    height: 100%;
+}
+
+.listing-card ul {
+    li {
+        width: 94%;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 2%;
+        border-width: 1px;
+        border-style: solid;
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        -moz-box-shadow:0 0 10px $c-neutral-black;
+	    -webkit-box-shadow:0 0 10px $c-neutral-black;
+	    box-shadow:0 0 10px $c-neutral-black;
+
+        &:hover {
+            border-style: outset;
+            border-color: #f2b632;
+            border-width: 5px;
+        }
+
+        a {
+            display: inline-block;
+            width: 100%;
+        }
+
+        a:hover {
+            box-shadow: 1px 2px 10px red;
+        }
+    }
+}
+
+.listing-card DETAILS[open] SUMMARY ~ * 
+{
+ animation: sweep .5s ease-in-out;
+}
+
+@keyframes sweep 
+{
+ 0%    {opacity: 0; margin-left: -10px}
+ 100%  {opacity: 1; margin-left: 0px}
+}

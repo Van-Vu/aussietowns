@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AussieTowns.Model;
 using AussieTowns.Repository;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 
 namespace AussieTowns.Services
 {
@@ -17,35 +15,35 @@ namespace AussieTowns.Services
             _userRepository = userRepository;
         }
 
-        public IList<User> GetAll()
-        {
-            return _userRepository.GetAll().ToList();
-        }
-
         public async Task<User> GetById(int id)
         {
             return await _userRepository.GetById(id);
         }
 
-        public User GetByEmailAndPassword(string email, string password)
+        public async Task<User> GetByEmailAndPassword(string email, string password)
         {
-            return _userRepository.GetAll()?.SingleOrDefault(x => x.Email == email && x.Password == password);
+            return await _userRepository.GetByEmailAndPassword(email, password);
         }
 
 
-        public bool Register(User user)
+        public async Task<int> Register(User user)
         {
-            return _userRepository.Insert(user);  
+            return await _userRepository.Insert(user);  
         }
 
-        public bool Update(User user)
+        public async Task<int> Update(User user)
         {
-            return _userRepository.Update(user);
+            return await _userRepository.Update(user);
         }
 
-        public bool Delete(int id)
+        public async Task<int> Deactivate(int id)
         {
-            return _userRepository.Delete(id);
+            return await _userRepository.Deactivate(id);
+        }
+
+        public async Task<IEnumerable<User>> SearchUser(string searchTerm)
+        {
+            return await _userRepository.SearchUser(searchTerm);
         }
     }
 }

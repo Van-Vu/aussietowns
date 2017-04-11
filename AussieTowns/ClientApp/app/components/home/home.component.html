@@ -1,3 +1,51 @@
+<section class="header-main">
+    <div class="background"></div>
+    <div class="content">
+        <h1>Meet the local, have a blast !</h1>
+        <p>bodom</p>
+        <article>
+            <form (ngSubmit)="onSearch(model)" [formGroup]="model" class="searchbar">
+                <kpx-autocomplete id="thebox"
+                                  [min-chars]="2"
+                                  formControlName="location" [search-data]="searchLocations" (onSearch)="onLocationSearch($event)">
+                </kpx-autocomplete>
+                <input type="submit" class="searchBtn" value="Submit"/>
+            </form>
+        </article>
+        <div>this is something else</div>
+    </div>
+</section>
+
+<section class="popularRequest">
+
+        <!--<div class="swiper-button-prev" style="position: relative; top: 350px; left: 10%;"></div>
+        <swiper [config]="requestConfig" [initialize]="initializeRequestSlide" style="width: 70%; margin-left: auto; margin-right: auto;">
+            <div class="swiper-wrapper" style="width: 100%;">
+                <div class="swiper-slide" *ngFor="let slide of requestSlides">
+                    <img [src]="slide.imgSrc" />
+                    <div>{{slide.text}}</div>
+                </div>
+            </div>
+        </swiper>
+        <div class="swiper-button-next" style="position: relative; top: 350px;right: 10%;"></div>-->
+    <article class="request-slides" style="width:70%">
+        <slider [slides]="requestSlides" [config]="requestConfig" [initialize]="initializeRequestSlide"></slider>
+    </article>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <h1>Hello, world!</h1>
 <p>Welcome to your new single-page application, built with:</p>
 <ul>
@@ -23,17 +71,36 @@
     Base drop zone
 </div>-->
 
-<input id="user_profile_pic" #fileInput type="file" style="display: none;" accept="image/jpeg, image/png"/>
-<label class="btn btn-block btn-large" for="user_profile_pic2" role="button">Upload a file from your computer</label>
 
-<button (click)="addFile()">Add</button>
+<!--<div class="row">
+    <div  class="col-md-12">
+        <carousel [slides]="slides" [interval]="NextPhotoInterval" [noWrap]="noLoopSlides" >
+        </carousel>
+    </div>
+    <div class="col-md-12">
+        <button type="button" class="btn btn-info"
+                (click)="removeLastSlide()">
+            Remove Last Slide
+        </button>
+    </div>
+</div>-->
 
 
 
-<img [src]="src" [hidden]="!src"><br>
-<input id="user_profile_pic2" type="file" image-upload style="display: none;"
-       (imageSelected)="selected($event)"
-       [resizeOptions]="resizeOptions">
+
+
+
+    <input id="user_profile_pic" #fileInput type="file" style="display: none;" accept="image/jpeg, image/png" />
+    <label class="btn btn-block btn-large" for="user_profile_pic2" role="button">Upload a file from your computer</label>
+
+    <button (click)="addFile()">Add</button>
+
+
+
+    <img [src]="src" [hidden]="!src"><br>
+    <input id="user_profile_pic2" type="file" image-upload style="display: none;"
+           (imageSelected)="selected($event)"
+           [resizeOptions]="resizeOptions">
 
 
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AussieTowns.Model;
 using AussieTowns.Repository;
 
@@ -18,7 +20,13 @@ namespace AussieTowns.Services
 
         public IList<SuburbDetail> SearchByBoundingBox()
         {
-            return _locationRepository.GetLocationsByBoundingBox();
+            //return _locationRepository.GetLocationsByBoundingBox();
+            return null;
+        }
+
+        public async Task<IEnumerable<SuburbDetail>> SearchBySuburbName(string name)
+        {
+            return await _locationRepository.GetLocationBySuburbName(name);
         }
     }
 }

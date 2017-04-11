@@ -1,0 +1,12 @@
+<input type="text" #searchBox
+            [formControl]="term"
+            [(ngModel)]="selected.Description" (focus)="onFocus()" (keydown)="onKeyDown($event)"
+            (blur)="onBlur()" (keyup)="onKeyUp($event)" class="form-control" placeholder="{{placeholder}}"/>
+<div *ngIf="showList && list.length > 0" class="menu">
+    <ul *ngFor="let item of list; let i=index;" class="menu-list">
+        <li [class.selected]="item.Selected" (click)="onClickOption(item, i)" class="menu-list-item">
+            <img *ngIf="item.imageUrl" [src]="item.imageUrl" style="width: 30px;height:30px;">
+            <span style="width:auto">{{item.name}}</span> 
+        </li>
+    </ul>
+</div>

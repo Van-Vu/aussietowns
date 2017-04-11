@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AussieTowns.Auth;
-using AussieTowns.DataAccess;
 using AussieTowns.Model;
 using AussieTowns.Repository;
 using AussieTowns.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -18,8 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using MySQL.Data.Entity.Extensions;
 using Newtonsoft.Json;
+
 
 namespace AussieTowns
 {
@@ -41,8 +37,13 @@ namespace AussieTowns
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddMvc();
+            // Add framework services with JSON loop ignore: http://stackoverflow.com/a/38382021/1284688
+            services.AddMvc()
+                .AddJsonOptions(
+                    options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                );
+
+            services.AddAutoMapper();
 
             // Enable the use of an [Authorize("Bearer")] attribute on methods and classes to protect.
             services.AddAuthorization(auth =>
@@ -55,18 +56,14 @@ namespace AussieTowns
             });
 
             //Use a MySQL database
-            var sqlConnectionString = Configuration.GetConnectionString("DataAccessMySqlProvider");
-
-            services.AddDbContext<AussieTownDBContext>(options =>
-                options.UseMySQL(sqlConnectionString)
-            );
+            var mySqlConnectionString = Configuration.GetConnectionString("DataAccessMySqlProvider");
 
             services.AddSingleton<ISearchService, SearchService>();
             services.AddSingleton<IUserService, UserService>();
-            services.AddSingleton<ITourService, TourService>();
-            services.AddSingleton<ILocationRepository, LocationRepository>();
-            services.AddSingleton<IUserRepository, UserRepository>();
-            services.AddSingleton<ITourRepository, TourRepository>();
+            services.AddSingleton<IListingService, ListingService>();
+            services.AddSingleton<ILocationRepository, LocationRepository>(x => new LocationRepository(mySqlConnectionString));
+            services.AddSingleton<IUserRepository, UserRepository>(x => new UserRepository(mySqlConnectionString));
+            services.AddSingleton<IListingRepository, ListingRepository>(x => new ListingRepository(mySqlConnectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

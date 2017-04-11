@@ -1,0 +1,74 @@
+﻿<form [formGroup]="model">
+    <div class="form-group">
+        <label>Host</label>
+        <tourparticipant [participantType]="'Host'" [users]="this.model.controls.operators.value"></tourparticipant>
+    </div>
+    <div class="form-group">
+        <label for="location">Where</label>
+        <kpx-autocomplete [min-chars]="2" formControlName="locationId" [search-data]="searchLocations" (onSearch)="onLocationSearch($event)"></kpx-autocomplete>
+
+        <div class="alert alert-danger" *ngIf="model.get('locationId').hasError('required') && model.get('locationId').touched">
+            Location is required
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="cost">Cost</label>
+        <input type="text" class="form-control" id="cost" placeholder="Your cost per person" formControlName="cost">
+        <div class="alert alert-danger" *ngIf="model.get('cost').hasError('required') && model.get('cost').touched">
+            Cost is required
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="location">Schedule</label>
+        <div formArrayName="schedules" class="schedule">
+            <div *ngFor="let schedule of this.model.controls.schedules.controls; let i=index" class="panel panel-default">
+                <div class="panel-heading">
+                    <span>Schedule {{i + 1}}</span>
+                    <span class="glyphicon glyphicon-remove pull-right" *ngIf="this.model.controls.schedules.controls.length > 1" (click)="removeAddress(i)"></span>
+                </div>
+                <div class="panel-body" [formGroupName]="i">
+                    <schedule [scheduleIntance]="this.model.controls.schedules.controls[i]"></schedule>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="header">Short description</label>
+        <textarea type="text" class="form-control" id="header"
+                  placeholder="Short description which will appear in as a header"
+                  formControlName="header" cols="40" rows="5"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="expectation">What to expect</label>
+        <textarea type="text" class="form-control" id="expectation"
+                  placeholder="Detail description of the event"
+                  formControlName="description" cols="40" rows="5"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="requirements">Requirements</label>
+        <textarea type="text" class="form-control" id="requirements"
+                  placeholder="Requirement for guests"
+                  formControlName="requirement" cols="40" rows="5"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="participants">Minimum participants</label>
+        <select id="participants" class="form-control" formControlName="minParticipant">
+            <option value="0" selected="selected">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+
+    </div>
+
+    <!--<input type="button" (click)="onInsert()" class="btn btn-success" value="Add Tour" [disabled]="model.invalid" *ngIf="isNew"/>-->
+    <input type="button" (click)="onInsert()" class="btn btn-success" value="Add Tour" *ngIf="isNew" />
+    <input type="button" (click)="onUpdate()" class="btn btn-success" value="Update" [disabled]="model.invalid" *ngIf="!isNew">
+</form>

@@ -6,9 +6,11 @@ namespace AussieTowns.Auth
     {
         public static RSAParameters GenerateKey()
         {
-            using (var key = new RSACryptoServiceProvider(2048))
+            using (RSA rsa = RSA.Create())
             {
-                return key.ExportParameters(true);
+                rsa.KeySize = 2048;
+
+                return rsa.ExportParameters(true);
             }
         }
     }

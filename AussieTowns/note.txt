@@ -1,0 +1,40 @@
+﻿TECH DEBT:
+DONE (no child route) - Reuse resource in search page
+DONE Action return JSonConverter keep Camelcase, return string Lower case
+DONE API async
+- Call hotUpdate many times when start
+- Find a Font
+- How to deploy
+- HTML5: section, article, summary, aside
+- Location data: http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.001July%202016?OpenDocument
+- JS conversion of datetime base on current location
+- Color pallette: 
+https://designschool.canva.com/blog/website-color-schemes/
+https://designschool.canva.com/blog/100-color-combinations/
+https://www.awwwards.com/trendy-web-color-palettes-and-material-design-color-schemes-tools.html
+- Apple like scrollbar
+- For homepage: https://www.bypeople.com/image-hover-animation/
+- https://www.bypeople.com/expandable-profile-css-button/; http://codepen.io/sazzad/pen/yNNNJG; http://codepen.io/sethabbott/pen/FtuLz; https://dcrazed.com/css-buttons-nice-hover-effects/
+-Put http://glyphicons.com license
+- Load component dynamic
+
+NICE TO HAVE:
+Remember action when script doesn't finish loading, still render page then dispaly like facebook
+Commsec show password on un-finish loading
+
+GOOD REPO:
+https://github.com/aspnet/JavaScriptServices/tree/dev/templates/Angular2Spa
+https://github.com/damienbod/Angular2WebpackVisualStudio/blob/master/src/AngularWebpackVisualStudio/webpack.dev.js
+https://gist.github.com/shlomohass/c1c4c27e4dda3de52d57
+https://github.com/kekeh/mydatepicker/wiki/Two-date-pickers-set-options
+
+
+SAMPLE SOLUTION:
+- Modal-Backdrop CSS: position: fixed;width: 100%;height: 100%;background: rgba(0,0,0,0.7);z-index:10000;
+- CSS: position absolute but relative to parent: http://stackoverflow.com/questions/10487292/position-absolute-but-relative-to-parent
+- EF Core one to many: TourOffer config (sample: https://docs.microsoft.com/en-us/ef/core/modeling/relationships#foreign-key)
+- Excluse module on server: http://stackoverflow.com/questions/40751383/angular-universal-dynamic-imports-for-browser-only
+- Upgrade to .net core 1.1:
+	1- https://jeremylindsayni.wordpress.com/2016/11/20/upgrading-from-net-core-1-0-t0-1-1-with-visual-studio-2015/
+	2- https://github.com/dotnet/cli/issues/4683
+- Async: https://msdn.microsoft.com/en-us/magazine/jj991977.aspx

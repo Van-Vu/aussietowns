@@ -1,14 +1,15 @@
 ﻿import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
-import { Cookie } from 'ng2-cookies';
-
 import { User } from '../model/user';
 import { RequestResult } from '../model/RequestResult';
+import { Observable } from 'rxjs/Observable';
+import { CookieFactory } from '../components/mock/cookieFactory';
 
 @Injectable()
 export class UserService {
-    constructor(private http: Http) { }
+
+    constructor(private http: Http) {}
 
     getAll() {
         return this.http.get('/users', this.jwt()).map((response: Response) => response.json());
@@ -21,10 +22,10 @@ export class UserService {
     create(user: User) {
         return this.http.post('api/user/register', user, this.jwt()).map(response => {
             let result = response.json() as RequestResult;
-            if (result.State == 1) {
-                let json = result.Data as any;
+            if (result.state == 1) {
+                let json = result.data as any;
 
-                Cookie.set("token", json.accessToken);
+                CookieFactory.set("token", json.accessToken);
                 //sessionStorage.setItem("token", json.accessToken);
             }
             return result;
@@ -33,21 +34,34 @@ export class UserService {
     }
 
     login(user) {
-        return this.http.post('api/user/login', { email: user.Email, password: user.Password }, this.jwt()).map(response => {
+        return this.http.post('api/user/login', { email: user.email, password: user.password }).map(response => {
             let result = response.json() as RequestResult;
-            if (result.State == 1) {
-                let json = result.Data as any;
+            if (result.state == 1) {
+                let json = result.data as any;
 
-                Cookie.set("token", json.accessToken);
+                CookieFactory.set("token", json.accessToken);
+                CookieFactory.set("userId", json.userId);
                 //sessionStorage.setItem("token", json.accessToken);
             }
-            return result;
+            return result.data;
         })
+        .catch(this.handleError);
+    }
+
+    getMiniProfile(id: number) {
+        return this.http.get('api/user/summary/' + id, this.jwt())
+            .map(response => {
+                let result = response.json() as RequestResult;
+                if (result.state == 1) {
+                    return result.data;
+                }
+                return '';
+            })
             .catch(this.handleError);
     }
 
-    getUserInfo() {
-        return this.http.get('api/user/info', this.jwt())
+    getUserInfo(id: number) {
+        return this.http.get('api/user/' + id, this.jwt())
             .map(response => response.json() as RequestResult)
             .catch(this.handleError);
     }
@@ -58,8 +72,20 @@ export class UserService {
             .catch(this.handleError);
     }
 
+    getToursByUserId(id: number) {
+        return this.http.get('api/user/tour/' + id, this.jwt())
+            .map(response => response.json() as RequestResult)
+            .catch(this.handleError);
+    }
+
     delete(_id: string) {
         return this.http.delete('/users/' + _id, this.jwt());
+    }
+
+    search(term: string): Observable<User[]> {
+        return this.http.get('api/user/autocomplete/?search=' + term)
+            .map(response => response.json())
+            .catch(this.handleError);
     }
 
     // private helper methods
@@ -76,11 +102,10 @@ export class UserService {
         // create authorization header with jwt token
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        
 
-        let token = Cookie.check("token");
+        let token = CookieFactory.check("token");
         if (token) {
-            headers.append('Authorization', 'Bearer ' + Cookie.get("token"));
+            headers.append('Authorization', 'Bearer ' + CookieFactory.get("token"));
         }
 
         return new RequestOptions({ headers: headers });

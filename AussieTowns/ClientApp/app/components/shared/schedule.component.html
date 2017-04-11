@@ -1,0 +1,40 @@
+﻿<form [formGroup]="model">
+    <div class="schedule-wrapper">
+        <div class="left25">
+            Date
+        </div>
+        <div class="left25">
+            Start time
+        </div>
+        <div class="left25">
+            Duration
+        </div>
+        <div class="left25">
+            <input type="checkbox" formControlName="isRepeated" (change)="isRepeated = !isRepeated" style="width: 20px;"> Repeat
+        </div>
+        <div class="clear"></div>
+        <div class="left25">
+            <my-date-picker [options]="startDatePickerOptions" (dateChanged)="onStartDateChanged($event)" formControlName="startDate"></my-date-picker>
+        </div>
+        <div class="left25">
+            <input class="form-control" type="text" placeholder="hh:mm" (keyup)="onStartTimeInput($event)" formControlName="startTime">
+        </div>
+        <div class="left25">
+            <timepicker formControlName="duration"></timepicker>
+        </div>
+        <div class="left25" [hidden]="!isRepeated">
+            <div *ngFor="let period of repeatPeriods">
+                <p>
+                    <input type="radio" formControlName="repeatPeriod"
+                           [value]="period.value">
+                    {{period.display}}
+                </p>
+            </div>
+            <div>
+                <p style="width: 30px; display: inline-block; bottom: 10px; position: relative;">Until</p>
+                <my-date-picker [options]="endDatePickerOptions" (dateChanged)="onEndDateChanged($event)" formControlName="endDate"></my-date-picker>                
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</form>

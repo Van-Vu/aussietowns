@@ -1,5 +1,5 @@
 ﻿export class RequestResult {
-    State: number;
-    Msg: string;
-    Data: Object;
+    state: number;
+    msg: string;
+    data: Object;
 }

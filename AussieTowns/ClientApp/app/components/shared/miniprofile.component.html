@@ -1,15 +1,18 @@
-﻿<div [id]="userId">
+﻿<div [id]="userId" class="miniprofile-wrapper">
+    <div class="overlay" (click)="onRemoveUser()">
+        <span class="glyphicon glyphicon-remove-sign"></span>
+    </div>
     <div class="photo_wrapper">
         <a [href]="profileUrl" target="_blank">
-            <img class="profile_photo_img" [src]="profileImageUrl" width="50"  height="50" [alt]="fullName">
+            <img class="profile_photo_img" [src]="profileImageUrl" width="50" height="50" [alt]="fullName">
         </a>
     </div>
     <div class="text_wrapper">
-        <div class="feed_item_answer_user">
+        <div>
             <a class="user" [href]="profileUrl" target="_blank">{{fullName}}</a>
         </div>
         <div>
-            <span class="IdentityNameCredential ActorNameCredential">{{shortDescription}}</span>
+            <span>{{shortDescription}}</span>
         </div>
     </div>
 </div>

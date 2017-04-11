@@ -1,29 +1,34 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using AussieTowns.DataAccess;
+using System.Data;
+using System.Threading.Tasks;
 using AussieTowns.Model;
+using Dapper;
 
 namespace AussieTowns.Repository
 {
-    public class LocationRepository: ILocationRepository
+    public class LocationRepository: RepositoryBase, ILocationRepository
     {
-        private readonly AussieTownDBContext _context;
+        public LocationRepository(string connString): base(connString)
+        {}
 
-        public LocationRepository(AussieTownDBContext context)
+        public IEnumerable<SuburbDetail> GetLocationsByBoundingBox()
         {
-            _context = context;
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "";
+                dbConnection.Open();
+                return dbConnection.Query<SuburbDetail>(sql);
+            }
         }
 
-        public IList<SuburbDetail> GetLocationsByBoundingBox()
+        public async Task<IEnumerable<SuburbDetail>> GetLocationBySuburbName(string suburbName)
         {
-            //return _context.SuburbDetails.Take(500).ToList();
-            return _context.SuburbDetails.Take(5).ToList();
-
-            //return new List<SuburbDetail>
-            //{
-            //    new SuburbDetail() {SuburbName = "Sydney", Postcode = 2000, Lat = -33.867139, Lng = 151.207114},
-            //    new SuburbDetail() {SuburbName = "Pyrmont", Postcode = 2099, Lat = -33.870, Lng = 151.190}
-            //};
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "SELECT * FROM SuburbDetail WHERE suburbname like CONCAT('%',@name,'%') LIMIT 10";
+                dbConnection.Open();
+                return await dbConnection.QueryAsync<SuburbDetail>(sql, new { name = suburbName });
+            }
         }
     }
 }

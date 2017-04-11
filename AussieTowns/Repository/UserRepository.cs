@@ -1,81 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using AussieTowns.DataAccess;
 using AussieTowns.Model;
-using Microsoft.EntityFrameworkCore;
+using Dapper;
 
 namespace AussieTowns.Repository
 {
-    public class UserRepository:IUserRepository
+    public class UserRepository: RepositoryBase, IUserRepository
     {
-        private readonly AussieTownDBContext _context;
+        public UserRepository(string connString): base(connString)
+        {}
 
-        public UserRepository(AussieTownDBContext context)
+        public async Task<User> GetByEmailAndPassword(string email, string password)
         {
-            _context = context;
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "SELECT * FROM User WHERE email=@email AND password=@password";
+                dbConnection.Open();
+                var user = await dbConnection.QueryAsync<User>(sql,new {email, password});
+                return user.FirstOrDefault();
+            }
         }
 
-        public IQueryable<User> GetAll()
+        public async Task<User> GetById(int id)
         {
-            return _context.Users.AsNoTracking();
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "SELECT * FROM User WHERE id=@id";
+                dbConnection.Open();
+                var user = await dbConnection.QueryAsync<User>(sql,new {id});
+
+                return user.FirstOrDefault();
+            }
         }
 
-        public Task<User> GetById(int id)
+        public async Task<IEnumerable<User>> SearchUser(string searchTerm)
         {
-            return _context.Users.Include(s => s.TourOperators)
-            .ThenInclude(e => e.TourOffer).SingleOrDefaultAsync(x => x.Id == id);
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "SELECT * FROM User WHERE firstname like CONCAT('%',@term,'%') OR lastname like CONCAT('%',@term,'%') OR email like CONCAT('%',@term,'%')";
+                dbConnection.Open();
+                return  await dbConnection.QueryAsync<User>(sql, new { term = searchTerm });
+            }
         }
 
-        public bool Insert(User user)
+        public async Task<int> Insert(User user)
         {
-            try
+            using (IDbConnection dbConnection = Connection)
             {
-                _context.Users.Add(user);
-                _context.SaveChanges();
+                var sql = "INSERT INTO User(Firstname, Lastname, email, password, gender,birthday, phone, language, currency, location, description, address, emergencycontact, photourl, videourl) "
+                        + "VALUES (@firstname, @lastname, @email, @password, @gender, @birthday, @phone, @language, @currency, @location, @description, @address, @emergencycontact, @photourl, @videourl)";
+                dbConnection.Open();
+                var ret = await dbConnection.ExecuteAsync(sql,user);
+                return ret;
             }
-            catch (Exception ex)
-            {
-                return false;
-            }
-
-            return true;
         }
 
-        public bool Update(User user)
+        public async Task<int> Update(User user)
         {
-            try
+            using (IDbConnection dbConnection = Connection)
             {
-                _context.DetachEntity<User>(user.Id);
-
-                _context.Entry(user).State = EntityState.Modified;
-
-                _context.SaveChanges();
+                var sql = "UPDATE User SET firstname = @firstname, lastname = @lastname, email = @email, password= @password, gender= @gender, birthday= @birthday, phone = @phone, language= @language, currency = @currency, "
+                    + "location = @location, description = @description, address= @address, emergencycontact= @emergencycontact, photourl = @photourl, videorl = @videourl WHERE id = @Id";
+                dbConnection.Open();
+                return await dbConnection.ExecuteAsync(sql,user);
             }
-            catch (Exception ex)
-            {
-                return false;
-            }
-
-            return true;
         }
 
-        public bool Delete(int id)
+        public async Task<int> Deactivate(int id)
         {
-            try
+            using (IDbConnection dbConnection = Connection)
             {
-                var user = _context.Users.SingleOrDefault(x => x.Id == id);
-                _context.Users.Remove(user);
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+                var sql = "UPDATE User SET IsActive = 0 WHERE id = @id";
+                dbConnection.Open();
 
-            return true;
+                return await dbConnection.ExecuteAsync(sql,new {id});
+            }
         }
     }
 }

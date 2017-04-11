@@ -1,0 +1,11 @@
+﻿@mixin button-bg($bg) {
+  background: $bg;
+  &:hover, 
+  &:focus {
+    background:darken($bg,8%);
+    transition: all $transition-standard;
+  }
+  &:active {
+    background:darken($bg,25%);
+  } 
+}

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
@@ -8,12 +10,12 @@ using System.Threading.Tasks;
 using AussieTowns.Auth;
 using AussieTowns.Model;
 using AussieTowns.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,20 +26,22 @@ namespace AussieTowns.Controllers
     {
         private readonly IUserService _userService;
         private readonly IHostingEnvironment _hostingEnv;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserService userService, IHostingEnvironment hostingEnv)
+        public UserController(IUserService userService, IHostingEnvironment hostingEnv, IMapper mapper)
         {
             _userService = userService;
             _hostingEnv = hostingEnv;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
-        public object Register([FromBody] User user)
+        public async Task<RequestResult> Register([FromBody] User user)
         {
             var a = string.Empty;
             try
             {
-                _userService.Register(user);
+                await _userService.Register(user);
                 return GenerateToken(user);
             }
             catch (Exception ex)
@@ -47,22 +51,22 @@ namespace AussieTowns.Controllers
         }
 
         [HttpPost("login")]
-        public object Login([FromBody] User user)
+        public async Task<RequestResult> Login([FromBody] User user)
         {
             try
             {
-                var existedUser = _userService.GetByEmailAndPassword(user.Email, user.Password);
+                var existedUser = await _userService.GetByEmailAndPassword(user.Email, user.Password);
                 if (existedUser != null)
                 {
                     return GenerateToken(existedUser);
                 }
                 else
                 {
-                    return JsonConvert.SerializeObject(new RequestResult
+                    return new RequestResult
                     {
                         State = RequestState.Failed,
                         Msg = "Username or password is invalid"
-                    });
+                    };
                 }
                 
             }
@@ -72,57 +76,110 @@ namespace AussieTowns.Controllers
             }
         }
 
-        [HttpGet("info")]
+        [HttpGet("{id}")]
         [Authorize("Bearer")]
-        public string GetUserInfo()
+        public async Task<RequestResult> GetUserInfo(int id)
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
-            if (claimsIdentity != null)
-            {
-                var userId = Convert.ToInt32(claimsIdentity.Claims.FirstOrDefault(x=>x.Type=="userId")?.Value);
-                var email = claimsIdentity.Name;
-                var user = _userService.GetById(userId);
-                if (user?.Result?.Email == email)
+            if (claimsIdentity == null)
+                return new RequestResult
                 {
-                    return JsonConvert.SerializeObject(new RequestResult
-                    {
-                        State = RequestState.Success,
-                        Data = user?.Result
-                    });
-                }
+                    State = RequestState.Failed,
+                    Msg = "Can't find user"
+                };
+            
+            //var userId = Convert.ToInt32(claimsIdentity.Claims.FirstOrDefault(x=>x.Type=="userId")?.Value);
+            //var email = claimsIdentity.Name;
+            var user = await _userService.GetById(id);
+            if (user!= null)
+            {
+                return new RequestResult
+                {
+                    State = RequestState.Success,
+                    Data = user
+                };
             }
 
-            return JsonConvert.SerializeObject(new RequestResult
+            return new RequestResult
             {
                 State = RequestState.Failed,
                 Msg = "Can't find user"
-            });
+            };
+        }
+
+        [HttpGet("summary/{id}")]
+        [Authorize("Bearer")]
+        public async Task<RequestResult> GetUserMiniProfile(int id)
+        {
+            var user = await _userService.GetById(id);
+            if (user != null)
+            {
+                return new RequestResult
+                {
+                    State = RequestState.Success,
+                    Data = _mapper.Map<User,MiniProfile>(user) 
+                };
+            }
+
+            return new RequestResult
+            {
+                State = RequestState.Failed,
+                Msg = "Can't find user"
+            };
+        }
+
+
+        [HttpGet("search")]
+        public async Task<RequestResult> SearchUser([FromQuery]string term)
+        {
+            try
+            {
+                var availableUsers = await _userService.SearchUser(term);
+                return new RequestResult
+                {
+                    State = RequestState.Success,
+                    Data = availableUsers.Select(user => _mapper.Map<User, MiniProfile>(user))
+                };
+            }
+            catch (Exception ex)
+            {
+                return new RequestResult
+                {
+                    State = RequestState.Failed,
+                    Data = "Something is wrong: " + ex.Message
+                };
+            }
+        }
+
+        [HttpGet("autocomplete")]
+        public async Task<IEnumerable<AutoCompleteItem>> GetAutocomplete([FromQuery] string search)
+        {
+            return (await _userService.SearchUser(search)).Select(user => _mapper.Map<User, AutoCompleteItem>(user));
         }
 
         [HttpPut("{id}")]
         [Authorize("Bearer")]
-        public string Update(int id,[FromBody] User userRequest)
+        public async Task<RequestResult> Update(int id,[FromBody] User userRequest)
         {
             try
             {
-                _userService.Update(userRequest);
-                return JsonConvert.SerializeObject(new RequestResult
+                await _userService.Update(userRequest);
+                return new RequestResult
                 {
                     State = RequestState.Success,
                     Msg = "Update successful"
-                });
+                };
             }
             catch (Exception ex)
             {
-                return JsonConvert.SerializeObject(new RequestResult
+                return new RequestResult
                 {
                     State = RequestState.Failed,
-                    Msg = "Update failed"
-                });
+                    Msg = "Update failed:" + ex.Message
+                };
             }
         }
-
-
+        
         [HttpPost("profileimage")]
         public async Task<ActionResult> Post(IFormFile file)
         {
@@ -148,13 +205,13 @@ namespace AussieTowns.Controllers
 
         }
 
-        private string GenerateToken(User user)
+        private RequestResult GenerateToken(User user)
         {
             var requestAt = DateTime.Now;
             var expiresIn = requestAt + TokenAuthOption.ExpiresSpan;
             var token = GenerateToken(user, expiresIn);
 
-            return JsonConvert.SerializeObject(new RequestResult
+            return new RequestResult
             {
                 State = RequestState.Success,
                 Data = new
@@ -163,9 +220,10 @@ namespace AussieTowns.Controllers
                     expiresIn = TokenAuthOption.ExpiresSpan.TotalSeconds,
                     tokeyType = TokenAuthOption.TokenType,
                     accessToken = token,
-                    username = user.FirstName
+                    username = user.FirstName,
+                    userId = user.Id
                 }
-            });
+            };
         }
 
         private string GenerateToken(User user, DateTime expires)
