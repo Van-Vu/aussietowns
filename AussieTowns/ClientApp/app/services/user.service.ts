@@ -62,7 +62,10 @@ export class UserService {
 
     getUserInfo(id: number) {
         return this.http.get('api/user/' + id, this.jwt())
-            .map(response => response.json() as RequestResult)
+            .map(response => {
+                let res = response.json() as RequestResult;
+                return res.data;
+            })
             .catch(this.handleError);
     }
 

@@ -40,14 +40,14 @@ export class ListingOfferCardComponent {
     initializeSlide:boolean = false;
 
     ngOnInit() {
-        this.id = this.listingDetail.Id;
-        this.location = this.listingDetail.Location;
-        this.hostName = this.listingDetail.PrimaryOwner;
-        this.header = this.listingDetail.Header;
-        this.cost = this.listingDetail.Cost;
-        this.date = Utils.getDate(this.listingDetail.Time);
-        this.time = Utils.getTime(this.listingDetail.Time);
-        this.description = this.listingDetail.Description;
+        this.id = this.listingDetail.id;
+        this.location = this.listingDetail.location;
+        this.hostName = this.listingDetail.primaryOwner;
+        this.header = this.listingDetail.header;
+        this.cost = this.listingDetail.cost;
+        this.date = Utils.getDate(this.listingDetail.schedules[0].startDate);
+        this.time = Utils.getTime(this.listingDetail.schedules[0].startDate);
+        this.description = this.listingDetail.description;
         if (isBrowser) {
             this.initializeSlide = true;    
         }

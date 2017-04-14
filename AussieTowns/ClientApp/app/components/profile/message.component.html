@@ -1,0 +1,23 @@
+﻿<div class="message-leftpanel">
+    <ul>
+        <li *ngFor="let message of messages ">
+            <miniprofile [data]="message.userTwo" [isRemovable]="false"></miniprofile>
+        </li>
+    </ul>
+</div>
+<div class="message-rightpanel">
+    <section class="conversation">
+        <div>
+            <form (ngSubmit)="onSend(model)" [formGroup]="model">
+                <input type="text" formControlName="content" />
+                <input type="submit" value="Send Message" />
+            </form>
+        </div>
+        <ul>
+            <li *ngFor="let message of messages">
+                <p>{{message.id}}</p>
+                <div>{{message.lastMessageTime}}</div>
+            </li>
+        </ul>
+    </section>
+</div>

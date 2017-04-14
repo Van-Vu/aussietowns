@@ -46,7 +46,7 @@ export class ProfileFormComponent implements AfterViewInit{
             locationId: [''],
             gender: [''],
             birthday: [''],
-            aescription: [''],
+            description: [''],
             address: [''],
             emergencyContact: [''],
             photo: [''],
@@ -77,20 +77,20 @@ export class ProfileFormComponent implements AfterViewInit{
                     this.userService.getUserInfo(this.profileId).subscribe(
                         data => {
                             this.model = this.fb.group({
-                                id: [data.Data.Id],
-                                email: [data.Data.Email, [forbiddenNameValidator()]],
-                                password: [data.Data.Password, [Validators.required, Validators.minLength(7)]],
-                                firstName: [data.Data.FirstName, [Validators.required, Validators.minLength(2)]],
-                                lastName: [data.Data.LastName, [Validators.required, Validators.minLength(2)]],
-                                phone: [data.Data.Phone],
-                                locationId: [data.Data.Location],
-                                gender: [data.Data.Gender],
-                                birthday: [data.Data.Birthday],
-                                description: [data.Data.Description],
-                                address: [data.Data.Address],
-                                emergencyContact: [data.Data.EmergencyContact],
-                                photo: [data.Data.PhotoUrl],
-                                video: [data.Data.VideoUrl]
+                                id: [data.id],
+                                email: [data.email, [forbiddenNameValidator()]],
+                                password: [data.password, [Validators.required, Validators.minLength(7)]],
+                                firstName: [data.firstName, [Validators.required, Validators.minLength(2)]],
+                                lastName: [data.lastName, [Validators.required, Validators.minLength(2)]],
+                                phone: [data.phone],
+                                locationId: [data.location],
+                                gender: [data.gender],
+                                birthday: [data.birthday],
+                                description: [data.description],
+                                address: [data.address],
+                                emergencyContact: [data.emergencyContact],
+                                photo: [data.photoUrl],
+                                video: [data.videoUrl]
                             });
                         });
                 }

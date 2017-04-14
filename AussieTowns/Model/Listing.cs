@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AussieTowns.Common;
 
 namespace AussieTowns.Model
@@ -20,5 +21,9 @@ namespace AussieTowns.Model
         public ICollection<TourOperator> TourOperators { get; set; }
 
         public ICollection<TourGuest> TourGuests { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
+        public bool IsActive { get; set; }
     }
 }

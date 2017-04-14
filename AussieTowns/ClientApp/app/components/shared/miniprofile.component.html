@@ -1,5 +1,5 @@
 ﻿<div [id]="userId" class="miniprofile-wrapper">
-    <div class="overlay" (click)="onRemoveUser()">
+    <div class="overlay" (click)="onRemoveUser()" [hidden]="!isRemovable">
         <span class="glyphicon glyphicon-remove-sign"></span>
     </div>
     <div class="photo_wrapper">

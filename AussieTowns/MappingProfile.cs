@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AussieTowns.Common;
 using AussieTowns.Model;
 using AutoMapper;
+using Newtonsoft.Json;
 
 namespace AussieTowns
 {
@@ -34,6 +35,16 @@ namespace AussieTowns
                     opts => opts.MapFrom(src => src.TourOperators.Any(x=>x.IsOwner) ? src.TourOperators.SingleOrDefault(x=>x.IsOwner).User.FirstName : string.Empty))
                 .ForMember(dest => dest.MinParticipant,
                     opts => opts.MapFrom(src => src.Type==ListingType.Offer ? src.MinParticipant : src.TourGuests.Count()));
+
+            CreateMap<ListingView, ListingSummary>()
+                .ForMember(dest => dest.Location,
+                    opts => opts.MapFrom(src => $"{src.SuburbName} ({src.PostCode})"))
+                .ForMember(dest => dest.PrimaryOwner,
+                    opts => opts.MapFrom(src => src.OwnerName))
+                .ForMember(dest => dest.MinParticipant,
+                    opts => opts.MapFrom(src => src.MinParticipant))
+                .ForMember(dest => dest.Schedules,
+                    opts => opts.MapFrom(src => JsonConvert.DeserializeObject<IEnumerable<Schedule>>(src.Schedules)));
 
             CreateMap<Schedule, ScheduleResponse>()
                 .ForMember(dest => dest.StartDate, opts => opts.MapFrom(src => src.StartDate.Date.ToString("yyyy/MM/dd")))

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,9 +50,12 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "INSERT INTO User(Firstname, Lastname, email, password, gender,birthday, phone, language, currency, location, description, address, emergencycontact, photourl, videourl) "
-                        + "VALUES (@firstname, @lastname, @email, @password, @gender, @birthday, @phone, @language, @currency, @location, @description, @address, @emergencycontact, @photourl, @videourl)";
+                var sql = "INSERT INTO User(Firstname, Lastname, email, password, gender,birthday, phone, language, currency, location, description, address, emergencycontact, photourl, videourl,createdDate,updatedDate,isActive) "
+                        + "VALUES (@firstname, @lastname, @email, @password, @gender, @birthday, @phone, @language, @currency, @location, @description, @address, @emergencycontact, @photourl, @videourl,@createdDate,@updatedDate,@isActive)";
                 dbConnection.Open();
+                user.CreatedDate = DateTime.Now;
+                user.UpdatedDate = DateTime.Now;
+                user.IsActive = true;
                 var ret = await dbConnection.ExecuteAsync(sql,user);
                 return ret;
             }
@@ -62,8 +66,10 @@ namespace AussieTowns.Repository
             using (IDbConnection dbConnection = Connection)
             {
                 var sql = "UPDATE User SET firstname = @firstname, lastname = @lastname, email = @email, password= @password, gender= @gender, birthday= @birthday, phone = @phone, language= @language, currency = @currency, "
-                    + "location = @location, description = @description, address= @address, emergencycontact= @emergencycontact, photourl = @photourl, videorl = @videourl WHERE id = @Id";
+                    + "location = @location, description = @description, address= @address, emergencycontact= @emergencycontact, photourl = @photourl, videorl = @videourl, updatedDate=@updatedDate, isActive=@isActive WHERE id = @Id";
                 dbConnection.Open();
+                user.UpdatedDate = DateTime.Now;
+                user.IsActive = true;
                 return await dbConnection.ExecuteAsync(sql,user);
             }
         }

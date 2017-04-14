@@ -61,9 +61,11 @@ namespace AussieTowns
             services.AddSingleton<ISearchService, SearchService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IListingService, ListingService>();
+            services.AddSingleton<IMessageService, MessageService>();
             services.AddSingleton<ILocationRepository, LocationRepository>(x => new LocationRepository(mySqlConnectionString));
             services.AddSingleton<IUserRepository, UserRepository>(x => new UserRepository(mySqlConnectionString));
             services.AddSingleton<IListingRepository, ListingRepository>(x => new ListingRepository(mySqlConnectionString));
+            services.AddSingleton<IMessageRepository, MessageRepository>(x => new MessageRepository(mySqlConnectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

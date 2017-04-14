@@ -2,11 +2,11 @@
 DONE (no child route) - Reuse resource in search page
 DONE Action return JSonConverter keep Camelcase, return string Lower case
 DONE API async
+DONE Location data: http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.001July%202016?OpenDocument
 - Call hotUpdate many times when start
 - Find a Font
 - How to deploy
 - HTML5: section, article, summary, aside
-- Location data: http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.001July%202016?OpenDocument
 - JS conversion of datetime base on current location
 - Color pallette: 
 https://designschool.canva.com/blog/website-color-schemes/
@@ -38,3 +38,4 @@ SAMPLE SOLUTION:
 	1- https://jeremylindsayni.wordpress.com/2016/11/20/upgrading-from-net-core-1-0-t0-1-1-with-visual-studio-2015/
 	2- https://github.com/dotnet/cli/issues/4683
 - Async: https://msdn.microsoft.com/en-us/magazine/jj991977.aspx
+- Message DB design: http://www.9lessons.info/2013/05/message-conversation-database-design.html

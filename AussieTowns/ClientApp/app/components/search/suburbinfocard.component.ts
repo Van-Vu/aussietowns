@@ -12,7 +12,7 @@ declare var google: any;
 })
 
 export class SuburbInforCardComponent {
-    @Input() data: SuburbLocation;
+    @Input() data: any;
     @Input() map: any;
 
     suburbFullName: string;

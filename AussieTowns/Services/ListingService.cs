@@ -41,9 +41,9 @@ namespace AussieTowns.Services
             return await _listingRepository.UpdateListing(listing);
         }
 
-        public async Task<int> DeleteListing(int id)
+        public async Task<int> DeActivateListing(int id)
         {
-            return await _listingRepository.DeleteListing(id);
+            return await _listingRepository.DeActivateListing(id);
         }
     }
 }

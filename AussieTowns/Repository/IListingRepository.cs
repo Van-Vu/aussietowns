@@ -13,6 +13,6 @@ namespace AussieTowns.Repository
         Task<IEnumerable<ListingView>> GetListingsBySuburb(int suburbId);
         Task<int> InsertListing(Listing listing);
         Task<int> UpdateListing(Listing listing);
-        Task<int> DeleteListing(int listingId);
+        Task<int> DeActivateListing(int listingId);
     }
 }

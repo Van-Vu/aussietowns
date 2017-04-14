@@ -17,7 +17,7 @@ namespace AussieTowns.Model
         public string Description { get; set; }
         public int MinParticipant { get; set; }
         public string PrimaryOwner { get; set; }
-        public Schedule[] Schedules { get; set; }
+        public IEnumerable<Schedule> Schedules { get; set; }
 
     }
 }

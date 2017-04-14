@@ -8,6 +8,7 @@ import { User } from '../../model/user';
 })
 export class MiniProfileComponent {
     @Input() data: any;
+    @Input() isRemovable: boolean = true;
     @Output() removeUser = new EventEmitter();
 
     userId: number;

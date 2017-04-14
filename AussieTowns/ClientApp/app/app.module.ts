@@ -17,6 +17,7 @@ import { ProfileFormComponent } from './components/forms/profileform.component';
 import { LoginFormComponent } from './components/forms/loginform.component';
 import { UserService } from  './services/user.service';
 import { AlertService } from './services/alert.service';
+import { MessageService } from './services/message.service';
 
 import { TextMaskModule } from 'angular2-text-mask';
 
@@ -34,6 +35,7 @@ import { SliderComponent } from './components/shared/slider.component';
 import { ListingOfferCardComponent } from './components/search/listingoffercard.component';
 import { CustomReuseStrategy }from './components/shared/customeReuseStrategy';
 import { ProfileComponent } from './components/profile/profile.component';
+import { MessageComponent } from './components/profile/message.component';
 
 import { isBrowser } from 'angular2-universal';
 
@@ -107,11 +109,12 @@ if (isBrowser) {
         LoginModalComponent,
         RegistrationModalComponent,
         TimePickerComponent,
-        ScheduleComponent
+        ScheduleComponent,
+        MessageComponent
     ],
     imports: imports,
     providers: [SearchService, ItineraryBridge, MapBridge, UserService, AlertService,
-        ListingService, DeviceDetectionService,
+        ListingService, DeviceDetectionService, MessageService,
         { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
         { provide: UrlSerializer, useClass: CustomUrlSerializer }]
 })

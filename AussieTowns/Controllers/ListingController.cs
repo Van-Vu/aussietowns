@@ -120,7 +120,7 @@ namespace AussieTowns.Controllers
                 return new RequestResult
                 {
                     State = RequestState.Success,
-                    Data = await _listingService.DeleteListing(id)
+                    Data = await _listingService.DeActivateListing(id)
                 };
             }
             catch (Exception)
@@ -168,7 +168,7 @@ namespace AussieTowns.Controllers
                 return new RequestResult
                 {
                     State = RequestState.Success,
-                    Data = listingsSummary
+                    Data = listingsSummary.Select(x => _mapper.Map<ListingView, ListingSummary>(x))
                 };
 
             }

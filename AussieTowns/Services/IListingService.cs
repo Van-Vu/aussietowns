@@ -13,6 +13,6 @@ namespace AussieTowns.Services
         Task<Listing> GetListingDetail(int id);
         Task<int> InsertListing(Listing listing);
         Task<int> UpdateListing(Listing listing);
-        Task<int> DeleteListing(int id);
+        Task<int> DeActivateListing(int id);
     }
 }
