@@ -1,0 +1,19 @@
+﻿/************
+Mixin for placeholder text styles
+
+Usage:
+input {
+    @include placeholder {
+        font-family: $base-font-family;
+        color: red;
+    }
+}
+
+***********/
+
+@mixin placeholder {
+  &::-webkit-input-placeholder {@content}
+  &:-moz-placeholder           {@content}
+  &::-moz-placeholder          {@content}
+  &:-ms-input-placeholder      {@content}
+}

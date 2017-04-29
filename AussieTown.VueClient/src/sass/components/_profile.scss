@@ -1,0 +1,86 @@
+﻿.profile-content{
+    margin-top: 50px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+
+    .profile-section {
+      display: none;
+      padding: 20px 0 0;
+      border-top: 1px solid #ddd;
+    }
+
+    input[type="radio"] {
+        display:none;
+    }
+
+    .tab-text {
+      display: inline-block;
+      margin: 0 0 -1px;
+      padding: 15px 25px;
+      font-weight: 600;
+      text-align: center;
+      color: #bbb;
+      border: 1px solid transparent;
+
+      &:hover {
+            color: #888;
+            cursor: pointer;
+        }
+
+      &:before {
+          font-family: "Glyphicons Halflings";
+          font-weight: normal;
+          margin-right: 10px;
+        }
+
+        /*user*/
+        &[for*='1']:before {
+          content: '\E008';
+        }
+
+        /*camera*/
+        &[for*='2']:before {
+          content: '\E046';
+        }
+
+        /*comment*/
+        &[for*='3']:before {
+          content: '\E111';
+        }
+
+        &[for*='4']:before {
+          content: '\E006';
+        }
+    }
+
+    input:checked + label {
+      color: #555;
+      border: 1px solid #ddd;
+      border-top: 2px solid orange;
+      border-bottom: 1px solid #fff;
+    }
+
+    #tab1:checked ~ #content1,
+    #tab2:checked ~ #content2,
+    #tab3:checked ~ #content3,
+    #tab4:checked ~ #content4 {
+      display: block;
+    }
+
+    @media screen and (max-width: 650px) {
+      .tab-text {
+        font-size: 0;
+      }
+
+      .tab-text:before {
+        margin: 0;
+        font-size: 18px;
+      }
+    }
+    @media screen and (max-width: 400px) {
+      .tab-text {
+        padding: 15px;
+      }
+    }
+}

@@ -1,0 +1,42 @@
+﻿.autocomplete-wrapper {
+    position:relative;
+}
+
+.menu {
+    min-width: 200px;
+    padding: 5px 0;
+    box-shadow: 0 9px 20px rgba(0, 0, 0, 0.25);
+    position: absolute;
+    background: #fff;
+    z-index: 1000;
+    overflow: auto;
+    width: 100%;
+    right:0;
+
+    .menu-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .menu-list-item {
+        font-size: 14px;
+        color: #0c0c0c;
+        padding: 6px 20px;
+
+        &.selected {
+            font-weight: bold;
+            background-color: #f2f4f6;
+        }
+
+        &:hover {
+            background: #f2f4f6;
+            cursor: pointer;
+        }
+    }
+}
+
+.kpx-autocomplete-main  .col .menu {
+width: 100%;
+}
+
