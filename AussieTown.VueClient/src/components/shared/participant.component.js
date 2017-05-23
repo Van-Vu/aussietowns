@@ -21,6 +21,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import MiniProfileComponent from './miniprofile.component.vue';
 import AutoCompleteComponent from '../autocomplete/autocomplete.vue';
+import { SearchService } from '../../services/search.service';
 var ParticipantComponent = (function (_super) {
     __extends(ParticipantComponent, _super);
     function ParticipantComponent() {
@@ -35,14 +36,6 @@ var ParticipantComponent = (function (_super) {
     ParticipantComponent.prototype.created = function () {
         this.buttonText = "Add " + this.participantType;
         //this.internalUsers = this.exixtingUsers;
-        this.internalUsers = [
-            {
-                id: 1,
-                photoUrl: "/static/images/logo.png",
-                fullname: "asdfasdfas",
-                shortDescription: "asdfasdfa"
-            }
-        ];
     };
     ParticipantComponent.prototype.toggleProfileSearch = function (event) {
         this.isAdding = !this.isAdding;
@@ -55,16 +48,18 @@ var ParticipantComponent = (function (_super) {
         event.stopPropagation();
     };
     ParticipantComponent.prototype.onUserSearch = function (search) {
+        var _this = this;
+        (new SearchService()).getUser(search)
+            .then(function (response) { return _this.searchUsers = response; });
         //this.userService.search(search).subscribe((response: any) => {
         //    this.searchUsers = response;
         //});
     };
     ParticipantComponent.prototype.onUserSelected = function (user) {
-        this.internalUsers.push(user);
         this.$emit("userAdded", user);
     };
     ParticipantComponent.prototype.onUserRemove = function (user) {
-        this.internalUsers.splice(this.internalUsers.indexOf(user), 1);
+        //this.internalUsers.splice(this.internalUsers.indexOf(user), 1);
         this.$emit("userRemoved", user);
     };
     return ParticipantComponent;
@@ -72,7 +67,7 @@ var ParticipantComponent = (function (_super) {
 __decorate([
     Prop,
     __metadata("design:type", Array)
-], ParticipantComponent.prototype, "exixtingUsers", void 0);
+], ParticipantComponent.prototype, "participants", void 0);
 __decorate([
     Prop,
     __metadata("design:type", String)

@@ -21,12 +21,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { SelectedAutocompleteValue, AutocompleteItem } from './autocomplete.model';
+import { SelectedAutocompleteValue, AutocompleteItem } from '../model/autocomplete.model';
 var AutoCompleteComponent = (function (_super) {
     __extends(AutoCompleteComponent, _super);
     function AutoCompleteComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.cleanUp = false;
+        //@Output('onSelect') onSelect: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
+        //@Output() onSearch: EventEmitter<string> = new EventEmitter();
+        _this.keyword = '';
         _this.selected = new SelectedAutocompleteValue();
         _this.firstSet = true;
         //private list: AutocompleteItem[];
@@ -100,8 +102,9 @@ var AutoCompleteComponent = (function (_super) {
         this.indexSelected = index;
         this.selected.Description = "" + this.list[this.indexSelected].name;
         this.selected.Value = this.list[this.indexSelected].id;
-        this.$emit("select", this.selected);
+        this.$emit("select", this.list[this.indexSelected]);
         this.firstSet = false;
+        this.keyword = this.selected.Description;
         if (this.cleanUp) {
             this.indexSelected = -1;
             this.selected = new SelectedAutocompleteValue();
@@ -146,10 +149,6 @@ __decorate([
     Prop,
     __metadata("design:type", Array)
 ], AutoCompleteComponent.prototype, "list", void 0);
-__decorate([
-    Prop,
-    __metadata("design:type", String)
-], AutoCompleteComponent.prototype, "keyword", void 0);
 AutoCompleteComponent = __decorate([
     Component({
         name: "AutoComplete"

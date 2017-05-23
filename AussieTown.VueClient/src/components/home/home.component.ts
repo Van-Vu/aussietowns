@@ -1,16 +1,17 @@
 import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import AutoCompleteComponent from "../autocomplete/autocomplete.vue";
+import AutoCompleteComponent from "../shared/autocomplete.vue";
 import VueRouter from 'vue-router';
 import LoginModalComponent from '../modal/loginmodal.component.vue';
 import ListingRequestModalComponent from '../modal/listingrequestmodal.component.vue';
 import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue';
+import axios from 'axios';
+import { SearchService } from '../../services/search.service';
 
 @Component({
     name: 'Home',
     components: {
         "autocomplete": AutoCompleteComponent,
-        "login-modal": LoginModalComponent,
         "listingrequestmodal": ListingRequestModalComponent,
         "listingoffermodal": ListingOfferModalComponent
     }
@@ -27,7 +28,6 @@ export default class HomeComponent extends Vue{
     initializeRequestSlide: boolean = false;
     searchLocations: any;
 
-    showLoginModal: boolean = false;
     showListingRequest: boolean = false;
     showListingOffer: boolean = false;
 
@@ -77,10 +77,8 @@ export default class HomeComponent extends Vue{
 
     onLocationSearch(event) {
         this.searchStr = event;
-        this.list = [
-            { "id": 1, "name": "test" },
-            { "id": 2, "name": "test2" }
-        ];
+        (new SearchService()).getLocation('syd')
+            .then(response => this.list= response);
     }
 
     onSelect(val) {
@@ -92,4 +90,21 @@ export default class HomeComponent extends Vue{
         console.log(model.value);
         this.$router.push('search');
     }
+@Prop posts: any[];
+errors: any[];
+
+    created() {
+	    //axios.get(`http://jsonplaceholder.typicode.com/posts`)
+	    //.then(response => {
+	    //  // JSON responses are automatically parsed.
+	    //  this.posts = response.data
+	    //})
+	    //.catch(e => {
+	    //  this.errors.push(e)
+	    //})
+
+
+    }
+
+	
 }

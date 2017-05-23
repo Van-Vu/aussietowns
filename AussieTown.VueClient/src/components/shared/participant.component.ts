@@ -2,7 +2,9 @@
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import axios from "axios";
 import MiniProfileComponent from './miniprofile.component.vue';
-import AutoCompleteComponent from '../autocomplete/autocomplete.vue';
+import AutoCompleteComponent from './autocomplete.vue';
+import { SearchService } from '../../services/search.service';
+
 
 @Component({
     name: "Participant",
@@ -13,7 +15,7 @@ import AutoCompleteComponent from '../autocomplete/autocomplete.vue';
 })
 
 export default class ParticipantComponent extends Vue {
-    @Prop exixtingUsers: any[];
+    @Prop participants: any[];
     @Prop participantType: string;
 
     searchStr: string = "";
@@ -27,15 +29,6 @@ export default class ParticipantComponent extends Vue {
     created() {
         this.buttonText = "Add " + this.participantType;
         //this.internalUsers = this.exixtingUsers;
-
-        this.internalUsers = [
-            {
-                id: 1,
-                photoUrl: "/static/images/logo.png",
-                fullname: "asdfasdfas",
-                shortDescription: "asdfasdfa"                      
-            }
-        ];
     }
 
     toggleProfileSearch(event) {
@@ -50,18 +43,20 @@ export default class ParticipantComponent extends Vue {
     }
 
     onUserSearch(search) {
+        (new SearchService()).getUser(search)
+            .then(response => this.searchUsers = response);
+
         //this.userService.search(search).subscribe((response: any) => {
         //    this.searchUsers = response;
         //});
     }
 
     onUserSelected(user) {
-        this.internalUsers.push(user);
         this.$emit("userAdded", user);
     }
 
     onUserRemove(user) {
-        this.internalUsers.splice(this.internalUsers.indexOf(user), 1);
+        //this.internalUsers.splice(this.internalUsers.indexOf(user), 1);
         this.$emit("userRemoved", user);
     }
 }

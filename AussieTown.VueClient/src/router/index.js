@@ -1,16 +1,19 @@
 import Vue from "vue";
-import VueRouter from "vue-router";
+import Router from "vue-router";
 import Hello from "../components/Hello.vue";
 import HomeComponent from '../components/home/home.component.vue';
 import SearchComponent from '../components/search/search.component.vue';
 import Test from '../components/test';
 import LoginForm from '../components/form/loginform.component.vue';
+import RegistrationForm from '../components/form/registration.component.vue';
+import ProfileComponent from '../components/profile/profile.component.vue';
 import ListingOfferForm from '../components/form/listingoffer.component.vue';
 import ListingRequestForm from '../components/form/listingrequest.component.vue';
 import ParticipantComponent from '../components/shared/participant.component.vue';
 import ScheduleComponent from '../components/shared/schedule.component.vue';
-Vue.use(VueRouter);
-export default new VueRouter({
+import UserDetailComponent from '../components/form/userdetail.component.vue';
+Vue.use(Router);
+var router = new Router({
     mode: 'history',
     routes: [
         {
@@ -19,8 +22,8 @@ export default new VueRouter({
             component: Test
         },
         {
-            path: "/form",
-            name: "form",
+            path: "/login",
+            name: "login",
             component: LoginForm
         },
         {
@@ -41,7 +44,7 @@ export default new VueRouter({
         {
             path: "/profile",
             name: "profile",
-            component: Test
+            component: ProfileComponent
         },
         {
             path: "/offer",
@@ -64,9 +67,20 @@ export default new VueRouter({
             component: ScheduleComponent
         },
         {
+            path: "/pform",
+            name: "ProfileForm",
+            component: UserDetailComponent
+        },
+        {
+            path: "/reg",
+            name: "RegistrationForm",
+            component: RegistrationForm
+        },
+        {
             path: "/",
             name: "Hello",
             component: Hello
         },
     ]
 });
+export default router;

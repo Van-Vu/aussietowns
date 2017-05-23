@@ -3,13 +3,14 @@
         <form @submit.prevent="validateBeforeSubmit" v-if="!formSubmitted" style="margin-top:100px">
             <div class="field">
                 <label class="label">Host</label>
-                <p class="control has-icon has-icon-right">
-                    <participant></participant>
-                </p>
+                <div class="control">
+                    <participant participantType="Host" :participants="operators" 
+                                 @userAdded="onUserAdded" @userRemoved="onUserRemoved"></participant>
+                </div>
             </div>
             <div class="field">
                 <label class="label" for="password">Where</label>
-                <p class="control has-icon has-icon-right">
+                <div class="control has-icon has-icon-right">
                     <autocomplete name='location' 
                                   v-model="location"
                                   v-validate:location.initial="'required'"
@@ -23,7 +24,7 @@
                         <i class="glyphicon glyphicon-lock"></i>
                     </span>
                     <span v-show="errors.has('location')" class="help is-danger">{{ errors.first('location') }}</span>
-                </p>
+                </div>
             </div>
             <div class="field">
                 <label class="label" for="cost">Cost</label>
@@ -38,32 +39,32 @@
             </div>
             <div class="field">
                 <label class="label">Schedule</label>
-                <p class="control">
+                <div class="control">
                     <schedule></schedule>
-                </p>
+                </div>
             </div>
             <div class="field">
                 <label class="label" for="description">Description</label>
-                <p class="control has-icon has-icon-right">
+                <div class="control has-icon has-icon-right">
                     <input name="description" v-model="description" v-validate:description.initial="'required'"
                            :class="{'input': true, 'is-danger': errors.has('description') }" type="text" placeholder="">
                     <span class="icon user">
                         <i class="glyphicon glyphicon-lock"></i>
                     </span>
                     <span v-show="errors.has('description')" class="help is-danger">{{ errors.first('description') }}</span>
-                </p>
+                </div>
             </div>
             <div class="field">
                 <label class="label" for="expectation">What to expect</label>
-                <p class="control has-icon has-icon-right">
+                <div class="control has-icon has-icon-right">
                     <textarea name="expectation" class="textarea" v-model="expectation" cols="40" rows="5"></textarea>
-                </p>
+                </div>
             </div>
             <div class="field">
                 <label class="label" for="requirement">Requirement</label>
-                <p class="control has-icon has-icon-right">
+                <div class="control has-icon has-icon-right">
                     <textarea name="requirement" class="textarea" v-model="requirement" cols="40" rows="5"></textarea>
-                </p>
+                </div>
             </div>
             <div class="field">
                 <label class="label" for="participants">Minimum participants</label>

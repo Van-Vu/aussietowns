@@ -4,7 +4,7 @@
 import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import axios from "axios";
-import { SelectedAutocompleteValue, AutocompleteItem } from  './autocomplete.model'
+import { SelectedAutocompleteValue, AutocompleteItem } from  '../model/autocomplete.model'
 
 
 @Component({
@@ -14,12 +14,12 @@ export default class AutoCompleteComponent extends Vue {
     @Prop minChars: number;
     @Prop placeHolderText: string;
     @Prop initialData: AutocompleteItem;
-    @Prop cleanUp: boolean = false;
+    @Prop cleanUp: boolean;
     @Prop list: AutocompleteItem[];
 
     //@Output('onSelect') onSelect: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
     //@Output() onSearch: EventEmitter<string> = new EventEmitter();
-    @Prop keyword:string;
+    keyword:string = '';
 
     private selected: SelectedAutocompleteValue = new SelectedAutocompleteValue();
 
@@ -97,10 +97,10 @@ export default class AutoCompleteComponent extends Vue {
         this.selected.Description = `${this.list[this.indexSelected].name}`;
         this.selected.Value = this.list[this.indexSelected].id;
 
-        this.$emit("select", this.selected);
+        this.$emit("select", this.list[this.indexSelected]);
 
         this.firstSet = false;
-
+	this.keyword = this.selected.Description;
         if (this.cleanUp) {
             this.indexSelected = -1;
             this.selected = new SelectedAutocompleteValue();

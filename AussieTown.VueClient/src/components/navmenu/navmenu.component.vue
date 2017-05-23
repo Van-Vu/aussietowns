@@ -19,24 +19,24 @@
                             <span class='glyphicon glyphicon-th-list'></span> Tour Detail
                         </router-link>
                     </li>
-                    <li v-if="!isLoggedin" class="nav-bar__menu-item" active-class="link-active">
-                        <a class="nav-bar__menu-item-link" @click="loginModal.show()">
+                    <li v-if="logginInUserId == 0" class="nav-bar__menu-item" active-class="link-active">
+                        <a class="nav-bar__menu-item-link" @click="showLoginModal = !showLoginModal">
                             <span class='glyphicon glyphicon-th-list'></span> Log in
                         </a>
                     </li>
-                    <li v-if="!isLoggedin" class="nav-bar__menu-item" active-class="link-active">
-                        <a class="nav-bar__menu-item-link" @click="registerModal.show()">
+                    <li v-if="logginInUserId == 0" class="nav-bar__menu-item" active-class="link-active">
+                        <a class="nav-bar__menu-item-link" @click="showRegistrationModal = !showRegistrationModal">
                             <span class='glyphicon glyphicon-th-list'></span> Sign up
                         </a>
                     </li>
 
-                    <li v-if="isLoggedin" class="nav-bar__menu-item">
-                        <router-link class="nav-bar__menu-item-link" :to="{ name: 'profile', params: { id: 1}}"  active-class="link-active">
+                    <li v-if="logginInUserId > 0" class="nav-bar__menu-item">
+                        <router-link class="nav-bar__menu-item-link" :to="{ name: 'profile', params: { id: logginInUserId }}"  active-class="link-active">
                             <span class='glyphicon glyphicon-th-list'></span> Hi
                         </router-link>
                     </li>
 
-                    <li v-if="isLoggedin" class="nav-bar__menu-item">
+                    <li v-if="logginInUserId > 0" class="nav-bar__menu-item">
                         <router-link class="nav-bar__menu-item-link" to="logout" @click="onLogout()">
                             <span class='glyphicon glyphicon-th-list'></span> Log out
                         </router-link>
@@ -45,7 +45,10 @@
             </div>
 
         </div>
+        <loginmodal :show="showLoginModal" @onSuccessfulLogin="onSuccessfulLogin" @onClose="showLoginModal = !showLoginModal"></loginmodal>
+        <registrationmodal :show="showRegistrationModal" @onClose="showRegistrationModal = !showRegistrationModal"></registrationmodal>
     </div>
+
 </template>
 
 <script lang="ts">

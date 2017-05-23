@@ -20,6 +20,7 @@ import VeeValidate from 'vee-validate';
 import { ListingType } from '../shared/utils';
 import AutoCompleteComponent from '../autocomplete/autocomplete.vue';
 import ScheduleComponent from '../shared/schedule.component.vue';
+import ParticipantComponent from '../shared/participant.component.vue';
 Vue.use(VeeValidate);
 var ListingOfferForm = (function (_super) {
     __extends(ListingOfferForm, _super);
@@ -33,7 +34,14 @@ var ListingOfferForm = (function (_super) {
         _this.placeHolderText = "this is the test";
         _this.id = 0;
         _this.type = ListingType.Offer;
-        _this.operators = [];
+        _this.operators = [
+            {
+                id: 1,
+                photoUrl: "/static/images/logo.png",
+                fullname: "asdfasdfas",
+                shortDescription: "asdfasdfa"
+            }
+        ];
         _this.guests = [];
         _this.schedules = [];
         _this.location = '';
@@ -84,6 +92,16 @@ var ListingOfferForm = (function (_super) {
     };
     ListingOfferForm.prototype.fulldayChange = function () {
         //this.isFullday = !this.isFullday;
+    };
+    ListingOfferForm.prototype.onUserAdded = function (user) {
+        this.operators.push({
+            id: user.id,
+            photoUrl: user.imageUrl,
+            fullname: user.name,
+            shortDescription: ""
+        });
+    };
+    ListingOfferForm.prototype.onUserRemoved = function (user) {
     };
     ListingOfferForm.prototype.initOperator = function () {
         return {
@@ -191,7 +209,8 @@ ListingOfferForm = __decorate([
         name: 'ListingOffer',
         components: {
             'autocomplete': AutoCompleteComponent,
-            'schedule': ScheduleComponent
+            'schedule': ScheduleComponent,
+            'participant': ParticipantComponent
         }
     })
 ], ListingOfferForm);

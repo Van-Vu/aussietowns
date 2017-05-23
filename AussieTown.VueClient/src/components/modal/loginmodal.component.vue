@@ -4,7 +4,7 @@
             This is header
         </div>
         <div slot="body">
-            This is header
+            <loginform @onSuccessfulLogin="onSuccessfulLogin"></loginform>
         </div>
     </modalshell>
 </template>

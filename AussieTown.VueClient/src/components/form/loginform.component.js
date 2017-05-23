@@ -16,21 +16,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
+import { UserService } from '../../services/user.service';
 import VeeValidate from 'vee-validate';
+import { LoginModel } from '../model/login.model';
 Vue.use(VeeValidate);
 var LoginForm = (function (_super) {
     __extends(LoginForm, _super);
     function LoginForm() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.email = "";
-        _this.password = "";
         _this.formSubmitted = false;
+        _this.model = new LoginModel();
         return _this;
     }
     LoginForm.prototype.validateBeforeSubmit = function (e) {
+        var _this = this;
         this.$validator.validateAll().then(function () {
             // eslint-disable-next-line
-            alert('From Submitted!');
+            (new UserService()).login(_this.model)
+                .then(function (response) {
+                _this.$emit('onSuccessfulLogin', response);
+            });
         }).catch(function () {
             // eslint-disable-next-line
             alert('Correct them errors!');

@@ -1,5 +1,5 @@
 ﻿<template>
-        <div class="schedule-wrapper">
+        <div class="schedule-wrapper" style="margin-top:100px;">
             <div class="left25">
                 Date
             </div>
@@ -24,6 +24,7 @@
             <div class="left25">
                 <vue-timepicker v-model="duration"></vue-timepicker>
                 <!--<timepicker formControlName="duration"></timepicker>-->
+
             </div>
             <div class="left25" v-show="isRepeated">
                 <div v-for="period of repeatPeriods">
@@ -39,7 +40,6 @@
             </div>
         </div>
 </template>
-
 <script lang="ts">
 import ScheduleComponent from "./schedule.component.ts";
 export default ScheduleComponent;

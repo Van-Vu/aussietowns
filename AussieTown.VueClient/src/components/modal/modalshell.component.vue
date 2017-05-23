@@ -16,8 +16,8 @@
                 </section>
 
                 <footer class="modal-card-foot">
-                    <a class="button is-success">Save changes</a>
-                    <a class="button">Cancel</a>
+                    <slot name="footer">
+                    </slot>
                 </footer>
                 <button class="modal-close" @click="close"></button>
                 </div>

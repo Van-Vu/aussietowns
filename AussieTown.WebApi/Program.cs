@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 
-namespace AussieTown.VueClient
+namespace AussieTown.WebApi
 {
     public class Program
     {

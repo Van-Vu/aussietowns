@@ -2,8 +2,8 @@
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import { ListingType } from '../shared/utils';
-import AutoCompleteComponent from '../autocomplete/autocomplete.vue';
-import { AutocompleteItem } from '../autocomplete/autocomplete.model';
+import AutoCompleteComponent from '../shared/autocomplete.vue';
+import { AutocompleteItem } from '../model/autocomplete.model';
 
 Vue.use(VeeValidate);
 

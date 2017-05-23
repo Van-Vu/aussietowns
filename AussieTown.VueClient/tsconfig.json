@@ -9,11 +9,13 @@
       "es2015.promise"
     ],
     "types": [
-      "vue-typescript-import-dts"
+      "vue-typescript-import-dts",
+	    "@types/node"
     ],
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "allowJs":true
   },
   "include": [
     "src/**/*.ts"

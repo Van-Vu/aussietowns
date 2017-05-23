@@ -2,7 +2,7 @@
   <div class="autocomplete-wrapper">
     <input type="text"
            class="input"
-          v-bind:value="keyword"
+          v-model="keyword"
           @input="onInput($event.target.value)"
           @keydown="onKeyDown($event)" @keyup="onKeyUp($event)" @blur="onBlur" @focus="onFocus"
           v-bind:placeHolder="placeHolderText" />

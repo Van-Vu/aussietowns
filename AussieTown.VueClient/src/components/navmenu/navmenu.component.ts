@@ -1,20 +1,32 @@
 import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-
+import LoginModal from '../modal/loginmodal.component.vue';
+import RegistrationModal from '../modal/registrationmodal.component.vue';
 
 @Component({
-    name: 'nav-menu'
+    name: 'nav-menu',
+    components: {
+        'loginmodal': LoginModal,
+        'registrationmodal': RegistrationModal
+    }
 })
 export default class NavMenuComponent extends Vue {
-
-    isLoggedin: boolean = false;
+    logginInUserId: number = 0;
     name: string = "test";
     id: number;
     hideNavToggle = false;
     isMenuOpen = false;
     isSticky = false;
 
+    showLoginModal: boolean = false;
+    showRegistrationModal: boolean = false;
 
+    onSuccessfulLogin(userId: number) {
+        if (userId > 0) {
+            this.logginInUserId = userId;
+            this.showLoginModal = false;
+        }
+    }
     //ngOnInit() {
     //    if (isBrowser) {
     //        Observable.fromEvent(window, 'resize')

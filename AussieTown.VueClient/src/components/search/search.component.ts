@@ -1,14 +1,16 @@
 ﻿import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import AutoCompleteComponent from "./autocomplete/autocomplete.vue";
+import AutoCompleteComponent from "../shared/autocomplete.vue";
 import ListingOfferCardComponent from './listingoffercard.component.vue';
-import * as VueGoogleMaps from 'vue2-google-maps';
 
-Vue.use(VueGoogleMaps, {
-    load: {
-        key: 'AIzaSyCaS0ArS9mkdiAFxHKIgpMwUMp1_XSdzTM'
-    }
-});
+if (process.env.VUE_ENV === 'client') {
+    const googleMaps = require('vue2-google-maps')
+    Vue.use(googleMaps, {
+        load: {
+            key: 'AIzaSyCaS0ArS9mkdiAFxHKIgpMwUMp1_XSdzTM'
+        }
+    })
+}
 
 @Component({
     name: "Search",
@@ -25,6 +27,15 @@ export default class SearchComponent extends Vue {
     listings: any[] = [];
     totalDistance: number = 0;
     listing = { id: 1, location: "Sydney", primaryOwner: "test User", header: "this is header", cost: "cost", description: "this is description" };
+
+	created(): void {
+		if (process.env.VUE_ENV === 'client') {
+			alert('here');
+		};
+		if (process.env.VUE_ENV === 'server') {
+		console.log(`hey server`);
+		};
+	}
 
     center = { lat: -33.860, lng: 151.210 };
     markers = [

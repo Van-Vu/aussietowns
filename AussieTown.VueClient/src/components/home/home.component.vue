@@ -8,7 +8,7 @@
                 <article>
                     <form class="searchbar">
                         <autocomplete :minChars="3"
-                                      :list="list"
+                                      :list.sync="list"
                                       :placeHolderText="placeHolderText"
                                       :keyword="searchStr"
                                       v-on:search="onLocationSearch($event)"
@@ -17,14 +17,19 @@
                     </form>
                 </article>
                 <div>this is something else</div>
-                <login-modal :show.sync="showLoginModal" @onClose="showLoginModal = !showLoginModal"></login-modal>
-                <button @click="showLoginModal = !showLoginModal">Toggle Modal</button>
                 <listingrequestmodal :show.sync="showListingRequest" @onClose="showListingRequest = !showListingRequest"></listingrequestmodal>
                 <button @click="showListingRequest = !showListingRequest">Toggle Request</button>
                 <listingoffermodal :show.sync="showListingOffer" @onClose="showListingOffer = !showListingOffer"></listingoffermodal>
                 <button @click="showListingOffer = !showListingOffer">Toggle Offer</button>
             </div>
         </section>
+
+  <ul v-if="posts && posts.length">
+    <li v-for="post of posts">
+      <p><strong>{{post.title}}</strong></p>
+      <p>{{post.body}}</p>
+    </li>
+  </ul>
 
         <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>

@@ -16,15 +16,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
+import LoginModal from '../modal/loginmodal.component.vue';
+import RegistrationModal from '../modal/registrationmodal.component.vue';
 var NavMenuComponent = (function (_super) {
     __extends(NavMenuComponent, _super);
     function NavMenuComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.isLoggedin = false;
+        _this.logginInUserId = 0;
         _this.name = "test";
         _this.hideNavToggle = false;
         _this.isMenuOpen = false;
         _this.isSticky = false;
+        _this.showLoginModal = false;
+        _this.showRegistrationModal = false;
         return _this;
         //ngOnInit() {
         //    if (isBrowser) {
@@ -76,11 +80,21 @@ var NavMenuComponent = (function (_super) {
         //    return false;
         //}
     }
+    NavMenuComponent.prototype.onSuccessfulLogin = function (userId) {
+        if (userId > 0) {
+            this.logginInUserId = userId;
+            this.showLoginModal = false;
+        }
+    };
     return NavMenuComponent;
 }(Vue));
 NavMenuComponent = __decorate([
     Component({
-        name: 'nav-menu'
+        name: 'nav-menu',
+        components: {
+            'loginmodal': LoginModal,
+            'registrationmodal': RegistrationModal
+        }
     })
 ], NavMenuComponent);
 export default NavMenuComponent;

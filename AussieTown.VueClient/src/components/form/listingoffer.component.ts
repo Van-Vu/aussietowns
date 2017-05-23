@@ -2,8 +2,8 @@
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import { ListingType } from '../shared/utils';
-import AutoCompleteComponent from '../autocomplete/autocomplete.vue';
-import { AutocompleteItem } from '../autocomplete/autocomplete.model';
+import AutoCompleteComponent from '../shared/autocomplete.vue';
+import { AutocompleteItem } from '../model/autocomplete.model';
 import ScheduleComponent from '../shared/schedule.component.vue';
 import ParticipantComponent from '../shared/participant.component.vue';
 
@@ -32,7 +32,14 @@ export default class ListingOfferForm extends Vue{
 
     id= 0;
     type= ListingType.Offer;
-    operators = [];
+    operators = [
+        {
+            id: 1,
+            photoUrl: "/static/images/logo.png",
+            fullname: "asdfasdfas",
+            shortDescription: "asdfasdfa"
+        }
+    ];
     guests= [];
     schedules=[];
     location='';
@@ -91,6 +98,19 @@ export default class ListingOfferForm extends Vue{
 
     fulldayChange() {
         //this.isFullday = !this.isFullday;
+    }
+
+    onUserAdded(user) {
+        this.operators.push({
+            id: user.id,
+            photoUrl: user.imageUrl,
+            fullname: user.name,
+            shortDescription: ""
+        });
+    }
+
+    onUserRemoved(user) {
+        
     }
 
     initOperator() {

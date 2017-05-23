@@ -17,6 +17,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import Component from "vue-class-component";
 import NavMenuComponent from './components/navmenu/navmenu.component.vue';
+//let window: any;
+if (process.env.VUE_ENV === 'client') {
+    Vue.component('datepicker', require('vuejs-datepicker'));
+    Vue.component('vue-timepicker', require('vue2-timepicker'));
+}
+//Vue.use(ElementUI);
 var App = (function (_super) {
     __extends(App, _super);
     function App() {

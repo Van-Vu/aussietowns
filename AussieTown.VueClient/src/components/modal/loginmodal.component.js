@@ -20,28 +20,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import ModalShellComponent from './modalshell.component.vue';
-var LoginModalComponent = (function (_super) {
-    __extends(LoginModalComponent, _super);
-    function LoginModalComponent() {
+import LoginForm from '../form/loginform.component.vue';
+var LoginModal = (function (_super) {
+    __extends(LoginModal, _super);
+    function LoginModal() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    LoginModalComponent.prototype.created = function () {
+    LoginModal.prototype.created = function () {
     };
-    LoginModalComponent.prototype.close = function () {
+    LoginModal.prototype.close = function () {
         this.$emit('onClose');
     };
-    return LoginModalComponent;
+    LoginModal.prototype.onSuccessfulLogin = function (userId) {
+        this.$emit('onSuccessfulLogin', userId);
+    };
+    return LoginModal;
 }(Vue));
 __decorate([
     Prop,
     __metadata("design:type", Boolean)
-], LoginModalComponent.prototype, "show", void 0);
-LoginModalComponent = __decorate([
+], LoginModal.prototype, "show", void 0);
+LoginModal = __decorate([
     Component({
         name: "login-modal",
         components: {
-            "modalshell": ModalShellComponent
+            "modalshell": ModalShellComponent,
+            "loginform": LoginForm
         }
     })
-], LoginModalComponent);
-export default LoginModalComponent;
+], LoginModal);
+export default LoginModal;

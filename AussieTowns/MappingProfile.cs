@@ -16,7 +16,7 @@ namespace AussieTowns
             CreateMap<User, MiniProfile>()
                 .ForMember(dest => dest.Fullname, opts => opts.MapFrom(src => $"{src.FirstName} {src.LastName}"))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => "/asset/images/home-icon.png"))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => "/static/images/logo.png"))
                 .ForMember(dest => dest.ShortDescription, opts => opts.MapFrom(src => src.Description.PadLeft(30)));
 
             CreateMap<SuburbDetail, AutoCompleteItem>()
@@ -26,7 +26,7 @@ namespace AussieTowns
             CreateMap<User, AutoCompleteItem>()
                 .ForMember(dest => dest.Name,
                     opts => opts.MapFrom(src => $"{src.FirstName} {src.LastName}"))
-                .ForMember(dest => dest.ImageUrl, opts => opts.MapFrom(src => "/asset/images/home-icon.png"));
+                .ForMember(dest => dest.ImageUrl, opts => opts.MapFrom(src => "/static/images/logo.png"));
 
             CreateMap<Listing, ListingSummary>()
                 .ForMember(dest => dest.Location,

@@ -14,12 +14,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 import AutoCompleteComponent from "../autocomplete/autocomplete.vue";
-import LoginModalComponent from '../modal/loginmodal.component.vue';
 import ListingRequestModalComponent from '../modal/listingrequestmodal.component.vue';
 import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue';
+import { SearchService } from '../../services/search.service';
 var HomeComponent = (function (_super) {
     __extends(HomeComponent, _super);
     function HomeComponent() {
@@ -31,7 +34,6 @@ var HomeComponent = (function (_super) {
         //Photos
         _this.slides = [];
         _this.initializeRequestSlide = false;
-        _this.showLoginModal = false;
         _this.showListingRequest = false;
         _this.showListingOffer = false;
         _this.requestSlides = [
@@ -69,11 +71,10 @@ var HomeComponent = (function (_super) {
         this.slides.pop();
     };
     HomeComponent.prototype.onLocationSearch = function (event) {
+        var _this = this;
         this.searchStr = event;
-        this.list = [
-            { "id": 1, "name": "test" },
-            { "id": 2, "name": "test2" }
-        ];
+        (new SearchService()).getLocation('syd')
+            .then(function (response) { return _this.list = response; });
     };
     HomeComponent.prototype.onSelect = function (val) {
         this.searchStr = val.Description;
@@ -83,14 +84,27 @@ var HomeComponent = (function (_super) {
         console.log(model.value);
         this.$router.push('search');
     };
+    HomeComponent.prototype.created = function () {
+        //axios.get(`http://jsonplaceholder.typicode.com/posts`)
+        //.then(response => {
+        //  // JSON responses are automatically parsed.
+        //  this.posts = response.data
+        //})
+        //.catch(e => {
+        //  this.errors.push(e)
+        //})
+    };
     return HomeComponent;
 }(Vue));
+__decorate([
+    Prop,
+    __metadata("design:type", Array)
+], HomeComponent.prototype, "posts", void 0);
 HomeComponent = __decorate([
     Component({
         name: 'Home',
         components: {
             "autocomplete": AutoCompleteComponent,
-            "login-modal": LoginModalComponent,
             "listingrequestmodal": ListingRequestModalComponent,
             "listingoffermodal": ListingOfferModalComponent
         }

@@ -1,19 +1,19 @@
 ﻿<template>
     <ul class="tour-paticipant">
         <div style="height:100px;"
-        <li class="li-horizontal" v-for="user of internalUsers ">
+        <li class="li-horizontal" v-for="user of participants ">
             <miniprofile :data="user" :isRemovable="true" @removeUser="onUserRemove($event)"></miniprofile>
         </li>
         <li class="li-horizontal">
             <button @click.prevent="toggleProfileSearch($event)" class="addParticipant">
                 <span class="glyphicon glyphicon-plus-sign"></span> {{buttonText}}
             </button>
-            <autocomplete :minChars="3"
+            <autocomplete v-show="isAdding" :minChars="3"
                           :list="searchUsers"
                           :placeHolderText="placeHolderText"
                           :keyword="searchStr"
                           v-on:search="onUserSearch($event)"
-                          v-on:select="onUserSelect($event)"></autocomplete>
+                          v-on:select="onUserSelected($event)"></autocomplete>
         </li>
     </ul>
 </template>

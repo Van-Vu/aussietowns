@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import axios from "axios";
-import AutoCompleteComponent from "./autocomplete/autocomplete.vue";
+import AutoCompleteComponent from "./shared/autocomplete.vue";
 import Test from './test.vue';
 
 //import 'vue-instant/dist/vue-instant.css'

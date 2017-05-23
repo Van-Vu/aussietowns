@@ -16,8 +16,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import Datepicker from 'vuejs-datepicker';
-import VueTimepicker from 'vue2-timepicker';
+//import Datepicker from 'vuejs-datepicker';
+//import VueTimepicker from 'vue2-timepicker';
 var ScheduleComponent = (function (_super) {
     __extends(ScheduleComponent, _super);
     function ScheduleComponent() {
@@ -38,12 +38,6 @@ var ScheduleComponent = (function (_super) {
     return ScheduleComponent;
 }(Vue));
 ScheduleComponent = __decorate([
-    Component({
-        name: "Schedule",
-        components: {
-            "datepicker": Datepicker,
-            "vue-timepicker": VueTimepicker
-        }
-    })
+    Component
 ], ScheduleComponent);
 export default ScheduleComponent;

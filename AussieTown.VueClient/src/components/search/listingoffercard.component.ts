@@ -1,6 +1,6 @@
 ﻿import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import AutoCompleteComponent from "./autocomplete/autocomplete.vue";
+import AutoCompleteComponent from "../shared/autocomplete.vue";
 import Utils from '../shared/utils';
 
 @Component({

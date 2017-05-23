@@ -7,8 +7,8 @@
                 </p>
             </div>
             <div class="field">
-                <label class="label" for="password">Where</label>
-                <p class="control has-icon has-icon-right">
+                <label class="label" for="password">Where</label>d
+                <div class="control has-icon has-icon-right">
                     <autocomplete name='location'
                                   v-model="location"
                                   v-validate:location.initial="'required'"
@@ -22,7 +22,7 @@
                         <i class="glyphicon glyphicon-lock"></i>
                     </span>
                     <span v-show="errors.has('location')" class="help is-danger">{{ errors.first('location') }}</span>
-                </p>
+                </div>
             </div>
             <div class="field">
                 <label class="label" for="cost">Cost</label>

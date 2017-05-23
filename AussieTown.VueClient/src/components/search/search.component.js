@@ -17,12 +17,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import ListingOfferCardComponent from './listingoffercard.component.vue';
-import * as VueGoogleMaps from 'vue2-google-maps';
-Vue.use(VueGoogleMaps, {
-    load: {
-        key: 'AIzaSyCaS0ArS9mkdiAFxHKIgpMwUMp1_XSdzTM'
-    }
-});
+if (process.env.VUE_ENV === 'client') {
+    var googleMaps = require('vue2-google-maps');
+    Vue.use(googleMaps, {
+        load: {
+            key: 'AIzaSyCaS0ArS9mkdiAFxHKIgpMwUMp1_XSdzTM'
+        }
+    });
+}
 var SearchComponent = (function (_super) {
     __extends(SearchComponent, _super);
     function SearchComponent() {
@@ -39,6 +41,16 @@ var SearchComponent = (function (_super) {
         ];
         return _this;
     }
+    SearchComponent.prototype.created = function () {
+        if (process.env.VUE_ENV === 'client') {
+            alert('here');
+        }
+        ;
+        if (process.env.VUE_ENV === 'server') {
+            console.log("hey server");
+        }
+        ;
+    };
     SearchComponent.prototype.showTourRequest = function () {
         this.$router.push("home");
     };
