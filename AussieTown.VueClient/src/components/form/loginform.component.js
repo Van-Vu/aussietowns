@@ -16,9 +16,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import { UserService } from '../../services/user.service';
+import UserService from '../../services/user.service';
 import VeeValidate from 'vee-validate';
-import { LoginModel } from '../model/login.model';
+import LoginModel from '../model/login.model';
 Vue.use(VeeValidate);
 var LoginForm = (function (_super) {
     __extends(LoginForm, _super);

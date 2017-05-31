@@ -18,7 +18,7 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import { ListingType } from '../shared/utils';
-import AutoCompleteComponent from '../autocomplete/autocomplete.vue';
+import AutoCompleteComponent from '../shared/autocomplete.vue';
 Vue.use(VeeValidate);
 var ListingRequestForm = (function (_super) {
     __extends(ListingRequestForm, _super);

@@ -2,8 +2,8 @@
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import AutoCompleteComponent from "../shared/autocomplete.vue";
-import { RegisterModel } from '../model/register.model';
-import { UserService } from '../../services/user.service';
+import RegisterModel from '../model/register.model';
+import UserService from '../../services/user.service';
 
 
 

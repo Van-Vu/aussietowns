@@ -1,17 +1,17 @@
 import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import AutoCompleteComponent from "../shared/autocomplete.vue";
 import VueRouter from 'vue-router';
 import LoginModalComponent from '../modal/loginmodal.component.vue';
 import ListingRequestModalComponent from '../modal/listingrequestmodal.component.vue';
 import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue';
 import axios from 'axios';
-import { SearchService } from '../../services/search.service';
+import SearchService from '../../services/search.service';
+import LocationSearchComponent from '../shared/locationsearch.component.vue';
 
 @Component({
     name: 'Home',
     components: {
-        "autocomplete": AutoCompleteComponent,
+        "locationsearch": LocationSearchComponent,
         "listingrequestmodal": ListingRequestModalComponent,
         "listingoffermodal": ListingOfferModalComponent
     }
@@ -70,20 +70,8 @@ export default class HomeComponent extends Vue{
         this.slides.pop();
     }
 
-    searchStr: string = "";
-    selectedId: number = 0;
-    list: any[] = [];
-    placeHolderText = "this is the test";
-
-    onLocationSearch(event) {
-        this.searchStr = event;
-        (new SearchService()).getLocation('syd')
-            .then(response => this.list= response);
-    }
-
     onSelect(val) {
-        this.searchStr = val.Description;
-        this.selectedId = val.Value;
+        console.log(val);
     }
 
     onSearch(model) {
@@ -92,6 +80,16 @@ export default class HomeComponent extends Vue{
     }
 @Prop posts: any[];
 errors: any[];
+
+    public asyncData({ store, route }) {
+        // return the Promise from the action
+        console.log('here II am: :' + store.state);
+        return store.getters.getListing;
+    }
+
+    get myComputedProp() {
+        return this.$store.getters.getListing;
+    }
 
     created() {
 	    //axios.get(`http://jsonplaceholder.typicode.com/posts`)
@@ -102,7 +100,6 @@ errors: any[];
 	    //.catch(e => {
 	    //  this.errors.push(e)
 	    //})
-
 
     }
 

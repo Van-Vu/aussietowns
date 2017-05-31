@@ -1,4 +1,4 @@
-﻿export class RegisterModel {
+﻿export default class RegisterModel {
     email: string;
     password: string;
     firstname: string;

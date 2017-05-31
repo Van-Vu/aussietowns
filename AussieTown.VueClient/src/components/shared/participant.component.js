@@ -20,8 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import MiniProfileComponent from './miniprofile.component.vue';
-import AutoCompleteComponent from '../autocomplete/autocomplete.vue';
-import { SearchService } from '../../services/search.service';
+import UserSearchComponent from './usersearch.component.vue';
 var ParticipantComponent = (function (_super) {
     __extends(ParticipantComponent, _super);
     function ParticipantComponent() {
@@ -47,15 +46,7 @@ var ParticipantComponent = (function (_super) {
         }
         event.stopPropagation();
     };
-    ParticipantComponent.prototype.onUserSearch = function (search) {
-        var _this = this;
-        (new SearchService()).getUser(search)
-            .then(function (response) { return _this.searchUsers = response; });
-        //this.userService.search(search).subscribe((response: any) => {
-        //    this.searchUsers = response;
-        //});
-    };
-    ParticipantComponent.prototype.onUserSelected = function (user) {
+    ParticipantComponent.prototype.onUserSelect = function (user) {
         this.$emit("userAdded", user);
     };
     ParticipantComponent.prototype.onUserRemove = function (user) {
@@ -77,7 +68,7 @@ ParticipantComponent = __decorate([
         name: "Participant",
         components: {
             "miniprofile": MiniProfileComponent,
-            "autocomplete": AutoCompleteComponent
+            "usersearch": UserSearchComponent
         }
     })
 ], ParticipantComponent);

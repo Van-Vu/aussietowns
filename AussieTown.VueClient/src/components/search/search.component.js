@@ -17,6 +17,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import ListingOfferCardComponent from './listingoffercard.component.vue';
+import ListingRequestModalComponent from '../modal/listingrequestmodal.component.vue';
+import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue';
 if (process.env.VUE_ENV === 'client') {
     var googleMaps = require('vue2-google-maps');
     Vue.use(googleMaps, {
@@ -34,6 +36,8 @@ var SearchComponent = (function (_super) {
         _this.listings = [];
         _this.totalDistance = 0;
         _this.listing = { id: 1, location: "Sydney", primaryOwner: "test User", header: "this is header", cost: "cost", description: "this is description" };
+        _this.showListingRequest = false;
+        _this.showListingOffer = false;
         _this.center = { lat: -33.860, lng: 151.210 };
         _this.markers = [
             { position: { lat: -33.860, lng: 10.0 } },
@@ -60,7 +64,9 @@ SearchComponent = __decorate([
     Component({
         name: "Search",
         components: {
-            "listingoffercard": ListingOfferCardComponent
+            "listingoffercard": ListingOfferCardComponent,
+            "listingrequestmodal": ListingRequestModalComponent,
+            "listingoffermodal": ListingOfferModalComponent
         }
     })
 ], SearchComponent);

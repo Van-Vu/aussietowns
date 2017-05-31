@@ -19,10 +19,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import AutoCompleteComponent from "../autocomplete/autocomplete.vue";
 import ListingRequestModalComponent from '../modal/listingrequestmodal.component.vue';
 import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue';
-import { SearchService } from '../../services/search.service';
+import LocationSearchComponent from '../shared/locationsearch.component.vue';
 var HomeComponent = (function (_super) {
     __extends(HomeComponent, _super);
     function HomeComponent() {
@@ -58,10 +57,6 @@ var HomeComponent = (function (_super) {
             loop: true,
             controlBy: 'container'
         };
-        _this.searchStr = "";
-        _this.selectedId = 0;
-        _this.list = [];
-        _this.placeHolderText = "this is the test";
         return _this;
     }
     HomeComponent.prototype.addNewSlide = function () {
@@ -70,20 +65,26 @@ var HomeComponent = (function (_super) {
     HomeComponent.prototype.removeLastSlide = function () {
         this.slides.pop();
     };
-    HomeComponent.prototype.onLocationSearch = function (event) {
-        var _this = this;
-        this.searchStr = event;
-        (new SearchService()).getLocation('syd')
-            .then(function (response) { return _this.list = response; });
-    };
     HomeComponent.prototype.onSelect = function (val) {
-        this.searchStr = val.Description;
-        this.selectedId = val.Value;
+        console.log(val);
     };
     HomeComponent.prototype.onSearch = function (model) {
         console.log(model.value);
         this.$router.push('search');
     };
+    HomeComponent.prototype.asyncData = function (_a) {
+        var store = _a.store, route = _a.route;
+        // return the Promise from the action
+        console.log('here II am: :' + store.state);
+        return store.getters.getListing;
+    };
+    Object.defineProperty(HomeComponent.prototype, "myComputedProp", {
+        get: function () {
+            return this.$store.getters.getListing;
+        },
+        enumerable: true,
+        configurable: true
+    });
     HomeComponent.prototype.created = function () {
         //axios.get(`http://jsonplaceholder.typicode.com/posts`)
         //.then(response => {
@@ -104,7 +105,7 @@ HomeComponent = __decorate([
     Component({
         name: 'Home',
         components: {
-            "autocomplete": AutoCompleteComponent,
+            "locationsearch": LocationSearchComponent,
             "listingrequestmodal": ListingRequestModalComponent,
             "listingoffermodal": ListingOfferModalComponent
         }

@@ -16,21 +16,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-var Test = (function (_super) {
-    __extends(Test, _super);
-    function Test() {
+var Test_bk = (function (_super) {
+    __extends(Test_bk, _super);
+    function Test_bk() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.msg = "Hello Bodom";
         return _this;
     }
-    Test.prototype.created = function () {
+    Test_bk.prototype.created = function () {
         this.msg = "asdfasdfa";
     };
-    return Test;
+    return Test_bk;
 }(Vue));
-Test = __decorate([
+Test_bk = __decorate([
     Component({
         name: "Test"
     })
-], Test);
-export default Test;
+], Test_bk);
+export default Test_bk;

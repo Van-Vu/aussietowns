@@ -3,4 +3,4 @@ var RegisterModel = (function () {
     }
     return RegisterModel;
 }());
-export { RegisterModel };
+export default RegisterModel;

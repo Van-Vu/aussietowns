@@ -2,15 +2,15 @@
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import axios from "axios";
 import MiniProfileComponent from './miniprofile.component.vue';
-import AutoCompleteComponent from './autocomplete.vue';
-import { SearchService } from '../../services/search.service';
+import UserSearchComponent from './usersearch.component.vue';
+import SearchService from '../../services/search.service';
 
 
 @Component({
     name: "Participant",
     components: {
         "miniprofile": MiniProfileComponent,
-        "autocomplete": AutoCompleteComponent
+        "usersearch": UserSearchComponent
     }
 })
 
@@ -42,16 +42,7 @@ export default class ParticipantComponent extends Vue {
         event.stopPropagation();
     }
 
-    onUserSearch(search) {
-        (new SearchService()).getUser(search)
-            .then(response => this.searchUsers = response);
-
-        //this.userService.search(search).subscribe((response: any) => {
-        //    this.searchUsers = response;
-        //});
-    }
-
-    onUserSelected(user) {
+    onUserSelect(user) {
         this.$emit("userAdded", user);
     }
 

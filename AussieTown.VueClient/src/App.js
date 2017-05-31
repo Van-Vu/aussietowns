@@ -20,7 +20,7 @@ import NavMenuComponent from './components/navmenu/navmenu.component.vue';
 //let window: any;
 if (process.env.VUE_ENV === 'client') {
     Vue.component('datepicker', require('vuejs-datepicker'));
-    Vue.component('vue-timepicker', require('vue2-timepicker'));
+    //Vue.component('vue-timepicker', require('vue2-timepicker'))
 }
 //Vue.use(ElementUI);
 var App = (function (_super) {

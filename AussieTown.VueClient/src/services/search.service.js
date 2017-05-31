@@ -16,4 +16,4 @@ var SearchService = (function () {
     };
     return SearchService;
 }());
-export { SearchService };
+export default SearchService;

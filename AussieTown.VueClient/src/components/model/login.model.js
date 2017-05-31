@@ -3,4 +3,4 @@ var LoginModel = (function () {
     }
     return LoginModel;
 }());
-export { LoginModel };
+export default LoginModel;

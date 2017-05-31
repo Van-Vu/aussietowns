@@ -9,7 +9,7 @@ var UserService = (function () {
         return http.get('/users/' + _id, this.jwt()).then(function (response) { return response.data; });
     };
     UserService.prototype.create = function (user) {
-        return http.post('api/user/register', user, this.jwt()).then(function (response) {
+        return http.post('api/user/register', user).then(function (response) {
             var result = response.data;
             if (result.state == 1) {
                 var json = result.data;
@@ -79,4 +79,4 @@ var UserService = (function () {
     };
     return UserService;
 }());
-export { UserService };
+export default UserService;

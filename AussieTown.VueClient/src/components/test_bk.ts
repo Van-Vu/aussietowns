@@ -4,7 +4,7 @@ import { Component } from "vue-property-decorator";
 @Component({
     name: "Test"
 })
-export default class Test extends Vue {
+export default class Test_bk extends Vue {
     msg: string = "Hello Bodom";
 
     created(): void {

@@ -1,6 +1,6 @@
 ﻿import { http } from './http-base';
 
-export class SearchService {
+export default class SearchService {
     private locationAutocompleteUrl = 'api/search/autocomplete/?search=';  // URL to web API
     private userAutocompleteUrl = 'api/user/autocomplete/?search=';  // URL to web API
 

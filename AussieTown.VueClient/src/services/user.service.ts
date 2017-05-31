@@ -1,6 +1,6 @@
 ﻿import { http } from './http-base';
 
-export class UserService {
+export default class UserService {
     getAll() {
         return http.get('/users', this.jwt()).then(response => response.data);
     }

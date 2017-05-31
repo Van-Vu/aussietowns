@@ -3,24 +3,15 @@
         <section class="header-main">
             <div class="background"></div>
             <div class="content">
-                <h1>Hell world!</h1>
+                <h1>Hell world! {{ myComputedProp }}</h1>
                 <p>bodom</p>
                 <article>
                     <form class="searchbar">
-                        <autocomplete :minChars="3"
-                                      :list.sync="list"
-                                      :placeHolderText="placeHolderText"
-                                      :keyword="searchStr"
-                                      v-on:search="onLocationSearch($event)"
-                                      v-on:select="onSelect($event)"></autocomplete>
+                        <locationsearch @onSelected="onSelect($event)"></locationsearch>
                         <input type="submit" class="searchBtn" value="Submit" @click="onSearch" />
                     </form>
                 </article>
                 <div>this is something else</div>
-                <listingrequestmodal :show.sync="showListingRequest" @onClose="showListingRequest = !showListingRequest"></listingrequestmodal>
-                <button @click="showListingRequest = !showListingRequest">Toggle Request</button>
-                <listingoffermodal :show.sync="showListingOffer" @onClose="showListingOffer = !showListingOffer"></listingoffermodal>
-                <button @click="showListingOffer = !showListingOffer">Toggle Offer</button>
             </div>
         </section>
 
@@ -50,6 +41,7 @@
 
     </div>
 </template>
+
 <script lang="ts">
 import HomeComponent from "./home.component.ts";
 export default HomeComponent;

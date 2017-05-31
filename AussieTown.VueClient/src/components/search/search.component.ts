@@ -2,6 +2,8 @@
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import AutoCompleteComponent from "../shared/autocomplete.vue";
 import ListingOfferCardComponent from './listingoffercard.component.vue';
+import ListingRequestModalComponent from '../modal/listingrequestmodal.component.vue';
+import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue';
 
 if (process.env.VUE_ENV === 'client') {
     const googleMaps = require('vue2-google-maps')
@@ -15,7 +17,9 @@ if (process.env.VUE_ENV === 'client') {
 @Component({
     name: "Search",
     components: {
-        "listingoffercard": ListingOfferCardComponent
+        "listingoffercard": ListingOfferCardComponent,
+        "listingrequestmodal": ListingRequestModalComponent,
+        "listingoffermodal": ListingOfferModalComponent
     }
 })
 
@@ -27,6 +31,9 @@ export default class SearchComponent extends Vue {
     listings: any[] = [];
     totalDistance: number = 0;
     listing = { id: 1, location: "Sydney", primaryOwner: "test User", header: "this is header", cost: "cost", description: "this is description" };
+    showListingRequest: boolean = false;
+    showListingOffer: boolean = false;
+
 
 	created(): void {
 		if (process.env.VUE_ENV === 'client') {

@@ -8,12 +8,7 @@
             <button @click.prevent="toggleProfileSearch($event)" class="addParticipant">
                 <span class="glyphicon glyphicon-plus-sign"></span> {{buttonText}}
             </button>
-            <autocomplete v-show="isAdding" :minChars="3"
-                          :list="searchUsers"
-                          :placeHolderText="placeHolderText"
-                          :keyword="searchStr"
-                          v-on:search="onUserSearch($event)"
-                          v-on:select="onUserSelected($event)"></autocomplete>
+            <usersearch v-show="isAdding" @onSelected="onUserSelect($event)"></usersearch>
         </li>
     </ul>
 </template>

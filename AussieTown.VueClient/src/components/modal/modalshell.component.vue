@@ -19,7 +19,7 @@
                     <slot name="footer">
                     </slot>
                 </footer>
-                <button class="modal-close" @click="close"></button>
+                <button class="modal-close" style="z-index:1000;" @click="close"></button>
                 </div>
         </section>
     </transition>

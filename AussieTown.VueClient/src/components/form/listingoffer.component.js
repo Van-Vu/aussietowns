@@ -18,42 +18,30 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import { ListingType } from '../shared/utils';
-import AutoCompleteComponent from '../autocomplete/autocomplete.vue';
 import ScheduleComponent from '../shared/schedule.component.vue';
 import ParticipantComponent from '../shared/participant.component.vue';
+import ListingModel from '../model/listing.model';
+import MiniProfile from '../model/miniprofile.model';
+import LocationSearchComponent from '../shared/locationsearch.component.vue';
+import ListingService from '../../services/listing.service';
 Vue.use(VeeValidate);
 var ListingOfferForm = (function (_super) {
     __extends(ListingOfferForm, _super);
     function ListingOfferForm() {
+        //dateMask: any;
+        //tourId: number = 0;
+        //hostList: any[] = [];
+        //searchLocations: any;
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.tourId = 0;
-        _this.hostList = [];
-        _this.list = [];
-        _this.searchStr = "";
-        _this.selectedId = 0;
-        _this.placeHolderText = "this is the test";
-        _this.id = 0;
-        _this.type = ListingType.Offer;
-        _this.operators = [
-            {
-                id: 1,
-                photoUrl: "/static/images/logo.png",
-                fullname: "asdfasdfas",
-                shortDescription: "asdfasdfa"
-            }
-        ];
-        _this.guests = [];
-        _this.schedules = [];
-        _this.location = '';
-        _this.cost = 0;
-        _this.header = '';
-        _this.description = '';
-        _this.expectation = '';
-        _this.requirement = '';
-        _this.minParticipant = 0;
         _this.formSubmitted = false;
+        _this.model = new ListingModel();
         return _this;
     }
+    ListingOfferForm.prototype.onInsertorUpdate = function () {
+        //Bodom: hack
+        this.model.id = 0;
+        (new ListingService()).addListing(this.contructBeforeSubmit(this.model));
+    };
     ListingOfferForm.prototype.onInsert = function () {
         //console.log(this.contructBeforeSubmit(this.model.value));
         //let model = this.contructBeforeSubmit(this.model.value);
@@ -85,21 +73,16 @@ var ListingOfferForm = (function (_super) {
         //    error => {
         //    });
     };
-    ListingOfferForm.prototype.onLocationSearch = function (search) {
-        //this.searchService.autoComplete(search).subscribe((response: any) => {
-        //    this.searchLocations = response;
-        //});
+    ListingOfferForm.prototype.onLocationSelected = function (item) {
+        this.model.locationDetail = item;
     };
     ListingOfferForm.prototype.fulldayChange = function () {
         //this.isFullday = !this.isFullday;
     };
     ListingOfferForm.prototype.onUserAdded = function (user) {
-        this.operators.push({
-            id: user.id,
-            photoUrl: user.imageUrl,
-            fullname: user.name,
-            shortDescription: ""
-        });
+        if (this.model.tourOperators == null)
+            this.model.tourOperators = new Array();
+        this.model.tourOperators.push(new MiniProfile(user.id, user.name, '', '', user.imageUrl, ''));
     };
     ListingOfferForm.prototype.onUserRemoved = function (user) {
     };
@@ -153,24 +136,24 @@ var ListingOfferForm = (function (_super) {
             var schedule = schedules[i];
             scheduleArr.push({
                 id: schedule.id,
-                startDate: schedule.startDate.date.year + '/' + schedule.startDate.date.month + '/' + schedule.startDate.date.day + 'T' + schedule.startTime,
-                duration: schedule.duration,
-                repeatedType: schedule.repeatPeriod,
+                startDate: schedule.startDate.getUTCFullYear() + '/' + schedule.startDate.getUTCMonth() + '/' + schedule.startDate.getUTCDate() + 'T' + schedule.startTime.HH + ':' + schedule.startTime.mm,
+                duration: schedule.duration.HH + ':' + schedule.duration.mm,
+                repeatedType: schedule.repeatedType,
                 listingId: model.id,
-                endDate: schedule.endDate.date.year + '/' + schedule.endDate.date.month + '/' + schedule.endDate.date.day
+                endDate: schedule.endDate.getUTCFullYear() + '/' + schedule.endDate.getUTCMonth() + '/' + schedule.endDate.getUTCDate()
             });
         }
         return scheduleArr;
     };
     ListingOfferForm.prototype.constructOperator = function (model) {
-        var operators = model.operators;
+        var operators = model.tourOperators;
         var operatorArr = [];
         for (var i = 0; i < operators.length; i++) {
             var operator = operators[i];
             operatorArr.push({
                 listingId: model.id,
                 userId: operator.id,
-                isOwner: (i == 0) ? true : false
+                isOwner: (i === 0)
             });
         }
         return operatorArr;
@@ -188,19 +171,19 @@ var ListingOfferForm = (function (_super) {
         //    "type":"0",
         //    "tourOperators":[{ "listingId": "0", "userId": "1", "isOwner": true }]
         //}
-        //return {
-        //    id: model.id,
-        //    type: ListingType.Offer,
-        //    locationId: model.locationId.id,
-        //    cost: model.cost,
-        //    currency: model.currency,
-        //    header: model.header,
-        //    description: model.description,
-        //    requirement: model.requirement,
-        //    minParticipant: model.minParticipant,
-        //    schedules: this.constructShedule(model),
-        //    tourOperators: this.constructOperator(model)
-        //}
+        return {
+            id: model.id,
+            type: ListingType.Offer,
+            locationId: model.locationDetail.id,
+            cost: model.cost,
+            currency: model.currency,
+            header: model.header,
+            description: model.description,
+            requirement: model.requirement,
+            minParticipant: model.minParticipant,
+            schedules: this.constructShedule(model),
+            tourOperators: this.constructOperator(model)
+        };
     };
     return ListingOfferForm;
 }(Vue));
@@ -208,7 +191,7 @@ ListingOfferForm = __decorate([
     Component({
         name: 'ListingOffer',
         components: {
-            'autocomplete': AutoCompleteComponent,
+            'locationsearch': LocationSearchComponent,
             'schedule': ScheduleComponent,
             'participant': ParticipantComponent
         }

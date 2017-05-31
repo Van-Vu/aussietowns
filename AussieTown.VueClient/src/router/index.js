@@ -3,7 +3,7 @@ import Router from "vue-router";
 import Hello from "../components/Hello.vue";
 import HomeComponent from '../components/home/home.component.vue';
 import SearchComponent from '../components/search/search.component.vue';
-import Test from '../components/test';
+import Test from '../components/test.vue';
 import LoginForm from '../components/form/loginform.component.vue';
 import RegistrationForm from '../components/form/registration.component.vue';
 import ProfileComponent from '../components/profile/profile.component.vue';

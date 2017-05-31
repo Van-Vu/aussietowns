@@ -1,6 +1,6 @@
 ﻿import { http } from './http-base';
 
-export class ListingService {
+export default class ListingService {
     private baseUrl = '/api/listing/';
     private getListingByUserUrl = this.baseUrl + '?user=';
     private getListingBySuburbUrl = this.baseUrl + 'suburb/';
@@ -12,16 +12,16 @@ export class ListingService {
             });
     }
 
-    //addListing(listing) {
-    //    return http.post(this.baseUrl, listing, this.jwt()).map(response => {
-    //        let result = response.json() as RequestResult;
-    //        if (result.state == 1) {
-    //            let json = result.data as any;
-    //        }
-    //        return result;
-    //    })
-    //        .catch(this.handleError);
-    //}
+    addListing(listing) {
+        return http.post(this.baseUrl, listing, this.jwt())
+            .then(response => {
+            let result = response.data;
+            if (result.state === 1) {
+                return result;
+            }
+        })
+            .catch(this.handleError);
+    }
 
     //updateListing(listing) {
     //    return http.put(this.baseUrl + listing.id, listing)

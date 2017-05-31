@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
-import AutoCompleteComponent from "../autocomplete/autocomplete.vue";
+import AutoCompleteComponent from "../shared/autocomplete.vue";
 Vue.use(VeeValidate);
 var UserDetailComponent = (function (_super) {
     __extends(UserDetailComponent, _super);

@@ -17,9 +17,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
-import AutoCompleteComponent from "../autocomplete/autocomplete.vue";
-import { RegisterModel } from '../model/register.model';
-import { UserService } from '../../services/user.service';
+import AutoCompleteComponent from "../shared/autocomplete.vue";
+import RegisterModel from '../model/register.model';
+import UserService from '../../services/user.service';
 Vue.use(VeeValidate);
 var RegistrationForm = (function (_super) {
     __extends(RegistrationForm, _super);
@@ -45,7 +45,19 @@ var RegistrationForm = (function (_super) {
         //this.searchStr = val.Description;
         //this.selectedId = val.Value;
     };
-    RegistrationForm.prototype.onUpdate = function () { };
+    RegistrationForm.prototype.onRegister = function () {
+        var _this = this;
+        this.$validator.validateAll().then(function () {
+            // eslint-disable-next-line
+            (new UserService()).create(_this.model)
+                .then(function (response) {
+                _this.$emit('onSuccessfulLogin', response);
+            });
+        }).catch(function () {
+            // eslint-disable-next-line
+            alert('Correct them errors!');
+        });
+    };
     RegistrationForm.prototype.capture = function () { };
     return RegistrationForm;
 }(Vue));

@@ -11,16 +11,16 @@ var ListingService = (function () {
             return response.data;
         });
     };
-    //addListing(listing) {
-    //    return http.post(this.baseUrl, listing, this.jwt()).map(response => {
-    //        let result = response.json() as RequestResult;
-    //        if (result.state == 1) {
-    //            let json = result.data as any;
-    //        }
-    //        return result;
-    //    })
-    //        .catch(this.handleError);
-    //}
+    ListingService.prototype.addListing = function (listing) {
+        return http.post(this.baseUrl, listing, this.jwt())
+            .then(function (response) {
+            var result = response.data;
+            if (result.state === 1) {
+                return result;
+            }
+        })
+            .catch(this.handleError);
+    };
     //updateListing(listing) {
     //    return http.put(this.baseUrl + listing.id, listing)
     //        .map(response => response.json() as RequestResult)
@@ -58,4 +58,4 @@ var ListingService = (function () {
     };
     return ListingService;
 }());
-export { ListingService };
+export default ListingService;

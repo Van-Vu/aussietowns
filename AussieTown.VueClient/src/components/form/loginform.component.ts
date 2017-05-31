@@ -1,9 +1,9 @@
 ﻿import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { UserService } from '../../services/user.service';
+import UserService from '../../services/user.service';
 
 import VeeValidate from 'vee-validate';
-import { LoginModel } from '../model/login.model';
+import LoginModel from '../model/login.model';
 
 
 Vue.use(VeeValidate);

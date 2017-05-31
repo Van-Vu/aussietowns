@@ -1,25 +1,17 @@
 ﻿<template>
     <div>
-        <form @submit.prevent="validateBeforeSubmit" v-if="!formSubmitted" style="margin-top:100px">
+        <form @submit.prevent="onInsertorUpdate" v-if="!formSubmitted" style="margin-top:100px">
             <div class="field">
                 <label class="label">Host</label>
                 <div class="control">
-                    <participant participantType="Host" :participants="operators" 
+                    <participant participantType="Host" :participants="model.tourOperators" 
                                  @userAdded="onUserAdded" @userRemoved="onUserRemoved"></participant>
                 </div>
             </div>
             <div class="field">
                 <label class="label" for="password">Where</label>
                 <div class="control has-icon has-icon-right">
-                    <autocomplete name='location' 
-                                  v-model="location"
-                                  v-validate:location.initial="'required'"
-                                  :minChars="3"
-                                  :list="list"
-                                  :placeHolderText="placeHolderText"
-                                  :keyword="searchStr"
-                                  v-on:search="onLocationSearch($event)"
-                                  v-on:select="onSelect($event)"></autocomplete>
+                    <locationsearch @onSelected="onLocationSelected($event)"></locationsearch>
                     <span class="icon">
                         <i class="glyphicon glyphicon-lock"></i>
                     </span>
@@ -29,7 +21,7 @@
             <div class="field">
                 <label class="label" for="cost">Cost</label>
                 <p class="control has-icon has-icon-right">
-                    <input name="cost" v-model="cost" v-validate:cost.initial="'required|numeric'"
+                    <input name="cost" v-model="model.cost" v-validate:cost.initial="'required|numeric'"
                            :class="{'input': true, 'is-danger': errors.has('cost') }" type="text" placeholder="Cost per person">
                     <span class="icon user">
                         <i class="glyphicon glyphicon-lock"></i>
@@ -40,13 +32,24 @@
             <div class="field">
                 <label class="label">Schedule</label>
                 <div class="control">
-                    <schedule></schedule>
+                    <schedule :model="model.schedules"></schedule>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="header">Header</label>
+                <div class="control has-icon has-icon-right">
+                    <input name="description" v-model="model.header" v-validate:header.initial="'required'"
+                           :class="{'input': true, 'is-danger': errors.has('header') }" type="text" placeholder="">
+                    <span class="icon user">
+                        <i class="glyphicon glyphicon-lock"></i>
+                    </span>
+                    <span v-show="errors.has('header')" class="help is-danger">{{ errors.first('header') }}</span>
                 </div>
             </div>
             <div class="field">
                 <label class="label" for="description">Description</label>
                 <div class="control has-icon has-icon-right">
-                    <input name="description" v-model="description" v-validate:description.initial="'required'"
+                    <input name="description" v-model="model.description" v-validate:description.initial="'required'"
                            :class="{'input': true, 'is-danger': errors.has('description') }" type="text" placeholder="">
                     <span class="icon user">
                         <i class="glyphicon glyphicon-lock"></i>
@@ -57,18 +60,18 @@
             <div class="field">
                 <label class="label" for="expectation">What to expect</label>
                 <div class="control has-icon has-icon-right">
-                    <textarea name="expectation" class="textarea" v-model="expectation" cols="40" rows="5"></textarea>
+                    <textarea name="expectation" class="textarea" v-model="model.expectation" cols="40" rows="5"></textarea>
                 </div>
             </div>
             <div class="field">
                 <label class="label" for="requirement">Requirement</label>
                 <div class="control has-icon has-icon-right">
-                    <textarea name="requirement" class="textarea" v-model="requirement" cols="40" rows="5"></textarea>
+                    <textarea name="requirement" class="textarea" v-model="model.requirement" cols="40" rows="5"></textarea>
                 </div>
             </div>
             <div class="field">
                 <label class="label" for="participants">Minimum participants</label>
-                <select id="participants" class="select" v-model="minParticipant">
+                <select id="participants" class="select" v-model="model.minParticipant">
                     <option value="0" selected="selected">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>

@@ -105,30 +105,39 @@ namespace AussieTowns.Repository
 
                         var listingId = Convert.ToInt16(await dbConnection.ExecuteScalarAsync("SELECT LAST_INSERT_ID()"));
 
-                        foreach (var schedule in listing.Schedules)
+                        if (listing.Schedules != null && listing.Schedules.Any())
                         {
-                            schedule.ListingId = listingId;
+                            foreach (var schedule in listing.Schedules)
+                            {
+                                schedule.ListingId = listingId;
+                            }
+                            var scheduleSql =
+                                "INSERT INTO Schedule(startdate, duration, enddate, repeatedtype,listingid) "
+                                + " VALUES(@startDate, @duration, @endDate, @repeatedType, @listingId)";
+                            await dbConnection.ExecuteAsync(scheduleSql, listing.Schedules);
                         }
-                        var scheduleSql =
-                            "INSERT INTO Schedule(startdate, duration, enddate, repeatedtype,listingid) "
-                            + " VALUES(@startDate, @duration, @endDate, @repeatedType, @listingId)";
-                        await dbConnection.ExecuteAsync(scheduleSql, listing.Schedules);
 
-                        foreach (var tourOperator in listing.TourOperators)
+                        if (listing.TourOperators != null && listing.TourOperators.Any())
                         {
-                            tourOperator.ListingId = listingId;
+                            foreach (var tourOperator in listing.TourOperators)
+                            {
+                                tourOperator.ListingId = listingId;
+                            }
+                            var operatorSql = "INSERT INTO TourOperator(userid, listingid, isowner) "
+                                + " VALUES(@userId, @listingId, @isOwner)";
+                            await dbConnection.ExecuteAsync(operatorSql, listing.TourOperators);
                         }
-                        var operatorSql = "INSERT INTO TourOperator(userid, listingid, isowner) " 
-                            + " VALUES(@userId, @listingId, @isOwner)";
-                        await dbConnection.ExecuteAsync(operatorSql, listing.TourOperators);
 
-                        foreach (var tourGuest in listing.TourGuests)
+                        if (listing.TourGuests != null && listing.TourGuests.Any())
                         {
-                            tourGuest.ListingId = listingId;
+                            foreach (var tourGuest in listing.TourGuests)
+                            {
+                                tourGuest.ListingId = listingId;
+                            }
+                            var guestSql = "INSERT INTO TourGuest(userid, listingid, isowner) "
+                                + "VALUES(@userId, @listingId, @isOwner)";
+                            await dbConnection.ExecuteAsync(guestSql, listing.TourGuests);
                         }
-                        var guestSql = "INSERT INTO TourGuest(userid, listingid, isowner) " 
-                            + "VALUES(@userId, @listingId, @isOwner)";
-                        await dbConnection.ExecuteAsync(guestSql, listing.TourGuests);
 
                         tran.Commit();
                         return listingId;
