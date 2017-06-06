@@ -14,5 +14,6 @@ namespace AussieTowns.Services
         Task<int> InsertListing(Listing listing);
         Task<int> UpdateListing(Listing listing);
         Task<int> DeActivateListing(int id);
+        Task<IEnumerable<int>> MapListingHeaderToId(string header);
     }
 }

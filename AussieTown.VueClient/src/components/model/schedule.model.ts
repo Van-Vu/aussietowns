@@ -2,10 +2,10 @@
 
 export default class ScheduleModel {
     public id: number;
-    public startDate: Date;
+    public startDate: string;
     public startTime: Object;
     public duration: Object;
-    public endDate: Date;
+    public endDate: string;
     public repeatedType: RepeatedType;
 
     constructor(startDate, startTime, duration, endDate, repeatedType) {

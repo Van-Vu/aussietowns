@@ -6,7 +6,7 @@ export default class UserService {
     }
 
     getById(_id: string) {
-        return http.get('/users/' + _id, this.jwt()).then(response => response.data);
+        return http.get('api/user/' + _id).then(response => response.data);
     }
 
     create(user) {

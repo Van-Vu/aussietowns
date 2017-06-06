@@ -2,18 +2,19 @@
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import AutoCompleteComponent from "../shared/autocomplete.vue";
 import Utils from '../shared/utils';
+import ListingModel from '../model/listing.model';
 
 @Component({
-    name: "ListingOfferCard"
+    name: "ListingCard"
 })
 
-export default class ListingOfferCardComponent extends Vue {
+export default class ListingCardComponent extends Vue {
     @Prop listingDetail: any;
     private id:number;
     location: string;
     hostName: string;
     header: string;
-    cost: string;
+    cost: number;
     date: string;
     time: string;
     description: string;
@@ -39,12 +40,11 @@ export default class ListingOfferCardComponent extends Vue {
 
     created(): void {
         this.id = this.listingDetail.id;
-        this.location = this.listingDetail.location;
-        this.hostName = this.listingDetail.primaryOwner;
+        this.location = this.listingDetail.locationDetail.name;
         this.header = this.listingDetail.header;
         this.cost = this.listingDetail.cost;
-        this.date = "";
-        this.time = "";
+        this.date = this.listingDetail.schedules[0].startDate;
+        this.time = this.listingDetail.schedules[0].startTime.toString();
         //this.date = Utils.getDate(this.listingDetail.schedules[0].startDate);
         //this.time = Utils. getTime(this.listingDetail.schedules[0].startDate);
         this.description = this.listingDetail.description;

@@ -6,7 +6,7 @@ var UserService = (function () {
         return http.get('/users', this.jwt()).then(function (response) { return response.data; });
     };
     UserService.prototype.getById = function (_id) {
-        return http.get('/users/' + _id, this.jwt()).then(function (response) { return response.data; });
+        return http.get('api/user/' + _id).then(function (response) { return response.data; });
     };
     UserService.prototype.create = function (user) {
         return http.post('api/user/register', user).then(function (response) {

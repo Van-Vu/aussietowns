@@ -1,7 +1,6 @@
 ﻿import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import AutoCompleteComponent from "../shared/autocomplete.vue";
-import ListingOfferCardComponent from './listingoffercard.component.vue';
+import ListingCardComponent from '../shared/listingcard.component.vue';
 import ListingRequestModalComponent from '../modal/listingrequestmodal.component.vue';
 import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue';
 
@@ -17,7 +16,7 @@ if (process.env.VUE_ENV === 'client') {
 @Component({
     name: "Search",
     components: {
-        "listingoffercard": ListingOfferCardComponent,
+        "listingoffercard": ListingCardComponent,
         "listingrequestmodal": ListingRequestModalComponent,
         "listingoffermodal": ListingOfferModalComponent
     }

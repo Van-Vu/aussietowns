@@ -19,7 +19,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { AutocompleteItem } from '../model/autocomplete.model';
 import SearchService from '../../services/search.service';
 import AutoCompleteComponent from './autocomplete.vue';
 var LocationSearchComponent = (function (_super) {
@@ -38,11 +37,20 @@ var LocationSearchComponent = (function (_super) {
     LocationSearchComponent.prototype.onLocationSelected = function (selectedItem) {
         this.$emit("onSelected", selectedItem);
     };
+    LocationSearchComponent.prototype.onRefreshSelect = function (selectedIndex) {
+        this.locations = this.locations.filter(function (d, i) {
+            if (i === selectedIndex)
+                d.selected = true;
+            else
+                d.selected = false;
+            return d;
+        });
+    };
     return LocationSearchComponent;
 }(Vue));
 __decorate([
     Prop,
-    __metadata("design:type", AutocompleteItem)
+    __metadata("design:type", Object)
 ], LocationSearchComponent.prototype, "initialData", void 0);
 LocationSearchComponent = __decorate([
     Component({

@@ -77,38 +77,46 @@ namespace AussieTowns.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize("Bearer")]
+        //[Authorize("Bearer")]
         public async Task<RequestResult> GetUserInfo(int id)
         {
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            if (claimsIdentity == null)
+            try
+            {
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+                if (claimsIdentity == null)
+                    return new RequestResult
+                    {
+                        State = RequestState.Failed,
+                        Msg = "Can't find user"
+                    };
+
+                //var userId = Convert.ToInt32(claimsIdentity.Claims.FirstOrDefault(x=>x.Type=="userId")?.Value);
+                //var email = claimsIdentity.Name;
+                var user = await _userService.GetById(id);
+                if (user != null)
+                {
+                    return new RequestResult
+                    {
+                        State = RequestState.Success,
+                        Data = _mapper.Map<User, UserResponse>(user)
+                    };
+                }
+
                 return new RequestResult
                 {
                     State = RequestState.Failed,
                     Msg = "Can't find user"
                 };
-            
-            //var userId = Convert.ToInt32(claimsIdentity.Claims.FirstOrDefault(x=>x.Type=="userId")?.Value);
-            //var email = claimsIdentity.Name;
-            var user = await _userService.GetById(id);
-            if (user!= null)
-            {
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Data = user
-                };
             }
-
-            return new RequestResult
+            catch (Exception e)
             {
-                State = RequestState.Failed,
-                Msg = "Can't find user"
-            };
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         [HttpGet("summary/{id}")]
-        [Authorize("Bearer")]
+        //[Authorize("Bearer")]
         public async Task<RequestResult> GetUserMiniProfile(int id)
         {
             var user = await _userService.GetById(id);
@@ -158,7 +166,7 @@ namespace AussieTowns.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize("Bearer")]
+        //[Authorize("Bearer")]
         public async Task<RequestResult> Update(int id,[FromBody] User userRequest)
         {
             try

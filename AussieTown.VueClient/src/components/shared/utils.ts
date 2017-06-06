@@ -1,7 +1,7 @@
 ﻿export class Utils {
-    public static getDate(datetime: any) {
+    public static getDate(datetime: Date) {
         var date = new Date(datetime);
-        return this.ensureTwoDigit(date.getDate()) + '/' + this.ensureTwoDigit((date.getMonth()) + 1) + '/' + date.getFullYear();
+        return date.getFullYear() + '/' + this.ensureTwoDigit((date.getMonth()) + 1) + '/' + this.ensureTwoDigit(date.getDate());
     }
 
     public static  getTime(datetime: any) {
@@ -17,6 +17,10 @@
 
     public static ensureTwoDigit(value) {
         return ("0" + (value)).slice(-2);
+    }
+
+    public static listingTypeConvert(listingType: string) {
+        return listingType === 'offer' ? ListingType.Offer : ListingType.Request;
     }
 }
 

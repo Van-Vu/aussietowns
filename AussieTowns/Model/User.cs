@@ -15,15 +15,16 @@ namespace AussieTowns.Model
         public string Phone { get; set; }
         public int Language { get; set; }
         public int Currency { get; set; }
-        public string Location { get; set; }
+        public int LocationId { get; set; }
+        public SuburbDetail Location { get; set; }
         public string Description { get; set; }
         public string Address { get; set; }
         public string EmergencyContact { get; set; }
         public string PhotoUrl { get; set; }
         public string VideoUrl { get; set; }
 
-        public ICollection<TourOperator> TourOperators { get; set; }
-        public ICollection<TourGuest> TourGuests { get; set; }
+        public ICollection<Listing> OperatorListings { get; set; }
+        public ICollection<Listing> GuestListings { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }

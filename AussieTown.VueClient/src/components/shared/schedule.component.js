@@ -19,10 +19,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import ScheduleModel from '../model/schedule.model';
 import * as vuetimepicker from './vuetimepicker.vue';
-//import Datepicker from 'vuejs-datepicker';
-//import VueTimepicker from 'vue2-timepicker';
+import * as datepicker from './datepicker.vue';
 var ScheduleComponent = (function (_super) {
     __extends(ScheduleComponent, _super);
     function ScheduleComponent() {
@@ -36,8 +34,23 @@ var ScheduleComponent = (function (_super) {
         return _this;
     }
     ScheduleComponent.prototype.created = function () {
-        if (this.model.length === 0) {
-            this.model.push(new ScheduleModel(new Date(), { HH: '08', mm: '00' }, { HH: '08', mm: '00' }, new Date(), 2));
+        if (this.model.length > 0) {
+            for (var i = 0; i < this.model.length; i++) {
+                console.log('run here, server?');
+                var schedule = this.model[i];
+                if (typeof (schedule.startTime) === 'string') {
+                    schedule.startTime = {
+                        HH: schedule.startTime.toString().substring(0, 2),
+                        mm: schedule.startTime.toString().substring(3, 5)
+                    };
+                }
+                if (typeof (schedule.duration) === 'string') {
+                    schedule.duration = {
+                        HH: schedule.duration.toString().substring(0, 2),
+                        mm: schedule.duration.toString().substring(3, 5)
+                    };
+                }
+            }
         }
     };
     return ScheduleComponent;
@@ -50,7 +63,8 @@ ScheduleComponent = __decorate([
     Component({
         name: "Schedule",
         components: {
-            "vue-timepicker": vuetimepicker
+            "vue-timepicker": vuetimepicker,
+            "datepicker": datepicker
         }
     })
 ], ScheduleComponent);

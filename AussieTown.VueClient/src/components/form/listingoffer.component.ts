@@ -10,6 +10,8 @@ import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
 import LocationSearchComponent from '../shared/locationsearch.component.vue';
 import ListingService from '../../services/listing.service';
+import { Utils } from '../shared/utils';
+import * as datepicker from '../shared/datepicker.vue';
 
 Vue.use(VeeValidate);
 
@@ -18,91 +20,60 @@ Vue.use(VeeValidate);
     components: {
         'locationsearch': LocationSearchComponent,
         'schedule': ScheduleComponent,
-        'participant': ParticipantComponent
+        'participant': ParticipantComponent,
+        "datepicker": datepicker
     }
 })
 
 export default class ListingOfferForm extends Vue{
-    //dateMask: any;
-    //tourId: number = 0;
-    //hostList: any[] = [];
-    //searchLocations: any;
-
-    //id= 0;
-    //type= ListingType.Offer;
-    //operators = [
-    //    {
-    //        id: 1,
-    //        photoUrl: "/static/images/logo.png",
-    //        fullname: "asdfasdfas",
-    //        shortDescription: "asdfasdfa"
-    //    }
-    //];
-    //guests= [];
-    //schedules=[];
-    //location='';
-    //cost=0;
-    //header='';
-    //description = '';
-    //expectation = '';
-    //requirement='';
-    //minParticipant=0;
+    @Prop listingType: string;
 
     selectedLocation: AutocompleteItem;
     formSubmitted = false;
-
+    isOffer: boolean = false;
     model: ListingModel = new ListingModel();
 
+    asyncData({ store, route }) {
+        if (route.params.listingId) {
+            return store.dispatch('FETCH_LISTING_BY_ID', route.params.listingId);
+        }
+    }
+
+    beforeRouteEnter(to, from, next) {
+        //console.log('execute beforeRouteEnter: ' + to.params.seoString);
+        //next(vm => vm.setListingId(1));
+        next();
+    }
+
+    setListingId(id) {
+        //this.listingId = id;
+        //console.log("here I am:" + this.listingId);
+    }
+    
+
+    created() {
+        if (this.listingType) {
+            this.isOffer = Utils.listingTypeConvert(this.listingType) === ListingType.Offer;
+        }
+
+        if (this.$store.state.listing) {
+            this.model = this.$store.state.listing;
+            this.isOffer = this.model.listingType === ListingType.Offer;
+        } 
+    }
+
     onInsertorUpdate() {
-        //Bodom: hack
-        this.model.id = 0;
-
-        (new ListingService()).addListing(this.contructBeforeSubmit(this.model));
-    }
-
-    onInsert() {
-        //console.log(this.contructBeforeSubmit(this.model.value));
-        //let model = this.contructBeforeSubmit(this.model.value);
-        //delete model.id;
-        //this.listingService.addListing(model)
-        //    .subscribe(
-        //    data => {
-        //        if (data.State == 1) {
-        //        }
-        //        else {
-        //            alert(data.Msg);
-        //        }
-
-        //        console.log(data.Data);
-        //    },
-        //    error => {
-
-        //    });
-    }
-
-    onUpdate() {
-        //this.listingService.updateListing(this.contructBeforeSubmit(this.model.value))
-        //    .subscribe(
-        //    data => {
-        //        if (data.State == 1) {
-        //        }
-        //        else {
-        //            alert(data.Msg);
-        //        }
-
-        //        console.log(data.Data);
-        //    },
-        //    error => {
-
-        //    });
+        if (this.model.id > 0) {
+            return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model));        
+            //(new ListingService()).updateListing(this.contructBeforeSubmit(this.model));
+        } else {
+            return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model));        
+            //(new ListingService()).addListing(this.contructBeforeSubmit(this.model));
+        }
     }
 
     onLocationSelected(item: AutocompleteItem) {
         this.model.locationDetail = item;
-    }
-
-    fulldayChange() {
-        //this.isFullday = !this.isFullday;
     }
 
     onUserAdded(user: AutocompleteItem) {
@@ -114,57 +85,6 @@ export default class ListingOfferForm extends Vue{
         
     }
 
-    initOperator() {
-        return {
-            Selected: true,
-            description: null,
-            id: 1,
-            imageUrl: "/asset/images/home-icon.png",
-            name: "asdfa bodom5"
-        }
-    }
-
-    addOperator(miniProfile) {
-        //const control = this.model.controls['operators'].value;
-
-        //control.push(miniProfile);
-    }
-
-    initEmptyShedule() {
-        //const control = <FormArray>this.model.controls['schedules'];
-
-        //control.push(this.fb.group({
-        //    id: [0],
-        //    startDate: [''],
-        //    startTime: [''],
-        //    duration: [''],
-        //    isRepeated: [false],
-        //    repeatPeriod: [''],
-        //    endDate: ['']
-        //}));
-    }
-
-    applySchedule(schedule) {
-        //const control = <FormArray>this.model.controls['schedules'];
-        //var startDate = new Date(schedule.startDate);
-        //var endDate = schedule.endDate == '' ? null : new Date(schedule.endDate);
-        //control.push(this.fb.group({
-        //    id: [schedule.id],
-        //    startDate: [{ date: { year: startDate.getFullYear(), month: startDate.getMonth() + 1, day: startDate.getDate() } }],
-        //    startTime: [schedule.startTime.substr(0, 5)],
-        //    duration: [schedule.duration.substr(0, 5)],
-        //    isRepeated: [schedule.repeatedType && schedule.repeatedType !== 0],
-        //    repeatPeriod: [schedule.repeatedType],
-        //    endDate: [endDate ? { date: { year: endDate.getFullYear(), month: endDate.getMonth() + 1, day: endDate.getDate() } } : '']
-        //}));
-    }
-
-    removeAddress(i: number) {
-        //const control = <FormArray>this.model.controls['schedules'];
-        //control.removeAt(i);
-    }
-
-
     constructShedule(model) {
         var schedules = model.schedules;
 
@@ -172,35 +92,33 @@ export default class ListingOfferForm extends Vue{
         for (var i = 0; i < schedules.length; i++) {
             var schedule = schedules[i];
             scheduleArr.push({
-                id: schedule.id,
-                startDate: schedule.startDate.getUTCFullYear() + '/' + schedule.startDate.getUTCMonth() + '/' + schedule.startDate.getUTCDate() + 'T' + schedule.startTime.HH + ':' + schedule.startTime.mm,
+                id: schedule.id != null ? schedule.id : 0,
+                startDate: schedule.startDate + 'T' + schedule.startTime.HH + ':' + schedule.startTime.mm,
                 duration: schedule.duration.HH + ':' + schedule.duration.mm,
                 repeatedType: schedule.repeatedType,
                 listingId: model.id,
-                endDate: schedule.endDate.getUTCFullYear() + '/' + schedule.endDate.getUTCMonth() + '/' + schedule.endDate.getUTCDate()
+                endDate: schedule.endDate
             });
         }
 
         return scheduleArr;
     }
 
-    constructOperator(model: ListingModel) {
-        var operators = model.tourOperators;
-
-        var operatorArr = [];
-        for (var i = 0; i < operators.length; i++) {
-            var operator = operators[i];
-            operatorArr.push({
-                listingId: model.id,
+    constructParticipants(listingId: number, model: any) {
+        var participantArr = [];
+        for (var i = 0; i < model.length; i++) {
+            var operator = model[i];
+            participantArr.push({
+                listingId: listingId,
                 userId: operator.id,
                 isOwner: (i === 0)
             });
         }
 
-        return operatorArr;
+        return participantArr;
     }
 
-    contructBeforeSubmit(model) {
+    contructBeforeSubmit(model: ListingModel) {
         // Bodom: final format
         //{
         //    "cost":"50",
@@ -226,7 +144,8 @@ export default class ListingOfferForm extends Vue{
             requirement: model.requirement,
             minParticipant: model.minParticipant,
             schedules: this.constructShedule(model),
-            tourOperators: this.constructOperator(model)
+            tourGuests: this.constructParticipants(model.id, model.tourGuests),
+            tourOperators: this.constructParticipants(model.id, model.tourOperators)
         }
     }
 }

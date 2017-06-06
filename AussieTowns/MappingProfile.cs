@@ -32,9 +32,9 @@ namespace AussieTowns
                 .ForMember(dest => dest.Location,
                     opts => opts.MapFrom(src => $"{src.Location.SuburbName}, {src.Location.State} ({src.Location.Postcode})"))
                 .ForMember(dest => dest.PrimaryOwner,
-                    opts => opts.MapFrom(src => src.TourOperators.Any(x=>x.IsOwner) ? src.TourOperators.SingleOrDefault(x=>x.IsOwner).User.FirstName : string.Empty))
+                    opts => opts.MapFrom(src => src.TourOperators.Any(x => x.IsOwner) ? src.TourOperators.SingleOrDefault(x => x.IsOwner).User.FirstName : string.Empty))
                 .ForMember(dest => dest.MinParticipant,
-                    opts => opts.MapFrom(src => src.Type==ListingType.Offer ? src.MinParticipant : src.TourGuests.Count()));
+                    opts => opts.MapFrom(src => src.Type == ListingType.Offer ? src.MinParticipant : src.TourGuests.Count()));
 
             CreateMap<ListingView, ListingSummary>()
                 .ForMember(dest => dest.Location,
@@ -56,13 +56,21 @@ namespace AussieTowns
 
             CreateMap<Listing, ListingResponse>()
                 .ForMember(dest => dest.LocationDetail,
-                    opts => opts.MapFrom(src => Mapper.Map<SuburbDetail,AutoCompleteItem>(src.Location)))
+                    opts => opts.MapFrom(src => Mapper.Map<SuburbDetail, AutoCompleteItem>(src.Location)))
                 .ForMember(dest => dest.Schedules,
                     opts => opts.MapFrom(src => src.Schedules.Select(x => Mapper.Map<Schedule, ScheduleResponse>(x))))
                 .ForMember(dest => dest.TourOperators,
                     opts => opts.MapFrom(src => src.TourOperators.Select(x => Mapper.Map<User, MiniProfile>(x.User))))
                 .ForMember(dest => dest.TourGuests,
                     opts => opts.MapFrom(src => src.TourGuests.Select(x => Mapper.Map<User, MiniProfile>(x.User))));
+
+            CreateMap<User, UserResponse>()
+                .ForMember(dest => dest.LocationDetail,
+                    opts => opts.MapFrom(src => Mapper.Map<SuburbDetail, AutoCompleteItem>(src.Location)))
+                .ForMember(dest => dest.OperatorListings,
+                    opts => opts.MapFrom(src => src.OperatorListings.Select(Mapper.Map<Listing, ListingSummary>)))
+                .ForMember(dest => dest.GuestListings,
+                    opts => opts.MapFrom(src => src.GuestListings.Select( Mapper.Map<Listing, ListingSummary>)));
         }
     }
 }

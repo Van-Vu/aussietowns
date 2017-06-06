@@ -19,9 +19,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-var ListingOfferCardComponent = (function (_super) {
-    __extends(ListingOfferCardComponent, _super);
-    function ListingOfferCardComponent() {
+var ListingCardComponent = (function (_super) {
+    __extends(ListingCardComponent, _super);
+    function ListingCardComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.slides = [
             { "text": "", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/a5bdb2fc08f9096fb1ef3afca2e5c1ff5292daf9fe7b86b8710d091ae7fa5547/400/232/1.0" },
@@ -42,28 +42,27 @@ var ListingOfferCardComponent = (function (_super) {
         _this.initializeSlide = false;
         return _this;
     }
-    ListingOfferCardComponent.prototype.created = function () {
+    ListingCardComponent.prototype.created = function () {
         this.id = this.listingDetail.id;
-        this.location = this.listingDetail.location;
-        this.hostName = this.listingDetail.primaryOwner;
+        this.location = this.listingDetail.locationDetail.name;
         this.header = this.listingDetail.header;
         this.cost = this.listingDetail.cost;
-        this.date = "";
-        this.time = "";
+        this.date = this.listingDetail.schedules[0].startDate;
+        this.time = this.listingDetail.schedules[0].startTime.toString();
         //this.date = Utils.getDate(this.listingDetail.schedules[0].startDate);
         //this.time = Utils. getTime(this.listingDetail.schedules[0].startDate);
         this.description = this.listingDetail.description;
         this.initializeSlide = true;
     };
-    return ListingOfferCardComponent;
+    return ListingCardComponent;
 }(Vue));
 __decorate([
     Prop,
     __metadata("design:type", Object)
-], ListingOfferCardComponent.prototype, "listingDetail", void 0);
-ListingOfferCardComponent = __decorate([
+], ListingCardComponent.prototype, "listingDetail", void 0);
+ListingCardComponent = __decorate([
     Component({
-        name: "ListingOfferCard"
+        name: "ListingCard"
     })
-], ListingOfferCardComponent);
-export default ListingOfferCardComponent;
+], ListingCardComponent);
+export default ListingCardComponent;

@@ -14,8 +14,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import { ListingType } from '../shared/utils';
 import ScheduleComponent from '../shared/schedule.component.vue';
@@ -23,61 +26,54 @@ import ParticipantComponent from '../shared/participant.component.vue';
 import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
 import LocationSearchComponent from '../shared/locationsearch.component.vue';
-import ListingService from '../../services/listing.service';
+import { Utils } from '../shared/utils';
+import * as datepicker from '../shared/datepicker.vue';
 Vue.use(VeeValidate);
 var ListingOfferForm = (function (_super) {
     __extends(ListingOfferForm, _super);
     function ListingOfferForm() {
-        //dateMask: any;
-        //tourId: number = 0;
-        //hostList: any[] = [];
-        //searchLocations: any;
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.formSubmitted = false;
+        _this.isOffer = false;
         _this.model = new ListingModel();
         return _this;
     }
+    ListingOfferForm.prototype.asyncData = function (_a) {
+        var store = _a.store, route = _a.route;
+        if (route.params.listingId) {
+            return store.dispatch('FETCH_LISTING_BY_ID', route.params.listingId);
+        }
+    };
+    ListingOfferForm.prototype.beforeRouteEnter = function (to, from, next) {
+        //console.log('execute beforeRouteEnter: ' + to.params.seoString);
+        //next(vm => vm.setListingId(1));
+        next();
+    };
+    ListingOfferForm.prototype.setListingId = function (id) {
+        //this.listingId = id;
+        //console.log("here I am:" + this.listingId);
+    };
+    ListingOfferForm.prototype.created = function () {
+        if (this.listingType) {
+            this.isOffer = Utils.listingTypeConvert(this.listingType) === ListingType.Offer;
+        }
+        if (this.$store.state.listing) {
+            this.model = this.$store.state.listing;
+            this.isOffer = this.model.listingType === ListingType.Offer;
+        }
+    };
     ListingOfferForm.prototype.onInsertorUpdate = function () {
-        //Bodom: hack
-        this.model.id = 0;
-        (new ListingService()).addListing(this.contructBeforeSubmit(this.model));
-    };
-    ListingOfferForm.prototype.onInsert = function () {
-        //console.log(this.contructBeforeSubmit(this.model.value));
-        //let model = this.contructBeforeSubmit(this.model.value);
-        //delete model.id;
-        //this.listingService.addListing(model)
-        //    .subscribe(
-        //    data => {
-        //        if (data.State == 1) {
-        //        }
-        //        else {
-        //            alert(data.Msg);
-        //        }
-        //        console.log(data.Data);
-        //    },
-        //    error => {
-        //    });
-    };
-    ListingOfferForm.prototype.onUpdate = function () {
-        //this.listingService.updateListing(this.contructBeforeSubmit(this.model.value))
-        //    .subscribe(
-        //    data => {
-        //        if (data.State == 1) {
-        //        }
-        //        else {
-        //            alert(data.Msg);
-        //        }
-        //        console.log(data.Data);
-        //    },
-        //    error => {
-        //    });
+        if (this.model.id > 0) {
+            return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model));
+            //(new ListingService()).updateListing(this.contructBeforeSubmit(this.model));
+        }
+        else {
+            return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model));
+            //(new ListingService()).addListing(this.contructBeforeSubmit(this.model));
+        }
     };
     ListingOfferForm.prototype.onLocationSelected = function (item) {
         this.model.locationDetail = item;
-    };
-    ListingOfferForm.prototype.fulldayChange = function () {
-        //this.isFullday = !this.isFullday;
     };
     ListingOfferForm.prototype.onUserAdded = function (user) {
         if (this.model.tourOperators == null)
@@ -86,77 +82,33 @@ var ListingOfferForm = (function (_super) {
     };
     ListingOfferForm.prototype.onUserRemoved = function (user) {
     };
-    ListingOfferForm.prototype.initOperator = function () {
-        return {
-            Selected: true,
-            description: null,
-            id: 1,
-            imageUrl: "/asset/images/home-icon.png",
-            name: "asdfa bodom5"
-        };
-    };
-    ListingOfferForm.prototype.addOperator = function (miniProfile) {
-        //const control = this.model.controls['operators'].value;
-        //control.push(miniProfile);
-    };
-    ListingOfferForm.prototype.initEmptyShedule = function () {
-        //const control = <FormArray>this.model.controls['schedules'];
-        //control.push(this.fb.group({
-        //    id: [0],
-        //    startDate: [''],
-        //    startTime: [''],
-        //    duration: [''],
-        //    isRepeated: [false],
-        //    repeatPeriod: [''],
-        //    endDate: ['']
-        //}));
-    };
-    ListingOfferForm.prototype.applySchedule = function (schedule) {
-        //const control = <FormArray>this.model.controls['schedules'];
-        //var startDate = new Date(schedule.startDate);
-        //var endDate = schedule.endDate == '' ? null : new Date(schedule.endDate);
-        //control.push(this.fb.group({
-        //    id: [schedule.id],
-        //    startDate: [{ date: { year: startDate.getFullYear(), month: startDate.getMonth() + 1, day: startDate.getDate() } }],
-        //    startTime: [schedule.startTime.substr(0, 5)],
-        //    duration: [schedule.duration.substr(0, 5)],
-        //    isRepeated: [schedule.repeatedType && schedule.repeatedType !== 0],
-        //    repeatPeriod: [schedule.repeatedType],
-        //    endDate: [endDate ? { date: { year: endDate.getFullYear(), month: endDate.getMonth() + 1, day: endDate.getDate() } } : '']
-        //}));
-    };
-    ListingOfferForm.prototype.removeAddress = function (i) {
-        //const control = <FormArray>this.model.controls['schedules'];
-        //control.removeAt(i);
-    };
     ListingOfferForm.prototype.constructShedule = function (model) {
         var schedules = model.schedules;
         var scheduleArr = [];
         for (var i = 0; i < schedules.length; i++) {
             var schedule = schedules[i];
             scheduleArr.push({
-                id: schedule.id,
-                startDate: schedule.startDate.getUTCFullYear() + '/' + schedule.startDate.getUTCMonth() + '/' + schedule.startDate.getUTCDate() + 'T' + schedule.startTime.HH + ':' + schedule.startTime.mm,
+                id: schedule.id != null ? schedule.id : 0,
+                startDate: schedule.startDate + 'T' + schedule.startTime.HH + ':' + schedule.startTime.mm,
                 duration: schedule.duration.HH + ':' + schedule.duration.mm,
                 repeatedType: schedule.repeatedType,
                 listingId: model.id,
-                endDate: schedule.endDate.getUTCFullYear() + '/' + schedule.endDate.getUTCMonth() + '/' + schedule.endDate.getUTCDate()
+                endDate: schedule.endDate
             });
         }
         return scheduleArr;
     };
-    ListingOfferForm.prototype.constructOperator = function (model) {
-        var operators = model.tourOperators;
-        var operatorArr = [];
-        for (var i = 0; i < operators.length; i++) {
-            var operator = operators[i];
-            operatorArr.push({
-                listingId: model.id,
+    ListingOfferForm.prototype.constructParticipants = function (listingId, model) {
+        var participantArr = [];
+        for (var i = 0; i < model.length; i++) {
+            var operator = model[i];
+            participantArr.push({
+                listingId: listingId,
                 userId: operator.id,
                 isOwner: (i === 0)
             });
         }
-        return operatorArr;
+        return participantArr;
     };
     ListingOfferForm.prototype.contructBeforeSubmit = function (model) {
         // Bodom: final format
@@ -182,18 +134,24 @@ var ListingOfferForm = (function (_super) {
             requirement: model.requirement,
             minParticipant: model.minParticipant,
             schedules: this.constructShedule(model),
-            tourOperators: this.constructOperator(model)
+            tourGuests: this.constructParticipants(model.id, model.tourGuests),
+            tourOperators: this.constructParticipants(model.id, model.tourOperators)
         };
     };
     return ListingOfferForm;
 }(Vue));
+__decorate([
+    Prop,
+    __metadata("design:type", String)
+], ListingOfferForm.prototype, "listingType", void 0);
 ListingOfferForm = __decorate([
     Component({
         name: 'ListingOffer',
         components: {
             'locationsearch': LocationSearchComponent,
             'schedule': ScheduleComponent,
-            'participant': ParticipantComponent
+            'participant': ParticipantComponent,
+            "datepicker": datepicker
         }
     })
 ], ListingOfferForm);

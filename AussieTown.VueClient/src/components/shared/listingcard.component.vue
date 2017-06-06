@@ -28,6 +28,6 @@
 </template>
 
 <script lang="ts">
-import ListingOfferCardComponent from "./listingoffercard.component.ts";
-export default ListingOfferCardComponent;
+import ListingCardComponent from "./listingcard.component.ts";
+export default ListingCardComponent;
 </script>

@@ -1,6 +1,5 @@
 ﻿<template>
-    <div>
-        <form @submit.prevent="onInsertorUpdate" v-if="!formSubmitted" style="margin-top:100px">
+        <form @submit.prevent="onInsertorUpdate" style="margin-top:100px">
             <div class="field">
                 <label class="label">Host</label>
                 <div class="control">
@@ -11,7 +10,7 @@
             <div class="field">
                 <label class="label" for="password">Where</label>
                 <div class="control has-icon has-icon-right">
-                    <locationsearch @onSelected="onLocationSelected($event)"></locationsearch>
+                    <locationsearch :initialData="model.locationDetail" @onSelected="onLocationSelected($event)"></locationsearch>
                     <span class="icon">
                         <i class="glyphicon glyphicon-lock"></i>
                     </span>
@@ -31,9 +30,15 @@
             </div>
             <div class="field">
                 <label class="label">Schedule</label>
-                <div class="control">
+                <div v-show="isOffer" class="control">
                     <schedule :model="model.schedules"></schedule>
                 </div>
+                <!--<div v-show="!isOffer" class="control">
+                    <template v-for="schedule in model.schedules">
+                        <datepicker v-model="schedule.startDate"></datepicker>
+                        <datepicker v-model="schedule.endDate"></datepicker>
+                    </template>
+                </div>-->
             </div>
             <div class="field">
                 <label class="label" for="header">Header</label>
@@ -57,13 +62,13 @@
                     <span v-show="errors.has('description')" class="help is-danger">{{ errors.first('description') }}</span>
                 </div>
             </div>
-            <div class="field">
+            <div v-show="isOffer" class="field">
                 <label class="label" for="expectation">What to expect</label>
                 <div class="control has-icon has-icon-right">
                     <textarea name="expectation" class="textarea" v-model="model.expectation" cols="40" rows="5"></textarea>
                 </div>
             </div>
-            <div class="field">
+            <div v-show="isOffer" class="field">
                 <label class="label" for="requirement">Requirement</label>
                 <div class="control has-icon has-icon-right">
                     <textarea name="requirement" class="textarea" v-model="model.requirement" cols="40" rows="5"></textarea>
@@ -87,25 +92,6 @@
             </div>
             <button type="submit" class="button">Submit</button>
         </form>
-
-        <!--<div class="form-group">
-            <label for="location">Schedule</label>
-            <div formArrayName="schedules" class="schedule">
-                <div *ngFor="let schedule of this.model.controls.schedules.controls; let i=index" class="panel panel-default">
-                    <div class="panel-heading">
-                        <span>Schedule {{i + 1}}</span>
-                        <span class="glyphicon glyphicon-remove pull-right" *ngIf="this.model.controls.schedules.controls.length > 1" (click)="removeAddress(i)"></span>
-                    </div>
-                    <div class="panel-body" [formGroupName]="i">
-                        <schedule [scheduleIntance]="this.model.controls.schedules.controls[i]"></schedule>
-                    </div>
-                </div>
-            </div>
-        </div>-->
-        <div v-else>
-            <h1 class="submitted">Form submitted successfully!</h1>
-        </div>
-    </div>
 </template>
 
 <script lang="ts">

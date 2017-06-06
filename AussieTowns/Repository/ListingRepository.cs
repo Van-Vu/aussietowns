@@ -31,7 +31,7 @@ namespace AussieTowns.Repository
                     var listing = multipleResults.Read<Listing>().FirstOrDefault();
 
                     var location = multipleResults.Read<SuburbDetail>().FirstOrDefault();
-                    var schedules = multipleResults.Read<Schedule>().ToList();
+                    var schedules = multipleResults.Read<Schedule>()?.ToList();
                     var operators = multipleResults.Read<TourOperator,User, TourOperator>((tourOperator, user) =>
                     {
                         if (user != null)
@@ -40,13 +40,13 @@ namespace AussieTowns.Repository
                         }
 
                         return tourOperator;
-                    }).ToList();
+                    })?.ToList();
                     var guests = multipleResults.Read<TourGuest,User,TourGuest>((tourguest, user) =>
                     {
                         if (user != null) tourguest.User = user;
 
                         return tourguest;
-                    }).ToList();
+                    })?.ToList();
 
                     listing.Schedules = listing.Schedules ?? new List<Schedule>();
                     listing.Schedules.AddRange(schedules);
@@ -218,6 +218,16 @@ namespace AussieTowns.Repository
                 var sql = "UPDATE Listing SET IsActive = 0 WHERE id = @listingId";
                 dbConnection.Open();
                 return await dbConnection.ExecuteAsync(sql,new {listingId});
+            }
+        }
+
+        public async Task<IEnumerable<int>> GetListingIdByHeader(string header)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "SELECT Id FROM Listing WHERE Header like CONCAT(@header,'%')";
+                dbConnection.Open();
+                return await dbConnection.QueryAsync<int>(sql, new { header });
             }
         }
     }

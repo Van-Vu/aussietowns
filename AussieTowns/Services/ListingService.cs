@@ -45,5 +45,11 @@ namespace AussieTowns.Services
         {
             return await _listingRepository.DeActivateListing(id);
         }
+
+        public async Task<IEnumerable<int>> MapListingHeaderToId(string header)
+        {
+            return await _listingRepository.GetListingIdByHeader(header);
+
+        }
     }
 }

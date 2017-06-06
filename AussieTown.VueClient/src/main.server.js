@@ -12,13 +12,16 @@ export default function (context) {
             if (!matchedComponents.length) {
                 reject({ code: 404 });
             }
-            console.log('router: ' + router);
-            console.log('matchedcomponent: ' + matchedComponents);
             // call asyncData() on all matched route components
             Promise.all(matchedComponents.map(function (component) {
-                console.log('inside mainserver: ' + component.asyncData);
-                if (component.asyncData) {
-                    return component.asyncData({
+                //var propertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(component));
+                //console.log('all Prop name: ' + propertyNames);
+                //var propertySymbol = Object.getOwnPropertyNames(component);
+                //console.log('all Symbol name: ' + propertySymbol);
+                //var extendOptions = Object.getOwnPropertyNames((component as any).extendOptions);
+                //console.log('all Symbol name: ' + extendOptions);
+                if (component.extendOptions.asyncData) {
+                    return component.extendOptions.asyncData({
                         store: store,
                         route: router.currentRoute
                     });

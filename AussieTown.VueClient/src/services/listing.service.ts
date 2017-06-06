@@ -1,14 +1,17 @@
 ﻿import { http } from './http-base';
+import ListingModel from '../components/model/listing.model';
 
 export default class ListingService {
     private baseUrl = '/api/listing/';
     private getListingByUserUrl = this.baseUrl + '?user=';
     private getListingBySuburbUrl = this.baseUrl + 'suburb/';
+    private getListingIdByHeaderUrl = this.baseUrl + 'map/';
 
     getListingById(_id: number) {
         return http.get(this.baseUrl + _id)
             .then(response => {
-                return response.data;
+                console.log('afete getlisting:' + response.data);
+                return response.data as ListingModel;
             });
     }
 
@@ -23,15 +26,15 @@ export default class ListingService {
             .catch(this.handleError);
     }
 
-    //updateListing(listing) {
-    //    return http.put(this.baseUrl + listing.id, listing)
-    //        .map(response => response.json() as RequestResult)
-    //        .catch(this.handleError);
-    //}
+    updateListing(listing) {
+        return http.put(this.baseUrl + listing.id, listing)
+            .then(response => response.data)
+            .catch(this.handleError);
+    }
 
-    //deleteListing(_id: number) {
-    //    return http.delete(this.baseUrl + _id);
-    //}
+    deleteListing(_id: number) {
+        return http.delete(this.baseUrl + _id);
+    }
 
     getListingsByUserId(userId: number){
         return http.get(this.getListingByUserUrl + userId, this.jwt())
@@ -45,6 +48,14 @@ export default class ListingService {
             .then(response => {
                 return response.data;
             });
+    }
+
+    mapListingHeaderToId(header: string) {
+        console.log('here in header to Id');
+        return http.get(this.getListingIdByHeaderUrl + header)
+            .then(response => {
+                return response.data;
+            });        
     }
 
     private jwt() {

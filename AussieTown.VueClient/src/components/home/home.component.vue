@@ -12,6 +12,7 @@
                     </form>
                 </article>
                 <div>this is something else</div>
+                <datepicker v-model="datepick"></datepicker>
             </div>
         </section>
 

@@ -4,43 +4,44 @@ import VeeValidate from 'vee-validate';
 import { ListingType } from '../shared/utils';
 import AutoCompleteComponent from '../shared/autocomplete.vue';
 import { AutocompleteItem } from '../model/autocomplete.model';
+import ListingModel from '../model/listing.model';
+import LocationSearchComponent from '../shared/locationsearch.component.vue';
+import ParticipantComponent from '../shared/participant.component.vue';
+import ListingService from '../../services/listing.service';
+import MiniProfile from '../model/miniprofile.model';
 
 Vue.use(VeeValidate);
 
 @Component({
     name: 'ListingRequest',
     components: {
-        'autocomplete': AutoCompleteComponent
+        'locationsearch': LocationSearchComponent,
+        'participant': ParticipantComponent
     }
 })
 
 export default class ListingRequestForm extends Vue {
-    dateMask: any;
-    tourId: number = 0;
-    hostList: any[] = [];
-    searchLocations: any;
-
-    list: any[] = [];
-    searchStr: string = "";
-    selectedId: number = 0;
-    placeHolderText = "this is the test";
-
-
-    id = 0;
-    type = ListingType.Request;
-    operators = [];
-    guests = [];
-    schedules = [];
-    location = '';
-    cost = 0;
-    header = '';
-    description = '';
-    expectation = '';
-    requirement = '';
-    minParticipant = 0;
+    asyncData({ store, route }) {
+        // return the Promise from the action
+        console.log('here II am: :' + store.state);
+        return store.dispatch('FETCH_LISTING', 18);
+    }
 
     selectedLocation: AutocompleteItem;
     formSubmitted = false;
+
+    model: ListingModel = new ListingModel();
+
+    created() {
+        this.model = this.$store.state.listings[0].data;
+    }
+
+    onInsertorUpdate() {
+        //Bodom: hack
+        this.model.id = 0;
+
+        (new ListingService()).addListing(this.contructBeforeSubmit(this.model));
+    }
 
     onInsert() {
         //console.log(this.contructBeforeSubmit(this.model.value));
@@ -79,14 +80,17 @@ export default class ListingRequestForm extends Vue {
         //    });
     }
 
-    onLocationSearch(search) {
-        //this.searchService.autoComplete(search).subscribe((response: any) => {
-        //    this.searchLocations = response;
-        //});
+    onLocationSelected(item: AutocompleteItem) {
+        this.model.locationDetail = item;
     }
 
-    fulldayChange() {
-        //this.isFullday = !this.isFullday;
+    onUserAdded(user: AutocompleteItem) {
+        if (this.model.tourGuests == null) this.model.tourGuests = new Array<MiniProfile>();
+        this.model.tourGuests.push(new MiniProfile(user.id, user.name, '', '', user.imageUrl, ''));
+    }
+
+    onUserRemoved(user) {
+
     }
 
     initOperator() {
@@ -99,47 +103,6 @@ export default class ListingRequestForm extends Vue {
         }
     }
 
-    addOperator(miniProfile) {
-        //const control = this.model.controls['operators'].value;
-
-        //control.push(miniProfile);
-    }
-
-    initEmptyShedule() {
-        //const control = <FormArray>this.model.controls['schedules'];
-
-        //control.push(this.fb.group({
-        //    id: [0],
-        //    startDate: [''],
-        //    startTime: [''],
-        //    duration: [''],
-        //    isRepeated: [false],
-        //    repeatPeriod: [''],
-        //    endDate: ['']
-        //}));
-    }
-
-    applySchedule(schedule) {
-        //const control = <FormArray>this.model.controls['schedules'];
-        //var startDate = new Date(schedule.startDate);
-        //var endDate = schedule.endDate == '' ? null : new Date(schedule.endDate);
-        //control.push(this.fb.group({
-        //    id: [schedule.id],
-        //    startDate: [{ date: { year: startDate.getFullYear(), month: startDate.getMonth() + 1, day: startDate.getDate() } }],
-        //    startTime: [schedule.startTime.substr(0, 5)],
-        //    duration: [schedule.duration.substr(0, 5)],
-        //    isRepeated: [schedule.repeatedType && schedule.repeatedType !== 0],
-        //    repeatPeriod: [schedule.repeatedType],
-        //    endDate: [endDate ? { date: { year: endDate.getFullYear(), month: endDate.getMonth() + 1, day: endDate.getDate() } } : '']
-        //}));
-    }
-
-    removeAddress(i: number) {
-        //const control = <FormArray>this.model.controls['schedules'];
-        //control.removeAt(i);
-    }
-
-
     constructShedule(model) {
         var schedules = model.schedules;
 
@@ -148,8 +111,8 @@ export default class ListingRequestForm extends Vue {
             var schedule = schedules[i];
             scheduleArr.push({
                 id: schedule.id,
-                startDate: schedule.startDate.date.year + '/' + schedule.startDate.date.month + '/' + schedule.startDate.date.day + 'T' + schedule.startTime,
-                duration: schedule.duration,
+                startDate: schedule.startDate.date.year + '/' + schedule.startDate.date.month + '/' + schedule.startDate.date.day + 'T' + schedule.startTime.HH + ':' + schedule.startTime.mm,
+                duration: schedule.duration.HH + ':' + schedule.duration.mm,
                 repeatedType: schedule.repeatPeriod,
                 listingId: model.id,
                 endDate: schedule.endDate.date.year + '/' + schedule.endDate.date.month + '/' + schedule.endDate.date.day
@@ -168,7 +131,7 @@ export default class ListingRequestForm extends Vue {
             operatorArr.push({
                 listingId: model.id,
                 userId: operator.id,
-                isOwner: (i == 0) ? true : false
+                isOwner: (i === 0)
             });
         }
 
@@ -189,19 +152,17 @@ export default class ListingRequestForm extends Vue {
         //    "tourOperators":[{ "listingId": "0", "userId": "1", "isOwner": true }]
         //}
 
-
-        //return {
-        //    id: model.id,
-        //    type: ListingType.Offer,
-        //    locationId: model.locationId.id,
-        //    cost: model.cost,
-        //    currency: model.currency,
-        //    header: model.header,
-        //    description: model.description,
-        //    requirement: model.requirement,
-        //    minParticipant: model.minParticipant,
-        //    schedules: this.constructShedule(model),
-        //    tourOperators: this.constructOperator(model)
-        //}
+        return {
+            id: model.id,
+            type: ListingType.Request,
+            locationId: model.locationDetail.id,
+            cost: model.cost,
+            currency: model.currency,
+            header: model.header,
+            description: model.description,
+            minParticipant: model.minParticipant,
+            schedules: this.constructShedule(model),
+            tourGuests: this.constructOperator(model)
+        }
     }
 }

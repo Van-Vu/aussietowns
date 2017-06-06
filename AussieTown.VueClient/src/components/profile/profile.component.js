@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import UserDetailComponent from '../form/userdetail.component.vue';
-import ListingRequestForm from '../form/listingrequest.component.vue';
+import TripComponent from './trip.component.vue';
 var ProfileComponent = (function (_super) {
     __extends(ProfileComponent, _super);
     function ProfileComponent() {
@@ -27,6 +27,13 @@ var ProfileComponent = (function (_super) {
         _this.isTripsActivated = false;
         return _this;
     }
+    ProfileComponent.prototype.asyncData = function (_a) {
+        var store = _a.store, route = _a.route;
+        console.log('profile id:' + route.params.profileId);
+        if (route.params.profileId) {
+            return store.dispatch('FETCH_USER_BY_ID', route.params.profileId);
+        }
+    };
     ProfileComponent.prototype.activatePhotosTab = function () {
         this.isPhotosActivated = true;
     };
@@ -43,7 +50,7 @@ ProfileComponent = __decorate([
         name: 'ProfileComponent',
         components: {
             'profileform': UserDetailComponent,
-            "listingrequestform": ListingRequestForm
+            'tripcomponent': TripComponent
         }
     })
 ], ProfileComponent);

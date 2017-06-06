@@ -28,11 +28,40 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT * FROM User WHERE id=@id";
-                dbConnection.Open();
-                var user = await dbConnection.QueryAsync<User>(sql,new {id});
+                var sql = "SELECT * FROM User WHERE id=@id;"
+                          +
+                          "SELECT sd.* FROM SuburbDetail sd INNER JOIN User u ON sd.id = u.locationId WHERE u.id = @id;"
+                          +
+                          "SELECT * FROM Listing l INNER JOIN Schedule s ON l.id = s.listingid INNER JOIN tourguest g ON l.id = g.ListingId WHERE g.UserId = @id;"
+                          +
+                          "SELECT * FROM Listing l INNER JOIN Schedule s ON l.id = s.listingid INNER JOIN touroperator o ON l.id = o.ListingId WHERE o.UserId = @id;";
 
-                return user.FirstOrDefault();
+                dbConnection.Open();
+                using (var multipleResults = await dbConnection.QueryMultipleAsync(sql, new { id }))
+                {
+                    var user = multipleResults.Read<User>().FirstOrDefault();
+
+                    var location = multipleResults.Read<SuburbDetail>().FirstOrDefault();
+
+                    var operatorListings = multipleResults.Read<Listing, Schedule, Listing>((listing, schedule) =>
+                    {
+                        listing.Schedules = new List<Schedule> {schedule};
+
+                        return listing;
+                    })?.ToList();
+
+                    var guestListings = multipleResults.Read<Listing, Schedule, Listing>((listing, schedule) =>
+                    {
+                        listing.Schedules = new List<Schedule> { schedule };
+
+                        return listing;
+                    })?.ToList();
+
+                    user.Location = location;
+                    user.OperatorListings = operatorListings;
+                    user.GuestListings= guestListings;
+                    return user;
+                }
             }
         }
 
@@ -50,8 +79,8 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "INSERT INTO User(Firstname, Lastname, email, password, gender,birthday, phone, language, currency, location, description, address, emergencycontact, photourl, videourl,createdDate,updatedDate,isActive) "
-                        + "VALUES (@firstname, @lastname, @email, @password, @gender, @birthday, @phone, @language, @currency, @location, @description, @address, @emergencycontact, @photourl, @videourl,@createdDate,@updatedDate,@isActive)";
+                var sql = "INSERT INTO User(Firstname, Lastname, email, password, gender,birthday, phone, language, currency, locationId, description, address, emergencycontact, photourl, videourl,createdDate,updatedDate,isActive) "
+                        + "VALUES (@firstname, @lastname, @email, @password, @gender, @birthday, @phone, @language, @currency, @locationId, @description, @address, @emergencycontact, @photourl, @videourl,@createdDate,@updatedDate,@isActive)";
                 dbConnection.Open();
                 user.CreatedDate = DateTime.Now;
                 user.UpdatedDate = DateTime.Now;
@@ -66,7 +95,7 @@ namespace AussieTowns.Repository
             using (IDbConnection dbConnection = Connection)
             {
                 var sql = "UPDATE User SET firstname = @firstname, lastname = @lastname, email = @email, password= @password, gender= @gender, birthday= @birthday, phone = @phone, language= @language, currency = @currency, "
-                    + "location = @location, description = @description, address= @address, emergencycontact= @emergencycontact, photourl = @photourl, videorl = @videourl, updatedDate=@updatedDate, isActive=@isActive WHERE id = @Id";
+                    + "locationId = @locationId, description = @description, address= @address, emergencycontact= @emergencycontact, photourl = @photourl, videourl = @videourl, updatedDate=@updatedDate, isActive=@isActive WHERE id = @Id";
                 dbConnection.Open();
                 user.UpdatedDate = DateTime.Now;
                 user.IsActive = true;

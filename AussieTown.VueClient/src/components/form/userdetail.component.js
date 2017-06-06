@@ -17,40 +17,32 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
-import AutoCompleteComponent from "../shared/autocomplete.vue";
+import LocationSearchComponent from "../shared/locationsearch.component.vue";
+import UserModel from '../model/user.model';
 Vue.use(VeeValidate);
 var UserDetailComponent = (function (_super) {
     __extends(UserDetailComponent, _super);
     function UserDetailComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.email = '';
-        _this.password = '';
-        _this.firstname = '';
-        _this.lastname = '';
-        _this.phone = '';
-        _this.gender = '';
-        _this.birthday = new Date(2016, 9, 16);
-        _this.description = '';
-        _this.address = '';
-        _this.emergencyContact = '';
-        _this.list = [];
-        _this.placeHolderText = "this is the test";
-        _this.formSubmitted = false;
+        _this.model = new UserModel();
         return _this;
     }
-    UserDetailComponent.prototype.submitForm = function () {
-        this.formSubmitted = true;
+    UserDetailComponent.prototype.created = function () {
+        if (this.$store.state.profile) {
+            this.model = this.$store.state.profile;
+        }
     };
-    UserDetailComponent.prototype.onLocationSearch = function (event) {
-        //this.searchStr = event;
-        this.list = [
-            { "id": 1, "name": "test" },
-            { "id": 2, "name": "test2" }
-        ];
+    UserDetailComponent.prototype.onLocationSelected = function (item) {
+        this.model.locationId = +item.id;
     };
-    UserDetailComponent.prototype.onSelect = function (val) {
-        //this.searchStr = val.Description;
-        //this.selectedId = val.Value;
+    UserDetailComponent.prototype.onInsertorUpdate = function () {
+        if (this.model.id > 0) {
+            return this.$store.dispatch('UPDATE_USER', this.contructBeforeSubmit(this.model));
+            //(new ListingService()).updateListing(this.contructBeforeSubmit(this.model));
+        }
+    };
+    UserDetailComponent.prototype.contructBeforeSubmit = function (model) {
+        return this.model;
     };
     UserDetailComponent.prototype.onUpdate = function () { };
     UserDetailComponent.prototype.capture = function () { };
@@ -60,7 +52,7 @@ UserDetailComponent = __decorate([
     Component({
         name: 'UserDetail',
         components: {
-            "autocomplete": AutoCompleteComponent
+            "locationsearch": LocationSearchComponent
         }
     })
 ], UserDetailComponent);

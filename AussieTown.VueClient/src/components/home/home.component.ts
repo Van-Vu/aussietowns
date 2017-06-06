@@ -7,17 +7,29 @@ import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue
 import axios from 'axios';
 import SearchService from '../../services/search.service';
 import LocationSearchComponent from '../shared/locationsearch.component.vue';
+//import datepicker from '../share/datepicker.vue';
+
+import * as datepicker from '../shared/datepicker.vue';
+
 
 @Component({
     name: 'Home',
     components: {
         "locationsearch": LocationSearchComponent,
         "listingrequestmodal": ListingRequestModalComponent,
-        "listingoffermodal": ListingOfferModalComponent
+        "listingoffermodal": ListingOfferModalComponent,
+        "datepicker": datepicker
     }
 })
 
 export default class HomeComponent extends Vue{
+
+    asyncData({ store, route }) {
+        // return the Promise from the action
+        console.log('here II am: :' + store.state);
+        //return store.dispatch('FETCH_LISTING_BY_ID', 18);
+    }
+
 
     //The time to show the next photo
     private NextPhotoInterval: number = 5000;
@@ -30,6 +42,8 @@ export default class HomeComponent extends Vue{
 
     showListingRequest: boolean = false;
     showListingOffer: boolean = false;
+
+    datepick = "2017-06-03";
 
     requestSlides: Array<any> = [
         { "text": "slide conten asdfa sdfasfd asdf asdf asdf as dfasd", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/a5bdb2fc08f9096fb1ef3afca2e5c1ff5292daf9fe7b86b8710d091ae7fa5547/400/232/1.0" },
@@ -81,14 +95,8 @@ export default class HomeComponent extends Vue{
 @Prop posts: any[];
 errors: any[];
 
-    public asyncData({ store, route }) {
-        // return the Promise from the action
-        console.log('here II am: :' + store.state);
-        return store.getters.getListing;
-    }
-
     get myComputedProp() {
-        return this.$store.getters.getListing;
+        return this.$store.state;
     }
 
     created() {

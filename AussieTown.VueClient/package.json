@@ -25,11 +25,11 @@
     "vee-validate": "^2.0.0-beta.25",
     "vue": "^2.3.3",
     "vue-class-component": "^5.0.0",
+    "vue-date": "^1.1.6",
     "vue-property-decorator": "4.0.0",
     "vue-router": "^2.5.3",
     "vue-server-renderer": "^2.3.3",
     "vue2-google-maps": "^0.7.5",
-    "vuejs-datepicker": "^0.7.11",
     "vuex": "^2.3.1",
     "vuex-router-sync": "^4.1.3"
   },

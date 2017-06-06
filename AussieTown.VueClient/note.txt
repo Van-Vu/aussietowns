@@ -1,0 +1,2 @@
+﻿passing router param to component prop: https://router.vuejs.org/en/essentials/passing-props.html
+router regex: https://github.com/vuejs/vue-router/blob/dev/examples/route-matching/app.js

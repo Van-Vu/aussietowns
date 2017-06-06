@@ -4,20 +4,14 @@
             <div class="field">
                 <label class="label">Guests</label>
                 <p class="control has-icon has-icon-right">
+                    <participant participantType="Guest" :participants="model.tourGuests"
+                                 @userAdded="onUserAdded" @userRemoved="onUserRemoved"></participant>
                 </p>
             </div>
             <div class="field">
                 <label class="label" for="password">Where</label>d
                 <div class="control has-icon has-icon-right">
-                    <autocomplete name='location'
-                                  v-model="location"
-                                  v-validate:location.initial="'required'"
-                                  :minChars="3"
-                                  :list="list"
-                                  :placeHolderText="placeHolderText"
-                                  :keyword="searchStr"
-                                  v-on:search="onLocationSearch($event)"
-                                  v-on:select="onSelect($event)"></autocomplete>
+                    <locationsearch :initialData="model.locationDetail" @onSelected="onLocationSelected($event)"></locationsearch>
                     <span class="icon">
                         <i class="glyphicon glyphicon-lock"></i>
                     </span>
@@ -25,9 +19,18 @@
                 </div>
             </div>
             <div class="field">
+                <label class="label" for="password">When</label>d
+                <div class="control has-icon has-icon-right">
+                    <template v-for="schedule in model">
+                        <datepicker v-model="schedule.startDate"></datepicker>
+                        <datepicker v-model="schedule.endDate"></datepicker>
+                    </template>
+                </div>
+            </div>
+            <div class="field">
                 <label class="label" for="cost">Cost</label>
                 <p class="control has-icon has-icon-right">
-                    <input name="cost" v-model="cost" v-validate:cost.initial="'required|numeric'"
+                    <input name="cost" v-model="model.cost" v-validate:cost.initial="'required|numeric'"
                            :class="{'input': true, 'is-danger': errors.has('cost') }" type="text" placeholder="Cost per person">
                     <span class="icon user">
                         <i class="glyphicon glyphicon-lock"></i>
@@ -38,7 +41,7 @@
             <div class="field">
                 <label class="label" for="description">Description</label>
                 <p class="control has-icon has-icon-right">
-                    <input name="description" v-model="description" v-validate:description.initial="'required'"
+                    <input name="description" v-model="model.description" v-validate:description.initial="'required'"
                            :class="{'input': true, 'is-danger': errors.has('description') }" type="text" placeholder="">
                     <span class="icon user">
                         <i class="glyphicon glyphicon-lock"></i>
@@ -47,20 +50,8 @@
                 </p>
             </div>
             <div class="field">
-                <label class="label" for="expectation">What to expect</label>
-                <p class="control has-icon has-icon-right">
-                    <textarea name="expectation" class="textarea" v-model="expectation" cols="40" rows="5"></textarea>
-                </p>
-            </div>
-            <div class="field">
-                <label class="label" for="requirement">Requirement</label>
-                <p class="control has-icon has-icon-right">
-                    <textarea name="requirement" class="textarea" v-model="requirement" cols="40" rows="5"></textarea>
-                </p>
-            </div>
-            <div class="field">
                 <label class="label" for="participants">Minimum participants</label>
-                <select id="participants" class="select" v-model="minParticipant">
+                <select id="participants" class="select" v-model="model.minParticipant">
                     <option value="0" selected="selected">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -76,21 +67,6 @@
             </div>
             <button type="submit" class="button">Submit</button>
         </form>
-
-        <!--<div class="form-group">
-            <label for="location">Schedule</label>
-            <div formArrayName="schedules" class="schedule">
-                <div *ngFor="let schedule of this.model.controls.schedules.controls; let i=index" class="panel panel-default">
-                    <div class="panel-heading">
-                        <span>Schedule {{i + 1}}</span>
-                        <span class="glyphicon glyphicon-remove pull-right" *ngIf="this.model.controls.schedules.controls.length > 1" (click)="removeAddress(i)"></span>
-                    </div>
-                    <div class="panel-body" [formGroupName]="i">
-                        <schedule [scheduleIntance]="this.model.controls.schedules.controls[i]"></schedule>
-                    </div>
-                </div>
-            </div>
-        </div>-->
         <div v-else>
             <h1 class="submitted">Form submitted successfully!</h1>
         </div>

@@ -13,7 +13,7 @@ import { SelectedAutocompleteValue, AutocompleteItem } from  '../model/autocompl
 export default class AutoCompleteComponent extends Vue {
     @Prop minChars: number;
     @Prop placeHolderText: string;
-    @Prop initialData: AutocompleteItem;
+    @Prop initialData: any;
     @Prop cleanUp: boolean;
     @Prop list: AutocompleteItem[];
 
@@ -31,7 +31,14 @@ export default class AutoCompleteComponent extends Vue {
 
     private dontBlur = false;
 
-    created(): void {
+    beforeMounted() {
+        
+    }
+
+    created() {
+        if (this.initialData) {
+            this.keyword = this.initialData.name;    
+        }
     }
 
     get matches() {
@@ -108,11 +115,12 @@ export default class AutoCompleteComponent extends Vue {
     }
 
     refreshSelected(): void {
-        this.list = this.list.filter((d, i) => {
-            if (i == this.indexSelected) d.selected = true;
-            else d.selected = false;
-            return d;
-        });
+        this.$emit('refreshSelect', this.indexSelected);
+        //this.list = this.list.filter((d, i) => {
+        //    if (i === this.indexSelected) d.selected = true;
+        //    else d.selected = false;
+        //    return d;
+        //});
     }
 
     onClickOption(item: AutocompleteItem, index: number): void {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AussieTowns.Model;
 using AussieTowns.Services;
@@ -58,6 +59,24 @@ namespace AussieTowns.Controllers
                 };
             }
         }
+
+        [HttpGet("map/{seoString}")]
+        public async Task<int> MapListingHeader(string seoString)
+        {
+            try
+            {
+                var header = Regex.Replace(seoString,"-",string.Empty);
+                var listingIds = await _listingService.MapListingHeaderToId(header);
+                return listingIds.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                
+
+                throw;
+            }
+        }
+
 
         [HttpPost]
         public async Task<RequestResult> InsertListing([FromBody] Listing listing)

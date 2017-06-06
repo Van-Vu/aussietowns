@@ -15,13 +15,18 @@ export default context => {
       if (!matchedComponents.length) {
         reject({ code: 404 })
       }
-      console.log('router: ' + router);
-        console.log('matchedcomponent: ' + matchedComponents);
       // call asyncData() on all matched route components
-      Promise.all(matchedComponents.map(component => {
-          console.log('inside mainserver: ' + (component as any).asyncData);
-          if ((component as any).asyncData) {
-              return (component as any).asyncData({
+        Promise.all(matchedComponents.map(component => {
+            //var propertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(component));
+            //console.log('all Prop name: ' + propertyNames);
+            //var propertySymbol = Object.getOwnPropertyNames(component);
+            //console.log('all Symbol name: ' + propertySymbol);
+            //var extendOptions = Object.getOwnPropertyNames((component as any).extendOptions);
+            //console.log('all Symbol name: ' + extendOptions);
+
+
+            if ((component as any).extendOptions.asyncData) {
+                return (component as any).extendOptions.asyncData({
                   store,
                   route: router.currentRoute
               })

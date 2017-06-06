@@ -14,7 +14,7 @@ import AutoCompleteComponent from './autocomplete.vue';
 })
 
 export default class LocationSearchComponent extends Vue {
-    @Prop initialData: AutocompleteItem;
+    @Prop initialData: any;
 
     placeHolderText = "Type in a location / suburb";
     locations: any[] = [];
@@ -26,5 +26,13 @@ export default class LocationSearchComponent extends Vue {
 
     onLocationSelected(selectedItem) {
         this.$emit("onSelected", selectedItem);
+    }
+
+    onRefreshSelect(selectedIndex) {
+        this.locations = this.locations.filter((d, i) => {
+            if (i === selectedIndex) d.selected = true;
+            else d.selected = false;
+            return d;
+        });
     }
 }

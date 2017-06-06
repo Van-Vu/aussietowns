@@ -16,7 +16,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import ListingOfferCardComponent from './listingoffercard.component.vue';
+import ListingCardComponent from '../shared/listingcard.component.vue';
 import ListingRequestModalComponent from '../modal/listingrequestmodal.component.vue';
 import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue';
 if (process.env.VUE_ENV === 'client') {
@@ -64,7 +64,7 @@ SearchComponent = __decorate([
     Component({
         name: "Search",
         components: {
-            "listingoffercard": ListingOfferCardComponent,
+            "listingoffercard": ListingCardComponent,
             "listingrequestmodal": ListingRequestModalComponent,
             "listingoffermodal": ListingOfferModalComponent
         }

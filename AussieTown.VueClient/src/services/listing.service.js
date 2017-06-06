@@ -4,10 +4,12 @@ var ListingService = (function () {
         this.baseUrl = '/api/listing/';
         this.getListingByUserUrl = this.baseUrl + '?user=';
         this.getListingBySuburbUrl = this.baseUrl + 'suburb/';
+        this.getListingIdByHeaderUrl = this.baseUrl + 'map/';
     }
     ListingService.prototype.getListingById = function (_id) {
         return http.get(this.baseUrl + _id)
             .then(function (response) {
+            console.log('afete getlisting:' + response.data);
             return response.data;
         });
     };
@@ -21,14 +23,14 @@ var ListingService = (function () {
         })
             .catch(this.handleError);
     };
-    //updateListing(listing) {
-    //    return http.put(this.baseUrl + listing.id, listing)
-    //        .map(response => response.json() as RequestResult)
-    //        .catch(this.handleError);
-    //}
-    //deleteListing(_id: number) {
-    //    return http.delete(this.baseUrl + _id);
-    //}
+    ListingService.prototype.updateListing = function (listing) {
+        return http.put(this.baseUrl + listing.id, listing)
+            .then(function (response) { return response.data; })
+            .catch(this.handleError);
+    };
+    ListingService.prototype.deleteListing = function (_id) {
+        return http.delete(this.baseUrl + _id);
+    };
     ListingService.prototype.getListingsByUserId = function (userId) {
         return http.get(this.getListingByUserUrl + userId, this.jwt())
             .then(function (response) {
@@ -37,6 +39,13 @@ var ListingService = (function () {
     };
     ListingService.prototype.getListingBySuburb = function (suburbId) {
         return http.get(this.getListingBySuburbUrl + suburbId)
+            .then(function (response) {
+            return response.data;
+        });
+    };
+    ListingService.prototype.mapListingHeaderToId = function (header) {
+        console.log('here in header to Id');
+        return http.get(this.getListingIdByHeaderUrl + header)
             .then(function (response) {
             return response.data;
         });

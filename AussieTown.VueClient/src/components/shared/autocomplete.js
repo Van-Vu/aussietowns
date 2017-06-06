@@ -21,7 +21,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { SelectedAutocompleteValue, AutocompleteItem } from '../model/autocomplete.model';
+import { SelectedAutocompleteValue } from '../model/autocomplete.model';
 var AutoCompleteComponent = (function (_super) {
     __extends(AutoCompleteComponent, _super);
     function AutoCompleteComponent() {
@@ -37,7 +37,12 @@ var AutoCompleteComponent = (function (_super) {
         _this.dontBlur = false;
         return _this;
     }
+    AutoCompleteComponent.prototype.beforeMounted = function () {
+    };
     AutoCompleteComponent.prototype.created = function () {
+        if (this.initialData) {
+            this.keyword = this.initialData.name;
+        }
     };
     Object.defineProperty(AutoCompleteComponent.prototype, "matches", {
         get: function () {
@@ -111,14 +116,12 @@ var AutoCompleteComponent = (function (_super) {
         }
     };
     AutoCompleteComponent.prototype.refreshSelected = function () {
-        var _this = this;
-        this.list = this.list.filter(function (d, i) {
-            if (i == _this.indexSelected)
-                d.selected = true;
-            else
-                d.selected = false;
-            return d;
-        });
+        this.$emit('refreshSelect', this.indexSelected);
+        //this.list = this.list.filter((d, i) => {
+        //    if (i === this.indexSelected) d.selected = true;
+        //    else d.selected = false;
+        //    return d;
+        //});
     };
     AutoCompleteComponent.prototype.onClickOption = function (item, index) {
         this.dontBlur = true;
@@ -139,7 +142,7 @@ __decorate([
 ], AutoCompleteComponent.prototype, "placeHolderText", void 0);
 __decorate([
     Prop,
-    __metadata("design:type", AutocompleteItem)
+    __metadata("design:type", Object)
 ], AutoCompleteComponent.prototype, "initialData", void 0);
 __decorate([
     Prop,

@@ -18,33 +18,34 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import { ListingType } from '../shared/utils';
-import AutoCompleteComponent from '../shared/autocomplete.vue';
+import ListingModel from '../model/listing.model';
+import LocationSearchComponent from '../shared/locationsearch.component.vue';
+import ParticipantComponent from '../shared/participant.component.vue';
+import ListingService from '../../services/listing.service';
+import MiniProfile from '../model/miniprofile.model';
 Vue.use(VeeValidate);
 var ListingRequestForm = (function (_super) {
     __extends(ListingRequestForm, _super);
     function ListingRequestForm() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.tourId = 0;
-        _this.hostList = [];
-        _this.list = [];
-        _this.searchStr = "";
-        _this.selectedId = 0;
-        _this.placeHolderText = "this is the test";
-        _this.id = 0;
-        _this.type = ListingType.Request;
-        _this.operators = [];
-        _this.guests = [];
-        _this.schedules = [];
-        _this.location = '';
-        _this.cost = 0;
-        _this.header = '';
-        _this.description = '';
-        _this.expectation = '';
-        _this.requirement = '';
-        _this.minParticipant = 0;
         _this.formSubmitted = false;
+        _this.model = new ListingModel();
         return _this;
     }
+    ListingRequestForm.prototype.asyncData = function (_a) {
+        var store = _a.store, route = _a.route;
+        // return the Promise from the action
+        console.log('here II am: :' + store.state);
+        return store.dispatch('FETCH_LISTING', 18);
+    };
+    ListingRequestForm.prototype.created = function () {
+        this.model = this.$store.state.listings[0].data;
+    };
+    ListingRequestForm.prototype.onInsertorUpdate = function () {
+        //Bodom: hack
+        this.model.id = 0;
+        (new ListingService()).addListing(this.contructBeforeSubmit(this.model));
+    };
     ListingRequestForm.prototype.onInsert = function () {
         //console.log(this.contructBeforeSubmit(this.model.value));
         //let model = this.contructBeforeSubmit(this.model.value);
@@ -76,13 +77,15 @@ var ListingRequestForm = (function (_super) {
         //    error => {
         //    });
     };
-    ListingRequestForm.prototype.onLocationSearch = function (search) {
-        //this.searchService.autoComplete(search).subscribe((response: any) => {
-        //    this.searchLocations = response;
-        //});
+    ListingRequestForm.prototype.onLocationSelected = function (item) {
+        this.model.locationDetail = item;
     };
-    ListingRequestForm.prototype.fulldayChange = function () {
-        //this.isFullday = !this.isFullday;
+    ListingRequestForm.prototype.onUserAdded = function (user) {
+        if (this.model.tourGuests == null)
+            this.model.tourGuests = new Array();
+        this.model.tourGuests.push(new MiniProfile(user.id, user.name, '', '', user.imageUrl, ''));
+    };
+    ListingRequestForm.prototype.onUserRemoved = function (user) {
     };
     ListingRequestForm.prototype.initOperator = function () {
         return {
@@ -93,40 +96,6 @@ var ListingRequestForm = (function (_super) {
             name: "asdfa bodom5"
         };
     };
-    ListingRequestForm.prototype.addOperator = function (miniProfile) {
-        //const control = this.model.controls['operators'].value;
-        //control.push(miniProfile);
-    };
-    ListingRequestForm.prototype.initEmptyShedule = function () {
-        //const control = <FormArray>this.model.controls['schedules'];
-        //control.push(this.fb.group({
-        //    id: [0],
-        //    startDate: [''],
-        //    startTime: [''],
-        //    duration: [''],
-        //    isRepeated: [false],
-        //    repeatPeriod: [''],
-        //    endDate: ['']
-        //}));
-    };
-    ListingRequestForm.prototype.applySchedule = function (schedule) {
-        //const control = <FormArray>this.model.controls['schedules'];
-        //var startDate = new Date(schedule.startDate);
-        //var endDate = schedule.endDate == '' ? null : new Date(schedule.endDate);
-        //control.push(this.fb.group({
-        //    id: [schedule.id],
-        //    startDate: [{ date: { year: startDate.getFullYear(), month: startDate.getMonth() + 1, day: startDate.getDate() } }],
-        //    startTime: [schedule.startTime.substr(0, 5)],
-        //    duration: [schedule.duration.substr(0, 5)],
-        //    isRepeated: [schedule.repeatedType && schedule.repeatedType !== 0],
-        //    repeatPeriod: [schedule.repeatedType],
-        //    endDate: [endDate ? { date: { year: endDate.getFullYear(), month: endDate.getMonth() + 1, day: endDate.getDate() } } : '']
-        //}));
-    };
-    ListingRequestForm.prototype.removeAddress = function (i) {
-        //const control = <FormArray>this.model.controls['schedules'];
-        //control.removeAt(i);
-    };
     ListingRequestForm.prototype.constructShedule = function (model) {
         var schedules = model.schedules;
         var scheduleArr = [];
@@ -134,8 +103,8 @@ var ListingRequestForm = (function (_super) {
             var schedule = schedules[i];
             scheduleArr.push({
                 id: schedule.id,
-                startDate: schedule.startDate.date.year + '/' + schedule.startDate.date.month + '/' + schedule.startDate.date.day + 'T' + schedule.startTime,
-                duration: schedule.duration,
+                startDate: schedule.startDate.date.year + '/' + schedule.startDate.date.month + '/' + schedule.startDate.date.day + 'T' + schedule.startTime.HH + ':' + schedule.startTime.mm,
+                duration: schedule.duration.HH + ':' + schedule.duration.mm,
                 repeatedType: schedule.repeatPeriod,
                 listingId: model.id,
                 endDate: schedule.endDate.date.year + '/' + schedule.endDate.date.month + '/' + schedule.endDate.date.day
@@ -151,7 +120,7 @@ var ListingRequestForm = (function (_super) {
             operatorArr.push({
                 listingId: model.id,
                 userId: operator.id,
-                isOwner: (i == 0) ? true : false
+                isOwner: (i === 0)
             });
         }
         return operatorArr;
@@ -169,19 +138,18 @@ var ListingRequestForm = (function (_super) {
         //    "type":"0",
         //    "tourOperators":[{ "listingId": "0", "userId": "1", "isOwner": true }]
         //}
-        //return {
-        //    id: model.id,
-        //    type: ListingType.Offer,
-        //    locationId: model.locationId.id,
-        //    cost: model.cost,
-        //    currency: model.currency,
-        //    header: model.header,
-        //    description: model.description,
-        //    requirement: model.requirement,
-        //    minParticipant: model.minParticipant,
-        //    schedules: this.constructShedule(model),
-        //    tourOperators: this.constructOperator(model)
-        //}
+        return {
+            id: model.id,
+            type: ListingType.Request,
+            locationId: model.locationDetail.id,
+            cost: model.cost,
+            currency: model.currency,
+            header: model.header,
+            description: model.description,
+            minParticipant: model.minParticipant,
+            schedules: this.constructShedule(model),
+            tourGuests: this.constructOperator(model)
+        };
     };
     return ListingRequestForm;
 }(Vue));
@@ -189,7 +157,8 @@ ListingRequestForm = __decorate([
     Component({
         name: 'ListingRequest',
         components: {
-            'autocomplete': AutoCompleteComponent
+            'locationsearch': LocationSearchComponent,
+            'participant': ParticipantComponent
         }
     })
 ], ListingRequestForm);

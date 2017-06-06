@@ -1,49 +1,40 @@
 ﻿import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
-import AutoCompleteComponent from "../shared/autocomplete.vue";
-
+import LocationSearchComponent from "../shared/locationsearch.component.vue";
+import UserModel from '../model/user.model';
+import { AutocompleteItem }  from '../model/autocomplete.model';
 Vue.use(VeeValidate);
 
 @Component({
     name: 'UserDetail',
     components: {
-        "autocomplete": AutoCompleteComponent
+        "locationsearch": LocationSearchComponent
     }
 })
 
 export default class UserDetailComponent extends Vue {
-    email: string = '';
-    password: string = '';
-    firstname: string = '';
-    lastname: string = '';
-    phone: string = '';
-    gender: string = '';
-    birthday = new Date(2016, 9, 16);
-    description: string = '';
-    address: string = '';
-    emergencyContact: string = '';
+    model: UserModel = new UserModel();
 
-    list: any[] = [];
-    placeHolderText = "this is the test";
-
-    formSubmitted: boolean = false;
-
-    submitForm() {
-        this.formSubmitted = true;
+    created() {
+        if (this.$store.state.profile) {
+            this.model = this.$store.state.profile;
+        }
     }
 
-    onLocationSearch(event) {
-        //this.searchStr = event;
-        this.list = [
-            { "id": 1, "name": "test" },
-            { "id": 2, "name": "test2" }
-        ];
+    onLocationSelected(item: AutocompleteItem) {
+        this.model.locationId = +item.id;
     }
 
-    onSelect(val) {
-        //this.searchStr = val.Description;
-        //this.selectedId = val.Value;
+    onInsertorUpdate() {
+        if (this.model.id > 0) {
+            return this.$store.dispatch('UPDATE_USER', this.contructBeforeSubmit(this.model));
+            //(new ListingService()).updateListing(this.contructBeforeSubmit(this.model));
+        }
+    }
+
+    contructBeforeSubmit(model) {
+        return this.model;
     }
 
 onUpdate(){}
