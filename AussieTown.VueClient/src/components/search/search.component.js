@@ -35,7 +35,7 @@ var SearchComponent = (function (_super) {
         //suburbs: SuburbLocation[];
         _this.listings = [];
         _this.totalDistance = 0;
-        _this.listing = { id: 1, location: "Sydney", primaryOwner: "test User", header: "this is header", cost: "cost", description: "this is description" };
+        //listing = { id: 1, location: "Sydney", primaryOwner: "test User", header: "this is header", cost: "cost", description: "this is description" };
         _this.showListingRequest = false;
         _this.showListingOffer = false;
         _this.center = { lat: -33.860, lng: 151.210 };
@@ -45,15 +45,16 @@ var SearchComponent = (function (_super) {
         ];
         return _this;
     }
+    SearchComponent.prototype.asyncData = function (_a) {
+        var store = _a.store, route = _a.route;
+        if (route.params.suburbId) {
+            return store.dispatch('SEARCH_LISTINGS_BY_SUBURB', route.params.suburbId);
+        }
+    };
     SearchComponent.prototype.created = function () {
-        if (process.env.VUE_ENV === 'client') {
-            alert('here');
+        if (this.$store.state.searchListings) {
+            this.listings = this.$store.state.searchListings;
         }
-        ;
-        if (process.env.VUE_ENV === 'server') {
-            console.log("hey server");
-        }
-        ;
     };
     SearchComponent.prototype.showTourRequest = function () {
         this.$router.push("home");
@@ -64,7 +65,7 @@ SearchComponent = __decorate([
     Component({
         name: "Search",
         components: {
-            "listingoffercard": ListingCardComponent,
+            "listingcard": ListingCardComponent,
             "listingrequestmodal": ListingRequestModalComponent,
             "listingoffermodal": ListingOfferModalComponent
         }

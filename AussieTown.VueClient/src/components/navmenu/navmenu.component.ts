@@ -17,15 +17,18 @@ export default class NavMenuComponent extends Vue {
     hideNavToggle = false;
     isMenuOpen = false;
     isSticky = false;
+    $cookie: any;
 
     showLoginModal: boolean = false;
     showRegistrationModal: boolean = false;
 
-    onSuccessfulLogin(userId: number) {
-        if (userId > 0) {
-            this.logginInUserId = userId;
+    onSuccessfulLogin(responseToken) {
+        if (responseToken) {
+            this.$cookie.set('mtltk', responseToken.token);
+            this.$cookie.set('mtluserId', responseToken.userId);
             this.showLoginModal = false;
         }
+        //var test = responseToken;
     }
     //ngOnInit() {
     //    if (isBrowser) {

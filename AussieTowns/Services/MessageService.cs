@@ -18,7 +18,7 @@ namespace AussieTowns.Services
             return await _messageRepository.GetAllConversationsByUserId(userId);
         }
 
-        public async Task<IEnumerable<Message>> GetMessagesInConversation(int conversationId)
+        public async Task<IEnumerable<ConversationReply>> GetMessagesInConversation(int conversationId)
         {
             return await _messageRepository.GetMessagesInConversation(conversationId);
         }

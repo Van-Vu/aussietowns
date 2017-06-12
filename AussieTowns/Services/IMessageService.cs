@@ -10,6 +10,6 @@ namespace AussieTowns.Services
     {
         Task<int> SendMessage(Message message);
         Task<IEnumerable<Conversation>> GetAllConversationsByUser(int userId);
-        Task<IEnumerable<Message>> GetMessagesInConversation(int conversationId);
+        Task<IEnumerable<ConversationReply>> GetMessagesInConversation(int conversationId);
     }
 }

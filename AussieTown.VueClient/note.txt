@@ -1,2 +1,7 @@
 ﻿passing router param to component prop: https://router.vuejs.org/en/essentials/passing-props.html
 router regex: https://github.com/vuejs/vue-router/blob/dev/examples/route-matching/app.js
+token authentication: https://stormpath.com/blog/token-authentication-asp-net-core
+
+
+REFACTOR:
+fetch user / message / conversation / trips separatedly

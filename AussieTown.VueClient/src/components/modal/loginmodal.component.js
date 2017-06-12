@@ -31,8 +31,8 @@ var LoginModal = (function (_super) {
     LoginModal.prototype.close = function () {
         this.$emit('onClose');
     };
-    LoginModal.prototype.onSuccessfulLogin = function (userId) {
-        this.$emit('onSuccessfulLogin', userId);
+    LoginModal.prototype.onSuccessfulLogin = function (responseToken) {
+        this.$emit('onSuccessfulLogin', responseToken);
     };
     return LoginModal;
 }(Vue));

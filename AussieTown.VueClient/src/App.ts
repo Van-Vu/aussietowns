@@ -9,6 +9,9 @@ import NavMenuComponent from './components/navmenu/navmenu.component.vue';
 //    Vue.component('vue-timepicker', require('vue2-timepicker'))
 //}
 //Vue.use(ElementUI);
+import VueCookie from 'vue-js-cookie';
+
+Vue.use(VueCookie);
 
 @Component({
     name: "App",
@@ -19,6 +22,7 @@ import NavMenuComponent from './components/navmenu/navmenu.component.vue';
 
 
 export default class App extends Vue {
+    $cookie: any;
 //let process: any;
 	//console.log(`Bodom: ${process.env}`);
 }

@@ -10,6 +10,6 @@ namespace AussieTowns.Repository
     {
         Task<int> Insert(Message message);
         Task<IEnumerable<Conversation>> GetAllConversationsByUserId(int userId);
-        Task<IEnumerable<Message>> GetMessagesInConversation(int conversationId);
+        Task<IEnumerable<ConversationReply>> GetMessagesInConversation(int conversationId);
     }
 }

@@ -16,7 +16,7 @@ if (process.env.VUE_ENV === 'client') {
 @Component({
     name: "Search",
     components: {
-        "listingoffercard": ListingCardComponent,
+        "listingcard": ListingCardComponent,
         "listingrequestmodal": ListingRequestModalComponent,
         "listingoffermodal": ListingOfferModalComponent
     }
@@ -29,18 +29,20 @@ export default class SearchComponent extends Vue {
     //suburbs: SuburbLocation[];
     listings: any[] = [];
     totalDistance: number = 0;
-    listing = { id: 1, location: "Sydney", primaryOwner: "test User", header: "this is header", cost: "cost", description: "this is description" };
+    //listing = { id: 1, location: "Sydney", primaryOwner: "test User", header: "this is header", cost: "cost", description: "this is description" };
     showListingRequest: boolean = false;
     showListingOffer: boolean = false;
 
+    asyncData({ store, route }) {
+        if (route.params.suburbId) {
+            return store.dispatch('SEARCH_LISTINGS_BY_SUBURB', route.params.suburbId);
+        }
+    }
 
-	created(): void {
-		if (process.env.VUE_ENV === 'client') {
-			alert('here');
-		};
-		if (process.env.VUE_ENV === 'server') {
-		console.log(`hey server`);
-		};
+    created(): void {
+        if (this.$store.state.searchListings) {
+            this.listings = this.$store.state.searchListings;
+        }
 	}
 
     center = { lat: -33.860, lng: 151.210 };

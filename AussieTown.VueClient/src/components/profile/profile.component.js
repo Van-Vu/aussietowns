@@ -18,6 +18,7 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import UserDetailComponent from '../form/userdetail.component.vue';
 import TripComponent from './trip.component.vue';
+import MessageComponent from './message.component.vue';
 var ProfileComponent = (function (_super) {
     __extends(ProfileComponent, _super);
     function ProfileComponent() {
@@ -32,6 +33,7 @@ var ProfileComponent = (function (_super) {
         console.log('profile id:' + route.params.profileId);
         if (route.params.profileId) {
             return store.dispatch('FETCH_USER_BY_ID', route.params.profileId);
+            //return store.dispatch('FETCH_CONVERSATIONS_BY_USER', route.params.profileId);
         }
     };
     ProfileComponent.prototype.activatePhotosTab = function () {
@@ -50,7 +52,8 @@ ProfileComponent = __decorate([
         name: 'ProfileComponent',
         components: {
             'profileform': UserDetailComponent,
-            'tripcomponent': TripComponent
+            'tripcomponent': TripComponent,
+            'messagecomponent': MessageComponent
         }
     })
 ], ProfileComponent);

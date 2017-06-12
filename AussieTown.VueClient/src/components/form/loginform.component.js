@@ -33,8 +33,8 @@ var LoginForm = (function (_super) {
         this.$validator.validateAll().then(function () {
             // eslint-disable-next-line
             (new UserService()).login(_this.model)
-                .then(function (response) {
-                _this.$emit('onSuccessfulLogin', response);
+                .then(function (responseToken) {
+                _this.$emit('onSuccessfulLogin', responseToken);
             });
         }).catch(function () {
             // eslint-disable-next-line

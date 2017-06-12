@@ -32,9 +32,9 @@ namespace AussieTowns.Repository
                           +
                           "SELECT sd.* FROM SuburbDetail sd INNER JOIN User u ON sd.id = u.locationId WHERE u.id = @id;"
                           +
-                          "SELECT * FROM Listing l INNER JOIN Schedule s ON l.id = s.listingid INNER JOIN tourguest g ON l.id = g.ListingId WHERE g.UserId = @id;"
+                          "SELECT * FROM ListingView l INNER JOIN tourguest g ON l.id = g.ListingId WHERE g.UserId = @id;"
                           +
-                          "SELECT * FROM Listing l INNER JOIN Schedule s ON l.id = s.listingid INNER JOIN touroperator o ON l.id = o.ListingId WHERE o.UserId = @id;";
+                          "SELECT * FROM ListingView l INNER JOIN touroperator o ON l.id = o.ListingId WHERE o.UserId = @id;";
 
                 dbConnection.Open();
                 using (var multipleResults = await dbConnection.QueryMultipleAsync(sql, new { id }))
@@ -43,19 +43,21 @@ namespace AussieTowns.Repository
 
                     var location = multipleResults.Read<SuburbDetail>().FirstOrDefault();
 
-                    var operatorListings = multipleResults.Read<Listing, Schedule, Listing>((listing, schedule) =>
-                    {
-                        listing.Schedules = new List<Schedule> {schedule};
+                    //var operatorListings = multipleResults.Read<Listing, Schedule, Listing>((listing, schedule) =>
+                    //{
+                    //    listing.Schedules = new List<Schedule> {schedule};
 
-                        return listing;
-                    })?.ToList();
+                    //    return listing;
+                    //})?.ToList();
 
-                    var guestListings = multipleResults.Read<Listing, Schedule, Listing>((listing, schedule) =>
-                    {
-                        listing.Schedules = new List<Schedule> { schedule };
+                    //var guestListings = multipleResults.Read<Listing, Schedule, Listing>((listing, schedule) =>
+                    //{
+                    //    listing.Schedules = new List<Schedule> { schedule };
 
-                        return listing;
-                    })?.ToList();
+                    //    return listing;
+                    //})?.ToList();
+                    var operatorListings = multipleResults.Read<ListingView>()?.ToList();
+                    var guestListings = multipleResults.Read<ListingView>()?.ToList();
 
                     user.Location = location;
                     user.OperatorListings = operatorListings;

@@ -19,10 +19,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
+import { Utils } from '../shared/utils';
 var ListingCardComponent = (function (_super) {
     __extends(ListingCardComponent, _super);
     function ListingCardComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.id = 0;
+        _this.location = '';
+        _this.hostName = '';
+        _this.header = '';
+        _this.cost = 0;
+        _this.date = '';
+        _this.time = '';
+        _this.description = '';
         _this.slides = [
             { "text": "", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/a5bdb2fc08f9096fb1ef3afca2e5c1ff5292daf9fe7b86b8710d091ae7fa5547/400/232/1.0" },
             { "text": "", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/2466d2267dc2316b277610eafb1d957d7ce978df7e9bdd053fd8c67c40d57165/400/232/1.0" },
@@ -44,13 +53,13 @@ var ListingCardComponent = (function (_super) {
     }
     ListingCardComponent.prototype.created = function () {
         this.id = this.listingDetail.id;
-        this.location = this.listingDetail.locationDetail.name;
+        this.location = this.listingDetail.location;
         this.header = this.listingDetail.header;
         this.cost = this.listingDetail.cost;
-        this.date = this.listingDetail.schedules[0].startDate;
-        this.time = this.listingDetail.schedules[0].startTime.toString();
-        //this.date = Utils.getDate(this.listingDetail.schedules[0].startDate);
-        //this.time = Utils. getTime(this.listingDetail.schedules[0].startDate);
+        this.hostName = this.listingDetail.primaryOwner;
+        var startDatetime = new Date(this.listingDetail.schedules[0].startDate);
+        this.date = Utils.getDate(startDatetime);
+        this.time = Utils.getTime(startDatetime);
         this.description = this.listingDetail.description;
         this.initializeSlide = true;
     };

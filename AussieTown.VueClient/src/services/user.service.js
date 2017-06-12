@@ -1,4 +1,4 @@
-import { http } from './http-base';
+import http from './http-base';
 var UserService = (function () {
     function UserService() {
     }
@@ -13,8 +13,7 @@ var UserService = (function () {
             var result = response.data;
             if (result.state == 1) {
                 var json = result.data;
-                localStorage.setItem("token", json.accessToken);
-                //sessionStorage.setItem("token", json.accessToken);
+                return { token: json.accessToken, userId: json.userId };
             }
             return result;
         })
@@ -25,9 +24,7 @@ var UserService = (function () {
             var result = response.data;
             if (result.state == 1) {
                 var json = result.data;
-                localStorage.setItem("token", json.accessToken);
-                localStorage.setItem("userId", json.userId);
-                return json.userId;
+                return { token: json.accessToken, userId: json.userId };
             }
             return 0;
         })
@@ -66,9 +63,9 @@ var UserService = (function () {
         // create authorization header with jwt token
         var headers = new Headers();
         headers.append('Content-Type', 'application/json; charset=utf-8');
-        //let token = Cookie.check("token");
+        //let token = this.$cookie.get("mtl:tk");
         //if (token) {
-        //    headers.append('Authorization', 'Bearer ' + Cookie.get("token"));
+        //    headers.append('Authorization', 'Bearer ' + token);
         //}
         //return new RequestOptions({ headers: headers });
         return '';

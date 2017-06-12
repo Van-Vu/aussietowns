@@ -43,7 +43,7 @@ const router = new Router({
             component: HomeComponent
         },
         {
-            path: "/search",
+            path: "/search/:seoString-:suburbId(\\d+)",
             name: "search",
             component: SearchComponent
         },

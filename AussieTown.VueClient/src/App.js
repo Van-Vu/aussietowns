@@ -23,6 +23,8 @@ import NavMenuComponent from './components/navmenu/navmenu.component.vue';
 //    Vue.component('vue-timepicker', require('vue2-timepicker'))
 //}
 //Vue.use(ElementUI);
+import VueCookie from 'vue-js-cookie';
+Vue.use(VueCookie);
 var App = (function (_super) {
     __extends(App, _super);
     function App() {

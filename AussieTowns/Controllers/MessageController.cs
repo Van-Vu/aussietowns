@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AussieTowns.Model;
 using AussieTowns.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AussieTowns.Controllers
@@ -72,7 +73,8 @@ namespace AussieTowns.Controllers
 
         [HttpGet]
         [Route("conversation/{conversationId}")]
-        public async Task<RequestResult> GetAutocomplete(int conversationId)
+        [Authorize]
+        public async Task<RequestResult> GetMessagesInConversation(int conversationId)
         {
             try
             {

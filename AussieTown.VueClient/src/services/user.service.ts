@@ -1,6 +1,7 @@
-﻿import { http } from './http-base';
+﻿import http from './http-base';
 
 export default class UserService {
+
     getAll() {
         return http.get('/users', this.jwt()).then(response => response.data);
     }
@@ -15,8 +16,7 @@ export default class UserService {
             if (result.state == 1) {
                 let json = result.data as any;
 
-                localStorage.setItem("token", json.accessToken);
-                //sessionStorage.setItem("token", json.accessToken);
+                return { token: json.accessToken, userId: json.userId };
             }
             return result;
         })
@@ -29,9 +29,7 @@ export default class UserService {
             if (result.state == 1) {
                 let json = result.data as any;
 
-                localStorage.setItem("token", json.accessToken);
-                localStorage.setItem("userId", json.userId);
-                return json.userId;
+                return { token: json.accessToken, userId: json.userId };
             }
             return 0;
         })
@@ -78,9 +76,9 @@ export default class UserService {
         headers.append('Content-Type', 'application/json; charset=utf-8');
 
 
-        //let token = Cookie.check("token");
+        //let token = this.$cookie.get("mtl:tk");
         //if (token) {
-        //    headers.append('Authorization', 'Bearer ' + Cookie.get("token"));
+        //    headers.append('Authorization', 'Bearer ' + token);
         //}
 
         //return new RequestOptions({ headers: headers });

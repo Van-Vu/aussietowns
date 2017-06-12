@@ -1,4 +1,4 @@
-﻿import { http } from './http-base';
+﻿import http from './http-base';
 import ListingModel from '../components/model/listing.model';
 
 export default class ListingService {

@@ -78,7 +78,7 @@ var HomeComponent = (function (_super) {
         console.log(val);
     };
     HomeComponent.prototype.onSearch = function (model) {
-        console.log(model.value);
+        //{ name: 'user', params: { userId: 123 } }
         this.$router.push('search');
     };
     Object.defineProperty(HomeComponent.prototype, "myComputedProp", {
@@ -97,6 +97,7 @@ var HomeComponent = (function (_super) {
         //.catch(e => {
         //  this.errors.push(e)
         //})
+        this.$cookie.set('bodomtest', 'hi there');
     };
     return HomeComponent;
 }(Vue));

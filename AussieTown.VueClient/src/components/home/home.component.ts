@@ -39,7 +39,7 @@ export default class HomeComponent extends Vue{
     private slides: any[] = [];
     initializeRequestSlide: boolean = false;
     searchLocations: any;
-
+    $cookie: any;
     showListingRequest: boolean = false;
     showListingOffer: boolean = false;
 
@@ -89,7 +89,7 @@ export default class HomeComponent extends Vue{
     }
 
     onSearch(model) {
-        console.log(model.value);
+        //{ name: 'user', params: { userId: 123 } }
         this.$router.push('search');
     }
 @Prop posts: any[];
@@ -108,7 +108,7 @@ errors: any[];
 	    //.catch(e => {
 	    //  this.errors.push(e)
 	    //})
-
+        this.$cookie.set('bodomtest', 'hi there');
     }
 
 	

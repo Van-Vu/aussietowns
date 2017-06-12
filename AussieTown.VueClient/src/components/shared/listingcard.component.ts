@@ -1,7 +1,7 @@
 ﻿import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import AutoCompleteComponent from "../shared/autocomplete.vue";
-import Utils from '../shared/utils';
+import { Utils } from '../shared/utils';
 import ListingModel from '../model/listing.model';
 
 @Component({
@@ -10,14 +10,14 @@ import ListingModel from '../model/listing.model';
 
 export default class ListingCardComponent extends Vue {
     @Prop listingDetail: any;
-    private id:number;
-    location: string;
-    hostName: string;
-    header: string;
-    cost: number;
-    date: string;
-    time: string;
-    description: string;
+    id:number = 0;
+    location: string = '';
+    hostName: string = '';
+    header: string = '';
+    cost: number = 0;
+    date: string = '';
+    time: string = '';
+    description: string = '';
 
     slides: Array<any> = [
         { "text": "", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/a5bdb2fc08f9096fb1ef3afca2e5c1ff5292daf9fe7b86b8710d091ae7fa5547/400/232/1.0" },
@@ -40,13 +40,13 @@ export default class ListingCardComponent extends Vue {
 
     created(): void {
         this.id = this.listingDetail.id;
-        this.location = this.listingDetail.locationDetail.name;
+        this.location = this.listingDetail.location;
         this.header = this.listingDetail.header;
         this.cost = this.listingDetail.cost;
-        this.date = this.listingDetail.schedules[0].startDate;
-        this.time = this.listingDetail.schedules[0].startTime.toString();
-        //this.date = Utils.getDate(this.listingDetail.schedules[0].startDate);
-        //this.time = Utils. getTime(this.listingDetail.schedules[0].startDate);
+        this.hostName = this.listingDetail.primaryOwner;
+        var startDatetime = new Date(this.listingDetail.schedules[0].startDate);
+        this.date = Utils.getDate(startDatetime);
+        this.time = Utils.getTime(startDatetime);
         this.description = this.listingDetail.description;
         this.initializeSlide = true;    
     }

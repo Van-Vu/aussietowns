@@ -23,8 +23,8 @@ namespace AussieTowns.Model
         public string PhotoUrl { get; set; }
         public string VideoUrl { get; set; }
 
-        public ICollection<Listing> OperatorListings { get; set; }
-        public ICollection<Listing> GuestListings { get; set; }
+        public ICollection<ListingView> OperatorListings { get; set; }
+        public ICollection<ListingView> GuestListings { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }

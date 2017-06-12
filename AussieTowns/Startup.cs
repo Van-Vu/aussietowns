@@ -1,9 +1,11 @@
 using System;
+using System.Threading.Tasks;
 using AussieTowns.Auth;
 using AussieTowns.Model;
 using AussieTowns.Repository;
 using AussieTowns.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -57,14 +59,33 @@ namespace AussieTowns
             services.AddAutoMapper();
 
             // Enable the use of an [Authorize("Bearer")] attribute on methods and classes to protect.
-            services.AddAuthorization(auth =>
-            {
-                auth.AddPolicy("Bearer",
-                  policy =>
-                  {
-                      policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser();
-                  });
-            });
+            //services.AddAuthorization(auth =>
+            //{
+            //    auth.AddPolicy("Bearer",
+            //      policy =>
+            //      {
+            //          policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser();
+            //      });
+            //});
+
+            //services.Configure<IdentityOptions>(options =>
+            //{
+            //    options.Cookies.ApplicationCookie.LoginPath = new PathString("/");
+            //    options.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
+            //    {
+            //        OnRedirectToLogin = context =>
+            //        {
+            //            if (context.Request.Path.Value.StartsWith("/api"))
+            //            {
+            //                context.Response.Clear();
+            //                context.Response.StatusCode = 401;
+            //                return Task.FromResult(0);
+            //            }
+            //            context.Response.Redirect(context.RedirectUri);
+            //            return Task.FromResult(0);
+            //        }
+            //    };
+            //});
 
             //Use a MySQL database
             var mySqlConnectionString = Configuration.GetConnectionString("DataAccessMySqlProvider");
@@ -134,25 +155,64 @@ namespace AussieTowns
             #endregion
 
             #region UseJwtBearerAuthentication
-            app.UseJwtBearerAuthentication(new JwtBearerOptions()
-            {
-                TokenValidationParameters = new TokenValidationParameters()
-                {
-                    IssuerSigningKey = TokenAuthOption.Key,
-                    ValidAudience = TokenAuthOption.Audience,
-                    ValidIssuer = TokenAuthOption.Issuer,
-                    // When receiving a token, check that we've signed it.
-                    ValidateIssuerSigningKey = true,
-                    // When receiving a token, check that it is still valid.
-                    ValidateLifetime = true,
-                    // This defines the maximum allowable clock skew - i.e. provides a tolerance on the token expiry time 
-                    // when validating the lifetime. As we're creating the tokens locally and validating them on the same 
-                    // machines which should have synchronised time, this can be set to zero. Where external tokens are
-                    // used, some leeway here could be useful.
-                    ClockSkew = TimeSpan.FromMinutes(0)
-                }
-            });
+            //app.UseJwtBearerAuthentication(new JwtBearerOptions()
+            //{
+            //    TokenValidationParameters = new TokenValidationParameters()
+            //    {
+            //        IssuerSigningKey = TokenAuthOption.Key,
+            //        ValidAudience = TokenAuthOption.Audience,
+            //        ValidIssuer = TokenAuthOption.Issuer,
+            //        // When receiving a token, check that we've signed it.
+            //        ValidateIssuerSigningKey = true,
+            //        // When receiving a token, check that it is still valid.
+            //        ValidateLifetime = true,
+            //        // This defines the maximum allowable clock skew - i.e. provides a tolerance on the token expiry time 
+            //        // when validating the lifetime. As we're creating the tokens locally and validating them on the same 
+            //        // machines which should have synchronised time, this can be set to zero. Where external tokens are
+            //        // used, some leeway here could be useful.
+            //        ClockSkew = TimeSpan.FromMinutes(0)
+            //    }
+            //});
             #endregion
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                // The signing key must match!
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = TokenAuthOption.Key,
+
+                // Validate the JWT Issuer (iss) claim
+                ValidateIssuer = true,
+                ValidIssuer = TokenAuthOption.Issuer,
+
+                // Validate the JWT Audience (aud) claim
+                ValidateAudience = true,
+                ValidAudience = TokenAuthOption.Audience,
+
+                // Validate the token expiry
+                ValidateLifetime = true,
+
+                // If you want to allow a certain amount of clock drift, set that here:
+                ClockSkew = TimeSpan.Zero
+            };
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                AuthenticationScheme = "Cookie",
+                CookieName = "mtltk",
+                Events = new CookieAuthenticationEvents
+                {
+                    OnRedirectToLogin = async (context) => context.Response.StatusCode = 401,
+                    OnRedirectToAccessDenied = async (context) => context.Response.StatusCode = 403
+                },
+                TicketDataFormat = new CustomJwtDataFormat(
+                    SecurityAlgorithms.RsaSha256Signature,
+                    tokenValidationParameters)
+            });
+
+
 
             // global policy - assign here or on each controller
             app.UseCors("CorsPolicy");

@@ -68,9 +68,9 @@ namespace AussieTowns
                 .ForMember(dest => dest.LocationDetail,
                     opts => opts.MapFrom(src => Mapper.Map<SuburbDetail, AutoCompleteItem>(src.Location)))
                 .ForMember(dest => dest.OperatorListings,
-                    opts => opts.MapFrom(src => src.OperatorListings.Select(Mapper.Map<Listing, ListingSummary>)))
+                    opts => opts.MapFrom(src => src.OperatorListings.Select(Mapper.Map<ListingView, ListingSummary>)))
                 .ForMember(dest => dest.GuestListings,
-                    opts => opts.MapFrom(src => src.GuestListings.Select( Mapper.Map<Listing, ListingSummary>)));
+                    opts => opts.MapFrom(src => src.GuestListings.Select( Mapper.Map<ListingView, ListingSummary>)));
         }
     }
 }

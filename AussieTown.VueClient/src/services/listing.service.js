@@ -1,4 +1,4 @@
-import { http } from './http-base';
+import http from './http-base';
 var ListingService = (function () {
     function ListingService() {
         this.baseUrl = '/api/listing/';

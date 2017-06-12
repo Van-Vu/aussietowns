@@ -80,11 +80,13 @@ var NavMenuComponent = (function (_super) {
         //    return false;
         //}
     }
-    NavMenuComponent.prototype.onSuccessfulLogin = function (userId) {
-        if (userId > 0) {
-            this.logginInUserId = userId;
+    NavMenuComponent.prototype.onSuccessfulLogin = function (responseToken) {
+        if (responseToken) {
+            this.$cookie.set('mtltk', responseToken.token);
+            this.$cookie.set('mtluserId', responseToken.userId);
             this.showLoginModal = false;
         }
+        //var test = responseToken;
     };
     return NavMenuComponent;
 }(Vue));

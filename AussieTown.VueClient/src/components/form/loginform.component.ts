@@ -21,8 +21,8 @@ export default class LoginForm extends Vue {
         this.$validator.validateAll().then(() => {
             // eslint-disable-next-line
             (new UserService()).login(this.model)
-                .then(response => {
-                    this.$emit('onSuccessfulLogin', response); 
+                .then(responseToken => {
+                    this.$emit('onSuccessfulLogin', responseToken); 
                 });
         }).catch(() => {
             // eslint-disable-next-line

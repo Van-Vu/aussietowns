@@ -48,14 +48,30 @@ namespace AussieTowns.Repository
             }
         }
 
-        public async Task<IEnumerable<Message>> GetMessagesInConversation(int conversationId)
+        public async Task<IEnumerable<ConversationReply>> GetMessagesInConversation(int conversationId)
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT * FROM Message WHERE (senderId = @senderId AND recipientId= @recipientId)" 
-                    + " OR (senderId = @recipientId AND recipientId= @senderId)";
+                var sql = "SELECT R.id,R.time,R.messageContent, R.conversationId, U.* FROM user U, conversation_reply R "
+                          + "WHERE R.userId = U.id AND R.conversationId = @conversationId ORDER BY R.id ASC";
+
                 dbConnection.Open();
-                return await dbConnection.QueryAsync<Message>(sql, new { conversationId});
+                return await dbConnection.QueryAsync<ConversationReply, User, ConversationReply>(sql, (conversationReply, user) =>
+                {
+                    conversationReply.User = new MiniProfile
+                    {
+                        Id = user.Id,
+                        Fullname = $"{user.FirstName} {user.LastName}",
+                        Email = user.Email,
+                        PhotoUrl = user.PhotoUrl
+                    };
+
+                    return conversationReply;
+                }, new { conversationId });
+
+                //var sql = "SELECT * FROM Message WHERE (senderId = @senderId AND recipientId= @recipientId)" 
+                //    + " OR (senderId = @recipientId AND recipientId= @senderId)";
+                //return await dbConnection.QueryAsync<Message>(sql, new { conversationId});
             }
         }
 

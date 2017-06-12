@@ -36,6 +36,7 @@
 
         <section id="content3" class="profile-section">
             <div v-if="isMessageActivated">
+                <messagecomponent></messagecomponent>
             </div>
             <p>
                 Bacon ipsum dolor sit amet beef venison beef ribs kielbasa. Sausage pig leberkas, t-bone sirloin shoulder bresaola. Frankfurter rump porchetta ham. Pork belly prosciutto brisket meatloaf short ribs.
