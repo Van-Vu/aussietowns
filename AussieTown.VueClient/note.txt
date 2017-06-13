@@ -1,6 +1,10 @@
 ﻿passing router param to component prop: https://router.vuejs.org/en/essentials/passing-props.html
 router regex: https://github.com/vuejs/vue-router/blob/dev/examples/route-matching/app.js
 token authentication: https://stormpath.com/blog/token-authentication-asp-net-core
+integrate with Google: https://www.npmjs.com/package/vue-google-signin-button
+	https://developers.google.com/identity/sign-in/web/devconsole-project
+integrate with facebook: https://developers.facebook.com/docs/facebook-login/web
+	https://github.com/phanan/vue-facebook-signin-button
 
 
 REFACTOR:

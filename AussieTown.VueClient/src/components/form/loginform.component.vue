@@ -1,5 +1,16 @@
 ﻿<template>
     <div>
+        <g-signin-button :params="googleSignInParams"
+                         @success="onSignInSuccess"
+                         @error="onSignInError">
+            Sign in with Google
+        </g-signin-button>
+        <fb-signin-button :params="fbSignInParams"
+                          @success="onFbSignInSuccess"
+                          @error="onFbSignInError">
+            Sign in with Facebook
+        </fb-signin-button>
+
         <form @submit.prevent="validateBeforeSubmit" v-if="!formSubmitted">
             <div class="field">
                 <label class="label" for="email">Email</label>

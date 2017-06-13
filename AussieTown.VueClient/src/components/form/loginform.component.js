@@ -26,6 +26,13 @@ var LoginForm = (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.formSubmitted = false;
         _this.model = new LoginModel();
+        _this.googleSignInParams = {
+            client_id: '865729199339-hclqajg0re388bm6t9pje61gsglat3rr.apps.googleusercontent.com'
+        };
+        _this.fbSignInParams = {
+            scope: 'public_profile,email',
+            return_scopes: true
+        };
         return _this;
     }
     LoginForm.prototype.validateBeforeSubmit = function (e) {
@@ -43,6 +50,34 @@ var LoginForm = (function (_super) {
     };
     LoginForm.prototype.submitForm = function () {
         this.formSubmitted = true;
+    };
+    LoginForm.prototype.onSignInSuccess = function (googleUser) {
+        // `googleUser` is the GoogleUser object that represents the just-signed-in user. 
+        // See https://developers.google.com/identity/sign-in/web/reference#users 
+        var profile = googleUser.getBasicProfile(); // etc etc 
+        console.log('ID: ' + profile.getId());
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail());
+    };
+    LoginForm.prototype.onSignInError = function (error) {
+        // `error` contains any error occurred. 
+        console.log('OH NOES', error);
+    };
+    LoginForm.prototype.onFbSignInSuccess = function (response) {
+        FB.api('/me', { "fields": "id,name,email,first_name,last_name,picture" }, function (dude) {
+            console.log("Id: " + dude.id + ".");
+            console.log("Name: " + dude.name + ".");
+            console.log("Email: " + dude.email + ".");
+            console.log("First name: " + dude.first_name + ".");
+            console.log("Last name: " + dude.last_name + ".");
+            console.log("Picture: " + dude.picture.data.url + ".");
+        });
+    };
+    LoginForm.prototype.onFbSignInError = function (error) {
+        console.log('OH NOES', error);
     };
     return LoginForm;
 }(Vue));

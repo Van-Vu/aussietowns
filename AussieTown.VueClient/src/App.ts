@@ -10,8 +10,13 @@ import NavMenuComponent from './components/navmenu/navmenu.component.vue';
 //}
 //Vue.use(ElementUI);
 import VueCookie from 'vue-js-cookie';
-
 Vue.use(VueCookie);
+
+import GSignInButton from 'vue-google-signin-button';
+Vue.use(GSignInButton);
+
+import FBSignInButton from 'vue-facebook-signin-button';
+Vue.use(FBSignInButton);
 
 @Component({
     name: "App",

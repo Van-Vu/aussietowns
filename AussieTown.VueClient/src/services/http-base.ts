@@ -10,7 +10,6 @@ const http = axios.create({
 
 http.defaults.withCredentials = true;
 
-
 // Add a request interceptor
 http.interceptors.request.use(function (config) {
     // Do something before request is sent
