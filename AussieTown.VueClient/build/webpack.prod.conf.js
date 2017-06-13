@@ -9,9 +9,9 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
-var env = process.env.NODE_ENV === 'testing'
-  ? require('../config/test.env')
-  : config.build.env
+var env = '"production"'
+
+console.log("Bodom environment:" + env)
 
 var webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? '#source-map' : false,
@@ -80,6 +80,8 @@ var webpackConfig = merge(baseWebpackConfig, {
   ]
 })
 
+
+console.log("Bodom config.build.productionGzip:" + config.build.productionGzip)
 if (config.build.productionGzip) {
   var CompressionWebpackPlugin = require('compression-webpack-plugin')
 
