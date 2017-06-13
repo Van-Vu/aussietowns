@@ -29,6 +29,7 @@
     "vue-facebook-signin-button": "^1.0.1",
     "vue-google-signin-button": "^1.0.2",
     "vue-js-cookie": "^2.0.0",
+    "vue-lazy-image": "^1.1.0",
     "vue-property-decorator": "4.0.0",
     "vue-router": "^2.5.3",
     "vue-server-renderer": "^2.3.3",

@@ -18,6 +18,14 @@ Vue.use(GSignInButton);
 import FBSignInButton from 'vue-facebook-signin-button';
 Vue.use(FBSignInButton);
 
+
+import lazy from 'vue-lazy-image';
+
+Vue.use(lazy, {
+    loading: '/static/images/giphy.gif', //loading image 
+    try: 0, // the count of try to load one image 
+});
+
 @Component({
     name: "App",
     components: {

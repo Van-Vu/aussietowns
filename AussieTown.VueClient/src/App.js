@@ -29,6 +29,11 @@ import GSignInButton from 'vue-google-signin-button';
 Vue.use(GSignInButton);
 import FBSignInButton from 'vue-facebook-signin-button';
 Vue.use(FBSignInButton);
+import lazy from 'vue-lazy-image';
+Vue.use(lazy, {
+    loading: '/static/images/giphy.gif',
+    try: 0,
+});
 var App = (function (_super) {
     __extends(App, _super);
     function App() {

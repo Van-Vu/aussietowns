@@ -12,7 +12,20 @@
                     </form>
                 </article>
                 <div>this is something else</div>
-                <datepicker v-model="datepick"></datepicker>
+
+                <swiper ref="swiper"
+                        direction="horizontal"
+                        :mousewheel-control="true"
+                        :performance-mode="false"
+                        :pagination-visible="true"
+                        :pagination-clickable="true"
+                        :loop="false"
+                        @slide-change-start="onSlideChangeStart"
+                        @slide-change-end="onSlideChangeEnd">
+                    <div v-for="slide in requestSlides">
+                        <img v-lazy="slide.imgSrc"/>
+                    </div>
+                </swiper>
             </div>
         </section>
 
