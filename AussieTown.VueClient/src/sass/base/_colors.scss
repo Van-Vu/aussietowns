@@ -1,4 +1,18 @@
-﻿
+﻿$c-brand-green: #99CD4E !default;
+$c-brand-green-darker: #61892F !default;
+$c-brand-green-bold: #00B22D !default;
+$c-lightgrey: #E1E1E1 !default;
+$c-ivory: #f4e4d6 !default;
+$c-ivory2: #DFDCD2 !default;
+$c-beige: #dbc9b8 !default;
+$c-blue: #0070ba !default;
+$c-blue-light: #4CB5F5 !default;
+$c-pine: #34675C !default;
+$c-oz-green: #008751 !default; 
+$c-oz-gold: #FCD116 !default;
+$c-neutral-white: #ffffff !default; // White
+
+
 $c-darkgrey-darkest: #2C3941 !default; // darkest grey
 $c-darkgrey-lessdark: #4A565E !default; // less dark grey
 $c-darkgrey-dark: #6B747A !default; // dark grey
@@ -10,12 +24,9 @@ $c-lightgrey-dark: #9EACB6 !default; // dark light grey
 $c-lightgrey-light: #CFD5DB !default; // light grey
 $c-lightgrey-lightest: #F8F9FA !default; // lightest light grey
 
-$c-brand-orange: #ff5328  !default; // CRE orange
-$c-brand-orange-darker: darken($c-brand-orange, 10%) !default; // CRE orange - darker
-
 $c-screen-black: #1b1b1b !default; // Black
 $c-neutral-black: #000000 !default; // Black
-$c-neutral-white: #ffffff !default; // White
+
 
 $c-secondary-one: #0D458D !default; // dark blue
 $c-secondary-two: #0045AD !default; // aqua

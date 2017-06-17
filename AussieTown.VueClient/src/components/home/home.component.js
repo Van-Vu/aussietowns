@@ -14,31 +14,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import ListingRequestModalComponent from '../modal/listingrequestmodal.component.vue';
 import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue';
-import LocationSearchComponent from '../shared/locationsearch.component.vue';
-//import datepicker from '../share/datepicker.vue';
+import SearchBarComponent from '../shared/searchbar.component.vue';
 import * as datepicker from '../shared/datepicker.vue';
 import * as Swiper from '../shared/vue-swiper.vue';
 var HomeComponent = (function (_super) {
     __extends(HomeComponent, _super);
     function HomeComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        //The time to show the next photo
-        _this.NextPhotoInterval = 5000;
-        //Looping or not
-        _this.noLoopSlides = true;
-        //Photos
-        _this.slides = [];
-        _this.initializeRequestSlide = false;
         _this.showListingRequest = false;
         _this.showListingOffer = false;
-        _this.datepick = "2017-06-03";
         _this.requestSlides = [
             { "text": "slide conten asdfa sdfasfd asdf asdf asdf as dfasd", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/a5bdb2fc08f9096fb1ef3afca2e5c1ff5292daf9fe7b86b8710d091ae7fa5547/400/232/1.0" },
             { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/2466d2267dc2316b277610eafb1d957d7ce978df7e9bdd053fd8c67c40d57165/400/232/1.0" },
@@ -63,27 +51,11 @@ var HomeComponent = (function (_super) {
     HomeComponent.prototype.onSelect = function (val) {
         console.log(val);
     };
-    HomeComponent.prototype.onSearch = function (model) {
+    HomeComponent.prototype.onSearch = function (val) {
         //{ name: 'user', params: { userId: 123 } }
         this.$router.push('search');
     };
-    Object.defineProperty(HomeComponent.prototype, "myComputedProp", {
-        get: function () {
-            return this.$store.state;
-        },
-        enumerable: true,
-        configurable: true
-    });
     HomeComponent.prototype.created = function () {
-        //axios.get(`http://jsonplaceholder.typicode.com/posts`)
-        //.then(response => {
-        //  // JSON responses are automatically parsed.
-        //  this.posts = response.data
-        //})
-        //.catch(e => {
-        //  this.errors.push(e)
-        //})
-        this.$cookie.set('bodomtest', 'hi there');
     };
     HomeComponent.prototype.onSlideChangeStart = function (currentPage) {
         console.log('onSlideChangeStart', currentPage);
@@ -93,15 +65,11 @@ var HomeComponent = (function (_super) {
     };
     return HomeComponent;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Array)
-], HomeComponent.prototype, "posts", void 0);
 HomeComponent = __decorate([
     Component({
         name: 'Home',
         components: {
-            "locationsearch": LocationSearchComponent,
+            "searchbar": SearchBarComponent,
             "listingrequestmodal": ListingRequestModalComponent,
             "listingoffermodal": ListingOfferModalComponent,
             "datepicker": datepicker,

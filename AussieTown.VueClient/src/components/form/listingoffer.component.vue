@@ -1,5 +1,5 @@
 ﻿<template>
-        <form @submit.prevent="onInsertorUpdate" style="margin-top:100px">
+        <form @submit.prevent="onInsertorUpdate" class="container is-fluid">
             <div class="field">
                 <label class="label">Host</label>
                 <div class="control">
@@ -90,7 +90,7 @@
                     <option value="10">10</option>
                 </select>
             </div>
-            <button type="submit" class="button">Submit</button>
+            <button type="submit" class="button mtl_button">Submit</button>
         </form>
 </template>
 

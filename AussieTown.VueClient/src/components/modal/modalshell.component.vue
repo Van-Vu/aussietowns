@@ -1,6 +1,7 @@
 ﻿<template>
     <transition name="modal">
-        <section class="modal" :class="{ 'is-active': show }" >
+        <section class="modal" :class="cssClass" >
+            <a class="modal-close" @click="close"></a>
             <div class="modal-background"></div>
             <div class="modal-card">
                 <header class="modal-card-head">
@@ -19,8 +20,7 @@
                     <slot name="footer">
                     </slot>
                 </footer>
-                <button class="modal-close" style="z-index:1000;" @click="close"></button>
-                </div>
+            </div>
         </section>
     </transition>
 </template>

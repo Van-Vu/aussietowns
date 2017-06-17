@@ -5,9 +5,8 @@
             <miniprofile :data="user" :isRemovable="true" @removeUser="onUserRemove($event)"></miniprofile>
         </li>
         <li class="li-horizontal">
-            <button @click.prevent="toggleProfileSearch($event)" class="addParticipant">
-                <span class="glyphicon glyphicon-plus-sign"></span> {{buttonText}}
-            </button>
+            <a @click.prevent="toggleProfileSearch($event)" class="button mtl_button">
+            <i class="glyphicon glyphicon-plus-sign"/><span>{{buttonText}}</span></a>
             <usersearch v-show="isAdding" @onSelected="onUserSelect($event)"></usersearch>
         </li>
     </ul>

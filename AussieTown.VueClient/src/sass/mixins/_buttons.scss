@@ -4,8 +4,13 @@
   &:focus {
     background:darken($bg,8%);
     transition: all $transition-standard;
+    color:darken($c-neutral-white,8%);
   }
   &:active {
     background:darken($bg,25%);
   } 
+}
+
+@mixin button-border() {
+    border-radius: 25px;
 }

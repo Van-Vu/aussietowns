@@ -1,4 +1,6 @@
-﻿passing router param to component prop: https://router.vuejs.org/en/essentials/passing-props.html
+﻿IMPORTANT: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore
+
+passing router param to component prop: https://router.vuejs.org/en/essentials/passing-props.html
 router regex: https://github.com/vuejs/vue-router/blob/dev/examples/route-matching/app.js
 token authentication: https://stormpath.com/blog/token-authentication-asp-net-core
 integrate with Google: https://www.npmjs.com/package/vue-google-signin-button
@@ -6,9 +8,57 @@ integrate with Google: https://www.npmjs.com/package/vue-google-signin-button
 integrate with facebook: https://developers.facebook.com/docs/facebook-login/web
 	https://github.com/phanan/vue-facebook-signin-button
 
+Deployment guide: https://vuejs.org/v2/guide/deployment.html
+
+Vue class base: https://alligator.io/vuejs/typescript-class-components/
+
+Task:
+image & video
+book
+transition
+route guard
+final integration
+about / T&C
 
 Tech debt:
-use: https://github.com/weilao/vue-swiper but imitate https://github.com/warpcgd/vue-slider
+DONE use: https://github.com/weilao/vue-swiper but imitate https://github.com/warpcgd/vue-slider
+Mobile first: https://varvy.com/mobile/mobile-first.html
+split CSS from index
+a-frame ?
+
 
 REFACTOR:
 fetch user / message / conversation / trips separatedly
+
+
+Apple scrollbar:
+::-webkit-scrollbar {
+  width: 8px; /* 1px wider than Lion. */
+  /* This is more usable for users trying to click it. */
+  background-color: rgba(0,0,0,0);
+  -webkit-border-radius: 100px;
+}
+/* hover effect for both scrollbar area, and scrollbar 'thumb' */
+::-webkit-scrollbar:hover {
+  background-color: rgba(0, 0, 0, 0.09);
+}
+
+/* The scrollbar 'thumb' ...that marque oval shape in a scrollbar */
+::-webkit-scrollbar-thumb:vertical {
+  /* This is the EXACT color of Mac OS scrollbars. 
+     Yes, I pulled out digital color meter */
+  background: rgba(0,0,0,0.5);
+  -webkit-border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:vertical:active {
+  background: rgba(0,0,0,0.61); /* Some darker color when you click it */
+  -webkit-border-radius: 100px;
+}
+------- END APPLE SCROLLBAR
+
+
+Bulma class:
+columns
+column
+is-gapless
+is-mobile

@@ -1,5 +1,4 @@
-﻿//Base rules
-@import 'base/elementatom';
+﻿//mixins
 @import 'base/colors';
 @import 'base/effect';
 @import 'base/font';
@@ -14,6 +13,10 @@
 @import 'mixins/input';
 @import 'mixins/common';
 
+
+//Base rules
+@import 'bulma';
+@import 'base/elementatom';
 //Components
 
 @import 'components/app';
@@ -33,3 +36,4 @@
 @import 'components/message';
 @import 'components/vue-timepicker';
 @import 'components/vue-swiper';
+@import 'components/searchbar';

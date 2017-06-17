@@ -29,6 +29,7 @@ var NavMenuComponent = (function (_super) {
         _this.isSticky = false;
         _this.showLoginModal = false;
         _this.showRegistrationModal = false;
+        _this.currentTime = Date.now();
         return _this;
         //ngOnInit() {
         //    if (isBrowser) {
@@ -80,13 +81,37 @@ var NavMenuComponent = (function (_super) {
         //    return false;
         //}
     }
+    NavMenuComponent.prototype.created = function () {
+        if (process.env.VUE_ENV === 'client') {
+            window.addEventListener('scroll', this.handleScroll);
+        }
+    };
+    NavMenuComponent.prototype.destroyed = function () {
+        if (process.env.VUE_ENV === 'client') {
+            window.removeEventListener('scroll', this.handleScroll);
+        }
+    };
+    NavMenuComponent.prototype.handleScroll = function (event) {
+        var timeNow = Date.now();
+        if (timeNow - this.currentTime > 50) {
+            // Blacken header color
+            if (window.scrollY > 100) {
+                this.isSticky = true;
+            }
+            else {
+                this.isSticky = false;
+            }
+            console.log(this.$('.searchbar').getBoundingClientRect());
+            // Attach search bar
+            this.currentTime = timeNow;
+        }
+    };
     NavMenuComponent.prototype.onSuccessfulLogin = function (responseToken) {
         if (responseToken) {
             this.$cookie.set('mtltk', responseToken.token);
             this.$cookie.set('mtluserId', responseToken.userId);
             this.showLoginModal = false;
         }
-        //var test = responseToken;
     };
     return NavMenuComponent;
 }(Vue));

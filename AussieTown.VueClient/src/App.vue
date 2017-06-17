@@ -1,11 +1,18 @@
 <template>
-    <div id="app" class='container-fluid'>
-        <div class='header-bar'>
-            <nav-menu style="display: inline-block; height: 50px; top: 0px;"></nav-menu>
-        </div>
-        <keep-alive>
-            <router-view></router-view>
-        </keep-alive>
+    <div id="app">
+        <header class="hero-head">
+            <nav-menu></nav-menu>
+        </header>
+        <secion class="hero-body">
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
+        </secion>
+        <secion class="hero-foot">
+            <div>
+                This is the footer
+            </div>
+        </secion>
     </div>
 </template>
 
@@ -16,15 +23,4 @@ export default App;
 
 <style lang="scss">
     @import './sass/base.scss'
-</style>
-
-<style>
-/*#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}*/
 </style>

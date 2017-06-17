@@ -20,6 +20,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        currentPage: null,
         listing: null,
         profile: null,
         searchListings: null,
@@ -27,6 +28,9 @@ export default new Vuex.Store({
         conversationsContent: null
     },
     actions: {
+        SET_CURRENT_PAGE({ commit }, page) {
+            commit('UPDATE_PAGE', page);    
+        },
         FETCH_LISTING_BY_ID({ commit, state }, id) {
             if (state.listing && (state.listing as any).id === id) {
                 return state.listing;    
@@ -91,6 +95,9 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        UPDATE_PAGE(state, page) {
+            state.currentPage = page;
+        },
         UPDATE_LISTING(state, listing) {
             state.listing = listing;
         },

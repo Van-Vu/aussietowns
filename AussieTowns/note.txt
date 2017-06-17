@@ -10,8 +10,12 @@ DONE Location data: http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.5
 - JS conversion of datetime base on current location
 - Color pallette: 
 https://designschool.canva.com/blog/website-color-schemes/
-https://designschool.canva.com/blog/100-color-combinations/
+https://designschool.canva.com/blog/100-color-combinations/ 11, 52, 64, 66
 https://www.awwwards.com/trendy-web-color-palettes-and-material-design-color-schemes-tools.html
+https://au.pinterest.com/explore/travel-website-design/
+http://blog.visme.co/website-color-schemes/ 27 Gorgeous Contrast
+
+
 - Apple like scrollbar
 - For homepage: https://www.bypeople.com/image-hover-animation/
 - https://www.bypeople.com/expandable-profile-css-button/; http://codepen.io/sazzad/pen/yNNNJG; http://codepen.io/sethabbott/pen/FtuLz; https://dcrazed.com/css-buttons-nice-hover-effects/

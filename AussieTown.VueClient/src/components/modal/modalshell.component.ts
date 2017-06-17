@@ -1,5 +1,5 @@
 ﻿import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 
 @Component({
     name: 'modal-shell'
@@ -7,8 +7,11 @@ import { Component, Prop } from "vue-property-decorator";
     
 export default class ModalShellComponent  extends Vue{
     @Prop show: boolean;
+    cssClass: Object;
 
-    created(): void {
+    @Watch('show')
+    onPropertyChanged(value: string, oldValue: string) {
+        this.cssClass = { 'is-active': value, 'is-deactive': !value};
     }
 
     close() {

@@ -1,3 +1,43 @@
-﻿a {
+﻿.mtl_button--outline {
+    background-color: transparent;
+    color: $c-brand-green;
+    box-shadow: 0 0 0 1px $c-brand-green, 0 0 0 1px $c-brand-green;
+}
+
+.mtl_button {
+    background-color: $c-brand-green;
+    color: $c-neutral-white;
+    @include button-bg($c-brand-green);
+    @include button-border;
+}
+
+
+a {
     cursor: pointer;
+}
+
+html,
+body,
+#app {
+  height: 100%; /* needed for proper layout */
+}
+
+body {
+  //overflow: hidden;
+}
+
+#app {
+  //display: flex;
+  flex-direction: column;
+}
+
+.hero-head {
+  //flex: 0 0 auto;
+  //background-color: #dcdcdc;
+}
+
+.hero-body {
+  //flex: 1 1 auto;
+  position: relative;/* need this to position inner content */
+  overflow: auto;
 }

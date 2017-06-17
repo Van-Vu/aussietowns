@@ -6,8 +6,7 @@ import ListingRequestModalComponent from '../modal/listingrequestmodal.component
 import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue';
 import axios from 'axios';
 import SearchService from '../../services/search.service';
-import LocationSearchComponent from '../shared/locationsearch.component.vue';
-//import datepicker from '../share/datepicker.vue';
+import SearchBarComponent from '../shared/searchbar.component.vue';
 
 import * as datepicker from '../shared/datepicker.vue';
 import * as Swiper from '../shared/vue-swiper.vue';
@@ -15,7 +14,7 @@ import * as Swiper from '../shared/vue-swiper.vue';
 @Component({
     name: 'Home',
     components: {
-        "locationsearch": LocationSearchComponent,
+        "searchbar": SearchBarComponent,
         "listingrequestmodal": ListingRequestModalComponent,
         "listingoffermodal": ListingOfferModalComponent,
         "datepicker": datepicker,
@@ -24,27 +23,13 @@ import * as Swiper from '../shared/vue-swiper.vue';
 })
 
 export default class HomeComponent extends Vue{
-
-    asyncData({ store, route }) {
-        // return the Promise from the action
-        console.log('here II am: :' + store.state);
-        //return store.dispatch('FETCH_LISTING_BY_ID', 18);
-    }
-
-
-    //The time to show the next photo
-    private NextPhotoInterval: number = 5000;
-    //Looping or not
-    private noLoopSlides: boolean = true;
-    //Photos
-    private slides: any[] = [];
-    initializeRequestSlide: boolean = false;
-    searchLocations: any;
     $cookie: any;
     showListingRequest: boolean = false;
     showListingOffer: boolean = false;
 
-    datepick = "2017-06-03";
+    asyncData({ store, route }) {
+        return store.dispatch('SET_CURRENT_PAGE', 'home');
+    }
 
     requestSlides: Array<any> = [
         { "text": "slide conten asdfa sdfasfd asdf asdf asdf as dfasd", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/a5bdb2fc08f9096fb1ef3afca2e5c1ff5292daf9fe7b86b8710d091ae7fa5547/400/232/1.0" },
@@ -64,27 +49,13 @@ export default class HomeComponent extends Vue{
         console.log(val);
     }
 
-    onSearch(model) {
+    onSearch(val) {
         //{ name: 'user', params: { userId: 123 } }
         this.$router.push('search');
     }
-@Prop posts: any[];
-errors: any[];
-
-    get myComputedProp() {
-        return this.$store.state;
-    }
 
     created() {
-	    //axios.get(`http://jsonplaceholder.typicode.com/posts`)
-	    //.then(response => {
-	    //  // JSON responses are automatically parsed.
-	    //  this.posts = response.data
-	    //})
-	    //.catch(e => {
-	    //  this.errors.push(e)
-	    //})
-        this.$cookie.set('bodomtest', 'hi there');
+
     }
 
     onSlideChangeStart(currentPage) {

@@ -1,17 +1,14 @@
 ﻿<template>
-    <div>
+    <div class="container">
         <section class="header-main">
-            <div class="background"></div>
+            <div class="background">
+                <img src="/static/images/garie-beach.jpg" />
+            </div>
             <div class="content">
-                <h1>Hell world! {{ myComputedProp }}</h1>
-                <p>bodom</p>
-                <article>
-                    <form class="searchbar">
-                        <locationsearch @onSelected="onSelect($event)"></locationsearch>
-                        <input type="submit" class="searchBtn" value="Submit" @click="onSearch" />
-                    </form>
+                <h1>Hello world!</h1>
+                <article id="searchBarHomepage">
+                    <searchbar @onSelect="onSelect($event)" @onSearch="onSearch($event)"></searchbar>
                 </article>
-                <div>this is something else</div>
 
                 <swiper ref="swiper"
                         direction="horizontal"
@@ -28,13 +25,6 @@
                 </swiper>
             </div>
         </section>
-
-  <ul v-if="posts && posts.length">
-    <li v-for="post of posts">
-      <p><strong>{{post.title}}</strong></p>
-      <p>{{post.body}}</p>
-    </li>
-  </ul>
 
         <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>

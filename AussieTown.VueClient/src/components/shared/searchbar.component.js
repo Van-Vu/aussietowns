@@ -14,37 +14,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 import Vue from "vue";
-import { Component, Prop, Watch } from "vue-property-decorator";
-var ModalShellComponent = (function (_super) {
-    __extends(ModalShellComponent, _super);
-    function ModalShellComponent() {
+import { Component } from "vue-property-decorator";
+import LocationSearchComponent from './locationsearch.component.vue';
+var SearchBarComponent = (function (_super) {
+    __extends(SearchBarComponent, _super);
+    function SearchBarComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    ModalShellComponent.prototype.onPropertyChanged = function (value, oldValue) {
-        this.cssClass = { 'is-active': value, 'is-deactive': !value };
+    SearchBarComponent.prototype.onSelect = function (val) {
+        this.$emit('onSelect', val);
     };
-    ModalShellComponent.prototype.close = function () {
-        this.$emit('onClose');
+    SearchBarComponent.prototype.onSearch = function (val) {
+        //{ name: 'user', params: { userId: 123 } }
+        this.$emit('onSearch', val);
     };
-    return ModalShellComponent;
+    return SearchBarComponent;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Boolean)
-], ModalShellComponent.prototype, "show", void 0);
-__decorate([
-    Watch('show'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
-    __metadata("design:returntype", void 0)
-], ModalShellComponent.prototype, "onPropertyChanged", null);
-ModalShellComponent = __decorate([
+SearchBarComponent = __decorate([
     Component({
-        name: 'modal-shell'
+        name: "UserSearch",
+        components: {
+            "locationsearch": LocationSearchComponent
+        }
     })
-], ModalShellComponent);
-export default ModalShellComponent;
+], SearchBarComponent);
+export default SearchBarComponent;
