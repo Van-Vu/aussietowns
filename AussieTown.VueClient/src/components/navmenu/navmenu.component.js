@@ -14,10 +14,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Watch } from "vue-property-decorator";
 import LoginModal from '../modal/loginmodal.component.vue';
 import RegistrationModal from '../modal/registrationmodal.component.vue';
+import SearchBarComponent from '../shared/searchbar.component.vue';
 var NavMenuComponent = (function (_super) {
     __extends(NavMenuComponent, _super);
     function NavMenuComponent() {
@@ -27,8 +31,10 @@ var NavMenuComponent = (function (_super) {
         _this.hideNavToggle = false;
         _this.isMenuOpen = false;
         _this.isSticky = false;
+        _this.showSecondSearchBar = false;
         _this.showLoginModal = false;
         _this.showRegistrationModal = false;
+        // To handle scroll event
         _this.currentTime = Date.now();
         return _this;
         //ngOnInit() {
@@ -101,10 +107,21 @@ var NavMenuComponent = (function (_super) {
             else {
                 this.isSticky = false;
             }
-            console.log(this.$('.searchbar').getBoundingClientRect());
             // Attach search bar
+            if (this.$store.state.currentPage != null && this.$store.state.currentPage === 'home') {
+                //console.log(this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top);
+                if (this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top < 0) {
+                    this.showSecondSearchBar = true;
+                }
+                else {
+                    this.showSecondSearchBar = false;
+                }
+            }
             this.currentTime = timeNow;
         }
+    };
+    NavMenuComponent.prototype.onPropertyChanged = function (value, oldValue) {
+        console.log("secondbar value " + value);
     };
     NavMenuComponent.prototype.onSuccessfulLogin = function (responseToken) {
         if (responseToken) {
@@ -113,14 +130,23 @@ var NavMenuComponent = (function (_super) {
             this.showLoginModal = false;
         }
     };
+    NavMenuComponent.prototype.onSelect = function () { console.log('select'); };
+    NavMenuComponent.prototype.onSearch = function () { console.log('search'); };
     return NavMenuComponent;
 }(Vue));
+__decorate([
+    Watch('showSecondSearchBar'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], NavMenuComponent.prototype, "onPropertyChanged", null);
 NavMenuComponent = __decorate([
     Component({
         name: 'nav-menu',
         components: {
             'loginmodal': LoginModal,
-            'registrationmodal': RegistrationModal
+            'registrationmodal': RegistrationModal,
+            "searchbar": SearchBarComponent
         }
     })
 ], NavMenuComponent);

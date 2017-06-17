@@ -44,9 +44,7 @@ var HomeComponent = (function (_super) {
     }
     HomeComponent.prototype.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
-        // return the Promise from the action
-        console.log('here II am: :' + store.state);
-        //return store.dispatch('FETCH_LISTING_BY_ID', 18);
+        return store.dispatch('SET_CURRENT_PAGE', 'home');
     };
     HomeComponent.prototype.onSelect = function (val) {
         console.log(val);

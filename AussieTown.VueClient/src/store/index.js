@@ -6,6 +6,7 @@ import MessageService from "../services/message.service";
 Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
+        currentPage: null,
         listing: null,
         profile: null,
         searchListings: null,
@@ -13,6 +14,10 @@ export default new Vuex.Store({
         conversationsContent: null
     },
     actions: {
+        SET_CURRENT_PAGE: function (_a, page) {
+            var commit = _a.commit;
+            commit('UPDATE_PAGE', page);
+        },
         FETCH_LISTING_BY_ID: function (_a, id) {
             var commit = _a.commit, state = _a.state;
             if (state.listing && state.listing.id === id) {
@@ -81,6 +86,9 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        UPDATE_PAGE: function (state, page) {
+            state.currentPage = page;
+        },
         UPDATE_LISTING: function (state, listing) {
             state.listing = listing;
         },

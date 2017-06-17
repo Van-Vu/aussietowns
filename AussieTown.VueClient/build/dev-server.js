@@ -1,7 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const MFS = require('memory-fs')
-const clientConfig = require('./webpack.prod.conf')
+const clientConfig = require('./webpack.client.conf')
 const serverConfig = require('./webpack.server.config')
 
 module.exports = function setupDevServer (app, cb) {

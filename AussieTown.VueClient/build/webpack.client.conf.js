@@ -9,9 +9,9 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
-var env = '"production"'
+var isProd = process.env.NODE_ENV === 'production'
 
-console.log("Bodom environment:" + env)
+console.log("Bodom environment:" + isProd)
 
 var webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? '#source-map' : false,
@@ -23,7 +23,7 @@ var webpackConfig = merge(baseWebpackConfig, {
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': env,
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       'process.env.VUE_ENV': '"client"'
     }),
     // extract css into its own file
@@ -82,7 +82,8 @@ var webpackConfig = merge(baseWebpackConfig, {
 
 
 console.log("Bodom config.build.productionGzip:" + config.build.productionGzip)
-if (config.build.productionGzip) {
+console.log("Bodom isProd:" + isProd)
+if (isProd) {
   var CompressionWebpackPlugin = require('compression-webpack-plugin')
 
   webpackConfig.plugins.push(
