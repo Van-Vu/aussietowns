@@ -1,8 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import ListingService from "../services/listing.service";
-import UserService from "../services/user.service";
-import MessageService from "../services/message.service";
+//import actions from './actions';
+//import mutations from './mutations';
+//import getters from './getters';
+import ListingService from "../service/listing.service";
+import UserService from "../service/user.service";
+import MessageService from "../service/message.service";
 Vue.use(Vuex);
 export default new Vuex.Store({
     state: {

@@ -3,17 +3,14 @@ import Vuex from 'vuex'
 //import actions from './actions';
 //import mutations from './mutations';
 //import getters from './getters';
-import listings from './modules/listing';
+import ListingService from "../service/listing.service";
+import UserService from "../service/user.service";
+import MessageService from "../service/message.service";
 
-import products from './modules/products'
-import ListingService from "../services/listing.service";
-import UserService from "../services/user.service";
-import MessageService from "../services/message.service";
-
-import ListingModel from '../components/model/listing.model';
+import ListingModel from '../model/listing.model';
 import RequestResult from '../model/RequestResult';
-import ConversationModel from '../components/model/conversation.model';
-import MessageModel from '../components/model/message.model';
+import ConversationModel from '../model/conversation.model';
+import MessageModel from '../model/message.model';
 
 Vue.use(Vuex);
 
