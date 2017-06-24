@@ -5,8 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Model;
 using Dapper;
-using Newtonsoft.Json;
-using NuGet.Packaging;
 
 namespace AussieTowns.Repository
 {

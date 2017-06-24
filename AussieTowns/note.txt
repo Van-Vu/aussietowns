@@ -15,6 +15,7 @@ https://www.awwwards.com/trendy-web-color-palettes-and-material-design-color-sch
 https://au.pinterest.com/explore/travel-website-design/
 http://blog.visme.co/website-color-schemes/ 27 Gorgeous Contrast
 
+Node sass binding: npm rebuild node-sass
 
 - Apple like scrollbar
 - For homepage: https://www.bypeople.com/image-hover-animation/

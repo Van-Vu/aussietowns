@@ -7,7 +7,7 @@ import { Component, Prop, Watch } from "vue-property-decorator";
     
 export default class ModalShellComponent  extends Vue{
     @Prop show: boolean;
-    cssClass: Object;
+    cssClass: Object = null;
 
     @Watch('show')
     onPropertyChanged(value: string, oldValue: string) {

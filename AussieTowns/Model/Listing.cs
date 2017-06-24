@@ -17,10 +17,9 @@ namespace AussieTowns.Model
         public string Requirement { get; set; }
         public int MinParticipant { get; set; }
 
-        public ICollection<Schedule> Schedules { get; set; }
-        public ICollection<TourOperator> TourOperators { get; set; }
-
-        public ICollection<TourGuest> TourGuests { get; set; }
+        public List<Schedule> Schedules { get; set; }
+        public List<TourOperator> TourOperators { get; set; }
+        public List<TourGuest> TourGuests { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }

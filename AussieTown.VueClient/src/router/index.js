@@ -6,9 +6,14 @@ import SearchPage from '../page/search.page.vue';
 import ListingPage from '../page/listing.page.vue';
 import ProfilePage from '../page/profile.page.vue';
 import TestPage from '../page/test.page.vue';
+import * as HelpPage from '../page/static/help.page.vue';
+import * as AboutPage from '../page/static/about.page.vue';
+import * as TermsAndConditionsPage from '../page/static/termsandconditions.page.vue';
 Component.registerHooks([
     'asyncData',
-    'beforeRouteEnter'
+    'beforeRouteEnter',
+    'beforeRouteUpdate',
+    'beforeRouteLeave'
 ]);
 Vue.use(Router);
 var router = new Router({
@@ -31,9 +36,30 @@ var router = new Router({
         },
         {
             path: "/listing/:listingType(offer|request)",
-            name: "listing",
+            name: "newListing",
             component: ListingPage,
             props: true
+        },
+        {
+            path: "/listing/:seoString-:listingId(\\d+)",
+            name: "listingDetail",
+            component: ListingPage,
+            props: true
+        },
+        {
+            path: "/help",
+            name: "help",
+            component: HelpPage
+        },
+        {
+            path: "/about",
+            name: "about",
+            component: AboutPage
+        },
+        {
+            path: "/termsandconditions",
+            name: "termsandconditions",
+            component: TermsAndConditionsPage
         },
         {
             path: "/test",

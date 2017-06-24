@@ -18,14 +18,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Watch, Prop } from "vue-property-decorator";
+import ScheduleModel from '../../model/schedule.model';
 import * as vuetimepicker from './external/vuetimepicker.vue';
 import * as datepicker from './external/datepicker.vue';
 var ScheduleComponent = (function (_super) {
     __extends(ScheduleComponent, _super);
     function ScheduleComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.isRepeated = false;
+        _this.isRepeated = true;
+        _this.model = null;
         _this.repeatPeriods = [
             { value: '1', display: 'Daily' },
             { value: '2', display: 'Weekly' },
@@ -33,32 +35,35 @@ var ScheduleComponent = (function (_super) {
         ];
         return _this;
     }
-    ScheduleComponent.prototype.created = function () {
-        if (this.model.length > 0) {
-            for (var i = 0; i < this.model.length; i++) {
-                console.log('run here, server?');
-                var schedule = this.model[i];
-                if (typeof (schedule.startTime) === 'string') {
-                    schedule.startTime = {
-                        HH: schedule.startTime.toString().substring(0, 2),
-                        mm: schedule.startTime.toString().substring(3, 5)
-                    };
-                }
-                if (typeof (schedule.duration) === 'string') {
-                    schedule.duration = {
-                        HH: schedule.duration.toString().substring(0, 2),
-                        mm: schedule.duration.toString().substring(3, 5)
-                    };
-                }
-            }
+    ScheduleComponent.prototype.onScheduleChanged = function (value, oldValue) {
+        this.model = value;
+        if (typeof (this.model.startTime) === 'string') {
+            this.model.startTime = {
+                HH: this.model.startTime.toString().substring(0, 2),
+                mm: this.model.startTime.toString().substring(3, 5)
+            };
         }
+        if (typeof (this.model.duration) === 'string') {
+            this.model.duration = {
+                HH: this.model.duration.toString().substring(0, 2),
+                mm: this.model.duration.toString().substring(3, 5)
+            };
+        }
+    };
+    ScheduleComponent.prototype.validateBeforeSubmit = function () {
     };
     return ScheduleComponent;
 }(Vue));
 __decorate([
     Prop,
-    __metadata("design:type", Array)
-], ScheduleComponent.prototype, "model", void 0);
+    __metadata("design:type", Object)
+], ScheduleComponent.prototype, "schedule", void 0);
+__decorate([
+    Watch('schedule'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [ScheduleModel, ScheduleModel]),
+    __metadata("design:returntype", void 0)
+], ScheduleComponent.prototype, "onScheduleChanged", null);
 ScheduleComponent = __decorate([
     Component({
         name: "Schedule",

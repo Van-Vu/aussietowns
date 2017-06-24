@@ -1,5 +1,5 @@
 ﻿<template>
-    <div class="profile-content">
+    <div class="container is-fluid profile-content">
         <input id="tab1" type="radio" name="tabs" checked>
         <label for="tab1" class="tab-text">Profile</label>
 
@@ -23,7 +23,7 @@
 
         <section id="content2" class="profile-section">
             <div v-if="isPhotosActivated">
-                
+                <userimage></userimage>
             </div>
 
             <p>

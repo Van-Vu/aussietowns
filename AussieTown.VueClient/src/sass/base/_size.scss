@@ -77,3 +77,5 @@ $bp-custom-5: 78.75em; // 1260px
 .flex {
 	display: flex !important; //FIX: this is to override any specificity on the element and turn it into a flex container 
 }
+
+$size-header-height: 5em;

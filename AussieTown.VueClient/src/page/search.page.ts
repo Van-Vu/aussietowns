@@ -36,10 +36,18 @@ export default class SearchPage extends Vue {
     }
 
     created(): void {
+        this.$store.dispatch('SET_CURRENT_PAGE', 'search');
+    }
+
+    mounted() {
         if (this.$store.state.searchListings) {
             this.listings = this.$store.state.searchListings;
-        }
-	}
+        } else {
+            this.$store.dispatch('SEARCH_LISTINGS_BY_SUBURB', this.$route.params.suburbId).then(() => {
+                this.listings = this.$store.state.searchListings;
+            });
+        }        
+    }
 
     center = { lat: -33.860, lng: 151.210 };
     markers = [

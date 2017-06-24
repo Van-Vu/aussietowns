@@ -22,6 +22,11 @@
     public static listingTypeConvert(listingType: string) {
         return listingType === 'offer' ? ListingType.Offer : ListingType.Request;
     }
+
+    public static seorizeString(name: string) {
+        let sanitizeName = name.toLowerCase().replace(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/g, "");
+        return sanitizeName.split(' ').join('-');
+    }
 }
 
 export enum ListingType { Offer, Request }

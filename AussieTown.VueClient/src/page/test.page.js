@@ -16,8 +16,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import SearchBarComponent from '../component/shared/searchbar.component.vue';
-import * as Swiper from '../component/shared/vue-swiper.vue';
+import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
+import * as Swiper from '../component/shared/external/vue-swiper.vue';
 var TestPage = (function (_super) {
     __extends(TestPage, _super);
     function TestPage() {

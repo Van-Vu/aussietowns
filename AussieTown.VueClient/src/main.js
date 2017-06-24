@@ -5,6 +5,7 @@ import Vue from 'vue';
 // a global mixin that calls `asyncData` when a route component's params change
 Vue.mixin({
     beforeRouteUpdate: function (to, from, next) {
+        console.log('beforeRouteUpdate');
         var asyncData = this.$options.asyncData;
         if (asyncData) {
             asyncData({
@@ -20,6 +21,12 @@ Vue.mixin({
 if (window.__INITIAL_STATE__) {
     store.replaceState(window.__INITIAL_STATE__);
 }
+//import { Component } from "vue-property-decorator"
+//Component.registerHooks([
+//    'asyncData',
+//    'beforeRouteEnter',
+//    'beforeRouteLeave'
+//])
 // wait until router has resolved all async before hooks
 // and async components...
 router.onReady(function () {
@@ -37,10 +44,16 @@ router.onReady(function () {
         if (!activated.length) {
             return next();
         }
+        //if ((component as any).extendOptions.asyncData) {
+        //    return (component as any).extendOptions.asyncData({
+        //        store,
+        //        route: router.currentRoute
+        //    })
+        //}
         Promise.all(activated.map(function (c) {
-            console.log('here in client:' + c.asyncData);
-            if (c.asyncData) {
-                return c.asyncData({ store: store, route: to });
+            //console.log('here in client:' + (c as any).options.methods.asyncData)
+            if (c.options && c.options.methods && c.options.methods.asyncData) {
+                return c.options.methods.asyncData({ store: store, route: to });
             }
         })).then(function () {
             next();

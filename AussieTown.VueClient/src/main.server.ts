@@ -25,7 +25,7 @@ export default context => {
             //console.log('all Symbol name: ' + extendOptions);
 
 
-            if ((component as any).extendOptions.asyncData) {
+            if ((component as any).extendOptions && (component as any).extendOptions.asyncData) {
                 return (component as any).extendOptions.asyncData({
                   store,
                   route: router.currentRoute

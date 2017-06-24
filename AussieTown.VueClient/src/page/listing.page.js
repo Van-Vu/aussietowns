@@ -20,13 +20,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
-import ScheduleComponent from '../component/shared/schedule.component.vue';
 import ParticipantComponent from '../component/shared/participant.component.vue';
 import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
 import LocationSearchComponent from '../component/shared/search/locationsearch.component.vue';
 import { Utils, ListingType } from '../component/utils';
 import * as datepicker from '../component/shared/external/datepicker.vue';
+import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
 Vue.use(VeeValidate);
 var ListingPage = (function (_super) {
     __extends(ListingPage, _super);
@@ -34,6 +34,9 @@ var ListingPage = (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.formSubmitted = false;
         _this.isOffer = false;
+        _this.isEditing = false;
+        _this.editingSchedule = null;
+        _this.showScheduleModal = false;
         _this.model = new ListingModel();
         return _this;
     }
@@ -53,22 +56,29 @@ var ListingPage = (function (_super) {
         //console.log("here I am:" + this.listingId);
     };
     ListingPage.prototype.created = function () {
+        var _this = this;
         if (this.listingType) {
             this.isOffer = Utils.listingTypeConvert(this.listingType) === ListingType.Offer;
         }
         if (this.$store.state.listing) {
             this.model = this.$store.state.listing;
-            this.isOffer = this.model.listingType === ListingType.Offer;
+            this.isOffer = this.model.listingType == ListingType.Offer;
+        }
+        else {
+            if (this.$route.params.listingId) {
+                this.$store.dispatch('FETCH_LISTING_BY_ID', this.$route.params.listingId).then(function () {
+                    _this.model = _this.$store.state.listing;
+                    _this.isOffer = _this.model.listingType == ListingType.Offer;
+                });
+            }
         }
     };
     ListingPage.prototype.onInsertorUpdate = function () {
         if (this.model.id > 0) {
             return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model));
-            //(new ListingService()).updateListing(this.contructBeforeSubmit(this.model));
         }
         else {
             return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model));
-            //(new ListingService()).addListing(this.contructBeforeSubmit(this.model));
         }
     };
     ListingPage.prototype.onLocationSelected = function (item) {
@@ -80,6 +90,10 @@ var ListingPage = (function (_super) {
         this.model.tourOperators.push(new MiniProfile(user.id, user.name, '', '', user.imageUrl, ''));
     };
     ListingPage.prototype.onUserRemoved = function (user) {
+    };
+    ListingPage.prototype.onEditSchedule = function (scheduleObject) {
+        this.editingSchedule = scheduleObject;
+        this.showScheduleModal = true;
     };
     ListingPage.prototype.constructShedule = function (model) {
         var schedules = model.schedules;
@@ -124,7 +138,7 @@ var ListingPage = (function (_super) {
         //}
         return {
             id: model.id,
-            type: ListingType.Offer,
+            type: this.isOffer,
             locationId: model.locationDetail.id,
             cost: model.cost,
             currency: model.currency,
@@ -148,9 +162,9 @@ ListingPage = __decorate([
         name: 'ListingPage',
         components: {
             'locationsearch': LocationSearchComponent,
-            'schedule': ScheduleComponent,
             'participant': ParticipantComponent,
-            "datepicker": datepicker
+            "datepicker": datepicker,
+            "schedulemodal": ScheduleModalComponent
         }
     })
 ], ListingPage);

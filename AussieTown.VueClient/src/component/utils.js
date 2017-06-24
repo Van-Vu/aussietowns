@@ -20,6 +20,10 @@ var Utils = (function () {
     Utils.listingTypeConvert = function (listingType) {
         return listingType === 'offer' ? ListingType.Offer : ListingType.Request;
     };
+    Utils.seorizeString = function (name) {
+        var sanitizeName = name.toLowerCase().replace(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/g, "");
+        return sanitizeName.split(' ').join('-');
+    };
     return Utils;
 }());
 export { Utils };

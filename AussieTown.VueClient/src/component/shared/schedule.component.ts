@@ -6,6 +6,10 @@ import * as vuetimepicker from './external/vuetimepicker.vue';
 import * as datepicker from './external/datepicker.vue';
 import { Utils } from '../utils';
 
+import VeeValidate from 'vee-validate';
+Vue.use(VeeValidate);
+
+
 @Component({
     name: "Schedule",
     components: {
@@ -14,32 +18,43 @@ import { Utils } from '../utils';
     }
 })
 export default class ScheduleComponent extends Vue {
-    @Prop model: ScheduleModel[];
-    isRepeated: boolean = false;
+    @Prop schedule: any;
+    isRepeated: boolean = true;
+    model: ScheduleModel = null;
+
     public repeatPeriods = [
         { value: '1', display: 'Daily' },
         { value: '2', display: 'Weekly' },
         { value: '3', display: 'Monthly' }
     ];
 
-    created() {
-        if (this.model.length > 0) {
-            for (var i = 0; i < this.model.length; i++) {
-                console.log('run here, server?');
-                var schedule = this.model[i];
-                if (typeof (schedule.startTime) === 'string') {
-                    schedule.startTime = {
-                        HH: schedule.startTime.toString().substring(0, 2),
-                        mm: schedule.startTime.toString().substring(3, 5)
-                    };                    
-                }
-                if (typeof (schedule.duration) === 'string') {
-                    schedule.duration = {
-                        HH: schedule.duration.toString().substring(0, 2),
-                        mm: schedule.duration.toString().substring(3, 5)
-                    };                    
-                }
-            }
+    @Watch('schedule')
+    onScheduleChanged(value: ScheduleModel, oldValue: ScheduleModel) {
+        this.model = value;
+        if (typeof (this.model.startTime) === 'string') {
+            this.model.startTime = {
+                HH: this.model.startTime.toString().substring(0, 2),
+                mm: this.model.startTime.toString().substring(3, 5)
+            };
         }
+        if (typeof (this.model.duration) === 'string') {
+            this.model.duration = {
+                HH: this.model.duration.toString().substring(0, 2),
+                mm: this.model.duration.toString().substring(3, 5)
+            };
+        }
+    }
+
+    @Watch('isRepeated')
+    onRepeatedChanged(value: boolean, oldValue: boolean) {
+        console.log(`isRepeated: ${value}`);
+    }
+
+    validateBeforeSubmit() {
+        this.$validator.validateAll().then(() => {
+            this.$emit('onSave', this.model);
+        }).catch(() => {
+            alert('Correct them errors!');
+        });
     }
 }

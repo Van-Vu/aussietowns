@@ -34,6 +34,10 @@ Vue.use(lazy, {
     loading: '/static/images/giphy.gif',
     try: 0,
 });
+import globalconfig from './globalconfig';
+Vue.use(globalconfig, {});
+import VueMask from 'v-mask';
+Vue.use(VueMask);
 var App = (function (_super) {
     __extends(App, _super);
     function App() {

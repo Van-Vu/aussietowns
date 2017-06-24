@@ -1,12 +1,16 @@
 import axios from 'axios';
+import Vue from "vue";
 
-//export const http = axios.create({
-//    baseURL: `http://localhost/meetthelocal/`
-//})
 
-const http = axios.create({
-    baseURL: `http://localhost:3514/`
+(Vue.prototype as any).$http = axios;
+
+export const http = axios.create({
+    baseURL: `http://localhost/meetthelocal/`
 })
+
+//const http = axios.create({
+//    baseURL: `http://localhost:3514/`
+//})
 
 http.defaults.withCredentials = true;
 

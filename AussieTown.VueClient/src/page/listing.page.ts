@@ -10,6 +10,8 @@ import LocationSearchComponent from '../component/shared/search/locationsearch.c
 import ListingService from '../service/listing.service';
 import { Utils, ListingType } from '../component/utils';
 import * as datepicker from '../component/shared/external/datepicker.vue';
+import ScheduleModel from '../model/schedule.model';
+import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
 
 Vue.use(VeeValidate);
 
@@ -17,9 +19,9 @@ Vue.use(VeeValidate);
     name: 'ListingPage',
     components: {
         'locationsearch': LocationSearchComponent,
-        'schedule': ScheduleComponent,
         'participant': ParticipantComponent,
-        "datepicker": datepicker
+        "datepicker": datepicker,
+        "schedulemodal": ScheduleModalComponent
     }
 })
 
@@ -29,6 +31,10 @@ export default class ListingPage extends Vue{
     selectedLocation: AutocompleteItem;
     formSubmitted = false;
     isOffer: boolean = false;
+    isEditing: boolean = false;
+    editingSchedule: ScheduleModel = null;
+    showScheduleModal: boolean = false;
+
     model: ListingModel = new ListingModel();
 
     asyncData({ store, route }) {
@@ -56,17 +62,22 @@ export default class ListingPage extends Vue{
 
         if (this.$store.state.listing) {
             this.model = this.$store.state.listing;
-            this.isOffer = this.model.listingType === ListingType.Offer;
-        } 
+            this.isOffer = this.model.listingType == ListingType.Offer;
+        } else {
+            if (this.$route.params.listingId) {
+                this.$store.dispatch('FETCH_LISTING_BY_ID', this.$route.params.listingId).then(() => {
+                    this.model = this.$store.state.listing;
+                    this.isOffer = this.model.listingType == ListingType.Offer;
+                });                
+            }
+        }         
     }
 
     onInsertorUpdate() {
         if (this.model.id > 0) {
             return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model));        
-            //(new ListingService()).updateListing(this.contructBeforeSubmit(this.model));
         } else {
             return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model));        
-            //(new ListingService()).addListing(this.contructBeforeSubmit(this.model));
         }
     }
 
@@ -81,6 +92,15 @@ export default class ListingPage extends Vue{
 
     onUserRemoved(user) {
         
+    }
+
+    onSaveSchedule(scheduleObject) {
+        console.log(scheduleObject);
+    }
+
+    onEditSchedule(scheduleObject) {
+        this.editingSchedule = scheduleObject;
+        this.showScheduleModal = true;
     }
 
     constructShedule(model) {
@@ -133,7 +153,7 @@ export default class ListingPage extends Vue{
 
         return {
             id: model.id,
-            type: ListingType.Offer,
+            type: this.isOffer,
             locationId: model.locationDetail.id,
             cost: model.cost,
             currency: model.currency,
@@ -146,4 +166,5 @@ export default class ListingPage extends Vue{
             tourOperators: this.constructParticipants(model.id, model.tourOperators)
         }
     }
+
 }

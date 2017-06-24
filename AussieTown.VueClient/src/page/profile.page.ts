@@ -3,13 +3,15 @@ import { Component, Prop } from "vue-property-decorator";
 import UserDetailComponent from '../component/form/userdetail.component.vue';
 import TripComponent from '../component/profile/trip.component.vue';
 import MessageComponent from '../component/profile/message.component.vue';
+import UserImageComponent from '../component/profile/userimage.component.vue';
 
 @Component({
     name: 'ProfilePage',
     components: {
         'profileform': UserDetailComponent,
         'tripcomponent': TripComponent,
-        'messagecomponent': MessageComponent
+        'messagecomponent': MessageComponent,
+        'userimage': UserImageComponent
     }
 })
 

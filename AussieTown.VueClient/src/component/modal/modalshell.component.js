@@ -22,7 +22,9 @@ import { Component, Prop, Watch } from "vue-property-decorator";
 var ModalShellComponent = (function (_super) {
     __extends(ModalShellComponent, _super);
     function ModalShellComponent() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.cssClass = null;
+        return _this;
     }
     ModalShellComponent.prototype.onPropertyChanged = function (value, oldValue) {
         this.cssClass = { 'is-active': value, 'is-deactive': !value };

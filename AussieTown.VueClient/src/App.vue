@@ -4,14 +4,11 @@
             <nav-menu></nav-menu>
         </header>
         <secion class="hero-body">
-            <keep-alive>
+            <transition :duration="{ enter: 5000, leave: 500 }" name="fade">
                 <router-view></router-view>
-            </keep-alive>
+            </transition>
         </secion>
         <secion class="hero-foot">
-            <div>
-                This is the footer
-            </div>
         </secion>
     </div>
 </template>

@@ -6,6 +6,8 @@ import axios from 'axios';
 import SearchService from '../service/search.service';
 import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
 import * as Swiper from '../component/shared/external/vue-swiper.vue';
+import { AutocompleteItem } from '../model/autocomplete.model';
+import { Utils } from '../component/utils';
 
 @Component({
     name: 'HomePage',
@@ -19,9 +21,10 @@ export default class HomePage extends Vue{
     $cookie: any;
     showListingRequest: boolean = false;
     showListingOffer: boolean = false;
+    searchSuburb: AutocompleteItem = null;
 
     asyncData({ store, route }) {
-        return store.dispatch('SET_CURRENT_PAGE', 'home');
+        //return store.dispatch('SET_CURRENT_PAGE', 'home');
     }
 
     requestSlides: Array<any> = [
@@ -38,17 +41,18 @@ export default class HomePage extends Vue{
         { "text": "slide conten", "imgSrc": "/static/images/giphy.gif" }
     ];
 
-    onSelect(val) {
-        console.log(val);
+    onSelect(val: AutocompleteItem) {
+        this.searchSuburb = val;
     }
 
     onSearch(val) {
-        //{ name: 'user', params: { userId: 123 } }
-        this.$router.push('search');
+        if (this.searchSuburb) {
+            this.$router.push({ name: 'search', params: { seoString: Utils.seorizeString(this.searchSuburb.name), suburbId: this.searchSuburb.id } });    
+        }
     }
 
     created() {
-
+        this.$store.dispatch('SET_CURRENT_PAGE', 'home');
     }
 
     onSlideChangeStart(currentPage) {
@@ -58,5 +62,30 @@ export default class HomePage extends Vue{
     onSlideChangeEnd(currentPage) {
         console.log('onSlideChangeEnd', currentPage);
     }
-	
+
+
+    beforeRouteEnter(to, from, next) {
+        // called before the route that renders this component is confirmed.
+        // does NOT have access to `this` component instance,
+        // because it has not been created yet when this guard is called!
+        console.log('beforeRouteEnter');
+        return next()
+    }
+    beforeRouteUpdate(to, from, next) {
+        // called when the route that renders this component has changed,
+        // but this component is reused in the new route.
+        // For example, for a route with dynamic params /foo/:id, when we
+        // navigate between /foo/1 and /foo/2, the same Foo component instance
+        // will be reused, and this hook will be called when that happens.
+        // has access to `this` component instance.
+        console.log('beforeRouteUpdate');
+        return next()
+    }
+    beforeRouteLeave(to, from, next) {
+        // called when the route that renders this component is about to
+        // be navigated away from.
+        // has access to `this` component instance.
+        console.log('beforeRouteLeave');
+        return next()
+    }
 }

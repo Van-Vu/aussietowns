@@ -50,8 +50,17 @@ var SearchPage = (function (_super) {
         }
     };
     SearchPage.prototype.created = function () {
+        this.$store.dispatch('SET_CURRENT_PAGE', 'search');
+    };
+    SearchPage.prototype.mounted = function () {
+        var _this = this;
         if (this.$store.state.searchListings) {
             this.listings = this.$store.state.searchListings;
+        }
+        else {
+            this.$store.dispatch('SEARCH_LISTINGS_BY_SUBURB', this.$route.params.suburbId).then(function () {
+                _this.listings = _this.$store.state.searchListings;
+            });
         }
     };
     SearchPage.prototype.showTourRequest = function () {

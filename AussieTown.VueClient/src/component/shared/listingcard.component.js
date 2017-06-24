@@ -20,6 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { Utils } from '../utils';
+import * as Swiper from './external/vue-swiper.vue';
 var ListingCardComponent = (function (_super) {
     __extends(ListingCardComponent, _super);
     function ListingCardComponent() {
@@ -32,6 +33,7 @@ var ListingCardComponent = (function (_super) {
         _this.date = '';
         _this.time = '';
         _this.description = '';
+        _this.headerLink = '';
         _this.slides = [
             { "text": "", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/a5bdb2fc08f9096fb1ef3afca2e5c1ff5292daf9fe7b86b8710d091ae7fa5547/400/232/1.0" },
             { "text": "", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/2466d2267dc2316b277610eafb1d957d7ce978df7e9bdd053fd8c67c40d57165/400/232/1.0" },
@@ -39,18 +41,14 @@ var ListingCardComponent = (function (_super) {
             { "text": "", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/7f905e034dbde2f070551d1c979bac39b5e58a9a43e8d454bc20a1f23924c2e4/400/232/1.0" },
             { "text": "", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/2466d2267dc2316b277610eafb1d957d7ce978df7e9bdd053fd8c67c40d57165/400/232/1.0" }
         ];
-        _this.config = {
-            direction: 'horizontal',
-            //nextButton: '.swiper-button-next',
-            //prevButton: '.swiper-button-prev',
-            slidesPerView: 1,
-            paginationClickable: true,
-            spaceBetween: 0,
-            loop: true
-        };
-        _this.initializeSlide = false;
         return _this;
     }
+    ListingCardComponent.prototype.onSlideChangeStart = function (currentPage) {
+        console.log('onSlideChangeStart', currentPage);
+    };
+    ListingCardComponent.prototype.onSlideChangeEnd = function (currentPage) {
+        console.log('onSlideChangeEnd', currentPage);
+    };
     ListingCardComponent.prototype.created = function () {
         this.id = this.listingDetail.id;
         this.location = this.listingDetail.location;
@@ -61,7 +59,7 @@ var ListingCardComponent = (function (_super) {
         this.date = Utils.getDate(startDatetime);
         this.time = Utils.getTime(startDatetime);
         this.description = this.listingDetail.description;
-        this.initializeSlide = true;
+        this.headerLink = Utils.seorizeString(this.header);
     };
     return ListingCardComponent;
 }(Vue));
@@ -71,7 +69,10 @@ __decorate([
 ], ListingCardComponent.prototype, "listingDetail", void 0);
 ListingCardComponent = __decorate([
     Component({
-        name: "ListingCard"
+        name: "ListingCard",
+        components: {
+            "swiper": Swiper
+        }
     })
 ], ListingCardComponent);
 export default ListingCardComponent;

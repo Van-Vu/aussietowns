@@ -3,9 +3,14 @@ import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import AutoCompleteComponent from "../shared/autocomplete.vue";
 import { Utils } from '../utils';
 import ListingModel from '../../model/listing.model';
+import * as Swiper from './external/vue-swiper.vue';
+
 
 @Component({
-    name: "ListingCard"
+    name: "ListingCard",
+    components: {
+        "swiper": Swiper
+    }
 })
 
 export default class ListingCardComponent extends Vue {
@@ -18,6 +23,7 @@ export default class ListingCardComponent extends Vue {
     date: string = '';
     time: string = '';
     description: string = '';
+    headerLink: string = '';
 
     slides: Array<any> = [
         { "text": "", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/a5bdb2fc08f9096fb1ef3afca2e5c1ff5292daf9fe7b86b8710d091ae7fa5547/400/232/1.0" },
@@ -27,16 +33,16 @@ export default class ListingCardComponent extends Vue {
         { "text": "", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/2466d2267dc2316b277610eafb1d957d7ce978df7e9bdd053fd8c67c40d57165/400/232/1.0" }
     ];
 
-    config: Object = {
-        direction: 'horizontal',
-        //nextButton: '.swiper-button-next',
-        //prevButton: '.swiper-button-prev',
-        slidesPerView: 1,
-        paginationClickable: true,
-        spaceBetween: 0,
-        loop: true
-    };
-    initializeSlide:boolean = false;
+
+    onSlideChangeStart(currentPage) {
+        console.log('onSlideChangeStart', currentPage);
+    }
+
+    onSlideChangeEnd(currentPage) {
+        console.log('onSlideChangeEnd', currentPage);
+    }
+
+    globalconfig: any;
 
     created(): void {
         this.id = this.listingDetail.id;
@@ -48,6 +54,6 @@ export default class ListingCardComponent extends Vue {
         this.date = Utils.getDate(startDatetime);
         this.time = Utils.getTime(startDatetime);
         this.description = this.listingDetail.description;
-        this.initializeSlide = true;    
+        this.headerLink = Utils.seorizeString(this.header);
     }
 }

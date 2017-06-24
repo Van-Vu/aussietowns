@@ -41,3 +41,13 @@ body {
   position: relative;/* need this to position inner content */
   overflow: auto;
 }
+
+.is-sticky-bottom {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 101;
+    width: 100%;
+    /*background-color: transparent;*/
+}

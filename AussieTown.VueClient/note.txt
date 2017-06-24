@@ -1,5 +1,7 @@
 ﻿IMPORTANT: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore
 
+retain Vuex state afer refresh: https://stackoverflow.com/questions/43027499/vuex-state-on-page-refresh
+
 passing router param to component prop: https://router.vuejs.org/en/essentials/passing-props.html
 router regex: https://github.com/vuejs/vue-router/blob/dev/examples/route-matching/app.js
 token authentication: https://stormpath.com/blog/token-authentication-asp-net-core

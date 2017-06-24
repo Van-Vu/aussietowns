@@ -20,6 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
 import LoginModal from '../modal/loginmodal.component.vue';
+import MenuModal from '../modal/menumodal.component.vue';
 import RegistrationModal from '../modal/registrationmodal.component.vue';
 import SearchBarComponent from '../shared/search/searchbar.component.vue';
 var NavMenuComponent = (function (_super) {
@@ -34,6 +35,7 @@ var NavMenuComponent = (function (_super) {
         _this.showSecondSearchBar = false;
         _this.showLoginModal = false;
         _this.showRegistrationModal = false;
+        _this.showMenuModal = false;
         // To handle scroll event
         _this.currentTime = Date.now();
         return _this;
@@ -87,6 +89,13 @@ var NavMenuComponent = (function (_super) {
         //    return false;
         //}
     }
+    Object.defineProperty(NavMenuComponent.prototype, "currentPage", {
+        get: function () {
+            return this.$store.state.currentPage;
+        },
+        enumerable: true,
+        configurable: true
+    });
     NavMenuComponent.prototype.created = function () {
         if (process.env.VUE_ENV === 'client') {
             window.addEventListener('scroll', this.handleScroll);
@@ -108,7 +117,7 @@ var NavMenuComponent = (function (_super) {
                 this.isSticky = false;
             }
             // Attach search bar
-            if (this.$store.state.currentPage != null && this.$store.state.currentPage === 'home') {
+            if (this.currentPage != null && this.currentPage === 'home') {
                 //console.log(this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top);
                 if (this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top < 0) {
                     this.showSecondSearchBar = true;
@@ -122,6 +131,10 @@ var NavMenuComponent = (function (_super) {
     };
     NavMenuComponent.prototype.onPropertyChanged = function (value, oldValue) {
         console.log("secondbar value " + value);
+    };
+    NavMenuComponent.prototype.onRouteParamChanged = function (value, oldValue) {
+        this.showMenuModal = false;
+        this.showLoginModal = false;
     };
     NavMenuComponent.prototype.onSuccessfulLogin = function (responseToken) {
         if (responseToken) {
@@ -140,12 +153,19 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], NavMenuComponent.prototype, "onPropertyChanged", null);
+__decorate([
+    Watch('$route.params'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], NavMenuComponent.prototype, "onRouteParamChanged", null);
 NavMenuComponent = __decorate([
     Component({
         name: 'nav-menu',
         components: {
             'loginmodal': LoginModal,
             'registrationmodal': RegistrationModal,
+            'menumodal': MenuModal,
             "searchbar": SearchBarComponent
         }
     })

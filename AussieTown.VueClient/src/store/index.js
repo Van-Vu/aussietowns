@@ -9,12 +9,12 @@ import MessageService from "../service/message.service";
 Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
-        currentPage: null,
-        listing: null,
-        profile: null,
-        searchListings: null,
-        conversations: null,
-        conversationsContent: null
+        currentPage: '',
+        listing: {},
+        profile: {},
+        searchListings: [],
+        conversations: [],
+        conversationsContent: []
     },
     actions: {
         SET_CURRENT_PAGE: function (_a, page) {
@@ -23,9 +23,6 @@ export default new Vuex.Store({
         },
         FETCH_LISTING_BY_ID: function (_a, id) {
             var commit = _a.commit, state = _a.state;
-            if (state.listing && state.listing.id === id) {
-                return state.listing;
-            }
             return (new ListingService()).getListingById(id).then(function (response) {
                 commit('UPDATE_LISTING', response.data);
             });
@@ -42,9 +39,6 @@ export default new Vuex.Store({
         },
         FETCH_USER_BY_ID: function (_a, id) {
             var dispatch = _a.dispatch, commit = _a.commit, state = _a.state;
-            if (state.profile && state.profile.id === id) {
-                return state.profile;
-            }
             return (new UserService()).getById(id).then(function (response) {
                 console.log('fetch User');
                 commit('UPDATE_USER', response.data);
@@ -62,27 +56,18 @@ export default new Vuex.Store({
         },
         SEARCH_LISTINGS_BY_SUBURB: function (_a, suburbId) {
             var commit = _a.commit, state = _a.state;
-            if (state.searchListings) {
-                return state.searchListings;
-            }
             return (new ListingService()).getListingBySuburb(suburbId).then(function (response) {
                 commit('UPDATE_SEARCH_LISTINGS', response.data);
             });
         },
         FETCH_CONVERSATIONS_BY_USER: function (_a, userId) {
             var dispatch = _a.dispatch, commit = _a.commit, state = _a.state;
-            if (state.conversations) {
-                return state.conversations;
-            }
             return (new MessageService()).getConversations(userId).then(function (response) {
                 commit('UPDATE_CONVERSATIONS', response.data);
             });
         },
         FETCH_CONVERSATION_CONTENT: function (_a, conversationId) {
             var commit = _a.commit, state = _a.state;
-            if (state.conversationsContent) {
-                return state.conversationsContent;
-            }
             return (new MessageService()).getConversationContent(conversationId).then(function (response) {
                 commit('UPDATE_CONVERSATION_MESSAGES', response.data);
             });
@@ -90,10 +75,10 @@ export default new Vuex.Store({
     },
     mutations: {
         UPDATE_PAGE: function (state, page) {
-            state.currentPage = page;
+            Vue.set(state, 'currentPage', page);
         },
         UPDATE_LISTING: function (state, listing) {
-            state.listing = listing;
+            Vue.set(state, 'listing', listing);
         },
         UPDATE_USER: function (state, profile) {
             state.profile = profile;
