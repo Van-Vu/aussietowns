@@ -87,7 +87,7 @@ $nav-bar-height: 50px;
     background: -moz-linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)); /* For Firefox */
     background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)); /* Standard syntax */
 
-    border-top: 5px solid $c-brand-green;
+    border-top: 5px solid $c-brand-primary;
 
     &__logo {
         position: absolute;

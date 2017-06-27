@@ -72,6 +72,7 @@ var ListingPage = (function (_super) {
                 });
             }
         }
+        this.$store.dispatch('SET_CURRENT_PAGE', 'listing');
     };
     ListingPage.prototype.onInsertorUpdate = function () {
         if (this.model.id > 0) {
@@ -90,6 +91,8 @@ var ListingPage = (function (_super) {
         this.model.tourOperators.push(new MiniProfile(user.id, user.name, '', '', user.imageUrl, ''));
     };
     ListingPage.prototype.onUserRemoved = function (user) {
+    };
+    ListingPage.prototype.onSaveSchedule = function (scheduleObject) {
     };
     ListingPage.prototype.onEditSchedule = function (scheduleObject) {
         this.editingSchedule = scheduleObject;

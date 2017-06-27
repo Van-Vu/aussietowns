@@ -18,7 +18,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import Vue from "vue";
-import { Component, Prop, Watch } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 import ModalShellComponent from './modalshell.component.vue';
 import ScheduleComponent from '../shared/schedule.component.vue';
 var ScheduleModal = (function (_super) {
@@ -26,14 +26,12 @@ var ScheduleModal = (function (_super) {
     function ScheduleModal() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    ScheduleModal.prototype.created = function () {
-        var abc = this.schedule;
-    };
-    ScheduleModal.prototype.onVisibilityChanged = function (value, oldValue) {
-        var abc = this.schedule;
-    };
     ScheduleModal.prototype.close = function () {
         this.$emit('onClose');
+    };
+    ScheduleModal.prototype.onSaveSchedule = function (scheduleObject) {
+        this.close();
+        this.$emit('onSave', scheduleObject);
     };
     return ScheduleModal;
 }(Vue));
@@ -45,12 +43,6 @@ __decorate([
     Prop,
     __metadata("design:type", Object)
 ], ScheduleModal.prototype, "schedule", void 0);
-__decorate([
-    Watch('show'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
-    __metadata("design:returntype", void 0)
-], ScheduleModal.prototype, "onVisibilityChanged", null);
 ScheduleModal = __decorate([
     Component({
         name: "login-modal",

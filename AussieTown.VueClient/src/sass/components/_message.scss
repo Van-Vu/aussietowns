@@ -8,3 +8,40 @@
     width: 69%;
     display: inline-block;
 }
+
+@mixin talk-bubble-base() {
+	margin: 5px;
+    display: inline-block;
+    position: relative;
+	width: 80%;
+	height: auto;
+	
+    border-radius: 30px;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+}
+
+.talk-bubble-main {
+    @include talk-bubble-base;
+    margin-left: 20%;
+    background-color: $c-brand-primary;
+}
+
+.talk-bubble {
+    @include talk-bubble-base;
+    background-color: $c-brand-secondary;
+}
+
+
+/* talk bubble contents */
+.talktext{
+    padding: 1em;
+	text-align: left;
+    line-height: 1.5em;
+
+    p {
+        /* remove webkit p margins */
+        -webkit-margin-before: 0em;
+        -webkit-margin-after: 0em;
+    }
+}

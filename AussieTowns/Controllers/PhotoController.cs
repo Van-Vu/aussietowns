@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AussieTowns.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace AussieTowns.Controllers
 {
@@ -13,27 +15,38 @@ namespace AussieTowns.Controllers
     public class PhotoController
     {
         private IHostingEnvironment _environment;
+        private readonly AppSettings _appSettings;
 
-        public PhotoController(IHostingEnvironment environment)
+        public PhotoController(IHostingEnvironment environment, IOptions<AppSettings> appSettings)
         {
             _environment = environment;
+            _appSettings = appSettings.Value;
         }
 
         [HttpPost("upload")]
-        public async Task<int> Upload(ICollection<IFormFile> files)
+        public async Task<JsonResult> Upload(ICollection<IFormFile> files)
         {
-            var uploads = Path.Combine(_environment.WebRootPath, "uploads");
-            foreach (var file in files)
+            try
             {
-                if (file.Length > 0)
+                foreach (var file in files)
                 {
-                    using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                    if (file.Length > 0)
                     {
-                        await file.CopyToAsync(fileStream);
+                        var result = await AwsS3Extensions.SaveToS3Async(
+                            AwsS3Extensions.GetS3Client(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
+                                _appSettings.AwsS3Region),
+                            file.OpenReadStream(), "meetthelocal-development", $"images/{file.FileName}" );
                     }
                 }
+
+                // Bodom hack
+                return new JsonResult(new { state = 0, url = $"https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/{files.FirstOrDefault().FileName}" });
             }
-            return 1;
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         [HttpPost("upload2")]

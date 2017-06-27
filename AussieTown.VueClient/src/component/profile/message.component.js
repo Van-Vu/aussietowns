@@ -27,26 +27,34 @@ var MessageComponent = (function (_super) {
     }
     MessageComponent.prototype.created = function () {
         var _this = this;
-        if (this.$store.state.conversations) {
+        this.profileId = this.$route.params.profileId;
+        if (this.$store.state.conversations.length > 0) {
             this.conversations = this.$store.state.conversations;
         }
         else {
-            this.$store.dispatch('FETCH_CONVERSATIONS_BY_USER', this.$route.params.profileId).then(function () {
+            this.$store.dispatch('FETCH_CONVERSATIONS_BY_USER', this.profileId).then(function () {
                 _this.conversations = _this.$store.state.conversations;
-                if (_this.conversations) {
-                    var data = _this.conversations;
-                    for (var i = 0; i < data.length; i++) {
-                        _this.$store.dispatch('FETCH_CONVERSATION_CONTENT', data[i].id).then(function () {
-                            _this.conversationsContent = _this.$store.state.conversationsContent;
-                        });
-                    }
-                }
             });
         }
-        this.cookieValue = this.$cookie.get('bodomtest');
-        if (this.$store.state.conversationsContent) {
-            this.conversationsContent = this.$store.state.conversationsContent;
+        //this.cookieValue = this.$cookie.get('bodomtest');
+        //if (this.$store.state.conversationsContent) {
+        //    this.conversationsContent = this.$store.state.conversationsContent;
+        //}
+    };
+    MessageComponent.prototype.openConversation = function (conversation) {
+        var _this = this;
+        //var data = this.conversations;
+        //for (var i = 0; i < data.length; i++) {
+        this.$store.dispatch('FETCH_CONVERSATION_CONTENT', conversation.id).then(function () {
+            _this.conversationsContent = _this.$store.state.conversationsContent;
+        });
+        //}        
+    };
+    MessageComponent.prototype.messageBubble = function (message) {
+        if (message.user.id == this.profileId) {
+            return "talk-bubble-main";
         }
+        return "talk-bubble";
     };
     return MessageComponent;
 }(Vue));

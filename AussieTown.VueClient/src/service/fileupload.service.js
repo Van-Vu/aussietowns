@@ -1,8 +1,12 @@
 import http from './http-base';
 function upload(formData, progressCallback) {
-    var uploadUrl = "/api/photo/upload2";
+    var uploadUrl = "/api/photo/upload";
     return http.post(uploadUrl, formData, progressCallback)
-        .then(function (x) { return x.data; })
-        .then(function (x) { return x.map(function (img) { return Object.assign({}, img, { url: "/images/" + img.id }); }); });
+        .then(function (x) { return x.data; });
+    //// add url field
+    //.then(x => {
+    //    return Object.assign({}, x, { url: `/images/${x.id}` })
+    //}
+    //);
 }
 export { upload };

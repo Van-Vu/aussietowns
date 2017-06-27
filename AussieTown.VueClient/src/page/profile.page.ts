@@ -28,6 +28,11 @@ export default class ProfilePage extends Vue {
         }
     }
 
+    created() {
+        this.$store.dispatch('SET_CURRENT_PAGE', 'profile');
+        let abc = this.$route;
+    }
+
     activatePhotosTab() {
         this.isPhotosActivated = true;
     }
@@ -38,5 +43,9 @@ export default class ProfilePage extends Vue {
 
     activateTripsTab() {
         this.isTripsActivated = true;
+    }
+
+    currentTab() {
+        
     }
 }

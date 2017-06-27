@@ -8,7 +8,11 @@ export default class ConversationModel {
     public userTwoId: number;
     public userTwo: MiniProfile;
     public lastMessageTime: Object;
-    public get lastMessageFormat(): string {
-        return Utils.getDateTime(this.lastMessageTime);
+    public lastMessageFormat: string;
+
+    constructor() {
+        if (this.lastMessageTime) {
+            this.lastMessageFormat = Utils.getDateTime(this.lastMessageTime);
+        }
     }
 }

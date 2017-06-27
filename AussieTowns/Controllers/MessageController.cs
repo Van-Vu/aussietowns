@@ -73,7 +73,7 @@ namespace AussieTowns.Controllers
 
         [HttpGet]
         [Route("conversation/{conversationId}")]
-        [Authorize]
+        //[Authorize]
         public async Task<RequestResult> GetMessagesInConversation(int conversationId)
         {
             try

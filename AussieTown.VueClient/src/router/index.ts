@@ -10,6 +10,9 @@ import TestPage from '../page/test.page.vue';
 import * as HelpPage from '../page/static/help.page.vue';
 import * as AboutPage from '../page/static/about.page.vue';
 import * as TermsAndConditionsPage from '../page/static/termsandconditions.page.vue';
+import MessageComponent from '../component/profile/message.component.vue';
+import TripComponent from '../component/profile/trip.component.vue';
+import UserDetailComponent from '../component/form/userdetail.component.vue';
 
 Component.registerHooks([
     'asyncData',
@@ -37,8 +40,28 @@ const router = new Router({
         },
         {
             path: "/profile/:seoString-:profileId(\\d+)",
-            name: "profile",
-            component: ProfilePage
+            component: ProfilePage,
+            children: [
+                {
+                    // UserProfile will be rendered inside User's <router-view>
+                    // when /user/:id/profile is matched
+                    path: '',
+                    name: "profile",
+                    component: UserDetailComponent
+                },
+                {
+                    // UserProfile will be rendered inside User's <router-view>
+                    // when /user/:id/profile is matched
+                    path: 'messages',
+                    component: MessageComponent
+                },
+                {
+                    // UserPosts will be rendered inside User's <router-view>
+                    // when /user/:id/posts is matched
+                    path: 'trips',
+                    component: TripComponent
+                }
+            ]
         },
         {
             path: "/listing/:listingType(offer|request)",

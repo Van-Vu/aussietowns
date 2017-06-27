@@ -71,6 +71,8 @@ export default class ListingPage extends Vue{
                 });                
             }
         }         
+
+        this.$store.dispatch('SET_CURRENT_PAGE', 'listing');
     }
 
     onInsertorUpdate() {
@@ -95,7 +97,6 @@ export default class ListingPage extends Vue{
     }
 
     onSaveSchedule(scheduleObject) {
-        console.log(scheduleObject);
     }
 
     onEditSchedule(scheduleObject) {

@@ -1,5 +1,5 @@
 ﻿<template>
-    <form @submit.prevent="onInsertorUpdate" style="margin-top:100px">
+    <form @submit.prevent="onInsertorUpdate">
         <div class="field">
             <label for="email">Email Address</label>
             <p class="control has-icon has-icon-right">

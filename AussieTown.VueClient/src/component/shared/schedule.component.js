@@ -22,6 +22,8 @@ import { Component, Watch, Prop } from "vue-property-decorator";
 import ScheduleModel from '../../model/schedule.model';
 import * as vuetimepicker from './external/vuetimepicker.vue';
 import * as datepicker from './external/datepicker.vue';
+import VeeValidate from 'vee-validate';
+Vue.use(VeeValidate);
 var ScheduleComponent = (function (_super) {
     __extends(ScheduleComponent, _super);
     function ScheduleComponent() {
@@ -50,7 +52,16 @@ var ScheduleComponent = (function (_super) {
             };
         }
     };
+    ScheduleComponent.prototype.onRepeatedChanged = function (value, oldValue) {
+        console.log("isRepeated: " + value);
+    };
     ScheduleComponent.prototype.validateBeforeSubmit = function () {
+        var _this = this;
+        this.$validator.validateAll().then(function () {
+            _this.$emit('onSave', _this.model);
+        }).catch(function () {
+            alert('Correct them errors!');
+        });
     };
     return ScheduleComponent;
 }(Vue));
@@ -64,6 +75,12 @@ __decorate([
     __metadata("design:paramtypes", [ScheduleModel, ScheduleModel]),
     __metadata("design:returntype", void 0)
 ], ScheduleComponent.prototype, "onScheduleChanged", null);
+__decorate([
+    Watch('isRepeated'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Boolean, Boolean]),
+    __metadata("design:returntype", void 0)
+], ScheduleComponent.prototype, "onRepeatedChanged", null);
 ScheduleComponent = __decorate([
     Component({
         name: "Schedule",

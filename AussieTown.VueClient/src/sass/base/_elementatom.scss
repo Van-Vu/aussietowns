@@ -1,13 +1,13 @@
 ﻿.mtl_button--outline {
     background-color: transparent;
-    color: $c-brand-green;
-    box-shadow: 0 0 0 1px $c-brand-green, 0 0 0 1px $c-brand-green;
+    color: $c-brand-primary;
+    box-shadow: 0 0 0 1px $c-brand-primary, 0 0 0 1px $c-brand-primary;
 }
 
 .mtl_button {
-    background-color: $c-brand-green;
+    background-color: $c-brand-primary;
     color: $c-neutral-white;
-    @include button-bg($c-brand-green);
+    @include button-bg($c-brand-primary);
     @include button-border;
 }
 
@@ -47,7 +47,7 @@ body {
     bottom: 0px;
     left: 0px;
     right: 0px;
-    z-index: 101;
+    z-index: 0;
     width: 100%;
     /*background-color: transparent;*/
 }

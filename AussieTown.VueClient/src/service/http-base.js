@@ -1,12 +1,12 @@
 import axios from 'axios';
 import Vue from "vue";
 Vue.prototype.$http = axios;
-export var http = axios.create({
-    baseURL: "http://localhost/meetthelocal/"
-});
-//const http = axios.create({
-//    baseURL: `http://localhost:3514/`
+//export const http = axios.create({
+//    baseURL: `http://localhost/meetthelocal/`
 //})
+var http = axios.create({
+    baseURL: "http://localhost:3514/"
+});
 http.defaults.withCredentials = true;
 // Add a request interceptor
 http.interceptors.request.use(function (config) {

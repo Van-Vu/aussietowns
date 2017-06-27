@@ -90,6 +90,10 @@ namespace AussieTowns
             //Use a MySQL database
             var mySqlConnectionString = Configuration.GetConnectionString("DataAccessMySqlProvider");
 
+
+            services.AddOptions();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
             services.AddSingleton<ISearchService, SearchService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IListingService, ListingService>();

@@ -40,6 +40,10 @@ export default class NavMenuComponent extends Vue {
         if (process.env.VUE_ENV === 'client') {
             window.addEventListener('scroll', this.handleScroll);
         }
+
+        if (this.currentPage != null && this.currentPage !== 'home') {
+            this.showSecondSearchBar = true;
+        }
     }
 
     destroyed() {
@@ -82,6 +86,9 @@ export default class NavMenuComponent extends Vue {
     onRouteParamChanged(value: string, oldValue: string) {
         this.showMenuModal = false;
         this.showLoginModal = false;
+        if (this.currentPage != null && this.currentPage != 'home') {
+            this.showSecondSearchBar = true;
+        }
     }
 
     onSuccessfulLogin(responseToken) {

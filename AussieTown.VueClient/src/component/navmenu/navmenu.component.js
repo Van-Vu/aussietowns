@@ -100,6 +100,9 @@ var NavMenuComponent = (function (_super) {
         if (process.env.VUE_ENV === 'client') {
             window.addEventListener('scroll', this.handleScroll);
         }
+        if (this.currentPage != null && this.currentPage !== 'home') {
+            this.showSecondSearchBar = true;
+        }
     };
     NavMenuComponent.prototype.destroyed = function () {
         if (process.env.VUE_ENV === 'client') {
@@ -135,6 +138,9 @@ var NavMenuComponent = (function (_super) {
     NavMenuComponent.prototype.onRouteParamChanged = function (value, oldValue) {
         this.showMenuModal = false;
         this.showLoginModal = false;
+        if (this.currentPage != null && this.currentPage != 'home') {
+            this.showSecondSearchBar = true;
+        }
     };
     NavMenuComponent.prototype.onSuccessfulLogin = function (responseToken) {
         if (responseToken) {

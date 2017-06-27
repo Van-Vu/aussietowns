@@ -2,14 +2,19 @@
     <div>
         <ul>
             <li v-for="conversation in conversations">
-                <miniprofile :data="conversation.userTwo" :isRemovable="false"></miniprofile> 
-                <span>{{conversation.lastMessageFormat}}</span>
+                <a @click.prevent="openConversation(conversation)">
+                    <miniprofile :data="conversation.userTwo" :isRemovable="false"></miniprofile>
+                    <span>{{conversation.lastMessageFormat}}</span>
+                </a>
             </li>
-            <li v-for="conversation in conversationsContent">
-                <div v-for="message in conversation">{{message.messageContent}}</div>
+            <li v-for="message in conversationsContent">
+                <div :class="messageBubble(message)">
+                    <div class="talktext">
+                        <p>{{message.messageContent}}</p>
+                    </div>
+                </div>
             </li>
         </ul>
-        <span>{{cookieValue}}</span>
     </div>
 
 </template>

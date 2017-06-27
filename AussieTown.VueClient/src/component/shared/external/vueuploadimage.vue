@@ -1,14 +1,17 @@
 <template>
     <div>
-        <div v-for="image in uploadedFiles">
-            <img :src="image" />
-            <button @click="removeImage">Remove image</button>
+        <div class="upload-image" v-for="image in uploadedFiles" data-content="progress">
+            <span v-if="image.progress < 100">
+                <progress max="100" :value="image.progress" class="progress is-medium">{{image.progress}}</progress>
+            </span>
+            <img :src="image.src" />
+            <i class="glyphicon glyphicon-remove" v-if="image.progress >= 100"@click="removeImage"></i>
         </div>
         <form enctype="multipart/form-data" novalidate>
             <h1>Upload images</h1>
             <div class="dropbox">
                 <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" accept="image/*" class="input-file">
-                <p v-if="isInitial">
+                <p>
                     Drag your file(s) here to begin<br> or click to browse
                 </p>
                 <p v-if="isSaving">
@@ -60,51 +63,57 @@
                 this.uploadedFiles = [];
                 this.uploadError = null;
             },
+            setProgress(progressEvent, formData){
+                // Bodom hack: total size of XMLHttpRequestUpload vs FileReader doesn't match exactly
+                let image = this.uploadedFiles.find(x => (x.total + 100 < progressEvent.total) && (x.total + 400 > progressEvent.total));
+                image.progress = Math.round( (progressEvent.loaded * 100) / progressEvent.total )
+            },
+
             save(formData) {
                 // upload data to the server
                 this.currentStatus = STATUS_SAVING;
 
-                upload(formData, { 
-                    onUploadProgress: (progressEvent) => { 
-                        console.log(progressEvent);
-                    } })
+                upload(formData, {
+                    onUploadProgress:(progressEvent, formData) => {
+                        this.setProgress(progressEvent, formData);
+                    }
+                })
                 .then(x => {
-                    this.uploadedFiles = [].concat(x);
+                    //this.createImage(x);
+                    //this.uploadedFiles.push(x);
                     this.currentStatus = STATUS_SUCCESS;
                 })
                 .catch(err => {
                     this.uploadError = err.response;
+                    console.log(`fail ${err.response}`);
                     this.currentStatus = STATUS_FAILED;
                 });
             },
             createImage(file) {
-                var image = new Image();
                 var reader = new FileReader();
-                var vm = this;
 
                 reader.onload = (e) => {
-                    vm.uploadedFiles.push(e.target.result);
+                    this.uploadedFiles.push({src: e.target.result, progress: 0, total: e.total});
+                    //this.save(e.target.result);
                 };
+
                 reader.readAsDataURL(file);
             },
             filesChange(fieldName, fileList) {
-                // handle file changes
-                const formData = new FormData();
-
                 if (!fileList.length) return;
 
                 // append the files to FormData
                 Array
                 .from(Array(fileList.length).keys())
                 .map(x => {
+                    // handle file changes
+                    const formData = new FormData();
                     formData.append(fieldName, fileList[x], fileList[x].name);
 
-                    //var abc = 'teadsa';
                     this.createImage(fileList[x]);
+                    // save it
+                    this.save(formData);
                 });
-
-                // save it
-                this.save(formData);
             }
         }
     }
@@ -138,5 +147,38 @@
         font-size: 1.2em;
         text-align: center;
         padding: 50px 0;
+    }
+
+    .upload-image {
+        position: relative;
+        border: 1px solid rgb(153,205,78);
+        padding: 10px 10px;
+        margin: 10px;
+        box-shadow: inset 0px 0px 20px rgb(153,205,78);
+
+        & > span {
+            position: absolute;
+            width: 100%; height:100%;
+            top:0; left:0;
+            background:rgba(0,0,0,0.6);
+
+            & > progress {
+                position: absolute;
+                z-index: 5;
+                bottom: 50%;
+            }
+        }
+
+        & > i {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 2rem;
+        }
+    }
+
+    .upload-image img {
+        width: 100%;
+        vertical-align: top;
     }
 </style>

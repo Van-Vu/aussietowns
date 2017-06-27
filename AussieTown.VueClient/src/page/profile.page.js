@@ -37,6 +37,10 @@ var ProfilePage = (function (_super) {
             //return store.dispatch('FETCH_CONVERSATIONS_BY_USER', route.params.profileId);
         }
     };
+    ProfilePage.prototype.created = function () {
+        this.$store.dispatch('SET_CURRENT_PAGE', 'profile');
+        var abc = this.$route;
+    };
     ProfilePage.prototype.activatePhotosTab = function () {
         this.isPhotosActivated = true;
     };
@@ -45,6 +49,8 @@ var ProfilePage = (function (_super) {
     };
     ProfilePage.prototype.activateTripsTab = function () {
         this.isTripsActivated = true;
+    };
+    ProfilePage.prototype.currentTab = function () {
     };
     return ProfilePage;
 }(Vue));

@@ -88,10 +88,12 @@ export default new Vuex.Store({
             state.conversations = conversations;
         },
         UPDATE_CONVERSATION_MESSAGES(state, messages) {
-            if (state.conversationsContent == null) {
-                state.conversationsContent = new Array<MessageModel>();
-            }
-            state.conversationsContent.push(messages);
+            //if (state.conversationsContent == null) {
+            //    state.conversationsContent = new Array<MessageModel>();
+            //}
+            //state.conversationsContent.push(messages);
+
+            Vue.set(state, 'conversationsContent', messages);
         }
     }
 })
