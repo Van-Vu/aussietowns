@@ -25,7 +25,7 @@ var LocationSearchComponent = (function (_super) {
     __extends(LocationSearchComponent, _super);
     function LocationSearchComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.placeHolderText = "Type in a location / suburb";
+        _this.placeHolderText = "Location";
         _this.locations = [];
         return _this;
     }

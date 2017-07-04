@@ -15,6 +15,7 @@ Vue.use(VeeValidate);
 
 export default class UserDetailComponent extends Vue {
     model: UserModel = new UserModel();
+    isEditing: boolean = false;
 
     created() {
         if (this.$store.state.profile) {

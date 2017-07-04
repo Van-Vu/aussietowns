@@ -9,7 +9,7 @@ const isProd = process.env.NODE_ENV === 'production'
 
 const app = express()
 
-
+app.disable('etag');
 
 let renderer
 if (isProd) {
@@ -46,12 +46,13 @@ const serve = (path, cache) => express.static(resolve(path), {
 
 
 app.use('/dist', serve('./dist', true))
-app.use(express.static('dist'))	
+app.use(express.static('dist', { index: false }))
 	
-app.use(favicon(path.resolve(__dirname, './dist/static/logo.png')))
+//app.use(favicon(path.resolve(__dirname, './dist/static/logo.png')))
 //app.use('/service-worker.js', serve('./dist/service-worker.js'))
 
-console.log(`bodom`)  
+console.log(`bodom`)
+
 app.get('*', (req, res) => {
   if (!renderer) {
     return res.end('waiting for compilation... refresh in a moment.')
@@ -62,6 +63,9 @@ app.get('*', (req, res) => {
   res.setHeader("Content-Type", "text/html")
 
   const errorHandler = err => {
+      console.log('so we have an error:');
+      console.log(err);
+
     if (err && err.code === 404) {
       res.status(404).end('404 | Page Not Found')
     } else {
@@ -75,7 +79,21 @@ app.get('*', (req, res) => {
   renderer.renderToStream({ url: req.url })
     .on('error', errorHandler)
     .on('end', () => console.log(`whole request: ${Date.now() - s}ms`))
-    .pipe(res)
+      .pipe(res)
+
+  //const context = {
+  //    title: 'Vue HN 2.0', // default title
+  //    url: req.url
+  //}
+  //renderer.renderToString(context, (err, html) => {
+  //    if (err) {
+  //        console.log(`hi there: ${err}`)
+  //    }
+  //    res.end(html)
+  //    if (!isProd) {
+  //        console.log(`whole request: ${Date.now() - s}ms`)
+  //    }
+  //})
 })
 
 const port = process.env.PORT || 3000

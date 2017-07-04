@@ -1,6 +1,6 @@
 ﻿import Vue from "vue";
-import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import axios from "axios";
+import { Component, Prop } from "vue-property-decorator";
+import { Utils } from '../utils'
 
 @Component({
     name: "MiniProfile"
@@ -15,6 +15,7 @@ export default class MiniProfileComponent extends Vue{
     profileImageUrl: string;
     fullName: string;
     shortDescription: string;
+    profileLink: string;
 
     created() {
         this.userId = this.data.id;
@@ -22,6 +23,7 @@ export default class MiniProfileComponent extends Vue{
         this.profileUrl = '';
         this.fullName = this.data.fullname;
         this.shortDescription = this.data.shortDescription;        
+        this.profileLink = Utils.seorizeString(this.fullName);
     }
 
     onRemoveUser() {

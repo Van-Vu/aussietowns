@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using AussieTowns.Auth;
+using AussieTowns.Common;
 using AussieTowns.Model;
 using AussieTowns.Services;
 using AutoMapper;
@@ -38,9 +39,19 @@ namespace AussieTowns.Controllers
         [HttpPost("register")]
         public async Task<RequestResult> Register([FromBody] User user)
         {
-            var a = string.Empty;
             try
             {
+                if (user.Source == UserSource.Native)
+                {
+                    var realPassword = user.Password.RsaDecrypt();
+                    user.Salt = Sha512Hashing.GetSalt();
+                    user.Password = (realPassword + user.Salt).GetHash();
+                }
+                else
+                {
+                    user.ExternalId = user.ExternalId.RsaDecrypt();
+                }
+
                 await _userService.Register(user);
                 return GenerateToken(user);
             }
@@ -55,20 +66,34 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                var existedUser = await _userService.GetByEmailAndPassword(user.Email, user.Password);
-                if (existedUser != null)
+                var existingUser = (await _userService.SearchUser(user.Email)).FirstOrDefault();
+
+                if (user.Source == UserSource.Native)
                 {
-                    return GenerateToken(existedUser);
+                    var realPassword = user.Password.RsaDecrypt();
+                    var passwordHash = (realPassword + existingUser.Salt).GetHash();
+
+                    if (passwordHash == existingUser.Password)
+                    {
+                        return GenerateToken(existingUser);
+                    }
                 }
                 else
                 {
-                    return new RequestResult
+                    if (user.Email == existingUser.Email 
+                        && user.Source == existingUser.Source 
+                        && user.ExternalId.RsaDecrypt() == existingUser.ExternalId)
                     {
-                        State = RequestState.Failed,
-                        Msg = "Username or password is invalid"
-                    };
+                        return GenerateToken(existingUser);
+                    }
                 }
-                
+
+
+                return new RequestResult
+                {
+                    State = RequestState.Failed,
+                    Msg = "Username or password is invalid"
+                };
             }
             catch (Exception ex)
             {

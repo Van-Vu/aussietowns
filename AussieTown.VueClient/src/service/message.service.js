@@ -3,6 +3,7 @@ var MessageService = (function () {
     function MessageService() {
         this.getConversationByUserIdUrl = 'api/message/user/';
         this.getMessagesByConversationIdUrl = 'api/message/conversation/';
+        this.sendMessageUrl = 'api/message/conversation';
     }
     MessageService.prototype.getConversations = function (userId) {
         return http.get(this.getConversationByUserIdUrl + userId)
@@ -15,6 +16,10 @@ var MessageService = (function () {
             .then(function (response) {
             return response.data;
         });
+    };
+    MessageService.prototype.sendMessage = function (message) {
+        return http.post(this.sendMessageUrl, message)
+            .then(function (response) { return response.data; });
     };
     return MessageService;
 }());

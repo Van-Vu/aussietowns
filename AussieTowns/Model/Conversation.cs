@@ -10,5 +10,6 @@ namespace AussieTowns.Model
         public int UserTwoId { get; set; }
         public MiniProfile UserTwo { get; set; }
         public DateTime LastMessageTime { get; set; }
+        public string MessageContent { get; set; }
     }
 }

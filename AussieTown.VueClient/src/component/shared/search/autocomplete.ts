@@ -20,6 +20,7 @@ export default class AutoCompleteComponent extends Vue {
     //@Output('onSelect') onSelect: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
     //@Output() onSearch: EventEmitter<string> = new EventEmitter();
     keyword:string = '';
+    selectedText: string = '';
 
     private selected: SelectedAutocompleteValue = new SelectedAutocompleteValue();
 
@@ -72,10 +73,20 @@ export default class AutoCompleteComponent extends Vue {
 
     onKeyDown(event: KeyboardEvent) {
         var key = event.keyCode;
+        // Enter
         if (key == 13) {
+            if ((this.selectedText != '') && (this.keyword == '')) {
+                this.$emit('HeyIAmDone!');
+            }
+
             this.doSelectIndex(this.indexSelected);
             this.showList = false;
             event.preventDefault();
+        }
+
+        // Backspace
+        if ((key == 8) && (this.keyword == '')) {
+            this.selectedText = '';
         }
     }
 
@@ -107,7 +118,8 @@ export default class AutoCompleteComponent extends Vue {
         this.$emit("select", this.list[this.indexSelected]);
 
         this.firstSet = false;
-	this.keyword = this.selected.Description;
+        this.selectedText = this.selected.Description;
+	    this.keyword = '';
         if (this.cleanUp) {
             this.indexSelected = -1;
             this.selected = new SelectedAutocompleteValue();

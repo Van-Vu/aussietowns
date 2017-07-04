@@ -10,7 +10,7 @@ export default class UserService {
         return http.get('api/user/' + _id).then(response => response.data);
     }
 
-    create(user) {
+    signup(user) {
         return http.post('api/user/register', user).then(response => {
             let result = response.data;
             if (result.state == 1) {
@@ -24,7 +24,7 @@ export default class UserService {
     }
 
     login(user) {
-        return http.post('api/user/login', { email: user.email, password: user.password }).then(response => {
+        return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId }).then(response => {
             let result = response.data;
             if (result.state == 1) {
                 let json = result.data as any;

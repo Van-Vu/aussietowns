@@ -25,6 +25,7 @@ var UserDetailComponent = (function (_super) {
     function UserDetailComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.model = new UserModel();
+        _this.isEditing = false;
         return _this;
     }
     UserDetailComponent.prototype.created = function () {

@@ -5,7 +5,7 @@
                 <progress max="100" :value="image.progress" class="progress is-medium">{{image.progress}}</progress>
             </span>
             <img :src="image.src" />
-            <i class="glyphicon glyphicon-remove" v-if="image.progress >= 100"@click="removeImage"></i>
+            <i class="glyphicon glyphicon-trash" v-if="image.progress >= 100"@click="removeImage"></i>
         </div>
         <form enctype="multipart/form-data" novalidate>
             <h1>Upload images</h1>

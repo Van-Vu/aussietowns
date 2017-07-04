@@ -19,6 +19,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
+import { Utils } from '../utils';
 var MiniProfileComponent = (function (_super) {
     __extends(MiniProfileComponent, _super);
     function MiniProfileComponent() {
@@ -30,6 +31,7 @@ var MiniProfileComponent = (function (_super) {
         this.profileUrl = '';
         this.fullName = this.data.fullname;
         this.shortDescription = this.data.shortDescription;
+        this.profileLink = Utils.seorizeString(this.fullName);
     };
     MiniProfileComponent.prototype.onRemoveUser = function () {
         this.$emit("removeUser", this.data);

@@ -7,6 +7,7 @@
                 </a>
             </div>
             <div class="column is-half-mobile ">
+                <div class='nav-bar__logo'></div>
                 <router-link :to="{name:'home'}" class="is-center"><div class='nav-bar__logo'></div></router-link>
             </div>
             <div class="column is-one-quarter-mobile">
@@ -14,7 +15,7 @@
             </div>
 
         </div>
-        <div class="is-hidden-tablet" v-if="showSecondSearchBar">
+        <div class="is-hidden-tablet" v-show="showSecondSearchBar">
             <searchbar @onSelect="onSelect($event)" @onSearch="onSearch($event)"></searchbar>
         </div>
         <loginmodal :show="showLoginModal" @onSuccessfulLogin="onSuccessfulLogin" @onClose="showLoginModal = !showLoginModal"></loginmodal>

@@ -1,7 +1,7 @@
 ﻿<template>
-  <div class="autocomplete-wrapper">
-    <input type="text"
-           class="input"
+  <div class="autocomplete-wrapper is-flex">
+    <label v-if="selectedText != ''" class="tag is-success">{{selectedText}}</label>
+    <input type="text" class="search-box"
           v-model="keyword"
           @input="onInput($event.target.value)"
           @keydown="onKeyDown($event)" @keyup="onKeyUp($event)" @blur="onBlur" @focus="onFocus"

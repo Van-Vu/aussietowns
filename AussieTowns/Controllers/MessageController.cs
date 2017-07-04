@@ -22,32 +22,6 @@ namespace AussieTowns.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<RequestResult> Send([FromBody] Message message)
-        {
-            try
-            {
-                if (message== null)
-                {
-                    throw new Exception("Value cannot be null !");
-                }
-                await _messageService.SendMessage(message);
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Msg = "Update successful"
-                };
-            }
-            catch (Exception ex)
-            {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Msg = "Send failed:" + ex.Message
-                };
-            }
-        }
-
         [HttpGet]
         [Route("user/{userId}")]
         public async Task<RequestResult>  GetConversationsByUser(int userId)
@@ -91,6 +65,34 @@ namespace AussieTowns.Controllers
                 {
                     State = RequestState.Failed,
                     Data = "Get messages failed:" + ex.Message
+                };
+            }
+        }
+
+        [HttpPost]
+        [Route("conversation")]
+        public async Task<RequestResult> Send([FromBody] Message message)
+        {
+            try
+            {
+                if (message == null)
+                {
+                    throw new Exception("Value cannot be null !");
+                }
+                await _messageService.SendMessage(message);
+                return new RequestResult
+                {
+                    State = RequestState.Success,
+                    Msg = "Update successful",
+                    Data = new ConversationReply { ConversationId = message.ConversationId,MessageContent = message.MessageContent, UserId = message.UserId}
+                };
+            }
+            catch (Exception ex)
+            {
+                return new RequestResult
+                {
+                    State = RequestState.Failed,
+                    Msg = "Send failed:" + ex.Message
                 };
             }
         }

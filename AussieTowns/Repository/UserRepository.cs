@@ -81,8 +81,8 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "INSERT INTO User(Firstname, Lastname, email, password, gender,birthday, phone, language, currency, locationId, description, address, emergencycontact, photourl, videourl,createdDate,updatedDate,isActive) "
-                        + "VALUES (@firstname, @lastname, @email, @password, @gender, @birthday, @phone, @language, @currency, @locationId, @description, @address, @emergencycontact, @photourl, @videourl,@createdDate,@updatedDate,@isActive)";
+                var sql = "INSERT INTO User(Firstname, Lastname, email, salt, password, gender,birthday, phone, language, currency, locationId, description, address, emergencycontact, photourl, videourl,source, externalid, createdDate,updatedDate,isActive) "
+                        + "VALUES (@firstname, @lastname, @email, @salt, @password, @gender, @birthday, @phone, @language, @currency, @locationId, @description, @address, @emergencycontact, @photourl, @videourl, @source, @externalid, @createdDate,@updatedDate,@isActive)";
                 dbConnection.Open();
                 user.CreatedDate = DateTime.Now;
                 user.UpdatedDate = DateTime.Now;
@@ -96,7 +96,7 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "UPDATE User SET firstname = @firstname, lastname = @lastname, email = @email, password= @password, gender= @gender, birthday= @birthday, phone = @phone, language= @language, currency = @currency, "
+                var sql = "UPDATE User SET firstname = @firstname, lastname = @lastname, email = @email, gender= @gender, birthday= @birthday, phone = @phone, language= @language, currency = @currency, "
                     + "locationId = @locationId, description = @description, address= @address, emergencycontact= @emergencycontact, photourl = @photourl, videourl = @videourl, updatedDate=@updatedDate, isActive=@isActive WHERE id = @Id";
                 dbConnection.Open();
                 user.UpdatedDate = DateTime.Now;
@@ -113,6 +113,17 @@ namespace AussieTowns.Repository
                 dbConnection.Open();
 
                 return await dbConnection.ExecuteAsync(sql,new {id});
+            }
+        }
+
+        public async Task<User> GetByExternalInfo(string email, int source, string externalId)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "SELECT * FROM User WHERE email=@email AND source=@source AND externalid=@externalId";
+                dbConnection.Open();
+                var user = await dbConnection.QueryAsync<User>(sql, new { email, source,externalId });
+                return user.FirstOrDefault();
             }
         }
     }

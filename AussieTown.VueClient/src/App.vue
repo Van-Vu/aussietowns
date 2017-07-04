@@ -3,13 +3,13 @@
         <header class="hero-head">
             <nav-menu></nav-menu>
         </header>
-        <secion class="hero-body">
+        <section class="hero-body">
             <transition :duration="{ enter: 5000, leave: 500 }" name="fade">
                 <router-view></router-view>
             </transition>
-        </secion>
-        <secion class="hero-foot">
-        </secion>
+        </section>
+        <section class="hero-foot">
+        </section>
     </div>
 </template>
 

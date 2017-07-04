@@ -14,7 +14,7 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT C.id, C.lastmessagetime, U.* "
+                var sql = "SELECT C.id, C.lastmessagetime, R.messageContent, U.* "
                         + "FROM user U,conversation C, conversation_reply R "
                         + "WHERE "
                         + "CASE "
@@ -25,6 +25,8 @@ namespace AussieTowns.Repository
                         + "END "
                         + "AND "
                         + "C.id = R.conversationId "
+                        + "AND "
+                        + "C.lastmessagetime = R.time "
                         + "AND "
                         + "(C.userone = @userId OR C.usertwo = @userId) "
                         + "GROUP BY U.id "
@@ -49,26 +51,11 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT R.id,R.time,R.messageContent, R.conversationId, U.* FROM user U, conversation_reply R "
-                          + "WHERE R.userId = U.id AND R.conversationId = @conversationId ORDER BY R.id ASC";
+                var sql = "SELECT R.id,R.time,R.messageContent, R.conversationId, U.id as userId FROM user U, conversation_reply R "
+                          + "WHERE R.userId = U.id AND R.conversationId = @conversationId ORDER BY R.time ASC";
 
                 dbConnection.Open();
-                return await dbConnection.QueryAsync<ConversationReply, User, ConversationReply>(sql, (conversationReply, user) =>
-                {
-                    conversationReply.User = new MiniProfile
-                    {
-                        Id = user.Id,
-                        Fullname = $"{user.FirstName} {user.LastName}",
-                        Email = user.Email,
-                        PhotoUrl = user.PhotoUrl
-                    };
-
-                    return conversationReply;
-                }, new { conversationId });
-
-                //var sql = "SELECT * FROM Message WHERE (senderId = @senderId AND recipientId= @recipientId)" 
-                //    + " OR (senderId = @recipientId AND recipientId= @senderId)";
-                //return await dbConnection.QueryAsync<Message>(sql, new { conversationId});
+                return await dbConnection.QueryAsync<ConversationReply>(sql, new { conversationId });
             }
         }
 
@@ -76,8 +63,8 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "INSERT INTO Message(senderId, recipientId, content, time, isSeen, isActive)"
-                    +" VALUES(@senderId, @recipientId, @content, @time, @isSeen, @isActive)";
+                var sql = "INSERT INTO conversation_reply(conversationId, messageContent, userId, time)"
+                    + " VALUES(@conversationId, @messageContent, @userId, NOW())";
                 dbConnection.Open();
                 return await dbConnection.ExecuteAsync(sql,message);
             }

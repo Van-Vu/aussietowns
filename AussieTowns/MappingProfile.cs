@@ -55,6 +55,7 @@ namespace AussieTowns
                     opts => opts.MapFrom(src => src.EndDate.HasValue ? src.EndDate.Value.Date.ToString("yyyy/MM/dd") : string.Empty));
 
             CreateMap<Listing, ListingResponse>()
+                .ForMember(dest => dest.ListingType, opts => opts.MapFrom(src=> src.Type))
                 .ForMember(dest => dest.LocationDetail,
                     opts => opts.MapFrom(src => Mapper.Map<SuburbDetail, AutoCompleteItem>(src.Location)))
                 .ForMember(dest => dest.Schedules,

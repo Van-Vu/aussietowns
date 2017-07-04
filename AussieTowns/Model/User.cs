@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AussieTowns.Common;
 
 namespace AussieTowns.Model
 {
@@ -7,6 +8,7 @@ namespace AussieTowns.Model
     {
         public int Id { get; set; }
         public string Email { get; set; }
+        public string Salt { get; set; }
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -29,5 +31,7 @@ namespace AussieTowns.Model
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsActive { get; set; }
+        public UserSource Source { get; set; }
+        public string ExternalId { get; set; }
     }
 }

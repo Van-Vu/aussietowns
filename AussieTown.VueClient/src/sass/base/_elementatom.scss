@@ -5,12 +5,22 @@
 }
 
 .mtl_button {
-    background-color: $c-brand-primary;
-    color: $c-neutral-white;
+@include button-bg($c-brand-primary);
     @include button-bg($c-brand-primary);
-    @include button-border;
+    @include button-round-border-all;
 }
 
+.mtl_button-round-left {
+    @include button-bg($c-brand-primary);
+    @include button-bg($c-brand-primary);
+    @include button-round-border-left;
+}
+
+.mtl_button-round-right {
+    @include button-bg($c-brand-primary);
+    @include button-bg($c-brand-primary);
+    @include button-round-border-right;
+}
 
 a {
     cursor: pointer;
@@ -39,7 +49,7 @@ body {
 .hero-body {
   //flex: 1 1 auto;
   position: relative;/* need this to position inner content */
-  overflow: auto;
+  
 }
 
 .is-sticky-bottom {
@@ -50,4 +60,8 @@ body {
     z-index: 0;
     width: 100%;
     /*background-color: transparent;*/
+    >button{
+        height: 4rem;
+    }
+
 }

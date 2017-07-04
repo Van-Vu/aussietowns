@@ -20,17 +20,20 @@ book
 transition
 route guard
 final integration
-about / T&C
+DONE about / T&C
+DONE Serve Root with dev server
+DONE encrypt password
+dynamic loading module
 
 Tech debt:
 DONE use: https://github.com/weilao/vue-swiper but imitate https://github.com/warpcgd/vue-slider
 Mobile first: https://varvy.com/mobile/mobile-first.html
-split CSS from index
+DONE split CSS from index
 a-frame ?
 
 
 REFACTOR:
-fetch user / message / conversation / trips separatedly
+DONE fetch user / message / conversation / trips separatedly
 
 
 Apple scrollbar:

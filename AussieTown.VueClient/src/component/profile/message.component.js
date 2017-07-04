@@ -23,6 +23,9 @@ var MessageComponent = (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.conversations = new Array();
         _this.conversationsContent = new Array();
+        _this.isShowConversationContent = false;
+        _this.sendingMessage = '';
+        _this.currentConversation = 0;
         return _this;
     }
     MessageComponent.prototype.created = function () {
@@ -47,11 +50,25 @@ var MessageComponent = (function (_super) {
         //for (var i = 0; i < data.length; i++) {
         this.$store.dispatch('FETCH_CONVERSATION_CONTENT', conversation.id).then(function () {
             _this.conversationsContent = _this.$store.state.conversationsContent;
+            _this.currentConversation = conversation.id;
         });
+        this.isShowConversationContent = true;
         //}        
     };
+    MessageComponent.prototype.sendMessage = function () {
+        var _this = this;
+        this.$store.dispatch('SEND_MESSAGE', {
+            conversationId: this.currentConversation,
+            userId: this.profileId,
+            messageContent: this.sendingMessage
+        })
+            .then(function () {
+            _this.sendingMessage = '';
+            console.log('send message success!');
+        });
+    };
     MessageComponent.prototype.messageBubble = function (message) {
-        if (message.user.id == this.profileId) {
+        if (message.userId == this.profileId) {
             return "talk-bubble-main";
         }
         return "talk-bubble";

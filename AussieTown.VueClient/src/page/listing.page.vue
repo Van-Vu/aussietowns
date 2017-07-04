@@ -1,5 +1,5 @@
 ﻿<template>
-        <form @submit.prevent="onInsertorUpdate" class="container is-fluid" :class="{editing:isEditing}"style="top:55px;">
+        <form @submit.prevent="onInsertorUpdate" class="container is-fluid" :class="{editing:isEditing}" style="top:55px;">
             <div class="field">
                 <label class="label">Host</label>
                 <div class="control">
@@ -102,8 +102,11 @@
                 <label v-if="!isEditing">{{ model.minParticipant }}</label>
             </div>
             <!--<button type="submit" class="button mtl_button">Submit</button>-->
-            <button class="button mtl_button is-sticky-bottom" v-if="!isEditing" @click.prevent="isEditing = true">Edit</button>
-            <button type="submit" class="button mtl_button is-sticky-bottom" v-if="isEditing" @click="isEditing = false">Submit</button>
+            <div class="columns is-gapless is-flex is-sticky-bottom">
+                <button class="button mtl_button is-sticky-bottom" v-if="!isEditing" @click.prevent="isEditing = true">Edit</button>
+                <button type="submit" class="column is-half button mtl_button-round-left" v-if="isEditing" @click="isEditing = false">Submit</button>
+                <button class="column is-half button mtl_button-round-right" v-if="isEditing" @click="isEditing = false">Cancel</button>
+            </div>
             <schedulemodal :show="showScheduleModal" :schedule="editingSchedule" @onSave="onSaveSchedule" @onClose="showScheduleModal= !showScheduleModal"></schedulemodal>
         </form>
 </template>

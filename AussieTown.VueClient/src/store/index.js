@@ -51,7 +51,7 @@ export default new Vuex.Store({
         },
         INSERT_USER: function (_a, profile) {
             var commit = _a.commit, state = _a.state;
-            (new UserService()).create(profile);
+            (new UserService()).signup(profile);
             commit('UPDATE_USER', profile);
         },
         SEARCH_LISTINGS_BY_SUBURB: function (_a, suburbId) {
@@ -70,6 +70,12 @@ export default new Vuex.Store({
             var commit = _a.commit, state = _a.state;
             return (new MessageService()).getConversationContent(conversationId).then(function (response) {
                 commit('UPDATE_CONVERSATION_MESSAGES', response.data);
+            });
+        },
+        SEND_MESSAGE: function (_a, message) {
+            var commit = _a.commit, state = _a.state;
+            return (new MessageService()).sendMessage(message).then(function (response) {
+                commit('ADD_MESSAGE', response.data);
             });
         }
     },
@@ -95,6 +101,9 @@ export default new Vuex.Store({
             //}
             //state.conversationsContent.push(messages);
             Vue.set(state, 'conversationsContent', messages);
+        },
+        ADD_MESSAGE: function (state, message) {
+            state.conversationsContent.push(message);
         }
     }
 });

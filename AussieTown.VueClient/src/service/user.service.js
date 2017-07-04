@@ -8,7 +8,7 @@ var UserService = (function () {
     UserService.prototype.getById = function (_id) {
         return http.get('api/user/' + _id).then(function (response) { return response.data; });
     };
-    UserService.prototype.create = function (user) {
+    UserService.prototype.signup = function (user) {
         return http.post('api/user/register', user).then(function (response) {
             var result = response.data;
             if (result.state == 1) {
@@ -20,7 +20,7 @@ var UserService = (function () {
             .catch(this.handleError);
     };
     UserService.prototype.login = function (user) {
-        return http.post('api/user/login', { email: user.email, password: user.password }).then(function (response) {
+        return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId }).then(function (response) {
             var result = response.data;
             if (result.state == 1) {
                 var json = result.data;

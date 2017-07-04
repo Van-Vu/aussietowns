@@ -25,7 +25,7 @@ export default class RegistrationForm extends Vue {
     formSubmitted: boolean = false;
 
     submitForm() {
-        (new UserService()).create(this.model);
+        (new UserService()).signup(this.model);
     }
 
     onLocationSearch(event) {
@@ -44,7 +44,7 @@ export default class RegistrationForm extends Vue {
     onRegister() {
         this.$validator.validateAll().then(() => {
             // eslint-disable-next-line
-            (new UserService()).create(this.model)
+            (new UserService()).signup(this.model)
                 .then(response => {
                     this.$emit('onSuccessfulLogin', response);
                 });

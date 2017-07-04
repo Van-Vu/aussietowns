@@ -1,6 +1,6 @@
 ﻿import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
-import UserDetailComponent from '../component/form/userdetail.component.vue';
+import { Component, Prop, Watch } from "vue-property-decorator";
+import UserDetailComponent from '../component/profile/userdetail.component.vue';
 import TripComponent from '../component/profile/trip.component.vue';
 import MessageComponent from '../component/profile/message.component.vue';
 import UserImageComponent from '../component/profile/userimage.component.vue';
@@ -16,9 +16,7 @@ import UserImageComponent from '../component/profile/userimage.component.vue';
 })
 
 export default class ProfilePage extends Vue {
-    isPhotosActivated: boolean = false;
-    isMessageActivated: boolean = false;
-    isTripsActivated: boolean = false;
+    currentTab: string = '';
 
     asyncData({ store, route }) {
         console.log('profile id:' + route.params.profileId);
@@ -30,22 +28,14 @@ export default class ProfilePage extends Vue {
 
     created() {
         this.$store.dispatch('SET_CURRENT_PAGE', 'profile');
-        let abc = this.$route;
+        this.currentTab = this.$route.name;
+
+        console.log('create profile page');
     }
 
-    activatePhotosTab() {
-        this.isPhotosActivated = true;
-    }
-
-    activateMessageTab() {
-        this.isMessageActivated = true;
-    }
-
-    activateTripsTab() {
-        this.isTripsActivated = true;
-    }
-
-    currentTab() {
-        
+    @Watch('$route')
+    onRouteParamChanged(value, oldValue) {
+        //console.log(`route change ${value}`);
+        this.currentTab = value.name;
     }
 }

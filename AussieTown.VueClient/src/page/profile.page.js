@@ -14,9 +14,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
-import UserDetailComponent from '../component/form/userdetail.component.vue';
+import { Component, Watch } from "vue-property-decorator";
+import UserDetailComponent from '../component/profile/userdetail.component.vue';
 import TripComponent from '../component/profile/trip.component.vue';
 import MessageComponent from '../component/profile/message.component.vue';
 import UserImageComponent from '../component/profile/userimage.component.vue';
@@ -24,9 +27,7 @@ var ProfilePage = (function (_super) {
     __extends(ProfilePage, _super);
     function ProfilePage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.isPhotosActivated = false;
-        _this.isMessageActivated = false;
-        _this.isTripsActivated = false;
+        _this.currentTab = '';
         return _this;
     }
     ProfilePage.prototype.asyncData = function (_a) {
@@ -39,21 +40,21 @@ var ProfilePage = (function (_super) {
     };
     ProfilePage.prototype.created = function () {
         this.$store.dispatch('SET_CURRENT_PAGE', 'profile');
-        var abc = this.$route;
+        this.currentTab = this.$route.name;
+        console.log('create profile page');
     };
-    ProfilePage.prototype.activatePhotosTab = function () {
-        this.isPhotosActivated = true;
-    };
-    ProfilePage.prototype.activateMessageTab = function () {
-        this.isMessageActivated = true;
-    };
-    ProfilePage.prototype.activateTripsTab = function () {
-        this.isTripsActivated = true;
-    };
-    ProfilePage.prototype.currentTab = function () {
+    ProfilePage.prototype.onRouteParamChanged = function (value, oldValue) {
+        //console.log(`route change ${value}`);
+        this.currentTab = value.name;
     };
     return ProfilePage;
 }(Vue));
+__decorate([
+    Watch('$route'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], ProfilePage.prototype, "onRouteParamChanged", null);
 ProfilePage = __decorate([
     Component({
         name: 'ProfilePage',

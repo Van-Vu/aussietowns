@@ -4,6 +4,11 @@ import Vue from "vue";
 
 (Vue.prototype as any).$http = axios;
 
+
+//export const http = axios.create({
+//    baseURL: `http://10.0.0.98/meetthelocal/`
+//})
+
 //export const http = axios.create({
 //    baseURL: `http://localhost/meetthelocal/`
 //})

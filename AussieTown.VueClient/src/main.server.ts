@@ -11,6 +11,8 @@ export default context => {
     router.onReady(() => {
         const matchedComponents = router.getMatchedComponents()
 
+        console.log(`hit the server ${context.url}`);
+
       // no matched routes, reject with 404
       if (!matchedComponents.length) {
         reject({ code: 404 })
@@ -25,7 +27,7 @@ export default context => {
             //console.log('all Symbol name: ' + extendOptions);
 
 
-            if ((component as any).extendOptions && (component as any).extendOptions.asyncData) {
+            if (component && (component as any).extendOptions && (component as any).extendOptions.asyncData) {
                 return (component as any).extendOptions.asyncData({
                   store,
                   route: router.currentRoute
@@ -37,7 +39,7 @@ export default context => {
           // When we attach the state to the context, and the `template` option
           // is used for the renderer, the state will automatically be
           // serialized and injected into the HTML as window.__INITIAL_STATE__.
-          console.log('store.state: ' + (store.state as any).items);
+          console.log('store.state: ' + app);
 
           context.state = store.state
 

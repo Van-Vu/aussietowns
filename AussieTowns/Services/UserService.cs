@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AussieTowns.Common;
 using AussieTowns.Model;
 using AussieTowns.Repository;
 
@@ -20,9 +22,28 @@ namespace AussieTowns.Services
             return await _userRepository.GetById(id);
         }
 
-        public async Task<User> GetByEmailAndPassword(string email, string password)
+        public async Task<User> VerifyUser(User user)
+        {
+            switch (user.Source)
+            {
+                    case UserSource.Native:
+                        return await GetByEmailAndPassword(user.Email, user.Password);
+                    case UserSource.Facebook:
+                    case UserSource.Google:
+                        return await GetUserByExternalInfo(user.Email, user.Source, user.ExternalId);
+                    default:
+                        throw new KeyNotFoundException();
+            }
+            
+        }
+
+        private async Task<User> GetByEmailAndPassword(string email, string password)
         {
             return await _userRepository.GetByEmailAndPassword(email, password);
+        }
+        private async Task<User> GetUserByExternalInfo(string email, UserSource source, string externalId)
+        {
+            return await _userRepository.GetByExternalInfo(email, (int)source, externalId);
         }
 
 

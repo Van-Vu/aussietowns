@@ -31,7 +31,7 @@ var RegistrationForm = (function (_super) {
         return _this;
     }
     RegistrationForm.prototype.submitForm = function () {
-        (new UserService()).create(this.model);
+        (new UserService()).signup(this.model);
     };
     RegistrationForm.prototype.onLocationSearch = function (event) {
         //this.searchStr = event;
@@ -48,7 +48,7 @@ var RegistrationForm = (function (_super) {
         var _this = this;
         this.$validator.validateAll().then(function () {
             // eslint-disable-next-line
-            (new UserService()).create(_this.model)
+            (new UserService()).signup(_this.model)
                 .then(function (response) {
                 _this.$emit('onSuccessfulLogin', response);
             });

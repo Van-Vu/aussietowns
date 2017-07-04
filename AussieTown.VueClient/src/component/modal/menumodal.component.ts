@@ -3,7 +3,7 @@ import { Component, Prop } from "vue-property-decorator";
 import ModalShellComponent from './modalshell.component.vue';
 
 @Component({
-    name: "login-modal",
+    name: "menu-modal",
     components: {
         "modalshell": ModalShellComponent,
     }

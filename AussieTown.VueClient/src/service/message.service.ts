@@ -3,6 +3,7 @@
 export default class MessageService {
     private getConversationByUserIdUrl = 'api/message/user/';
     private getMessagesByConversationIdUrl = 'api/message/conversation/';
+    private sendMessageUrl = 'api/message/conversation';
 
     getConversations(userId: number) {
         return http.get(this.getConversationByUserIdUrl + userId)
@@ -16,5 +17,10 @@ export default class MessageService {
             .then(response => {
                 return response.data;
             });
+    }
+
+    sendMessage(message) {
+        return http.post(this.sendMessageUrl, message)
+            .then(response => { return response.data });
     }
 }

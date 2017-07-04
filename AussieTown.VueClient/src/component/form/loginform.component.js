@@ -19,6 +19,9 @@ import { Component } from "vue-property-decorator";
 import UserService from '../../service/user.service';
 import VeeValidate from 'vee-validate';
 import LoginModel from '../../model/login.model';
+import { UserSource } from '../../model/enum';
+import { fetchPublicKey, decryptTextFromServer } from '../../service/auth.service';
+import { GlobalConfig } from '../../GlobalConfig';
 Vue.use(VeeValidate);
 var LoginForm = (function (_super) {
     __extends(LoginForm, _super);
@@ -26,6 +29,8 @@ var LoginForm = (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.formSubmitted = false;
         _this.model = new LoginModel();
+        // Login or Signup
+        _this.isLogin = true;
         _this.googleSignInParams = {
             client_id: '865729199339-hclqajg0re388bm6t9pje61gsglat3rr.apps.googleusercontent.com'
         };
@@ -39,19 +44,47 @@ var LoginForm = (function (_super) {
         var _this = this;
         this.$validator.validateAll().then(function () {
             // eslint-disable-next-line
-            (new UserService()).login(_this.model)
-                .then(function (responseToken) {
-                _this.$emit('onSuccessfulLogin', responseToken);
-            });
+            if (_this.isLogin) {
+                _this.login(_this.model);
+            }
+            else {
+                _this.signup(_this.model);
+            }
         }).catch(function () {
             // eslint-disable-next-line
             alert('Correct them errors!');
         });
     };
+    LoginForm.prototype.login = function (model) {
+        var _this = this;
+        if (model.password) {
+            model.password = this.encryptText(model.password);
+        }
+        (new UserService()).login(model)
+            .then(function (responseToken) {
+            _this.$emit('onSuccessfulLogin', responseToken);
+        });
+    };
+    LoginForm.prototype.signup = function (model) {
+        var _this = this;
+        if (model.password) {
+            model.password = this.encryptText(model.password);
+        }
+        (new UserService()).signup(model)
+            .then(function (responseToken) {
+            _this.$emit('onSuccessfulLogin', responseToken);
+        });
+    };
+    LoginForm.prototype.encryptText = function (text) {
+        var encrypt = new JSEncrypt();
+        encrypt.setPublicKey(GlobalConfig.publicKey);
+        var encryptedText = encrypt.encrypt(text);
+        return encryptedText;
+    };
     LoginForm.prototype.submitForm = function () {
         this.formSubmitted = true;
     };
-    LoginForm.prototype.onSignInSuccess = function (googleUser) {
+    LoginForm.prototype.onGgSignInSuccess = function (googleUser) {
         // `googleUser` is the GoogleUser object that represents the just-signed-in user. 
         // See https://developers.google.com/identity/sign-in/web/reference#users 
         var profile = googleUser.getBasicProfile(); // etc etc 
@@ -61,23 +94,71 @@ var LoginForm = (function (_super) {
         console.log('Family Name: ' + profile.getFamilyName());
         console.log('Image URL: ' + profile.getImageUrl());
         console.log('Email: ' + profile.getEmail());
+        if (this.isLogin) {
+            this.login({ email: profile.getEmail(), source: UserSource.Google, externalId: this.encryptText(profile.getId()) });
+        }
+        else {
+            this.signup({
+                email: profile.getEmail(),
+                firstname: profile.getGivenName(),
+                lastname: profile.getFamilyName(),
+                photoUrl: profile.getImageUrl(),
+                source: UserSource.Google,
+                externalId: this.encryptText(profile.getId())
+            });
+        }
     };
-    LoginForm.prototype.onSignInError = function (error) {
+    LoginForm.prototype.onGgSignInError = function (error) {
         // `error` contains any error occurred. 
         console.log('OH NOES', error);
     };
     LoginForm.prototype.onFbSignInSuccess = function (response) {
-        FB.api('/me', { "fields": "id,name,email,first_name,last_name,picture" }, function (dude) {
-            console.log("Id: " + dude.id + ".");
-            console.log("Name: " + dude.name + ".");
-            console.log("Email: " + dude.email + ".");
-            console.log("First name: " + dude.first_name + ".");
-            console.log("Last name: " + dude.last_name + ".");
-            console.log("Picture: " + dude.picture.data.url + ".");
+        var _this = this;
+        FB.api('/me', { "fields": "id,name,email,first_name,last_name,picture" }, function (profile) {
+            console.log("Id: " + profile.id + ".");
+            console.log("Name: " + profile.name + ".");
+            console.log("Email: " + profile.email + ".");
+            console.log("First name: " + profile.first_name + ".");
+            console.log("Last name: " + profile.last_name + ".");
+            console.log("Picture: " + profile.picture.data.url + ".");
+            if (_this.isLogin) {
+                _this.login({ email: profile.email, source: UserSource.Facebook, externalId: _this.encryptText(profile.id) });
+            }
+            else {
+                _this.signup({
+                    email: profile.email,
+                    firstname: profile.first_name,
+                    lastname: profile.last_name,
+                    photoUrl: profile.picture.data.url,
+                    source: UserSource.Facebook,
+                    externalId: _this.encryptText(profile.id)
+                });
+            }
         });
     };
     LoginForm.prototype.onFbSignInError = function (error) {
         console.log('OH NOES', error);
+    };
+    LoginForm.prototype.checkFbLoginStatus = function () {
+        FB.getLoginStatus(function (response) {
+            console.log(response);
+        });
+    };
+    LoginForm.prototype.checkGGLoginStatus = function () {
+        gapi.auth.checkSessionState({ session_state: null }, function (isUserNotLoggedIn) {
+            if (isUserNotLoggedIn) {
+                // do some stuff
+            }
+        });
+    };
+    LoginForm.prototype.checkRSAEncryoption = function () {
+        var encrypt = new JSEncrypt();
+        fetchPublicKey().then(function (data) {
+            encrypt.setPublicKey(data);
+            var encryptedText = encrypt.encrypt("không phải utf8");
+            console.log(encryptedText);
+            decryptTextFromServer(encryptedText).then(function (x) { return console.log(x); });
+        });
     };
     return LoginForm;
 }(Vue));

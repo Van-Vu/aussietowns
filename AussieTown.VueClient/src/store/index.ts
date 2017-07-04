@@ -52,7 +52,7 @@ export default new Vuex.Store({
             commit('UPDATE_USER', profile);
         },
         INSERT_USER({ commit, state }, profile) {
-            (new UserService()).create(profile);
+            (new UserService()).signup(profile);
             commit('UPDATE_USER', profile);
         },
         SEARCH_LISTINGS_BY_SUBURB({ commit, state }, suburbId) {
@@ -69,6 +69,12 @@ export default new Vuex.Store({
             return (new MessageService()).getConversationContent(conversationId).then(response => {
                 commit('UPDATE_CONVERSATION_MESSAGES', (response as any).data);
             });            
+        },
+        SEND_MESSAGE({commit, state}, message)
+        {
+            return (new MessageService()).sendMessage(message).then(response => {
+                commit('ADD_MESSAGE', (response as any).data);
+            });                
         }
     },
     mutations: {
@@ -94,6 +100,9 @@ export default new Vuex.Store({
             //state.conversationsContent.push(messages);
 
             Vue.set(state, 'conversationsContent', messages);
+        },
+        ADD_MESSAGE(state, message) {
+            state.conversationsContent.push(message);
         }
     }
 })

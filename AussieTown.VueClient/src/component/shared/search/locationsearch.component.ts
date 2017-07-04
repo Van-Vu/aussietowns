@@ -15,7 +15,7 @@ import AutoCompleteComponent from './autocomplete.vue';
 export default class LocationSearchComponent extends Vue {
     @Prop initialData: any;
 
-    placeHolderText = "Type in a location / suburb";
+    placeHolderText = "Location";
     locations: any[] = [];
 
     onLocationSearch(searchTerm) {

@@ -6,14 +6,16 @@
 
       <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.1/css/bulma.min.css" type="text/css"/>-->    
       <meta name="mobile-web-app-capable" content="yes">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-    <meta name="theme-color" content="#f60">
-    <% for (var chunk of webpack.chunks) {
-        for (var file of chunk.files) {
-          if (file.match(/\.(js|css)$/)) { %>
-      <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>" as="<%= file.match(/\.css$/)?'style':'script' %>"><% }}} %>    
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+      <meta name="theme-color" content="#99CD4E">
       
+      <script type="text/javascript" charset="UTF-8" src="/static/script/jsencrypt.min.js"></script>
       <script type="text/javascript" charset="UTF-8" src="https://apis.google.com/js/api:client.js"></script>
+      
+      <!--<% for (var chunk of webpack.chunks) {
+      for (var file of chunk.files) {
+      if (file.match(/\.(js|css)$/)) { %>
+      <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>" as="<%= file.match(/\.css$/)?'style':'script' %>"><% }}} %>-->
 
       <script>
           window.fbAsyncInit = function() {
@@ -41,7 +43,7 @@
           //});
       </script>
   </head>
-  <body>
-    <!--vue-ssr-outlet-->
-  </body>
+    <body>
+<!--vue-ssr-outlet-->
+    </body>
 </html>

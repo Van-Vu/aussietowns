@@ -25,9 +25,6 @@ Vue.use(lazy, {
     try: 0, // the count of try to load one image 
 });
 
-import globalconfig from './globalconfig';
-Vue.use(globalconfig, {});
-
 import VueMask from 'v-mask'
 Vue.use(VueMask)
 

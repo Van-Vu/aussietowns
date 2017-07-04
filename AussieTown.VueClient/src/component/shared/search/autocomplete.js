@@ -29,6 +29,7 @@ var AutoCompleteComponent = (function (_super) {
         //@Output('onSelect') onSelect: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
         //@Output() onSearch: EventEmitter<string> = new EventEmitter();
         _this.keyword = '';
+        _this.selectedText = '';
         _this.selected = new SelectedAutocompleteValue();
         _this.firstSet = true;
         //private list: AutocompleteItem[];
@@ -75,10 +76,18 @@ var AutoCompleteComponent = (function (_super) {
     };
     AutoCompleteComponent.prototype.onKeyDown = function (event) {
         var key = event.keyCode;
+        // Enter
         if (key == 13) {
+            if ((this.selectedText != '') && (this.keyword == '')) {
+                this.$emit('HeyIAmDone!');
+            }
             this.doSelectIndex(this.indexSelected);
             this.showList = false;
             event.preventDefault();
+        }
+        // Backspace
+        if ((key == 8) && (this.keyword == '')) {
+            this.selectedText = '';
         }
     };
     AutoCompleteComponent.prototype.onKeyUp = function (event) {
@@ -109,7 +118,8 @@ var AutoCompleteComponent = (function (_super) {
         this.selected.Value = this.list[this.indexSelected].id;
         this.$emit("select", this.list[this.indexSelected]);
         this.firstSet = false;
-        this.keyword = this.selected.Description;
+        this.selectedText = this.selected.Description;
+        this.keyword = '';
         if (this.cleanUp) {
             this.indexSelected = -1;
             this.selected = new SelectedAutocompleteValue();

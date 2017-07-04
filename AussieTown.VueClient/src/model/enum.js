@@ -10,3 +10,9 @@ export var RepeatedType;
     RepeatedType[RepeatedType["Weekly"] = 2] = "Weekly";
     RepeatedType[RepeatedType["Monthly"] = 3] = "Monthly";
 })(RepeatedType || (RepeatedType = {}));
+export var UserSource;
+(function (UserSource) {
+    UserSource[UserSource["Native"] = 0] = "Native";
+    UserSource[UserSource["Facebook"] = 1] = "Facebook";
+    UserSource[UserSource["Google"] = 2] = "Google";
+})(UserSource || (UserSource = {}));

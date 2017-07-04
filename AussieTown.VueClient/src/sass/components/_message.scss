@@ -1,12 +1,20 @@
-﻿.message-leftpanel{
-    width: 30%;
-    display: inline-block;
-    float:left;
+﻿.conversation {
+    margin-bottom: 10px;
+    margin-top: 10px;
+
+    .photo_wrapper{
+        display: inline-block;
+    }
+
+    .text_wrapper{
+        display: inline-block;
+        vertical-align: top;
+    }
 }
 
-.message-rightpanel{
-    width: 69%;
-    display: inline-block;
+.message-icon {
+    pointer-events: auto !important;
+    color: $c-brand-primary-darker !important;
 }
 
 @mixin talk-bubble-base() {

@@ -19,6 +19,9 @@ export default class MessageComponent extends Vue {
     cookieValue: string;
     $cookie: any;
     profileId: number;
+    isShowConversationContent: boolean = false;
+    sendingMessage: string = '';
+    currentConversation: number = 0;
 
     created(): void {
         this.profileId = (this.$route.params as any).profileId;
@@ -41,14 +44,30 @@ export default class MessageComponent extends Vue {
     openConversation(conversation) {
         //var data = this.conversations;
         //for (var i = 0; i < data.length; i++) {
-            this.$store.dispatch('FETCH_CONVERSATION_CONTENT', conversation.id).then(() => {
-                this.conversationsContent = this.$store.state.conversationsContent;
-            });
+        this.$store.dispatch('FETCH_CONVERSATION_CONTENT', conversation.id).then(() => {
+            this.conversationsContent = this.$store.state.conversationsContent;
+            this.currentConversation = conversation.id;
+        });
+
+        this.isShowConversationContent = true;
         //}        
     }
 
+    sendMessage() {
+        this.$store.dispatch('SEND_MESSAGE',
+            {
+                conversationId: this.currentConversation,
+                userId: this.profileId,
+                messageContent: this.sendingMessage
+            })
+            .then(() => {
+                this.sendingMessage = '';
+                console.log('send message success!');
+            });
+    }
+
     messageBubble(message) {
-        if (message.user.id == this.profileId) {
+        if (message.userId == this.profileId) {
             return "talk-bubble-main";
         }
 

@@ -41,7 +41,7 @@ __decorate([
 ], MenuModal.prototype, "show", void 0);
 MenuModal = __decorate([
     Component({
-        name: "login-modal",
+        name: "menu-modal",
         components: {
             "modalshell": ModalShellComponent,
         }

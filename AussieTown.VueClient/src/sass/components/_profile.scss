@@ -2,7 +2,7 @@
     padding-top: $size-header-height;
 
     .profile-section {
-      display: none;
+      /*display: none;*/
       padding: 20px 0 0;
       border-top: 1px solid #ddd;
     }
@@ -56,13 +56,6 @@
       border: 1px solid #ddd;
       border-top: 2px solid orange;
       border-bottom: 1px solid #fff;
-    }
-
-    #tab1:checked ~ #content1,
-    #tab2:checked ~ #content2,
-    #tab3:checked ~ #content3,
-    #tab4:checked ~ #content4 {
-      display: block;
     }
 
     @media screen and (max-width: 650px) {

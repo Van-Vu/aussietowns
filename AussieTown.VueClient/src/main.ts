@@ -38,6 +38,9 @@ router.onReady(() => {
     // Doing it after initial route is resolved so that we don't double-fetch
     // the data that we already have. Using router.beforeResolve() so that all
     // async components are resolved.
+
+    console.log('hit the client')
+
     router.beforeResolve((to, from, next) => {
         const matched = router.getMatchedComponents(to)
         const prevMatched = router.getMatchedComponents(from)
@@ -48,13 +51,6 @@ router.onReady(() => {
         if (!activated.length) {
             return next()
         }
-
-        //if ((component as any).extendOptions.asyncData) {
-        //    return (component as any).extendOptions.asyncData({
-        //        store,
-        //        route: router.currentRoute
-        //    })
-        //}
 
         Promise.all(activated.map(c => {
             //console.log('here in client:' + (c as any).options.methods.asyncData)
