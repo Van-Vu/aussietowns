@@ -8,8 +8,9 @@ import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
 import LocationSearchComponent from '../component/shared/search/locationsearch.component.vue';
 import ListingService from '../service/listing.service';
-import { Utils, ListingType } from '../component/utils';
-import * as datepicker from '../component/shared/external/datepicker.vue';
+import { Utils } from '../component/utils';
+import { ListingType } from '../model/enum';
+import datepicker from '../component/shared/external/datepicker.vue';
 import ScheduleModel from '../model/schedule.model';
 import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
 
@@ -18,8 +19,8 @@ Vue.use(VeeValidate);
 @Component({
     name: 'ListingPage',
     components: {
-        'locationsearch': LocationSearchComponent,
-        'participant': ParticipantComponent,
+        "locationsearch": LocationSearchComponent,
+        "participant": ParticipantComponent,
         "datepicker": datepicker,
         "schedulemodal": ScheduleModalComponent
     }

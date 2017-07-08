@@ -1,3 +1,4 @@
+import { ListingType } from '../model/enum';
 var Utils = (function () {
     function Utils() {
     }
@@ -24,11 +25,13 @@ var Utils = (function () {
         var sanitizeName = name.toLowerCase().replace(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/g, "");
         return sanitizeName.split(' ').join('-');
     };
+    Utils.valueCompare = function (x, y) {
+        return JSON.stringify(x) === JSON.stringify(y);
+    };
+    Utils.removeFromArray = function (array, item) {
+        var _this = this;
+        return array.filter(function (target) { return !_this.valueCompare(item, target); });
+    };
     return Utils;
 }());
 export { Utils };
-export var ListingType;
-(function (ListingType) {
-    ListingType[ListingType["Offer"] = 0] = "Offer";
-    ListingType[ListingType["Request"] = 1] = "Request";
-})(ListingType || (ListingType = {}));

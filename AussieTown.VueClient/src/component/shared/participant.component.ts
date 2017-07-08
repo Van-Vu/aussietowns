@@ -7,7 +7,7 @@ import SearchService from '../../service/search.service';
 
 
 @Component({
-    name: "Participant",
+    name: "ParticipantComponent",
     components: {
         "miniprofile": MiniProfileComponent,
         "usersearch": UserSearchComponent

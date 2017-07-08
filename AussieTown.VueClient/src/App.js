@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import Component from "vue-class-component";
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
-//let window: any;
+import NotificationComponent from './component/shared/notification.component.vue';
 //if (process.env.VUE_ENV === 'client') {
 //    Vue.component('datepicker', require('vuejs-datepicker'))
 //    Vue.component('vue-timepicker', require('vue2-timepicker'))
@@ -41,14 +41,15 @@ var App = (function (_super) {
     function App() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    App = __decorate([
+        Component({
+            name: "App",
+            components: {
+                "nav-menu": NavMenuComponent,
+                "notifications": NotificationComponent
+            }
+        })
+    ], App);
     return App;
 }(Vue));
-App = __decorate([
-    Component({
-        name: "App",
-        components: {
-            "nav-menu": NavMenuComponent
-        }
-    })
-], App);
 export default App;

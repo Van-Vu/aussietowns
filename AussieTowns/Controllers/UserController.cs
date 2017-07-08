@@ -141,7 +141,7 @@ namespace AussieTowns.Controllers
         }
 
         [HttpGet("summary/{id}")]
-        //[Authorize("Bearer")]
+        [Authorize(Policy = "AtLeastEditor")]
         public async Task<RequestResult> GetUserMiniProfile(int id)
         {
             var user = await _userService.GetById(id);
@@ -253,8 +253,7 @@ namespace AussieTowns.Controllers
                     expiresIn = TokenAuthOption.ExpiresSpan.TotalSeconds,
                     tokeyType = TokenAuthOption.TokenType,
                     accessToken = token,
-                    username = user.FirstName,
-                    userId = user.Id
+                    loggedInUser = _mapper.Map<User,UserLoggedIn>(user)
                 }
             };
         }
@@ -266,7 +265,8 @@ namespace AussieTowns.Controllers
             ClaimsIdentity identity = new ClaimsIdentity(
                 new GenericIdentity(user.Email, "TokenAuth"),
                 new[] {
-                    new Claim("userId", user.Id.ToString())
+                    new Claim("userId", user.Id.ToString()),
+                    new Claim("role", user.Role.ToString()),
                 }
             );
 

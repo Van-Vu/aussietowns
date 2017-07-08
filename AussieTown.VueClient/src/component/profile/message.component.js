@@ -73,14 +73,14 @@ var MessageComponent = (function (_super) {
         }
         return "talk-bubble";
     };
+    MessageComponent = __decorate([
+        Component({
+            name: "MessageComponent",
+            components: {
+                "miniprofile": MiniProfileComponent
+            }
+        })
+    ], MessageComponent);
     return MessageComponent;
 }(Vue));
-MessageComponent = __decorate([
-    Component({
-        name: "MessageComponent",
-        components: {
-            "miniprofile": MiniProfileComponent
-        }
-    })
-], MessageComponent);
 export default MessageComponent;

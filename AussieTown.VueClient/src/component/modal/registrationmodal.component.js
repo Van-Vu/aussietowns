@@ -31,19 +31,19 @@ var RegistrationModal = (function (_super) {
     RegistrationModal.prototype.close = function () {
         this.$emit('onClose');
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Boolean)
+    ], RegistrationModal.prototype, "show", void 0);
+    RegistrationModal = __decorate([
+        Component({
+            name: "RegistrationModal",
+            components: {
+                "modalshell": ModalShellComponent,
+                'registrationform': RegistrationForm
+            }
+        })
+    ], RegistrationModal);
     return RegistrationModal;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Boolean)
-], RegistrationModal.prototype, "show", void 0);
-RegistrationModal = __decorate([
-    Component({
-        name: "RegistrationModal",
-        components: {
-            "modalshell": ModalShellComponent,
-            'registrationform': RegistrationForm
-        }
-    })
-], RegistrationModal);
 export default RegistrationModal;

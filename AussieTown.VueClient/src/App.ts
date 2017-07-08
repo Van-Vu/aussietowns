@@ -1,8 +1,8 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
+import NotificationComponent from './component/shared/notification.component.vue'
 
-//let window: any;
 
 //if (process.env.VUE_ENV === 'client') {
 //    Vue.component('datepicker', require('vuejs-datepicker'))
@@ -11,6 +11,7 @@ import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 //Vue.use(ElementUI);
 import VueCookie from 'vue-js-cookie';
 Vue.use(VueCookie);
+
 
 import GSignInButton from 'vue-google-signin-button';
 Vue.use(GSignInButton);
@@ -31,7 +32,8 @@ Vue.use(VueMask)
 @Component({
     name: "App",
     components: {
-        "nav-menu": NavMenuComponent
+        "nav-menu": NavMenuComponent,
+        "notifications": NotificationComponent
     }
 })
 

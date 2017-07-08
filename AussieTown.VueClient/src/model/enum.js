@@ -16,3 +16,10 @@ export var UserSource;
     UserSource[UserSource["Facebook"] = 1] = "Facebook";
     UserSource[UserSource["Google"] = 2] = "Google";
 })(UserSource || (UserSource = {}));
+export var UserRole;
+(function (UserRole) {
+    UserRole[UserRole["User"] = 1] = "User";
+    UserRole[UserRole["Editor"] = 2] = "Editor";
+    UserRole[UserRole["Admin"] = 4] = "Admin";
+    UserRole[UserRole["SuperAdmin"] = 8] = "SuperAdmin";
+})(UserRole || (UserRole = {}));

@@ -3,7 +3,7 @@ var UserService = (function () {
     function UserService() {
     }
     UserService.prototype.getAll = function () {
-        return http.get('/users', this.jwt()).then(function (response) { return response.data; });
+        return http.get('/users').then(function (response) { return response.data; });
     };
     UserService.prototype.getById = function (_id) {
         return http.get('api/user/' + _id).then(function (response) { return response.data; });
@@ -12,8 +12,7 @@ var UserService = (function () {
         return http.post('api/user/register', user).then(function (response) {
             var result = response.data;
             if (result.state == 1) {
-                var json = result.data;
-                return { token: json.accessToken, userId: json.userId };
+                return result.data;
             }
             return result;
         })
@@ -23,41 +22,39 @@ var UserService = (function () {
         return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId }).then(function (response) {
             var result = response.data;
             if (result.state == 1) {
-                var json = result.data;
-                return { token: json.accessToken, userId: json.userId };
+                return result.data;
             }
             return 0;
         })
             .catch(this.handleError);
     };
     UserService.prototype.getMiniProfile = function (id) {
-        return http.get('api/user/summary/' + id, this.jwt())
+        return http.get('api/user/summary/' + id)
             .then(function (response) {
             var result = response.data;
             if (result.state == 1) {
                 return result.data;
             }
             return '';
-        })
-            .catch(this.handleError);
+        });
     };
     UserService.prototype.getUserInfo = function (id) {
-        return http.get('api/user/' + id, this.jwt())
+        return http.get('api/user/' + id)
             .then(function (response) { return response.data; })
             .catch(this.handleError);
     };
     UserService.prototype.update = function (user) {
-        return http.put('api/user/' + user.Id, user, this.jwt())
+        return http.put('api/user/' + user.Id, user)
             .then(function (response) { return response.data; })
             .catch(this.handleError);
     };
     UserService.prototype.getToursByUserId = function (id) {
-        return http.get('api/user/tour/' + id, this.jwt())
+        return http.get('api/user/tour/' + id)
             .then(function (response) { return response.data; })
             .catch(this.handleError);
     };
     UserService.prototype.delete = function (_id) {
-        return http.delete('/users/' + _id, this.jwt());
+        return http.delete('/users/' + _id);
     };
     UserService.prototype.jwt = function () {
         // create authorization header with jwt token

@@ -2,23 +2,46 @@ import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import VueRouter from 'vue-router';
 import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue';
-import axios from 'axios';
 import SearchService from '../service/search.service';
 import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
-import * as Swiper from '../component/shared/external/vue-swiper.vue';
+import Swiper from '../component/shared/external/vue-swiper.vue';
 import { AutocompleteItem } from '../model/autocomplete.model';
 import { Utils } from '../component/utils';
+import * as Cookies from 'js-cookie';
 
 @Component({
     name: 'HomePage',
     components: {
         "searchbar": SearchBarComponent,
         "swiper": Swiper
+    },
+    beforeRouteEnter(to, from, next) {
+        // called before the route that renders this component is confirmed.
+        // does NOT have access to `this` component instance,
+        // because it has not been created yet when this guard is called!
+        console.log('beforeRouteEnter from home page');
+        next();
+    },
+    beforeRouteUpdate(to, from, next) {
+        // called when the route that renders this component has changed,
+        // but this component is reused in the new route.
+        // For example, for a route with dynamic params /foo/:id, when we
+        // navigate between /foo/1 and /foo/2, the same Foo component instance
+        // will be reused, and this hook will be called when that happens.
+        // has access to `this` component instance.
+        console.log('beforeRouteUpdate  from home page');
+        next();
+    },
+    beforeRouteLeave(to, from, next) {
+        // called when the route that renders this component is about to
+        // be navigated away from.
+        // has access to `this` component instance.
+        console.log('beforeRouteLeave  from home page');
+        next();
     }
 })
 
 export default class HomePage extends Vue{
-    $cookie: any;
     showListingRequest: boolean = false;
     showListingOffer: boolean = false;
     searchSuburb: AutocompleteItem = null;
@@ -63,29 +86,15 @@ export default class HomePage extends Vue{
         console.log('onSlideChangeEnd', currentPage);
     }
 
+    checkLogginUser() {
+        //this.$store.dispatch('TEST', 'Hey bodom test');
+        //this.$store.dispatch('FETCH_CURRENT_USER').then(() => {
+        //    console.log(this.$store.state.loggedinUser);
+        //});
+        //console.log(Cookies.getJSON('vuex'));    
 
-    beforeRouteEnter(to, from, next) {
-        // called before the route that renders this component is confirmed.
-        // does NOT have access to `this` component instance,
-        // because it has not been created yet when this guard is called!
-        console.log('beforeRouteEnter');
-        return next()
+        console.log(this.$store.getters.doneTodos);
     }
-    beforeRouteUpdate(to, from, next) {
-        // called when the route that renders this component has changed,
-        // but this component is reused in the new route.
-        // For example, for a route with dynamic params /foo/:id, when we
-        // navigate between /foo/1 and /foo/2, the same Foo component instance
-        // will be reused, and this hook will be called when that happens.
-        // has access to `this` component instance.
-        console.log('beforeRouteUpdate');
-        return next()
-    }
-    beforeRouteLeave(to, from, next) {
-        // called when the route that renders this component is about to
-        // be navigated away from.
-        // has access to `this` component instance.
-        console.log('beforeRouteLeave');
-        return next()
-    }
+
+
 }

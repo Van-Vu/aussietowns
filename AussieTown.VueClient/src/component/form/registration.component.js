@@ -58,12 +58,12 @@ var RegistrationForm = (function (_super) {
         });
     };
     RegistrationForm.prototype.capture = function () { };
+    RegistrationForm = __decorate([
+        Component({
+            name: 'RegistrationForm',
+            components: {}
+        })
+    ], RegistrationForm);
     return RegistrationForm;
 }(Vue));
-RegistrationForm = __decorate([
-    Component({
-        name: 'RegistrationForm',
-        components: {}
-    })
-], RegistrationForm);
 export default RegistrationForm;

@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <notifications></notifications>
         <header class="hero-head">
             <nav-menu></nav-menu>
         </header>

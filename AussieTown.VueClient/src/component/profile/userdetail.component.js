@@ -47,14 +47,14 @@ var UserDetailComponent = (function (_super) {
     };
     UserDetailComponent.prototype.onUpdate = function () { };
     UserDetailComponent.prototype.capture = function () { };
+    UserDetailComponent = __decorate([
+        Component({
+            name: 'UserDetail',
+            components: {
+                "locationsearch": LocationSearchComponent
+            }
+        })
+    ], UserDetailComponent);
     return UserDetailComponent;
 }(Vue));
-UserDetailComponent = __decorate([
-    Component({
-        name: 'UserDetail',
-        components: {
-            "locationsearch": LocationSearchComponent
-        }
-    })
-], UserDetailComponent);
 export default UserDetailComponent;

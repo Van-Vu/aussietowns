@@ -3,7 +3,7 @@ import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import AutoCompleteComponent from "../shared/autocomplete.vue";
 import { Utils } from '../utils';
 import ListingModel from '../../model/listing.model';
-import * as Swiper from './external/vue-swiper.vue';
+import Swiper from './external/vue-swiper.vue';
 
 
 @Component({

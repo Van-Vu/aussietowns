@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import { app, router, store } from './root';
 import Vue from 'vue';
+import merge from 'lodash.merge';
 // a global mixin that calls `asyncData` when a route component's params change
 Vue.mixin({
     beforeRouteUpdate: function (to, from, next) {
@@ -19,7 +20,9 @@ Vue.mixin({
     }
 });
 if (window.__INITIAL_STATE__) {
-    store.replaceState(window.__INITIAL_STATE__);
+    // Bodom hack
+    Reflect.deleteProperty(window.__INITIAL_STATE__, 'loggedInUser');
+    store.replaceState(merge({}, store.state, window.__INITIAL_STATE__));
 }
 //import { Component } from "vue-property-decorator"
 //Component.registerHooks([

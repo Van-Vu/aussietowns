@@ -11,7 +11,12 @@
                 <router-link :to="{name:'home'}" class="is-center"><div class='nav-bar__logo'></div></router-link>
             </div>
             <div class="column is-one-quarter-mobile">
-                <a class="button is-pulled-right mtl_button" @click="showLoginModal = !showLoginModal">Join</a>
+                <a v-if="!isLoggedIn"class="button is-pulled-right mtl_button" @click="showLoginModal = !showLoginModal">Join</a>
+                <a v-else class="is-pulled-right" @click="showLoginModal = !showLoginModal">
+                    <figure class="image is-32x32">
+                        <img class="is-circle" :src="profilePhoto" />
+                    </figure>
+                </a>
             </div>
 
         </div>

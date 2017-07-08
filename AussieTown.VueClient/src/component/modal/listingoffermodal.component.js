@@ -31,19 +31,19 @@ var ListingOfferModalComponent = (function (_super) {
     ListingOfferModalComponent.prototype.close = function () {
         this.$emit('onClose');
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Boolean)
+    ], ListingOfferModalComponent.prototype, "show", void 0);
+    ListingOfferModalComponent = __decorate([
+        Component({
+            name: "listingoffermodal",
+            components: {
+                "modalshell": ModalShellComponent,
+                "listingofferform": ListingOfferForm
+            }
+        })
+    ], ListingOfferModalComponent);
     return ListingOfferModalComponent;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Boolean)
-], ListingOfferModalComponent.prototype, "show", void 0);
-ListingOfferModalComponent = __decorate([
-    Component({
-        name: "listingoffermodal",
-        components: {
-            "modalshell": ModalShellComponent,
-            "listingofferform": ListingOfferForm
-        }
-    })
-], ListingOfferModalComponent);
 export default ListingOfferModalComponent;

@@ -1,31 +1,54 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-//import actions from './actions';
-//import mutations from './mutations';
-//import getters from './getters';
 import ListingService from "../service/listing.service";
 import UserService from "../service/user.service";
 import MessageService from "../service/message.service";
+import { Utils } from '../component/utils';
+import createPersistedState from 'vuex-persistedstate';
+import * as Cookies from 'js-cookie';
 Vue.use(Vuex);
 export default new Vuex.Store({
+    plugins: [
+        createPersistedState({
+            getState: function (key) { return Cookies.getJSON(key); },
+            setState: function (key, state) { return Cookies.set(key, state, { expires: 3, secure: false }); },
+            key: 'mtl',
+            paths: ['loggedInUser']
+        })
+    ],
     state: {
         currentPage: '',
+        loggedInUser: '',
         listing: {},
         profile: {},
         searchListings: [],
         conversations: [],
-        conversationsContent: []
+        conversationsContent: [],
+        message: '',
+        notifications: []
+    },
+    getters: {
+        isLoggedIn: function (state) {
+            return ((typeof state.loggedInUser === 'object') && (state.loggedInUser.email !== ''));
+        },
+        profilePhoto: function (state) {
+            return (typeof state.loggedInUser === 'object') ? state.loggedInUser.photoUrl : '';
+        }
     },
     actions: {
+        SET_CURRENT_USER: function (_a, loggedInUser) {
+            var commit = _a.commit, state = _a.state;
+            return commit('UPDATE_CURRENT_USER', loggedInUser);
+        },
         SET_CURRENT_PAGE: function (_a, page) {
             var commit = _a.commit;
             commit('UPDATE_PAGE', page);
         },
         FETCH_LISTING_BY_ID: function (_a, id) {
             var commit = _a.commit, state = _a.state;
-            return (new ListingService()).getListingById(id).then(function (response) {
-                commit('UPDATE_LISTING', response.data);
-            });
+            (new ListingService()).getListingById(id)
+                .then(function (response) { return commit('UPDATE_LISTING', response.data); })
+                .catch(function (error) { });
         },
         UPDATE_LISTING: function (_a, listing) {
             var commit = _a.commit, state = _a.state;
@@ -37,22 +60,22 @@ export default new Vuex.Store({
             (new ListingService()).addListing(listing);
             commit('UPDATE_LISTING', listing);
         },
-        FETCH_USER_BY_ID: function (_a, id) {
+        FETCH_PROFILE_BY_ID: function (_a, id) {
             var dispatch = _a.dispatch, commit = _a.commit, state = _a.state;
             return (new UserService()).getById(id).then(function (response) {
                 console.log('fetch User');
-                commit('UPDATE_USER', response.data);
+                commit('UPDATE_PROFILE', response.data);
             });
         },
         UPDATE_USER: function (_a, profile) {
             var commit = _a.commit, state = _a.state;
             (new UserService()).update(profile);
-            commit('UPDATE_USER', profile);
+            commit('UPDATE_PROFILE', profile);
         },
         INSERT_USER: function (_a, profile) {
             var commit = _a.commit, state = _a.state;
             (new UserService()).signup(profile);
-            commit('UPDATE_USER', profile);
+            commit('UPDATE_PROFILE', profile);
         },
         SEARCH_LISTINGS_BY_SUBURB: function (_a, suburbId) {
             var commit = _a.commit, state = _a.state;
@@ -77,6 +100,18 @@ export default new Vuex.Store({
             return (new MessageService()).sendMessage(message).then(function (response) {
                 commit('ADD_MESSAGE', response.data);
             });
+        },
+        ADD_NOTIFICATION: function (_a, notification) {
+            var commit = _a.commit;
+            commit('ADD_NOTIFICATION', notification);
+        },
+        REMOVE_NOTIFICATION: function (_a, notification) {
+            var commit = _a.commit;
+            commit('REMOVE_NOTIFICATION', notification);
+        },
+        TEST: function (_a, payload) {
+            var commit = _a.commit, state = _a.state;
+            (new UserService()).getMiniProfile(1).catch(function (error) { return commit('ADD_NOTIFICATION', error); });
         }
     },
     mutations: {
@@ -86,7 +121,7 @@ export default new Vuex.Store({
         UPDATE_LISTING: function (state, listing) {
             Vue.set(state, 'listing', listing);
         },
-        UPDATE_USER: function (state, profile) {
+        UPDATE_PROFILE: function (state, profile) {
             state.profile = profile;
         },
         UPDATE_SEARCH_LISTINGS: function (state, listings) {
@@ -104,6 +139,15 @@ export default new Vuex.Store({
         },
         ADD_MESSAGE: function (state, message) {
             state.conversationsContent.push(message);
+        },
+        UPDATE_CURRENT_USER: function (state, loggedInUser) {
+            state.loggedInUser = loggedInUser;
+        },
+        ADD_NOTIFICATION: function (state, notification) {
+            state.notifications.push(notification);
+        },
+        REMOVE_NOTIFICATION: function (state, notification) {
+            Vue.set(state, 'notifications', Utils.removeFromArray(state.notifications, notification));
         }
     }
 });

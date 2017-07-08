@@ -33,5 +33,6 @@ namespace AussieTowns.Model
         public bool IsActive { get; set; }
         public UserSource Source { get; set; }
         public string ExternalId { get; set; }
+        public int Role { get; set; }
     }
 }

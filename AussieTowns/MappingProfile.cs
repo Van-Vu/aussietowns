@@ -19,6 +19,8 @@ namespace AussieTowns
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => "/static/images/logo.png"))
                 .ForMember(dest => dest.ShortDescription, opts => opts.MapFrom(src => src.Description.PadLeft(30)));
 
+            CreateMap<User, UserLoggedIn>();
+
             CreateMap<SuburbDetail, AutoCompleteItem>()
                 .ForMember(dest => dest.Name,
                     opts => opts.MapFrom(src => $"{src.SuburbName}, {src.State} ({src.Postcode})"));

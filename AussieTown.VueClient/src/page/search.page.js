@@ -66,14 +66,14 @@ var SearchPage = (function (_super) {
     SearchPage.prototype.showTourRequest = function () {
         this.$router.push("home");
     };
+    SearchPage = __decorate([
+        Component({
+            name: "SearchPage",
+            components: {
+                "listingcard": ListingCardComponent
+            }
+        })
+    ], SearchPage);
     return SearchPage;
 }(Vue));
-SearchPage = __decorate([
-    Component({
-        name: "SearchPage",
-        components: {
-            "listingcard": ListingCardComponent
-        }
-    })
-], SearchPage);
 export default SearchPage;

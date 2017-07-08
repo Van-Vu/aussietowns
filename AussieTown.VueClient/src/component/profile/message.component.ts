@@ -17,7 +17,6 @@ export default class MessageComponent extends Vue {
     conversationsContent: MessageModel[] = new Array<MessageModel>();
     test: any[];
     cookieValue: string;
-    $cookie: any;
     profileId: number;
     isShowConversationContent: boolean = false;
     sendingMessage: string = '';

@@ -2,56 +2,57 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import Router  from "vue-router";
 
-
+// LAZY LOADING ATTEMP
 // https://github.com/vuejs/vue-router/issues/1379
-const HomePage = (resolve) => (require as any)(['../page/home.page.vue'], module => {
-    resolve(module.default)
-})
-//import SearchPage = resolve => require(['../page/search.page.vue'], resolve);
+//const HomePage = (resolve) => (require as any)(['../page/home.page.vue'], module => {
+//    resolve(module.default)
+//})
+//const SearchPage = (resolve) => (require as any)(['../page/search.page.vue'], module => {
+//    resolve(module.default)
+//})
+//const ListingPage = (resolve) => (require as any)(['../page/listing.page.vue'], module => {
+//    resolve(module.default)
+//})
+//const ProfilePage = (resolve) => (require as any)(['../page/profile.page.vue'], module => {
+//    resolve(module.default)
+//})
+//const TestPage = (resolve) => (require as any)(['../page/test.page.vue'], module => {
+//    resolve(module.default)
+//})
+//const HelpPage = (resolve) => (require as any)(['../page/static/help.page.vue'], module => {
+//    resolve(module.default)
+//})
+//const AboutPage = (resolve) => (require as any)(['../page/static/about.page.vue'], module => {
+//    resolve(module.default)
+//})
+//const TermsAndConditionsPage = (resolve) => (require as any)(['../page/static/termsandconditions.page.vue'], module => {
+//    resolve(module.default)
+//})
 
-const SearchPage = (resolve) => (require as any)(['../page/search.page.vue'], module => {
-    resolve(module.default)
-})
+import HomePage from '../page/home.page.vue';
+import SearchPage from '../page/search.page.vue';
+import ListingPage from '../page/listing.page.vue';
+import ProfilePage from '../page/profile.page.vue';
+import TestPage from '../page/test.page.vue';
+import HelpPage from '../page/static/help.page.vue';
+import AboutPage from '../page/static/about.page.vue';
+import TermsAndConditionsPage from '../page/static/termsandconditions.page.vue';
 
-//import SearchPage from '../page/search.page.vue';
-const ListingPage = (resolve) => (require as any)(['../page/listing.page.vue'], module => {
-    resolve(module.default)
-})
-//import ListingPage from '../page/listing.page.vue';
-const ProfilePage = (resolve) => (require as any)(['../page/profile.page.vue'], module => {
-    resolve(module.default)
-})
-//import ProfilePage from '../page/profile.page.vue';
-const TestPage = (resolve) => (require as any)(['../page/test.page.vue'], module => {
-    resolve(module.default)
-})
-//import TestPage from '../page/test.page.vue';
-const HelpPage = (resolve) => (require as any)(['../page/static/help.page.vue'], module => {
-    resolve(module.default)
-})
-//import * as HelpPage from '../page/static/help.page.vue';
-const AboutPage = (resolve) => (require as any)(['../page/static/about.page.vue'], module => {
-    resolve(module.default)
-})
-//import * as AboutPage from '../page/static/about.page.vue';
-const TermsAndConditionsPage = (resolve) => (require as any)(['../page/static/termsandconditions.page.vue'], module => {
-    resolve(module.default)
-})
-//import * as TermsAndConditionsPage from '../page/static/termsandconditions.page.vue';
-
-import * as App from '../App.vue';
+import App from '../App.vue';
 
 import MessageComponent from '../component/profile/message.component.vue';
 import TripComponent from '../component/profile/trip.component.vue';
 import UserImageComponent from '../component/profile/userimage.component.vue';
 import UserDetailComponent from '../component/profile/userdetail.component.vue';
+import LoginForm from '../component/form/loginform.component.vue';
+import RegistrationForm from '../component/form/registration.component.vue';
 
-Component.registerHooks([
-    'asyncData',
-    'beforeRouteEnter',
-    'beforeRouteUpdate',
-    'beforeRouteLeave'
-])
+//Component.registerHooks([
+//    'asyncData',
+//    'beforeRouteEnter',
+//    'beforeRouteUpdate',
+//    'beforeRouteLeave'
+//])
 
 
 
@@ -101,15 +102,16 @@ const router = new Router({
                     // when /user/:id/profile is matched
                     path: 'messages',
                     name: 'profileMessages',
-                    meta: { child: 'message' },
-                    component: MessageComponent
+                    meta: { requiresAuth: true },
+                    component: MessageComponent,
+
                 },
                 {
                     // UserPosts will be rendered inside User's <router-view>
                     // when /user/:id/posts is matched
                     path: 'trips',
                     name: 'profileTrips',
-                    meta: { child: 'trip' },
+                    meta: { requiresAuth: true },
                     component: TripComponent
                 }
             ]
@@ -124,6 +126,18 @@ const router = new Router({
             path: "/listing/:seoString-:listingId(\\d+)",
             name: "listingDetail",
             component: ListingPage,
+            props: true
+        },
+        {
+            path: "/login",
+            name: "login",
+            component: LoginForm,
+            props: true
+        },
+        {
+            path: "/registration",
+            name: "registration",
+            component: RegistrationForm,
             props: true
         },
         {
@@ -151,6 +165,20 @@ const router = new Router({
             redirect: "/"
         }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        // this route requires auth, check if logged in
+        // if not, redirect to login page.
+        console.log('inside route of Auth')
+        next()
+    } else {
+        next() // make sure to always call next()!
+    }
+
+    console.log('hey I am from before each')
+    next()
 })
 
 export default router

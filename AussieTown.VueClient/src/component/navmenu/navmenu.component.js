@@ -32,6 +32,8 @@ var NavMenuComponent = (function (_super) {
         _this.hideNavToggle = false;
         _this.isMenuOpen = false;
         _this.isSticky = false;
+        _this.profilePhoto = '';
+        _this.isLoggedIn = false;
         _this.showSecondSearchBar = false;
         _this.showLoginModal = false;
         _this.showRegistrationModal = false;
@@ -39,55 +41,6 @@ var NavMenuComponent = (function (_super) {
         // To handle scroll event
         _this.currentTime = Date.now();
         return _this;
-        //ngOnInit() {
-        //    if (isBrowser) {
-        //        Observable.fromEvent(window, 'resize')
-        //            .debounceTime(100)
-        //            .subscribe(e => {
-        //                this.onWindowResize();
-        //            });
-        //        Observable.fromEvent(window, 'scroll')
-        //            .throttleTime(1000)
-        //            .subscribe(e => {
-        //                this.onWindowScroll();
-        //            });
-        //        this.onWindowResize();
-        //    }
-        //}
-        //onWindowResize() {
-        //    let windowMode = this.detectionService.getCurrentMode();
-        //    if (windowMode == DeviceMode.Mobile) {
-        //        this.hideNavToggle = false;
-        //    } else {
-        //        this.hideNavToggle = true;
-        //    }
-        //}
-        //onWindowScroll() {
-        //    this.isSticky = this.detectionService.isScrollOverHalfPage();
-        //}
-        //handleLoggedIn(loggedInfo) {
-        //    if (loggedInfo) {
-        //        this.isLoggedin = true;
-        //        this.name = loggedInfo.name;
-        //        this.id = loggedInfo.id;
-        //    } else {
-        //        this.isLoggedin = false;
-        //    }
-        //}
-        //onLogout() {
-        //    Cookie.delete("token");
-        //    this.isLoggedin = false;
-        //}
-        //onTest() {
-        //    this.userService.getUserInfo(1).subscribe(
-        //        data => {
-        //            var abc = data;
-        //        });
-        //}
-        //onNavToggle() {
-        //    this.isMenuOpen = !this.isMenuOpen;
-        //    return false;
-        //}
     }
     Object.defineProperty(NavMenuComponent.prototype, "currentPage", {
         get: function () {
@@ -142,38 +95,38 @@ var NavMenuComponent = (function (_super) {
             this.showSecondSearchBar = true;
         }
     };
-    NavMenuComponent.prototype.onSuccessfulLogin = function (responseToken) {
-        if (responseToken) {
-            this.$cookie.set('mtltk', responseToken.token);
-            this.$cookie.set('mtluserId', responseToken.userId);
-            this.showLoginModal = false;
-        }
+    NavMenuComponent.prototype.onSuccessfulLogin = function () {
+        this.showLoginModal = false;
     };
     NavMenuComponent.prototype.onSelect = function () { console.log('select'); };
     NavMenuComponent.prototype.onSearch = function () { console.log('search'); };
+    NavMenuComponent.prototype.mounted = function () {
+        this.profilePhoto = this.$store.getters.profilePhoto;
+        this.isLoggedIn = this.$store.getters.isLoggedIn;
+    };
+    __decorate([
+        Watch('showSecondSearchBar'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String]),
+        __metadata("design:returntype", void 0)
+    ], NavMenuComponent.prototype, "onPropertyChanged", null);
+    __decorate([
+        Watch('$route.params'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String]),
+        __metadata("design:returntype", void 0)
+    ], NavMenuComponent.prototype, "onRouteParamChanged", null);
+    NavMenuComponent = __decorate([
+        Component({
+            name: 'nav-menu',
+            components: {
+                'loginmodal': LoginModal,
+                'registrationmodal': RegistrationModal,
+                'menumodal': MenuModal,
+                "searchbar": SearchBarComponent
+            }
+        })
+    ], NavMenuComponent);
     return NavMenuComponent;
 }(Vue));
-__decorate([
-    Watch('showSecondSearchBar'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
-    __metadata("design:returntype", void 0)
-], NavMenuComponent.prototype, "onPropertyChanged", null);
-__decorate([
-    Watch('$route.params'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
-    __metadata("design:returntype", void 0)
-], NavMenuComponent.prototype, "onRouteParamChanged", null);
-NavMenuComponent = __decorate([
-    Component({
-        name: 'nav-menu',
-        components: {
-            'loginmodal': LoginModal,
-            'registrationmodal': RegistrationModal,
-            'menumodal': MenuModal,
-            "searchbar": SearchBarComponent
-        }
-    })
-], NavMenuComponent);
 export default NavMenuComponent;

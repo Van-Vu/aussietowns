@@ -24,8 +24,9 @@ import ParticipantComponent from '../component/shared/participant.component.vue'
 import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
 import LocationSearchComponent from '../component/shared/search/locationsearch.component.vue';
-import { Utils, ListingType } from '../component/utils';
-import * as datepicker from '../component/shared/external/datepicker.vue';
+import { Utils } from '../component/utils';
+import { ListingType } from '../model/enum';
+import datepicker from '../component/shared/external/datepicker.vue';
 import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
 Vue.use(VeeValidate);
 var ListingPage = (function (_super) {
@@ -154,21 +155,21 @@ var ListingPage = (function (_super) {
             tourOperators: this.constructParticipants(model.id, model.tourOperators)
         };
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", String)
+    ], ListingPage.prototype, "listingType", void 0);
+    ListingPage = __decorate([
+        Component({
+            name: 'ListingPage',
+            components: {
+                "locationsearch": LocationSearchComponent,
+                "participant": ParticipantComponent,
+                "datepicker": datepicker,
+                "schedulemodal": ScheduleModalComponent
+            }
+        })
+    ], ListingPage);
     return ListingPage;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", String)
-], ListingPage.prototype, "listingType", void 0);
-ListingPage = __decorate([
-    Component({
-        name: 'ListingPage',
-        components: {
-            'locationsearch': LocationSearchComponent,
-            'participant': ParticipantComponent,
-            "datepicker": datepicker,
-            "schedulemodal": ScheduleModalComponent
-        }
-    })
-], ListingPage);
 export default ListingPage;

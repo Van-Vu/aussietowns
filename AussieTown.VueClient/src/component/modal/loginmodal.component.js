@@ -34,19 +34,19 @@ var LoginModal = (function (_super) {
     LoginModal.prototype.onSuccessfulLogin = function (responseToken) {
         this.$emit('onSuccessfulLogin', responseToken);
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Boolean)
+    ], LoginModal.prototype, "show", void 0);
+    LoginModal = __decorate([
+        Component({
+            name: "login-modal",
+            components: {
+                "modalshell": ModalShellComponent,
+                "loginform": LoginForm
+            }
+        })
+    ], LoginModal);
     return LoginModal;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Boolean)
-], LoginModal.prototype, "show", void 0);
-LoginModal = __decorate([
-    Component({
-        name: "login-modal",
-        components: {
-            "modalshell": ModalShellComponent,
-            "loginform": LoginForm
-        }
-    })
-], LoginModal);
 export default LoginModal;

@@ -6,7 +6,7 @@ import AutoCompleteComponent from './autocomplete.vue';
 
 
 @Component({
-    name: "LocationSearch",
+    name: "LocationSearchComponent",
     components: {
         "autocomplete": AutoCompleteComponent
     }

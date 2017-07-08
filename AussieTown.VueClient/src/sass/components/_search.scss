@@ -13,7 +13,7 @@
     bottom: 0;
     left: 0;
 
-    @media all and (max-width: $bp-small-max-width) {
+    @media all and (max-width: $is-mobile) {
         width: 100%;
     }
 }
@@ -27,7 +27,7 @@
     right: 0;
     left: auto;
     bottom: 0;
-    @media all and (max-width: $bp-small-max-width) {
+    @media all and (max-width: $is-mobile) {
         display:none;
     }
 }

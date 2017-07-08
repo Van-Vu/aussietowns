@@ -46,18 +46,18 @@ var LocationSearchComponent = (function (_super) {
             return d;
         });
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Object)
+    ], LocationSearchComponent.prototype, "initialData", void 0);
+    LocationSearchComponent = __decorate([
+        Component({
+            name: "LocationSearchComponent",
+            components: {
+                "autocomplete": AutoCompleteComponent
+            }
+        })
+    ], LocationSearchComponent);
     return LocationSearchComponent;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Object)
-], LocationSearchComponent.prototype, "initialData", void 0);
-LocationSearchComponent = __decorate([
-    Component({
-        name: "LocationSearch",
-        components: {
-            "autocomplete": AutoCompleteComponent
-        }
-    })
-], LocationSearchComponent);
 export default LocationSearchComponent;

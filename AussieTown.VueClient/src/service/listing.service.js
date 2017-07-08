@@ -14,7 +14,7 @@ var ListingService = (function () {
         });
     };
     ListingService.prototype.addListing = function (listing) {
-        return http.post(this.baseUrl, listing, this.jwt())
+        return http.post(this.baseUrl, listing)
             .then(function (response) {
             var result = response.data;
             if (result.state === 1) {
@@ -32,7 +32,7 @@ var ListingService = (function () {
         return http.delete(this.baseUrl + _id);
     };
     ListingService.prototype.getListingsByUserId = function (userId) {
-        return http.get(this.getListingByUserUrl + userId, this.jwt())
+        return http.get(this.getListingByUserUrl + userId)
             .then(function (response) {
             return response.data;
         });

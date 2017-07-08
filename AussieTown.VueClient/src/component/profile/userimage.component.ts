@@ -1,6 +1,6 @@
 ﻿import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import * as UploadImage from '../shared/external/vueuploadimage.vue';
+import UploadImage from '../shared/external/vueuploadimage.vue';
 
 @Component({
     name: "UserImage",

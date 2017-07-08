@@ -33,23 +33,23 @@ var ScheduleModal = (function (_super) {
         this.close();
         this.$emit('onSave', scheduleObject);
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Boolean)
+    ], ScheduleModal.prototype, "show", void 0);
+    __decorate([
+        Prop,
+        __metadata("design:type", Object)
+    ], ScheduleModal.prototype, "schedule", void 0);
+    ScheduleModal = __decorate([
+        Component({
+            name: "login-modal",
+            components: {
+                "modalshell": ModalShellComponent,
+                "schedule": ScheduleComponent
+            }
+        })
+    ], ScheduleModal);
     return ScheduleModal;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Boolean)
-], ScheduleModal.prototype, "show", void 0);
-__decorate([
-    Prop,
-    __metadata("design:type", Object)
-], ScheduleModal.prototype, "schedule", void 0);
-ScheduleModal = __decorate([
-    Component({
-        name: "login-modal",
-        components: {
-            "modalshell": ModalShellComponent,
-            "schedule": ScheduleComponent
-        }
-    })
-], ScheduleModal);
 export default ScheduleModal;

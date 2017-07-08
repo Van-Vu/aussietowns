@@ -53,23 +53,23 @@ var ParticipantComponent = (function (_super) {
         //this.internalUsers.splice(this.internalUsers.indexOf(user), 1);
         this.$emit("userRemoved", user);
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Array)
+    ], ParticipantComponent.prototype, "participants", void 0);
+    __decorate([
+        Prop,
+        __metadata("design:type", String)
+    ], ParticipantComponent.prototype, "participantType", void 0);
+    ParticipantComponent = __decorate([
+        Component({
+            name: "ParticipantComponent",
+            components: {
+                "miniprofile": MiniProfileComponent,
+                "usersearch": UserSearchComponent
+            }
+        })
+    ], ParticipantComponent);
     return ParticipantComponent;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Array)
-], ParticipantComponent.prototype, "participants", void 0);
-__decorate([
-    Prop,
-    __metadata("design:type", String)
-], ParticipantComponent.prototype, "participantType", void 0);
-ParticipantComponent = __decorate([
-    Component({
-        name: "Participant",
-        components: {
-            "miniprofile": MiniProfileComponent,
-            "usersearch": UserSearchComponent
-        }
-    })
-], ParticipantComponent);
 export default ParticipantComponent;

@@ -29,14 +29,14 @@ var SearchBarComponent = (function (_super) {
         //{ name: 'user', params: { userId: 123 } }
         this.$emit('onSearch', val);
     };
+    SearchBarComponent = __decorate([
+        Component({
+            name: "UserSearch",
+            components: {
+                "locationsearch": LocationSearchComponent
+            }
+        })
+    ], SearchBarComponent);
     return SearchBarComponent;
 }(Vue));
-SearchBarComponent = __decorate([
-    Component({
-        name: "UserSearch",
-        components: {
-            "locationsearch": LocationSearchComponent
-        }
-    })
-], SearchBarComponent);
 export default SearchBarComponent;

@@ -2,7 +2,7 @@
     width: 40%;
     margin-left: auto;
     margin-right: auto;
-    @media all and (max-width: $bp-small-max-width) {
+    @media all and (max-width: $is-mobile) {
         width: 100%;
     }
 }

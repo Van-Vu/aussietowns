@@ -31,19 +31,19 @@ var ListingRequestModalComponent = (function (_super) {
     ListingRequestModalComponent.prototype.close = function () {
         this.$emit('onClose');
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Boolean)
+    ], ListingRequestModalComponent.prototype, "show", void 0);
+    ListingRequestModalComponent = __decorate([
+        Component({
+            name: "listingrequestmodal",
+            components: {
+                "modalshell": ModalShellComponent,
+                "listingrequestform": ListingRequestForm
+            }
+        })
+    ], ListingRequestModalComponent);
     return ListingRequestModalComponent;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Boolean)
-], ListingRequestModalComponent.prototype, "show", void 0);
-ListingRequestModalComponent = __decorate([
-    Component({
-        name: "listingrequestmodal",
-        components: {
-            "modalshell": ModalShellComponent,
-            "listingrequestform": ListingRequestForm
-        }
-    })
-], ListingRequestModalComponent);
 export default ListingRequestModalComponent;

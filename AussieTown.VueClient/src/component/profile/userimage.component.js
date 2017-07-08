@@ -16,7 +16,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import * as UploadImage from '../shared/external/vueuploadimage.vue';
+import UploadImage from '../shared/external/vueuploadimage.vue';
 var UserImageComponent = (function (_super) {
     __extends(UserImageComponent, _super);
     function UserImageComponent() {
@@ -28,14 +28,14 @@ var UserImageComponent = (function (_super) {
     };
     UserImageComponent.prototype.close = function () {
     };
+    UserImageComponent = __decorate([
+        Component({
+            name: "UserImage",
+            components: {
+                'upload-image': UploadImage
+            }
+        })
+    ], UserImageComponent);
     return UserImageComponent;
 }(Vue));
-UserImageComponent = __decorate([
-    Component({
-        name: "UserImage",
-        components: {
-            'upload-image': UploadImage
-        }
-    })
-], UserImageComponent);
 export default UserImageComponent;

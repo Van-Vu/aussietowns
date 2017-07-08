@@ -16,7 +16,7 @@ export default class ListingService {
     }
 
     addListing(listing) {
-        return http.post(this.baseUrl, listing, this.jwt())
+        return http.post(this.baseUrl, listing)
             .then(response => {
             let result = response.data;
             if (result.state === 1) {
@@ -37,7 +37,7 @@ export default class ListingService {
     }
 
     getListingsByUserId(userId: number){
-        return http.get(this.getListingByUserUrl + userId, this.jwt())
+        return http.get(this.getListingByUserUrl + userId)
             .then(response => {
                 return response.data;
             });

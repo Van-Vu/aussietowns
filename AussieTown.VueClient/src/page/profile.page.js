@@ -34,7 +34,7 @@ var ProfilePage = (function (_super) {
         var store = _a.store, route = _a.route;
         console.log('profile id:' + route.params.profileId);
         if (route.params.profileId) {
-            return store.dispatch('FETCH_USER_BY_ID', route.params.profileId);
+            return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
             //return store.dispatch('FETCH_CONVERSATIONS_BY_USER', route.params.profileId);
         }
     };
@@ -47,23 +47,23 @@ var ProfilePage = (function (_super) {
         //console.log(`route change ${value}`);
         this.currentTab = value.name;
     };
+    __decorate([
+        Watch('$route'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], ProfilePage.prototype, "onRouteParamChanged", null);
+    ProfilePage = __decorate([
+        Component({
+            name: 'ProfilePage',
+            components: {
+                'profileform': UserDetailComponent,
+                'tripcomponent': TripComponent,
+                'messagecomponent': MessageComponent,
+                'userimage': UserImageComponent
+            }
+        })
+    ], ProfilePage);
     return ProfilePage;
 }(Vue));
-__decorate([
-    Watch('$route'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", void 0)
-], ProfilePage.prototype, "onRouteParamChanged", null);
-ProfilePage = __decorate([
-    Component({
-        name: 'ProfilePage',
-        components: {
-            'profileform': UserDetailComponent,
-            'tripcomponent': TripComponent,
-            'messagecomponent': MessageComponent,
-            'userimage': UserImageComponent
-        }
-    })
-], ProfilePage);
 export default ProfilePage;

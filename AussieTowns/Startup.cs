@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using AussieTowns.Auth;
+using AussieTowns.Common;
 using AussieTowns.Model;
 using AussieTowns.Repository;
 using AussieTowns.Services;
@@ -86,6 +87,14 @@ namespace AussieTowns
             //        }
             //    };
             //});
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AtLeastUser", policy => policy.RequireRole(((int)UserRole.User).ToString(), ((int)UserRole.Editor).ToString(), ((int)UserRole.Admin).ToString(), ((int)UserRole.SuperAdmin).ToString()));
+                options.AddPolicy("AtLeastEditor", policy => policy.RequireRole(((int)UserRole.Editor).ToString(), ((int)UserRole.Admin).ToString(), ((int)UserRole.SuperAdmin).ToString()));
+                options.AddPolicy("AtLeastAdmin", policy => policy.RequireRole(((int)UserRole.Admin).ToString(), ((int)UserRole.SuperAdmin).ToString()));
+                options.AddPolicy("SuperAdmin", policy => policy.RequireRole(((int)UserRole.SuperAdmin).ToString()));
+            });
 
             //Use a MySQL database
             var mySqlConnectionString = Configuration.GetConnectionString("DataAccessMySqlProvider");

@@ -34,14 +34,14 @@ var TripComponent = (function (_super) {
                 this.requests = profile.guestListings;
         }
     };
+    TripComponent = __decorate([
+        Component({
+            name: "TripComponent",
+            components: {
+                "listingcard": ListingCardComponent
+            }
+        })
+    ], TripComponent);
     return TripComponent;
 }(Vue));
-TripComponent = __decorate([
-    Component({
-        name: "TripComponent",
-        components: {
-            "listingcard": ListingCardComponent
-        }
-    })
-], TripComponent);
 export default TripComponent;

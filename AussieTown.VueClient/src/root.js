@@ -3,12 +3,11 @@ import { sync } from 'vuex-router-sync';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import Component from "vue-class-component";
 sync(store, router);
 // Register the router hooks with thier names
-Component.registerHooks([
-    'asyncData'
-]);
+//Component.registerHooks([
+//    'asyncData'
+//])
 var app = new Vue({
     router: router,
     store: store,

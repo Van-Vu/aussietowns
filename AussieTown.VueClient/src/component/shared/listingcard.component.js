@@ -20,7 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { Utils } from '../utils';
-import * as Swiper from './external/vue-swiper.vue';
+import Swiper from './external/vue-swiper.vue';
 var ListingCardComponent = (function (_super) {
     __extends(ListingCardComponent, _super);
     function ListingCardComponent() {
@@ -61,18 +61,18 @@ var ListingCardComponent = (function (_super) {
         this.description = this.listingDetail.description;
         this.headerLink = Utils.seorizeString(this.header);
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Object)
+    ], ListingCardComponent.prototype, "listingDetail", void 0);
+    ListingCardComponent = __decorate([
+        Component({
+            name: "ListingCard",
+            components: {
+                "swiper": Swiper
+            }
+        })
+    ], ListingCardComponent);
     return ListingCardComponent;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Object)
-], ListingCardComponent.prototype, "listingDetail", void 0);
-ListingCardComponent = __decorate([
-    Component({
-        name: "ListingCard",
-        components: {
-            "swiper": Swiper
-        }
-    })
-], ListingCardComponent);
 export default ListingCardComponent;

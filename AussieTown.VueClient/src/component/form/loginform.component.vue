@@ -24,7 +24,7 @@
             <div class="field">
                 <label class="label" for="email">Email</label>
                 <p class="control has-icon has-icon-right">
-                    <input name="email" v-model="model.email" v-validate:email.initial="'required|email'"
+                    <input name="email" v-model="model.email" v-validate:email="'required|email'"
                            :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="Email">
                     <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
                 </p>
@@ -32,7 +32,7 @@
             <div class="field">
                 <label class="label" for="password">Password</label>
                 <p class="control has-icon has-icon-right">
-                    <input name="password" v-model="model.password" v-validate:email.initial="'required'"
+                    <input name="password" v-model="model.password" v-validate:password="'required'"
                            :class="{'input': true, 'is-danger': errors.has('password') }" type="text" placeholder="●●●●●●●">
                     <span class="icon user">
                         <i class="glyphicon glyphicon-lock"></i>

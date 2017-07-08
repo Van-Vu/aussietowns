@@ -36,19 +36,19 @@ var MiniProfileComponent = (function (_super) {
     MiniProfileComponent.prototype.onRemoveUser = function () {
         this.$emit("removeUser", this.data);
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Object)
+    ], MiniProfileComponent.prototype, "data", void 0);
+    __decorate([
+        Prop,
+        __metadata("design:type", Boolean)
+    ], MiniProfileComponent.prototype, "isRemovable", void 0);
+    MiniProfileComponent = __decorate([
+        Component({
+            name: "MiniProfile"
+        })
+    ], MiniProfileComponent);
     return MiniProfileComponent;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Object)
-], MiniProfileComponent.prototype, "data", void 0);
-__decorate([
-    Prop,
-    __metadata("design:type", Boolean)
-], MiniProfileComponent.prototype, "isRemovable", void 0);
-MiniProfileComponent = __decorate([
-    Component({
-        name: "MiniProfile"
-    })
-], MiniProfileComponent);
 export default MiniProfileComponent;

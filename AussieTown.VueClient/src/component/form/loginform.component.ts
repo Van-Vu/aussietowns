@@ -23,6 +23,8 @@ declare const JSEncrypt: any;
 export default class LoginForm extends Vue {
     formSubmitted: boolean = false;
     model: LoginModel = new LoginModel();
+    $cookie: any;
+
     // Login or Signup
     isLogin: boolean = true;
 
@@ -55,7 +57,9 @@ export default class LoginForm extends Vue {
 
         (new UserService()).login(model)
         .then(responseToken => {
-            this.$emit('onSuccessfulLogin', responseToken);
+            this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
+            this.setCookies(responseToken.accessToken);
+            this.$emit('onSuccessfulLogin');
         });
     }
 
@@ -65,9 +69,15 @@ export default class LoginForm extends Vue {
         }
 
         (new UserService()).signup(model)
-            .then(responseToken => {
-                this.$emit('onSuccessfulLogin', responseToken);
-            });
+        .then(responseToken => {
+            this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
+            this.setCookies(responseToken.accessToken);
+            this.$emit('onSuccessfulLogin');
+        });
+    }
+
+    setCookies(accessToken) {
+        this.$cookie.set('mtltk', accessToken);
     }
 
     encryptText(text) {

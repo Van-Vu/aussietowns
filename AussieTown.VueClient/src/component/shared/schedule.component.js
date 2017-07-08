@@ -20,8 +20,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Watch, Prop } from "vue-property-decorator";
 import ScheduleModel from '../../model/schedule.model';
-import * as vuetimepicker from './external/vuetimepicker.vue';
-import * as datepicker from './external/datepicker.vue';
+import vuetimepicker from './external/vuetimepicker.vue';
+import datepicker from './external/datepicker.vue';
 import VeeValidate from 'vee-validate';
 Vue.use(VeeValidate);
 var ScheduleComponent = (function (_super) {
@@ -63,31 +63,31 @@ var ScheduleComponent = (function (_super) {
             alert('Correct them errors!');
         });
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Object)
+    ], ScheduleComponent.prototype, "schedule", void 0);
+    __decorate([
+        Watch('schedule'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [ScheduleModel, ScheduleModel]),
+        __metadata("design:returntype", void 0)
+    ], ScheduleComponent.prototype, "onScheduleChanged", null);
+    __decorate([
+        Watch('isRepeated'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Boolean, Boolean]),
+        __metadata("design:returntype", void 0)
+    ], ScheduleComponent.prototype, "onRepeatedChanged", null);
+    ScheduleComponent = __decorate([
+        Component({
+            name: "Schedule",
+            components: {
+                "vue-timepicker": vuetimepicker,
+                "datepicker": datepicker
+            }
+        })
+    ], ScheduleComponent);
     return ScheduleComponent;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Object)
-], ScheduleComponent.prototype, "schedule", void 0);
-__decorate([
-    Watch('schedule'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [ScheduleModel, ScheduleModel]),
-    __metadata("design:returntype", void 0)
-], ScheduleComponent.prototype, "onScheduleChanged", null);
-__decorate([
-    Watch('isRepeated'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Boolean, Boolean]),
-    __metadata("design:returntype", void 0)
-], ScheduleComponent.prototype, "onRepeatedChanged", null);
-ScheduleComponent = __decorate([
-    Component({
-        name: "Schedule",
-        components: {
-            "vue-timepicker": vuetimepicker,
-            "datepicker": datepicker
-        }
-    })
-], ScheduleComponent);
 export default ScheduleComponent;

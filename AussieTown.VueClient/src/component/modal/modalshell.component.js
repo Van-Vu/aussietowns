@@ -32,21 +32,21 @@ var ModalShellComponent = (function (_super) {
     ModalShellComponent.prototype.close = function () {
         this.$emit('onClose');
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Boolean)
+    ], ModalShellComponent.prototype, "show", void 0);
+    __decorate([
+        Watch('show'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String]),
+        __metadata("design:returntype", void 0)
+    ], ModalShellComponent.prototype, "onPropertyChanged", null);
+    ModalShellComponent = __decorate([
+        Component({
+            name: 'modal-shell'
+        })
+    ], ModalShellComponent);
     return ModalShellComponent;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Boolean)
-], ModalShellComponent.prototype, "show", void 0);
-__decorate([
-    Watch('show'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
-    __metadata("design:returntype", void 0)
-], ModalShellComponent.prototype, "onPropertyChanged", null);
-ModalShellComponent = __decorate([
-    Component({
-        name: 'modal-shell'
-    })
-], ModalShellComponent);
 export default ModalShellComponent;

@@ -2,8 +2,8 @@
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import axios from "axios";
 import ScheduleModel from '../../model/schedule.model';
-import * as vuetimepicker from './external/vuetimepicker.vue';
-import * as datepicker from './external/datepicker.vue';
+import vuetimepicker from './external/vuetimepicker.vue';
+import datepicker from './external/datepicker.vue';
 import { Utils } from '../utils';
 
 import VeeValidate from 'vee-validate';

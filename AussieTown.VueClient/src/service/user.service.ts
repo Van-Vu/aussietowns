@@ -3,7 +3,7 @@
 export default class UserService {
 
     getAll() {
-        return http.get('/users', this.jwt()).then(response => response.data);
+        return http.get('/users').then(response => response.data);
     }
 
     getById(_id: string) {
@@ -14,9 +14,7 @@ export default class UserService {
         return http.post('api/user/register', user).then(response => {
             let result = response.data;
             if (result.state == 1) {
-                let json = result.data as any;
-
-                return { token: json.accessToken, userId: json.userId };
+                return result.data;
             }
             return result;
         })
@@ -27,9 +25,7 @@ export default class UserService {
         return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId }).then(response => {
             let result = response.data;
             if (result.state == 1) {
-                let json = result.data as any;
-
-                return { token: json.accessToken, userId: json.userId };
+                return result.data;
             }
             return 0;
         })
@@ -37,37 +33,36 @@ export default class UserService {
     }
 
     getMiniProfile(id: number) {
-        return http.get('api/user/summary/' + id, this.jwt())
+        return http.get('api/user/summary/' + id)
             .then(response => {
                 let result = response.data;
                 if (result.state == 1) {
                     return result.data;
                 }
                 return '';
-            })
-            .catch(this.handleError);
+            });
     }
 
     getUserInfo(id: number) {
-        return http.get('api/user/' + id, this.jwt())
+        return http.get('api/user/' + id)
             .then(response => response.data)
             .catch(this.handleError);
     }
 
     update(user: any) {
-        return http.put('api/user/' + user.Id, user, this.jwt())
+        return http.put('api/user/' + user.Id, user)
             .then(response => response.data)
             .catch(this.handleError);
     }
 
     getToursByUserId(id: number) {
-        return http.get('api/user/tour/' + id, this.jwt())
+        return http.get('api/user/tour/' + id)
             .then(response => response.data)
             .catch(this.handleError);
     }
 
     delete(_id: string) {
-        return http.delete('/users/' + _id, this.jwt());
+        return http.delete('/users/' + _id);
     }
 
     private jwt() {

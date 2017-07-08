@@ -25,7 +25,7 @@
                 </swiper>
             </div>
         </section>
-
+        <button @click="checkLogginUser"> check current user</button>
         <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>
         <ul>

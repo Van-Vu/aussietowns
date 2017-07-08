@@ -33,18 +33,18 @@ var MenuModal = (function (_super) {
     MenuModal.prototype.onSuccessfulLogin = function (responseToken) {
         this.$emit('onSuccessfulLogin', responseToken);
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Boolean)
+    ], MenuModal.prototype, "show", void 0);
+    MenuModal = __decorate([
+        Component({
+            name: "menu-modal",
+            components: {
+                "modalshell": ModalShellComponent,
+            }
+        })
+    ], MenuModal);
     return MenuModal;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Boolean)
-], MenuModal.prototype, "show", void 0);
-MenuModal = __decorate([
-    Component({
-        name: "menu-modal",
-        components: {
-            "modalshell": ModalShellComponent,
-        }
-    })
-], MenuModal);
 export default MenuModal;

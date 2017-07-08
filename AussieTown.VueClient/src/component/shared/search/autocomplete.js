@@ -140,31 +140,31 @@ var AutoCompleteComponent = (function (_super) {
         this.doSelectIndex(this.indexSelected);
         this.dontBlur = false;
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Number)
+    ], AutoCompleteComponent.prototype, "minChars", void 0);
+    __decorate([
+        Prop,
+        __metadata("design:type", String)
+    ], AutoCompleteComponent.prototype, "placeHolderText", void 0);
+    __decorate([
+        Prop,
+        __metadata("design:type", Object)
+    ], AutoCompleteComponent.prototype, "initialData", void 0);
+    __decorate([
+        Prop,
+        __metadata("design:type", Boolean)
+    ], AutoCompleteComponent.prototype, "cleanUp", void 0);
+    __decorate([
+        Prop,
+        __metadata("design:type", Array)
+    ], AutoCompleteComponent.prototype, "list", void 0);
+    AutoCompleteComponent = __decorate([
+        Component({
+            name: "AutoComplete"
+        })
+    ], AutoCompleteComponent);
     return AutoCompleteComponent;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Number)
-], AutoCompleteComponent.prototype, "minChars", void 0);
-__decorate([
-    Prop,
-    __metadata("design:type", String)
-], AutoCompleteComponent.prototype, "placeHolderText", void 0);
-__decorate([
-    Prop,
-    __metadata("design:type", Object)
-], AutoCompleteComponent.prototype, "initialData", void 0);
-__decorate([
-    Prop,
-    __metadata("design:type", Boolean)
-], AutoCompleteComponent.prototype, "cleanUp", void 0);
-__decorate([
-    Prop,
-    __metadata("design:type", Array)
-], AutoCompleteComponent.prototype, "list", void 0);
-AutoCompleteComponent = __decorate([
-    Component({
-        name: "AutoComplete"
-    })
-], AutoCompleteComponent);
 export default AutoCompleteComponent;

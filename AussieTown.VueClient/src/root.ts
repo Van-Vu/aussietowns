@@ -8,9 +8,9 @@ import Component from "vue-class-component";
 sync(store, router)
 
 // Register the router hooks with thier names
-Component.registerHooks([
-    'asyncData'
-])
+//Component.registerHooks([
+//    'asyncData'
+//])
 
 
 const app = new Vue({

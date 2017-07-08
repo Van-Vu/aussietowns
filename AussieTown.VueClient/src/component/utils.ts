@@ -1,4 +1,6 @@
-﻿export class Utils {
+﻿import { ListingType } from '../model/enum';
+
+export class Utils {
     public static getDate(datetime: Date) {
         var date = new Date(datetime);
         return date.getFullYear() + '/' + this.ensureTwoDigit((date.getMonth()) + 1) + '/' + this.ensureTwoDigit(date.getDate());
@@ -27,6 +29,12 @@
         let sanitizeName = name.toLowerCase().replace(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/g, "");
         return sanitizeName.split(' ').join('-');
     }
-}
 
-export enum ListingType { Offer, Request }
+    private static valueCompare(x, y) {
+        return JSON.stringify(x) === JSON.stringify(y);
+    }
+
+    public static removeFromArray(array, item) {
+        return array.filter(target => !this.valueCompare(item, target));
+    }
+}

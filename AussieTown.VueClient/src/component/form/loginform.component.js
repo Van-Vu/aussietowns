@@ -62,7 +62,9 @@ var LoginForm = (function (_super) {
         }
         (new UserService()).login(model)
             .then(function (responseToken) {
-            _this.$emit('onSuccessfulLogin', responseToken);
+            _this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
+            _this.setCookies(responseToken.accessToken);
+            _this.$emit('onSuccessfulLogin');
         });
     };
     LoginForm.prototype.signup = function (model) {
@@ -72,8 +74,13 @@ var LoginForm = (function (_super) {
         }
         (new UserService()).signup(model)
             .then(function (responseToken) {
-            _this.$emit('onSuccessfulLogin', responseToken);
+            _this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
+            _this.setCookies(responseToken.accessToken);
+            _this.$emit('onSuccessfulLogin');
         });
+    };
+    LoginForm.prototype.setCookies = function (accessToken) {
+        this.$cookie.set('mtltk', accessToken);
     };
     LoginForm.prototype.encryptText = function (text) {
         var encrypt = new JSEncrypt();
@@ -160,11 +167,11 @@ var LoginForm = (function (_super) {
             decryptTextFromServer(encryptedText).then(function (x) { return console.log(x); });
         });
     };
+    LoginForm = __decorate([
+        Component({
+            name: "Loginform"
+        })
+    ], LoginForm);
     return LoginForm;
 }(Vue));
-LoginForm = __decorate([
-    Component({
-        name: "Loginform"
-    })
-], LoginForm);
 export default LoginForm;

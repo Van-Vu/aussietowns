@@ -38,18 +38,18 @@ var UserSearchComponent = (function (_super) {
     UserSearchComponent.prototype.onUserSelected = function (selectedItem) {
         this.$emit("onSelected", selectedItem);
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", AutocompleteItem)
+    ], UserSearchComponent.prototype, "initialData", void 0);
+    UserSearchComponent = __decorate([
+        Component({
+            name: "UserSearch",
+            components: {
+                "autocomplete": AutoCompleteComponent
+            }
+        })
+    ], UserSearchComponent);
     return UserSearchComponent;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", AutocompleteItem)
-], UserSearchComponent.prototype, "initialData", void 0);
-UserSearchComponent = __decorate([
-    Component({
-        name: "UserSearch",
-        components: {
-            "autocomplete": AutoCompleteComponent
-        }
-    })
-], UserSearchComponent);
 export default UserSearchComponent;
