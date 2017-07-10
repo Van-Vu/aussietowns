@@ -47,15 +47,6 @@ var ListingPage = (function (_super) {
             return store.dispatch('FETCH_LISTING_BY_ID', route.params.listingId);
         }
     };
-    ListingPage.prototype.beforeRouteEnter = function (to, from, next) {
-        //console.log('execute beforeRouteEnter: ' + to.params.seoString);
-        //next(vm => vm.setListingId(1));
-        next();
-    };
-    ListingPage.prototype.setListingId = function (id) {
-        //this.listingId = id;
-        //console.log("here I am:" + this.listingId);
-    };
     ListingPage.prototype.created = function () {
         var _this = this;
         if (this.listingType) {
@@ -67,6 +58,7 @@ var ListingPage = (function (_super) {
         }
         else {
             if (this.$route.params.listingId) {
+                console.log('in CREATED');
                 this.$store.dispatch('FETCH_LISTING_BY_ID', this.$route.params.listingId).then(function () {
                     _this.model = _this.$store.state.listing;
                     _this.isOffer = _this.model.listingType == ListingType.Offer;

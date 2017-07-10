@@ -10,7 +10,6 @@ export default class ListingService {
     getListingById(_id: number) {
         return http.get(this.baseUrl + _id)
             .then(response => {
-                console.log('afete getlisting:' + response.data);
                 return response.data as ListingModel;
             });
     }

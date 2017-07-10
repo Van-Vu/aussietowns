@@ -40,12 +40,6 @@ import UserImageComponent from '../component/profile/userimage.component.vue';
 import UserDetailComponent from '../component/profile/userdetail.component.vue';
 import LoginForm from '../component/form/loginform.component.vue';
 import RegistrationForm from '../component/form/registration.component.vue';
-//Component.registerHooks([
-//    'asyncData',
-//    'beforeRouteEnter',
-//    'beforeRouteUpdate',
-//    'beforeRouteLeave'
-//])
 Vue.use(Router);
 var router = new Router({
     mode: 'history',

@@ -53,9 +53,8 @@ export default new Vuex.Store({
             commit('UPDATE_PAGE', page);    
         },
         FETCH_LISTING_BY_ID({ commit, state }, id) {
-            (new ListingService()).getListingById(id)
-                .then(response => commit('UPDATE_LISTING', (response as any).data))
-                .catch(error => { });
+            return (new ListingService()).getListingById(id)
+                .then(response => commit('UPDATE_LISTING', (response as any).data));
         },
         UPDATE_LISTING({ commit, state }, listing) {
             (new ListingService()).updateListing(listing);
@@ -67,7 +66,6 @@ export default new Vuex.Store({
         },
         FETCH_PROFILE_BY_ID({ dispatch, commit, state }, id) {
             return (new UserService()).getById(id).then(response => {
-                console.log('fetch User');
                 commit('UPDATE_PROFILE', (response as any).data);
             });
         },
@@ -115,6 +113,7 @@ export default new Vuex.Store({
             Vue.set(state, 'currentPage', page);
         },
         UPDATE_LISTING(state, listing) {
+            console.log('update listing');
             Vue.set(state, 'listing', listing);
         },
         UPDATE_PROFILE(state, profile) {

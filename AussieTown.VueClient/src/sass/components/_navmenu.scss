@@ -125,6 +125,9 @@ $nav-bar-height: 50px;
         height: 30px;
         @include ctr;
         top: 25px;
+        @media all and (min-width: $is-mobile) {
+            background-color: $c-neutral-black;
+        }
     }
 
     &__toggle {

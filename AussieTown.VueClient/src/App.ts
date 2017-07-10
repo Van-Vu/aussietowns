@@ -29,6 +29,17 @@ Vue.use(lazy, {
 import VueMask from 'v-mask'
 Vue.use(VueMask)
 
+
+Vue.config.errorHandler = function (err, vm, info) {
+    // handle error
+    // `info` is a Vue-specific error info, e.g. which lifecycle hook
+    // the error was found in. Only available in 2.2.0+
+
+    console.log('damn it!');
+    console.log(info);
+    console.log(err);
+}
+
 @Component({
     name: "App",
     components: {

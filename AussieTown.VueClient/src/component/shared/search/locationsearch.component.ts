@@ -20,7 +20,7 @@ export default class LocationSearchComponent extends Vue {
 
     onLocationSearch(searchTerm) {
         (new SearchService()).getLocation(searchTerm)
-            .then(response => this.locations = response);
+            .then(response => this.locations = (response as any));
     }
 
     onLocationSelected(selectedItem) {

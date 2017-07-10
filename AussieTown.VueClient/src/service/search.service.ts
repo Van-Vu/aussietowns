@@ -6,9 +6,7 @@ export default class SearchService {
 
     getLocation(term: string) {
         return http.get(this.locationAutocompleteUrl + term)
-            .then(response => {
-                return response.data;
-            });
+            .then(response => response.data);
     }
 
     getUser(term: string) {

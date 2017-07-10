@@ -47,15 +47,6 @@ import UserDetailComponent from '../component/profile/userdetail.component.vue';
 import LoginForm from '../component/form/loginform.component.vue';
 import RegistrationForm from '../component/form/registration.component.vue';
 
-//Component.registerHooks([
-//    'asyncData',
-//    'beforeRouteEnter',
-//    'beforeRouteUpdate',
-//    'beforeRouteLeave'
-//])
-
-
-
 Vue.use(Router);
 
 const router = new Router({

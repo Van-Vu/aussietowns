@@ -1,16 +1,16 @@
 ﻿<template>
     <div class="nav-bar container" :class="{'is-sticky': isSticky}">
         <div class="columns is-gapless is-mobile">
-            <div class="column is-one-quarter-mobile">
+            <div class="column is-one-quarter-mobile is-hidden-tablet">
                 <a class="button is-pulled-left mtl_button" @click="showMenuModal = !showMenuModal">
                 <i class="glyphicon glyphicon-menu-hamburger"></i> Menu
                 </a>
             </div>
-            <div class="column is-half-mobile ">
+            <div class="column is-half">
                 <div class='nav-bar__logo'></div>
-                <router-link :to="{name:'home'}" class="is-center"><div class='nav-bar__logo'></div></router-link>
+                <router-link :to="{name:'home'}" class="nav-bar__logo"></router-link>
             </div>
-            <div class="column is-one-quarter-mobile">
+            <div class="column is-one-quarter-mobile is-hidden-tablet">
                 <a v-if="!isLoggedIn"class="button is-pulled-right mtl_button" @click="showLoginModal = !showLoginModal">Join</a>
                 <a v-else class="is-pulled-right" @click="showLoginModal = !showLoginModal">
                     <figure class="image is-32x32">
@@ -19,6 +19,9 @@
                 </a>
             </div>
 
+            <div class="column is-half-desktop is-hidden-mobile">
+                <p> hey mate, I'm here </p>
+            </div>
         </div>
         <div class="is-hidden-tablet" v-show="showSecondSearchBar">
             <searchbar @onSelect="onSelect($event)" @onSearch="onSearch($event)"></searchbar>

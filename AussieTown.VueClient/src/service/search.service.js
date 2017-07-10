@@ -6,9 +6,7 @@ var SearchService = (function () {
     }
     SearchService.prototype.getLocation = function (term) {
         return http.get(this.locationAutocompleteUrl + term)
-            .then(function (response) {
-            return response.data;
-        });
+            .then(function (response) { return response.data; });
     };
     SearchService.prototype.getUser = function (term) {
         return http.get(this.userAutocompleteUrl + term)

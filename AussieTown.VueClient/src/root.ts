@@ -7,10 +7,11 @@ import Component from "vue-class-component";
 
 sync(store, router)
 
+// DO NOT REMOVE, IT WORKS
 // Register the router hooks with thier names
-//Component.registerHooks([
-//    'asyncData'
-//])
+Component.registerHooks([
+    'asyncData'
+])
 
 
 const app = new Vue({

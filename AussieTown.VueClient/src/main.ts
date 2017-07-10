@@ -26,14 +26,6 @@ if ((window as any).__INITIAL_STATE__) {
     store.replaceState(merge({}, store.state, (window as any).__INITIAL_STATE__));
 }
 
-//import { Component } from "vue-property-decorator"
-
-//Component.registerHooks([
-//    'asyncData',
-//    'beforeRouteEnter',
-//    'beforeRouteLeave'
-//])
-
 // wait until router has resolved all async before hooks
 // and async components...
 router.onReady(() => {

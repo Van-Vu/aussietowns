@@ -21,7 +21,7 @@ http.interceptors.request.use(function (config) {
 });
 // Full code: https://github.com/mzabriskie/axios/issues/690
 // Add a response interceptor
-http.interceptors.response.use(function (response) { return response.data; }, function (error) {
+http.interceptors.response.use(function (response) { return response; }, function (error) {
     //let originalRequest = error.config;
     //if (error.response.status === 401) {
     //    return '401';

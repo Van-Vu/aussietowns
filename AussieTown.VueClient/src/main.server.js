@@ -21,7 +21,9 @@ export default function (context) {
                 //console.log('all Symbol name: ' + propertySymbol);
                 //var extendOptions = Object.getOwnPropertyNames((component as any).extendOptions);
                 //console.log('all Symbol name: ' + extendOptions);
+                //console.log('call asyncData() on all matched route components')
                 if (component && component.extendOptions && component.extendOptions.asyncData) {
+                    //console.log('call it')
                     return component.extendOptions.asyncData({
                         store: store,
                         route: router.currentRoute

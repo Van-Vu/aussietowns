@@ -46,9 +46,8 @@ export default new Vuex.Store({
         },
         FETCH_LISTING_BY_ID: function (_a, id) {
             var commit = _a.commit, state = _a.state;
-            (new ListingService()).getListingById(id)
-                .then(function (response) { return commit('UPDATE_LISTING', response.data); })
-                .catch(function (error) { });
+            return (new ListingService()).getListingById(id)
+                .then(function (response) { return commit('UPDATE_LISTING', response.data); });
         },
         UPDATE_LISTING: function (_a, listing) {
             var commit = _a.commit, state = _a.state;
@@ -119,6 +118,8 @@ export default new Vuex.Store({
             Vue.set(state, 'currentPage', page);
         },
         UPDATE_LISTING: function (state, listing) {
+            console.log('update listing');
+            console.log(listing);
             Vue.set(state, 'listing', listing);
         },
         UPDATE_PROFILE: function (state, profile) {

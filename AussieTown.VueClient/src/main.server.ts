@@ -26,29 +26,25 @@ export default context => {
             //var extendOptions = Object.getOwnPropertyNames((component as any).extendOptions);
             //console.log('all Symbol name: ' + extendOptions);
 
-
             if (component && (component as any).extendOptions && (component as any).extendOptions.asyncData) {
                 return (component as any).extendOptions.asyncData({
-                  store,
-                  route: router.currentRoute
-              })
-          }
-      })).then(() => {
-          // After all preFetch hooks are resolved, our store is now
-          // filled with the state needed to render the app.
-          // When we attach the state to the context, and the `template` option
-          // is used for the renderer, the state will automatically be
-          // serialized and injected into the HTML as window.__INITIAL_STATE__.
-          console.log('store.state: ' + app);
+                    store,
+                    route: router.currentRoute
+                })
+            }
+        })).then(() => {
+            // After all preFetch hooks are resolved, our store is now
+            // filled with the state needed to render the app.
+            // When we attach the state to the context, and the `template` option
+            // is used for the renderer, the state will automatically be
+            // serialized and injected into the HTML as window.__INITIAL_STATE__.
+            context.state = store.state
+            resolve(app)
+            }).catch(reject)
 
-          context.state = store.state
-
-          resolve(app)
-          }).catch(reject)
-
-      // the Promise should resolve to the app instance so it can be rendered
-      // resolve(app)
-    }, reject)
+        // the Promise should resolve to the app instance so it can be rendered
+        // resolve(app)
+        }, reject)
   })
 
 }

@@ -2,12 +2,10 @@
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import { AutocompleteItem } from '../model/autocomplete.model';
-import ScheduleComponent from '../component/shared/schedule.component.vue';
 import ParticipantComponent from '../component/shared/participant.component.vue';
 import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
 import LocationSearchComponent from '../component/shared/search/locationsearch.component.vue';
-import ListingService from '../service/listing.service';
 import { Utils } from '../component/utils';
 import { ListingType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
@@ -44,18 +42,6 @@ export default class ListingPage extends Vue{
         }
     }
 
-    beforeRouteEnter(to, from, next) {
-        //console.log('execute beforeRouteEnter: ' + to.params.seoString);
-        //next(vm => vm.setListingId(1));
-        next();
-    }
-
-    setListingId(id) {
-        //this.listingId = id;
-        //console.log("here I am:" + this.listingId);
-    }
-    
-
     created() {
         if (this.listingType) {
             this.isOffer = Utils.listingTypeConvert(this.listingType) === ListingType.Offer;
@@ -66,6 +52,7 @@ export default class ListingPage extends Vue{
             this.isOffer = this.model.listingType == ListingType.Offer;
         } else {
             if (this.$route.params.listingId) {
+                console.log('in CREATED');
                 this.$store.dispatch('FETCH_LISTING_BY_ID', this.$route.params.listingId).then(() => {
                     this.model = this.$store.state.listing;
                     this.isOffer = this.model.listingType == ListingType.Offer;
