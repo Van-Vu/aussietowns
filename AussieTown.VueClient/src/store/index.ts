@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import ListingService from "../service/listing.service";
 import UserService from "../service/user.service";
 import MessageService from "../service/message.service";
+import UploadService from "../service/fileupload.service";
 
 import ListingModel from '../model/listing.model';
 import RequestResult from '../model/RequestResult';
@@ -11,6 +12,7 @@ import ConversationModel from '../model/conversation.model';
 import MessageModel from '../model/message.model';
 
 import { Utils } from '../component/utils';
+import { plainToClass } from "class-transformer";
 
 import createPersistedState from 'vuex-persistedstate';
 import * as Cookies from 'js-cookie';
@@ -104,6 +106,22 @@ export default new Vuex.Store({
         REMOVE_NOTIFICATION({ commit }, notification) {
             commit('REMOVE_NOTIFICATION', notification);
         },
+        UPLOAD_LISTING_IMAGES({ commit }, payload) {
+            return (new UploadService()).uploadListing(payload.data, payload.actionId)
+                .then(response => {
+                    commit('UPDATE_LISTING_IMAGES', response.newImages);
+                });
+        },
+        UPLOAD_PROFILE_IMAGES({ commit }, payload) {
+            return (new UploadService()).uploadProfile(payload.data, payload.actionId)
+                .then(response => commit('UPDATE_PROFILE_IMAGES', response.url));
+        },
+        REMOVE_IMAGE({ commit }, payload) {
+            return (new ListingService()).deleteImage(payload.listingId, payload.url)
+                .then(response => {
+                    //commit('UPDATE_LISTING_IMAGES', response);
+                });
+        },
         TEST({ commit, state }, payload) {
             (new UserService()).getMiniProfile(1).catch(error => commit('ADD_NOTIFICATION', error));
         }
@@ -114,7 +132,7 @@ export default new Vuex.Store({
         },
         UPDATE_LISTING(state, listing) {
             console.log('update listing');
-            Vue.set(state, 'listing', listing);
+            Vue.set(state, 'listing', plainToClass(ListingModel, listing));
         },
         UPDATE_PROFILE(state, profile) {
             state.profile = profile;
@@ -144,6 +162,16 @@ export default new Vuex.Store({
         },
         REMOVE_NOTIFICATION(state, notification) {
             Vue.set(state, 'notifications', Utils.removeFromArray(state.notifications, notification));
+        },
+        UPDATE_LISTING_IMAGES(state, listingImages) {
+            if ((state.listing as any).imageList) {
+                listingImages.map(x => (state.listing as any).imageList.push(x));
+            } else {
+                Vue.set(state.listing, 'imageList', listingImages);
+            }
+        },
+        UPDATE_PROFILE_IMAGES(state, profileImages) {
+            (state.profile as any).images = profileImages;
         }
     }
 })

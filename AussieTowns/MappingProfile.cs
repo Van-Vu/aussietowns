@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Common;
 using AussieTowns.Model;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Newtonsoft.Json;
 
 namespace AussieTowns
@@ -50,14 +52,14 @@ namespace AussieTowns
 
             CreateMap<Schedule, ScheduleResponse>()
                 .ForMember(dest => dest.StartDate, opts => opts.MapFrom(src => src.StartDate.Date.ToString("yyyy/MM/dd")))
-                .ForMember(dest => dest.StartTime, opts => opts.MapFrom(src => src.StartDate.TimeOfDay.ToString("c")))
+                .ForMember(dest => dest.StartTime, opts => opts.MapFrom(src => src.StartDate.TimeOfDay.ToString(@"hh\:mm")))
                 .ForMember(dest => dest.Duration,
-                    opts => opts.MapFrom(src => src.Duration.ToString("c")))
+                    opts => opts.MapFrom(src => src.Duration.ToString(@"hh\:mm")))
                 .ForMember(dest => dest.EndDate,
                     opts => opts.MapFrom(src => src.EndDate.HasValue ? src.EndDate.Value.Date.ToString("yyyy/MM/dd") : string.Empty));
 
             CreateMap<Listing, ListingResponse>()
-                .ForMember(dest => dest.ListingType, opts => opts.MapFrom(src=> src.Type))
+                .ForMember(dest => dest.ListingType, opts => opts.MapFrom(src => src.Type))
                 .ForMember(dest => dest.LocationDetail,
                     opts => opts.MapFrom(src => Mapper.Map<SuburbDetail, AutoCompleteItem>(src.Location)))
                 .ForMember(dest => dest.Schedules,

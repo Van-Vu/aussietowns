@@ -8,7 +8,6 @@
             <i class="glyphicon glyphicon-trash" v-if="image.progress >= 100"@click="removeImage"></i>
         </div>
         <form enctype="multipart/form-data" novalidate>
-            <h1>Upload images</h1>
             <div class="dropbox">
                 <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" accept="image/*" class="input-file">
                 <p>
@@ -23,8 +22,6 @@
 </template>
 
 <script>
-    import { upload } from '../../../service/fileupload.service';
-
     const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
     export default {
@@ -71,23 +68,23 @@
 
             save(formData) {
                 // upload data to the server
-                this.currentStatus = STATUS_SAVING;
+                //this.currentStatus = STATUS_SAVING;
 
-                upload(formData, {
-                    onUploadProgress:(progressEvent, formData) => {
-                        this.setProgress(progressEvent, formData);
-                    }
-                })
-                .then(x => {
-                    //this.createImage(x);
-                    //this.uploadedFiles.push(x);
-                    this.currentStatus = STATUS_SUCCESS;
-                })
-                .catch(err => {
-                    this.uploadError = err.response;
-                    console.log(`fail ${err.response}`);
-                    this.currentStatus = STATUS_FAILED;
-                });
+                //upload(formData, {
+                //    onUploadProgress:(progressEvent, formData) => {
+                //        this.setProgress(progressEvent, formData);
+                //    }
+                //})
+                //.then(x => {
+                //    //this.createImage(x);
+                //    //this.uploadedFiles.push(x);
+                //    this.currentStatus = STATUS_SUCCESS;
+                //})
+                //.catch(err => {
+                //    this.uploadError = err.response;
+                //    console.log(`fail ${err.response}`);
+                //    this.currentStatus = STATUS_FAILED;
+                //});
             },
             createImage(file) {
                 var reader = new FileReader();
@@ -103,17 +100,21 @@
                 if (!fileList.length) return;
 
                 // append the files to FormData
+                const formData = new FormData();
+
                 Array
                 .from(Array(fileList.length).keys())
                 .map(x => {
                     // handle file changes
-                    const formData = new FormData();
                     formData.append(fieldName, fileList[x], fileList[x].name);
 
-                    this.createImage(fileList[x]);
+                    //this.createImage(fileList[x]);
+
                     // save it
-                    this.save(formData);
+                    //this.save(formData);
                 });
+
+                this.$emit('uploadImages', formData);
             }
         }
     }
@@ -125,8 +126,7 @@
         outline-offset: -10px;
         background: lightcyan;
         color: dimgray;
-        padding: 10px 10px;
-        min-height: 200px; /* minimum height */
+        min-height: 50px; /* minimum height */
         position: relative;
         cursor: pointer;
     }
@@ -134,7 +134,7 @@
     .input-file {
         opacity: 0; /* invisible but it's there! */
         width: 100%;
-        height: 200px;
+        height: 50px;
         position: absolute;
         cursor: pointer;
     }
@@ -146,7 +146,7 @@
     .dropbox p {
         font-size: 1.2em;
         text-align: center;
-        padding: 50px 0;
+        padding: 10px 0;
     }
 
     .upload-image {

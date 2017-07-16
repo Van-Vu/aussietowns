@@ -10,6 +10,16 @@ export var RepeatedType;
     RepeatedType[RepeatedType["Weekly"] = 2] = "Weekly";
     RepeatedType[RepeatedType["Monthly"] = 3] = "Monthly";
 })(RepeatedType || (RepeatedType = {}));
+export var RepeatedDay;
+(function (RepeatedDay) {
+    RepeatedDay[RepeatedDay["Monday"] = 1] = "Monday";
+    RepeatedDay[RepeatedDay["Tuesday"] = 2] = "Tuesday";
+    RepeatedDay[RepeatedDay["Wednesday"] = 4] = "Wednesday";
+    RepeatedDay[RepeatedDay["Thursday"] = 8] = "Thursday";
+    RepeatedDay[RepeatedDay["Friday"] = 16] = "Friday";
+    RepeatedDay[RepeatedDay["Saturday"] = 32] = "Saturday";
+    RepeatedDay[RepeatedDay["Sunday"] = 64] = "Sunday";
+})(RepeatedDay || (RepeatedDay = {}));
 export var UserSource;
 (function (UserSource) {
     UserSource[UserSource["Native"] = 0] = "Native";

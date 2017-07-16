@@ -1,22 +1,24 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import { app, router, store } from './root';
+import Vue from 'vue';
 import merge from 'lodash.merge';
 // a global mixin that calls `asyncData` when a route component's params change
-//Vue.mixin({
-//    beforeRouteUpdate(to, from, next) {
-//        console.log('beforeRouteUpdate')
-//        const { asyncData } = this.$options
-//        if (asyncData) {
-//            asyncData({
-//                store: this.$store,
-//                route: to
-//            }).then(next).catch(next)
-//        } else {
-//            next()
-//        }
-//    }
-//})
+Vue.mixin({
+    beforeRouteUpdate: function (to, from, next) {
+        console.log('beforeRouteUpdate');
+        var asyncData = this.$options.asyncData;
+        if (asyncData) {
+            asyncData({
+                store: this.$store,
+                route: to
+            }).then(next).catch(next);
+        }
+        else {
+            next();
+        }
+    }
+});
 if (window.__INITIAL_STATE__) {
     // Bodom hack
     Reflect.deleteProperty(window.__INITIAL_STATE__, 'loggedInUser');

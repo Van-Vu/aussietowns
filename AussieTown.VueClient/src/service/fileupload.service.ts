@@ -1,18 +1,25 @@
 ﻿import http from './http-base';
 
-function upload(formData, progressCallback) {
-    const uploadUrl = "/api/photo/upload";
-    return http.post(uploadUrl,
-        formData,
-        progressCallback)
-        // get data
-        .then(x => x.data);
+export default class UploadService {
+    private uploadListingUrl = "/api/photo/uploadListing/";
+    private uploadProfileUrl = "/api/photo/uploadProfile";
 
-        //// add url field
-        //.then(x => {
-        //    return Object.assign({}, x, { url: `/images/${x.id}` })
-        //}
-        //);
+    //uploadListing(formData, listingId, progressCallback) {
+    //    return http.post(this.uploadListingUrl,
+    //        formData,
+    //        progressCallback)
+    //        // get data
+    //        .then(x => x.data);
+    //}
+
+    uploadListing(formData, listingId) {
+        return http.post(this.uploadListingUrl + listingId, formData)
+            .then(x => x.data);
+    }
+
+    uploadProfile(formData, profileId) {
+        return http.post(this.uploadProfileUrl + profileId,formData)
+            // get data
+            .then(x => x.data);
+    }
 }
-
-export { upload }

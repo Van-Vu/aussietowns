@@ -1,7 +1,5 @@
 ﻿<template>
-    <div>
-        <upload-image url="bodomtest" name="bodomtest" :max_files="maxFileAllowed"></upload-image>
-    </div>
+    <imageupload :uploadType="1"></imageupload>
 </template>
 
 <script lang="ts">

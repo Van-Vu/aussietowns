@@ -16,7 +16,7 @@
         height:100%;
         border:0;
         flex-grow:1;
-        /*@include input-border;*/
+        @include input-border;
         /*border-right-width: 0;
         border-radius: 4px 0 0 4px;
         box-shadow: inset 1px 0px 1px 0px rgba(0, 0, 0, 0.075);

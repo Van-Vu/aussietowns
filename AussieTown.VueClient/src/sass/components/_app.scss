@@ -24,11 +24,6 @@ ul {
     padding: 0;
 
     .li-horizontal{
-        /*display: inline;*/
-        list-style-type: none;
+        display:inline;
     }
-}
-
-input[type=radio]{
-    width: 20px;
 }

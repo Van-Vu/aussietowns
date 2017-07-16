@@ -35,22 +35,13 @@ var ScheduleComponent = (function (_super) {
             { value: '2', display: 'Weekly' },
             { value: '3', display: 'Monthly' }
         ];
+        _this.disableDays = {
+            days: [6, 0] // Disable Saturday's and Sunday's
+        };
         return _this;
     }
     ScheduleComponent.prototype.onScheduleChanged = function (value, oldValue) {
         this.model = value;
-        if (typeof (this.model.startTime) === 'string') {
-            this.model.startTime = {
-                HH: this.model.startTime.toString().substring(0, 2),
-                mm: this.model.startTime.toString().substring(3, 5)
-            };
-        }
-        if (typeof (this.model.duration) === 'string') {
-            this.model.duration = {
-                HH: this.model.duration.toString().substring(0, 2),
-                mm: this.model.duration.toString().substring(3, 5)
-            };
-        }
     };
     ScheduleComponent.prototype.onRepeatedChanged = function (value, oldValue) {
         console.log("isRepeated: " + value);

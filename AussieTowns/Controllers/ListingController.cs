@@ -5,10 +5,12 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,11 +22,13 @@ namespace AussieTowns.Controllers
     {
         private readonly IListingService _listingService;
         private readonly IMapper _mapper;
+        private readonly AppSettings _appSettings;
 
-        public ListingController(IListingService listingService, IMapper mapper)
+        public ListingController(IListingService listingService, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             _listingService = listingService;
             _mapper = mapper;
+            _appSettings = appSettings.Value;
         }
 
         [HttpGet("{id}")]
@@ -151,6 +155,44 @@ namespace AussieTowns.Controllers
                 };
             }
         }
+
+        [HttpPost("{listingId}/deleteImage")]
+        public async Task<RequestResult> DeleteImage(int listingId, string url)
+        {
+            try
+            {
+                var image = await _listingService.FetchImageByUrl(listingId, url);
+
+                if (image != null)
+                {
+                    var filename = image.Url.Split('/').LastOrDefault();
+                    var result = await AwsS3Extensions.DeleteObjectS3Async(
+                        AwsS3Extensions.GetS3Client(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
+                            _appSettings.AwsS3Region), "meetthelocal-development", $"images/listings/{listingId}/{filename}");
+
+                    var deleteImage = _listingService.DeleteImage(image.ImageId);
+
+                    return new RequestResult
+                    {
+                        State = RequestState.Success,
+                        Data = "allGood"
+                    };
+                }
+                else
+                {
+                    throw new NullReferenceException("can't find image");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new RequestResult
+                {
+                    State = RequestState.Failed,
+                    Msg = "Something is wrong !"
+                };
+            }
+        }
+
 
         [HttpGet]
         public async Task<RequestResult> GetToursByUserId([FromQuery] int user)

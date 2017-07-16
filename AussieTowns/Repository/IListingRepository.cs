@@ -14,6 +14,10 @@ namespace AussieTowns.Repository
         Task<int> InsertListing(Listing listing);
         Task<int> UpdateListing(Listing listing);
         Task<int> DeActivateListing(int listingId);
+
+        Task<Image> GetImageByUrl(int listingId, string url);
         Task<IEnumerable<int>> GetListingIdByHeader(string header);
+        Task<int> InsertImage(int listingId, string url);
+        Task<int> DeleteImage(int imageId);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Common;
+using Microsoft.AspNetCore.Authentication;
 
 namespace AussieTowns.Model
 {
@@ -22,5 +23,9 @@ namespace AussieTowns.Model
         public ICollection<MiniProfile> TourOperators { get; set; }
 
         public ICollection<MiniProfile> TourGuests { get; set; }
+
+        public ICollection<Image> ImageList { get; set; }
+        
+
     }
 }

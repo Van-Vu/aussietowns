@@ -123,10 +123,12 @@ $nav-bar-height: 50px;
         background-size: contain;
         width: 30px;
         height: 30px;
-        @include ctr;
+        @include absolutecenter;
         top: 25px;
         @media all and (min-width: $is-mobile) {
-            background-color: $c-neutral-black;
+            float: left;
+            left: 2%;
+            //background-color: $c-neutral-black;
         }
     }
 

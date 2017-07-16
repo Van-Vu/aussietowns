@@ -19,10 +19,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
-import UserDetailComponent from '../component/profile/userdetail.component.vue';
-import TripComponent from '../component/profile/trip.component.vue';
-import MessageComponent from '../component/profile/message.component.vue';
-import UserImageComponent from '../component/profile/userimage.component.vue';
 var ProfilePage = (function (_super) {
     __extends(ProfilePage, _super);
     function ProfilePage() {
@@ -55,13 +51,7 @@ var ProfilePage = (function (_super) {
     ], ProfilePage.prototype, "onRouteParamChanged", null);
     ProfilePage = __decorate([
         Component({
-            name: 'ProfilePage',
-            components: {
-                'profileform': UserDetailComponent,
-                'tripcomponent': TripComponent,
-                'messagecomponent': MessageComponent,
-                'userimage': UserImageComponent
-            }
+            name: 'ProfilePage'
         })
     ], ProfilePage);
     return ProfilePage;

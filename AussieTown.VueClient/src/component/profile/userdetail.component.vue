@@ -1,11 +1,11 @@
 ﻿<template>
-    <form @submit.prevent="onInsertorUpdate" class="container is-fluid" :class="{editing:isEditing}">
+    <div class="container is-fluid" :class="{editing:isEditing}">
         <div class="field">
             <label class="label" for="email">Email Address</label>
             <p class="control has-icon has-icon-right">
-                <input name="email" v-if="isEditing" v-model="model.email" v-validate:email.initial="'required'"
+                <input name="email" v-if="isEditing" v-model="model.email" v-validate="'required|email'"
                        :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="">
-                <span class="icon user">
+                <span v-if="isEditing" class="icon user">
                     <i class="glyphicon glyphicon-lock"></i>
                 </span>
                 <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
@@ -15,9 +15,9 @@
         <div class="field">
             <label class="label" for="password">Password</label>
             <p class="control has-icon has-icon-right">
-                <input name="password" v-if="isEditing" v-model="model.password" v-validate:password.initial="'required'"
+                <input name="password" v-if="isEditing" v-model="model.password" v-validate="'required'"
                        :class="{'input': true, 'is-danger': errors.has('password') }" type="text" placeholder="●●●●●●●">
-                <span class="icon user">
+                <span v-if="isEditing" class="icon user">
                     <i class="glyphicon glyphicon-lock"></i>
                 </span>
                 <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
@@ -27,9 +27,9 @@
         <div class="field">
             <label class="label" for="firstName">First Name</label>
             <p class="control has-icon has-icon-right">
-                <input name="firstname" v-if="isEditing" v-model="model.firstName" v-validate:firstname="'required'"
+                <input name="firstname" v-if="isEditing" v-model="model.firstName" v-validate="'required'"
                        :class="{'input': true, 'is-danger': errors.has('firstname') }" type="text">
-                <span class="icon user">
+                <span v-if="isEditing" class="icon user">
                     <i class="glyphicon glyphicon-lock"></i>
                 </span>
                 <span v-show="errors.has('firstname')" class="help is-danger">{{ errors.first('firstname') }}</span>
@@ -39,9 +39,9 @@
         <div class="field">
             <label class="label" for="lastName">Last Name</label>
             <p class="control has-icon has-icon-right">
-                <input name="lastname" v-if="isEditing" v-model="model.lastName" v-validate:lastname="'required'"
+                <input name="lastname" v-if="isEditing" v-model="model.lastName" v-validate="'required'"
                        :class="{'input': true, 'is-danger': errors.has('lastname') }" type="text">
-                <span class="icon user">
+                <span v-if="isEditing" class="icon user">
                     <i class="glyphicon glyphicon-lock"></i>
                 </span>
                 <span v-show="errors.has('lastname')" class="help is-danger">{{ errors.first('lastname') }}</span>
@@ -60,7 +60,7 @@
             <label class="label" for="phoneNumber">Phone Number</label>
             <p class="control has-icon has-icon-right">
                 <input name="phone" v-if="isEditing" v-model="model.phone" class="input" type="text">
-                <span class="icon user">
+                <span v-if="isEditing" class="icon user">
                     <i class="glyphicon glyphicon-lock"></i>
                 </span>
                 <label v-if="!isEditing">{{ model.phone }}</label>
@@ -117,12 +117,17 @@
             <canvas></canvas>
             <label role="button" @click="capture">Capture</label>
         </div>
-        <div class="columns is-gapless is-flex is-sticky-bottom">
-            <button class="button mtl_button is-sticky-bottom" v-if="!isEditing" @click.prevent="isEditing = true">Edit</button>
-            <button type="submit" class="column is-half button mtl_button-round-left" v-if="isEditing" @click="isEditing = false">Submit</button>
-            <button class="column is-half button mtl_button-round-right" v-if="isEditing" @click="isEditing = false">Cancel</button>
+        <div class="container is-gapless is-flex is-sticky-bottom is-hidden-tablet">
+            <button class="column is-full button mtl_button" v-if="!isEditing" @click="onEdit">Edit</button>
+            <button class="column is-half button mtl_button-round-left" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
+            <button class="column is-half button mtl_button-round-right" v-if="isEditing" @click="onCancelEdit">Cancel</button>
         </div>
-    </form>
+        <div class="columns container is-flex is-hidden-mobile">
+            <button class="column hero-buttons mtl_button" v-if="!isEditing" @click.prevent="onEdit">Edit</button>
+            <button class="column hero-buttons mtl_button" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
+            <button class="column hero-buttons mtl_button" v-if="isEditing" @click="onCancelEdit">Cancel</button>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">

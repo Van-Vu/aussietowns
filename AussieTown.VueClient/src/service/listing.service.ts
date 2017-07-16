@@ -9,9 +9,7 @@ export default class ListingService {
 
     getListingById(_id: number) {
         return http.get(this.baseUrl + _id)
-            .then(response => {
-                return response.data as ListingModel;
-            });
+            .then(response => response.data);
     }
 
     addListing(listing) {
@@ -55,6 +53,10 @@ export default class ListingService {
             .then(response => {
                 return response.data;
             });        
+    }
+
+    deleteImage(listingId: number, url: string) {
+        return http.post(`${this.baseUrl}${listingId}/deleteImage`,`url=${url}`);
     }
 
     private jwt() {

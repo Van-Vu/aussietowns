@@ -1,18 +1,8 @@
 ﻿import Vue from "vue";
 import { Component, Prop, Watch } from "vue-property-decorator";
-import UserDetailComponent from '../component/profile/userdetail.component.vue';
-import TripComponent from '../component/profile/trip.component.vue';
-import MessageComponent from '../component/profile/message.component.vue';
-import UserImageComponent from '../component/profile/userimage.component.vue';
 
 @Component({
-    name: 'ProfilePage',
-    components: {
-        'profileform': UserDetailComponent,
-        'tripcomponent': TripComponent,
-        'messagecomponent': MessageComponent,
-        'userimage': UserImageComponent
-    }
+    name: 'ProfilePage'
 })
 
 export default class ProfilePage extends Vue {

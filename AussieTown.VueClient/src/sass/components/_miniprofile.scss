@@ -25,9 +25,11 @@
     .photo_wrapper {
         width: 50px;
         display: inline-block;   
+        vertical-align: top;
     }
 
     .text_wrapper {
         display: inline-block; 
+        vertical-align: top;
     }
 }

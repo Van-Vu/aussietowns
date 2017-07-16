@@ -1,7 +1,7 @@
 ﻿// mixin for abslolute centering elements - http://www.andrewhoule.me/blog/5-sass-mixins-i-use-on-nearly-every-project/
 
-@mixin ctr($axis: "both"){
-  position:absolute;
+@mixin absolutecenter($axis: "both", $position: "absolute"){
+  position:$position;
   @if $axis == "y"{
     top: 50%;
     transform: translateY(-50%);

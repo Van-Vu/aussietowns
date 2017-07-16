@@ -4,6 +4,10 @@
          @touchstart="_onTouchStart"
          @mousedown="_onTouchStart"
          @wheel="_onWheel">
+        <div class="slide-button-prev" v-show="currentPage > 1">
+            <i class="glyphicon glyphicon-chevron-left absolute-center-y" @click.prevent="prev"></i>
+        </div>
+        
         <div class="swiper-wrap"
              ref="wrap"
              :style="{
@@ -13,17 +17,17 @@
              @transitionend="_onTransitionEnd">
             <slot></slot>
         </div>
-        <div class="swiper-pagination"
+        <!--<div class="swiper-pagination"
              v-show="paginationVisible">
             <span class="swiper-pagination-bullet"
                   :class="{'active': index+1===currentPage}"
                   v-for="(slide,index) in slideEls"
                   @click="paginationClickable && setPage(index+1)"></span>
+        </div>-->
+        <div class="slide-button-next" v-show="currentPage < slideEls.length">
+            <i class="glyphicon glyphicon-chevron-right absolute-center-y" @click.prevent="next"></i>
         </div>
-        <div data-v-7fed18e9="" class="VueCarousel-navigation">
-            <span data-v-7fed18e9="" class="glyphicon glyphicon-arrow-left" @click="setPage(currentPage-1)"></span>
-            <span data-v-7fed18e9="" class="glyphicon glyphicon-arrow-right" @click="setPage(currentPage+1)"></span>
-        </div>
+        
     </div>
 </template>
 <script>
@@ -108,6 +112,10 @@
                 } else {
                     this._revert();
                 }
+            },
+            refresh(){
+                this.slideEls = [].map.call(this.$refs.wrap.children, el => el);
+                this.setPage(this.currentPage);
             },
             setPage(page, noAnimation) {
                 var self = this;

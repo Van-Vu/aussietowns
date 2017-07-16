@@ -7,7 +7,7 @@
                 </a>
             </div>
             <div class="column is-half">
-                <div class='nav-bar__logo'></div>
+                <div class='nav-bar__logo '></div>
                 <router-link :to="{name:'home'}" class="nav-bar__logo"></router-link>
             </div>
             <div class="column is-one-quarter-mobile is-hidden-tablet">
@@ -20,7 +20,15 @@
             </div>
 
             <div class="column is-half-desktop is-hidden-mobile">
-                <p> hey mate, I'm here </p>
+                <ul class="is-pulled-right ">
+                    <li class="li-horizontal"><router-link :to="{ name: 'home' }">Home</router-link></li>
+                    <li class="li-horizontal"><router-link :to="{ name: 'newListing', params: { listingType: 'offer' }}">Create new fun</router-link></li>
+                    <li class="li-horizontal"><router-link :to="{ name: 'newListing', params: { listingType: 'request' }}">Find fun</router-link></li>
+                    <li class="li-horizontal"><router-link :to="{ name: 'help' }">Help</router-link></li>
+                    <li class="li-horizontal"><router-link :to="{ name: 'termsandconditions' }">Terms and Conditions</router-link></li>
+                    <li class="li-horizontal"><router-link :to="{ name: 'about'}">About</router-link></li>
+                </ul>
+                <!--<p class="is-pulled-right"> hey mate, I'm here </p>-->
             </div>
         </div>
         <div class="is-hidden-tablet" v-show="showSecondSearchBar">

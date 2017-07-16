@@ -18,6 +18,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 import NotificationComponent from './component/shared/notification.component.vue';
+import "reflect-metadata";
 //if (process.env.VUE_ENV === 'client') {
 //    Vue.component('datepicker', require('vuejs-datepicker'))
 //    Vue.component('vue-timepicker', require('vue2-timepicker'))
@@ -32,18 +33,26 @@ Vue.use(FBSignInButton);
 import lazy from 'vue-lazy-image';
 Vue.use(lazy, {
     loading: '/static/images/giphy.gif',
-    try: 0,
+    try: 2,
+});
+Vue.directive('focus', {
+    inserted: function (el, binding) {
+        if (binding.value)
+            el.focus();
+        else
+            el.blur();
+    },
 });
 import VueMask from 'v-mask';
 Vue.use(VueMask);
-Vue.config.errorHandler = function (err, vm, info) {
-    // handle error
-    // `info` is a Vue-specific error info, e.g. which lifecycle hook
-    // the error was found in. Only available in 2.2.0+
-    console.log('damn it!');
-    console.log(info);
-    console.log(err);
-};
+//Vue.config.errorHandler = function (err, vm, info) {
+//    // handle error
+//    // `info` is a Vue-specific error info, e.g. which lifecycle hook
+//    // the error was found in. Only available in 2.2.0+
+//    console.log('damn it!');
+//    console.log(info);
+//    console.log(err);
+//}
 var App = (function (_super) {
     __extends(App, _super);
     function App() {

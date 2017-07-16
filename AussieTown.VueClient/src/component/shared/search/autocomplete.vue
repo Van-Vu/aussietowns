@@ -3,6 +3,7 @@
     <label v-if="selectedText != ''" class="tag is-success">{{selectedText}}</label>
     <input type="text" class="search-box"
           v-model="keyword"
+           v-focus="focus"
           @input="onInput($event.target.value)"
           @keydown="onKeyDown($event)" @keyup="onKeyUp($event)" @blur="onBlur" @focus="onFocus"
           v-bind:placeHolder="placeHolderText" />

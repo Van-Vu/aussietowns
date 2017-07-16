@@ -21,9 +21,7 @@ export default function (context) {
                 //console.log('all Symbol name: ' + propertySymbol);
                 //var extendOptions = Object.getOwnPropertyNames((component as any).extendOptions);
                 //console.log('all Symbol name: ' + extendOptions);
-                //console.log('call asyncData() on all matched route components')
                 if (component && component.extendOptions && component.extendOptions.asyncData) {
-                    //console.log('call it')
                     return component.extendOptions.asyncData({
                         store: store,
                         route: router.currentRoute
@@ -35,7 +33,6 @@ export default function (context) {
                 // When we attach the state to the context, and the `template` option
                 // is used for the renderer, the state will automatically be
                 // serialized and injected into the HTML as window.__INITIAL_STATE__.
-                console.log('store.state: ' + app);
                 context.state = store.state;
                 resolve(app);
             }).catch(reject);

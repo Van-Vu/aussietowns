@@ -19,6 +19,7 @@ import { Component } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import LocationSearchComponent from "../shared/search/locationsearch.component.vue";
 import UserModel from '../../model/user.model';
+import datepicker from '../shared/external/datepicker.vue';
 Vue.use(VeeValidate);
 var UserDetailComponent = (function (_super) {
     __extends(UserDetailComponent, _super);
@@ -26,6 +27,7 @@ var UserDetailComponent = (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.model = new UserModel();
         _this.isEditing = false;
+        _this.modelCache = null;
         return _this;
     }
     UserDetailComponent.prototype.created = function () {
@@ -42,6 +44,15 @@ var UserDetailComponent = (function (_super) {
             //(new ListingService()).updateListing(this.contructBeforeSubmit(this.model));
         }
     };
+    UserDetailComponent.prototype.onEdit = function () {
+        this.isEditing = true;
+        this.modelCache = Object.assign({}, this.model);
+    };
+    UserDetailComponent.prototype.onCancelEdit = function () {
+        this.isEditing = false;
+        Object.assign(this.model, this.modelCache);
+        this.modelCache = null;
+    };
     UserDetailComponent.prototype.contructBeforeSubmit = function (model) {
         return this.model;
     };
@@ -51,7 +62,8 @@ var UserDetailComponent = (function (_super) {
         Component({
             name: 'UserDetail',
             components: {
-                "locationsearch": LocationSearchComponent
+                "locationsearch": LocationSearchComponent,
+                "datepicker": datepicker
             }
         })
     ], UserDetailComponent);

@@ -21,13 +21,13 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import ParticipantComponent from '../component/shared/participant.component.vue';
-import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
 import LocationSearchComponent from '../component/shared/search/locationsearch.component.vue';
 import { Utils } from '../component/utils';
 import { ListingType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
 import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
+import ImageUploadComponent from '../component/shared/imageupload.component.vue';
 Vue.use(VeeValidate);
 var ListingPage = (function (_super) {
     __extends(ListingPage, _super);
@@ -38,7 +38,8 @@ var ListingPage = (function (_super) {
         _this.isEditing = false;
         _this.editingSchedule = null;
         _this.showScheduleModal = false;
-        _this.model = new ListingModel();
+        _this.modelCache = null;
+        _this.model = null;
         return _this;
     }
     ListingPage.prototype.asyncData = function (_a) {
@@ -67,13 +68,31 @@ var ListingPage = (function (_super) {
         }
         this.$store.dispatch('SET_CURRENT_PAGE', 'listing');
     };
+    ListingPage.prototype.onUploadImageCompleted = function () {
+        this.model.imageList = this.$store.state.listing.imageList;
+        this.$children.find(function (x) { return x.$el.id === 'imageupload'; }).$children[0].refresh();
+    };
+    ListingPage.prototype.test = function () {
+        var testvalue = this.$children;
+        console.log(testvalue);
+    };
     ListingPage.prototype.onInsertorUpdate = function () {
+        this.isEditing = false;
         if (this.model.id > 0) {
             return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model));
         }
         else {
             return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model));
         }
+    };
+    ListingPage.prototype.onEdit = function () {
+        this.isEditing = true;
+        this.modelCache = Object.assign({}, this.model);
+    };
+    ListingPage.prototype.onCancelEdit = function () {
+        this.isEditing = false;
+        Object.assign(this.model, this.modelCache);
+        this.modelCache = null;
     };
     ListingPage.prototype.onLocationSelected = function (item) {
         this.model.locationDetail = item;
@@ -86,6 +105,7 @@ var ListingPage = (function (_super) {
     ListingPage.prototype.onUserRemoved = function (user) {
     };
     ListingPage.prototype.onSaveSchedule = function (scheduleObject) {
+        console.log(scheduleObject);
     };
     ListingPage.prototype.onEditSchedule = function (scheduleObject) {
         this.editingSchedule = scheduleObject;
@@ -98,9 +118,10 @@ var ListingPage = (function (_super) {
             var schedule = schedules[i];
             scheduleArr.push({
                 id: schedule.id != null ? schedule.id : 0,
-                startDate: schedule.startDate + 'T' + schedule.startTime.HH + ':' + schedule.startTime.mm,
-                duration: schedule.duration.HH + ':' + schedule.duration.mm,
+                startDate: schedule.startDate + 'T' + schedule.startTime,
+                duration: schedule.duration,
                 repeatedType: schedule.repeatedType,
+                repeatedDay: schedule.repeatedDay,
                 listingId: model.id,
                 endDate: schedule.endDate
             });
@@ -158,7 +179,8 @@ var ListingPage = (function (_super) {
                 "locationsearch": LocationSearchComponent,
                 "participant": ParticipantComponent,
                 "datepicker": datepicker,
-                "schedulemodal": ScheduleModalComponent
+                "schedulemodal": ScheduleModalComponent,
+                "imageupload": ImageUploadComponent
             }
         })
     ], ListingPage);

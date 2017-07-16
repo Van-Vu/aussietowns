@@ -1,20 +1,16 @@
 ﻿import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import UploadImage from '../shared/external/vueuploadimage.vue';
+import ImageUploadComponent from '../shared/imageupload.component.vue';
 
 @Component({
-    name: "UserImage",
+    name: "UserImageComponent",
     components: {
-        'upload-image': UploadImage
+        "imageupload": ImageUploadComponent
     }
 })
 
 export default class UserImageComponent extends Vue {
-    maxFileAllowed: number = 5;
 
     created(): void {
-    }
-
-    close() {
     }
 }

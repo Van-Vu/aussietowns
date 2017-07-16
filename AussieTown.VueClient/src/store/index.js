@@ -3,7 +3,10 @@ import Vuex from 'vuex';
 import ListingService from "../service/listing.service";
 import UserService from "../service/user.service";
 import MessageService from "../service/message.service";
+import UploadService from "../service/fileupload.service";
+import ListingModel from '../model/listing.model';
 import { Utils } from '../component/utils';
+import { plainToClass } from "class-transformer";
 import createPersistedState from 'vuex-persistedstate';
 import * as Cookies from 'js-cookie';
 Vue.use(Vuex);
@@ -62,7 +65,6 @@ export default new Vuex.Store({
         FETCH_PROFILE_BY_ID: function (_a, id) {
             var dispatch = _a.dispatch, commit = _a.commit, state = _a.state;
             return (new UserService()).getById(id).then(function (response) {
-                console.log('fetch User');
                 commit('UPDATE_PROFILE', response.data);
             });
         },
@@ -108,6 +110,25 @@ export default new Vuex.Store({
             var commit = _a.commit;
             commit('REMOVE_NOTIFICATION', notification);
         },
+        UPLOAD_LISTING_IMAGES: function (_a, payload) {
+            var commit = _a.commit;
+            return (new UploadService()).uploadListing(payload.data, payload.actionId)
+                .then(function (response) {
+                commit('UPDATE_LISTING_IMAGES', response.newImages);
+            });
+        },
+        UPLOAD_PROFILE_IMAGES: function (_a, payload) {
+            var commit = _a.commit;
+            return (new UploadService()).uploadProfile(payload.data, payload.actionId)
+                .then(function (response) { return commit('UPDATE_PROFILE_IMAGES', response.url); });
+        },
+        REMOVE_IMAGE: function (_a, payload) {
+            var commit = _a.commit;
+            return (new ListingService()).deleteImage(payload.listingId, payload.url)
+                .then(function (response) {
+                //commit('UPDATE_LISTING_IMAGES', response);
+            });
+        },
         TEST: function (_a, payload) {
             var commit = _a.commit, state = _a.state;
             (new UserService()).getMiniProfile(1).catch(function (error) { return commit('ADD_NOTIFICATION', error); });
@@ -119,8 +140,7 @@ export default new Vuex.Store({
         },
         UPDATE_LISTING: function (state, listing) {
             console.log('update listing');
-            console.log(listing);
-            Vue.set(state, 'listing', listing);
+            Vue.set(state, 'listing', plainToClass(ListingModel, listing));
         },
         UPDATE_PROFILE: function (state, profile) {
             state.profile = profile;
@@ -149,6 +169,17 @@ export default new Vuex.Store({
         },
         REMOVE_NOTIFICATION: function (state, notification) {
             Vue.set(state, 'notifications', Utils.removeFromArray(state.notifications, notification));
+        },
+        UPDATE_LISTING_IMAGES: function (state, listingImages) {
+            if (state.listing.imageList) {
+                listingImages.map(function (x) { return state.listing.imageList.push(x); });
+            }
+            else {
+                Vue.set(state.listing, 'imageList', listingImages);
+            }
+        },
+        UPDATE_PROFILE_IMAGES: function (state, profileImages) {
+            state.profile.images = profileImages;
         }
     }
 });

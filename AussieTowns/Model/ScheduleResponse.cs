@@ -14,5 +14,6 @@ namespace AussieTowns.Model
         public string Duration { get; set; }
         public string EndDate { get; set; }
         public RepeatedType? RepeatedType { get; set; }
+        public List<string> RepeatedDay { get; set; }
     }
 }

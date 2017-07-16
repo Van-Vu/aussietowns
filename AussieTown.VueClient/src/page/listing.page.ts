@@ -11,6 +11,7 @@ import { ListingType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
 import ScheduleModel from '../model/schedule.model';
 import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
+import ImageUploadComponent from '../component/shared/imageupload.component.vue';
 
 Vue.use(VeeValidate);
 
@@ -20,7 +21,8 @@ Vue.use(VeeValidate);
         "locationsearch": LocationSearchComponent,
         "participant": ParticipantComponent,
         "datepicker": datepicker,
-        "schedulemodal": ScheduleModalComponent
+        "schedulemodal": ScheduleModalComponent,
+        "imageupload": ImageUploadComponent
     }
 })
 
@@ -33,8 +35,9 @@ export default class ListingPage extends Vue{
     isEditing: boolean = false;
     editingSchedule: ScheduleModel = null;
     showScheduleModal: boolean = false;
+    modelCache: any = null;
 
-    model: ListingModel = new ListingModel();
+    model: ListingModel = null;
 
     asyncData({ store, route }) {
         if (route.params.listingId) {
@@ -63,12 +66,34 @@ export default class ListingPage extends Vue{
         this.$store.dispatch('SET_CURRENT_PAGE', 'listing');
     }
 
+    onUploadImageCompleted() {
+        (this.model as any).imageList = this.$store.state.listing.imageList;
+        (this.$children.find(x => x.$el.id === 'imageupload').$children[0] as any).refresh();
+    }
+
+    test() {
+        var testvalue = this.$children;
+        console.log(testvalue);
+
+    }
     onInsertorUpdate() {
+        this.isEditing = false;
         if (this.model.id > 0) {
             return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model));        
         } else {
             return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model));        
         }
+    }
+
+    onEdit() {
+        this.isEditing = true;
+        this.modelCache = Object.assign({}, this.model);
+    }
+
+    onCancelEdit() {
+        this.isEditing = false;
+        Object.assign(this.model, this.modelCache);
+        this.modelCache = null;
     }
 
     onLocationSelected(item: AutocompleteItem) {
@@ -85,6 +110,7 @@ export default class ListingPage extends Vue{
     }
 
     onSaveSchedule(scheduleObject) {
+        console.log(scheduleObject);
     }
 
     onEditSchedule(scheduleObject) {
@@ -100,9 +126,10 @@ export default class ListingPage extends Vue{
             var schedule = schedules[i];
             scheduleArr.push({
                 id: schedule.id != null ? schedule.id : 0,
-                startDate: schedule.startDate + 'T' + schedule.startTime.HH + ':' + schedule.startTime.mm,
-                duration: schedule.duration.HH + ':' + schedule.duration.mm,
+                startDate: schedule.startDate + 'T' + schedule.startTime,
+                duration: schedule.duration,
                 repeatedType: schedule.repeatedType,
+                repeatedDay: schedule.repeatedDay,
                 listingId: model.id,
                 endDate: schedule.endDate
             });

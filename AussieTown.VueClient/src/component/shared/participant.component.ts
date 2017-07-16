@@ -17,6 +17,7 @@ import SearchService from '../../service/search.service';
 export default class ParticipantComponent extends Vue {
     @Prop participants: any[];
     @Prop participantType: string;
+    @Prop isEditing: boolean;
 
     searchStr: string = "";
     placeHolderText = "this is the test";

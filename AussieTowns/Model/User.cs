@@ -34,5 +34,7 @@ namespace AussieTowns.Model
         public UserSource Source { get; set; }
         public string ExternalId { get; set; }
         public int Role { get; set; }
+
+        public List<string> Images { get; set; }
     }
 }

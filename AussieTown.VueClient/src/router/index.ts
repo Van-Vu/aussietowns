@@ -168,7 +168,6 @@ router.beforeEach((to, from, next) => {
         next() // make sure to always call next()!
     }
 
-    console.log('hey I am from before each')
     next()
 })
 

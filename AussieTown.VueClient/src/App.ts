@@ -2,7 +2,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 import NotificationComponent from './component/shared/notification.component.vue'
-
+import "reflect-metadata";
 
 //if (process.env.VUE_ENV === 'client') {
 //    Vue.component('datepicker', require('vuejs-datepicker'))
@@ -23,22 +23,46 @@ import lazy from 'vue-lazy-image';
 
 Vue.use(lazy, {
     loading: '/static/images/giphy.gif', //loading image 
-    try: 0, // the count of try to load one image 
+    try: 2, // the count of try to load one image 
 });
+
+
+Vue.directive('focus', {
+    inserted: function (el, binding) {
+        if (binding.value) el.focus();
+        else el.blur();
+    },
+    //update: function (el) {
+    //    Vue.nextTick(function () {
+    //        el.focus();
+    //    })
+    //}
+
+    //componentUpdated: function (el, binding) {
+    //    if (binding.modifiers.lazy) {
+    //        if (Boolean(binding.value) === Boolean(binding.oldValue)) {
+    //            return;
+    //        }
+    //    }
+
+    //    if (binding.value) el.focus();
+    //    else el.blur();
+    //}
+})
 
 import VueMask from 'v-mask'
 Vue.use(VueMask)
 
 
-Vue.config.errorHandler = function (err, vm, info) {
-    // handle error
-    // `info` is a Vue-specific error info, e.g. which lifecycle hook
-    // the error was found in. Only available in 2.2.0+
+//Vue.config.errorHandler = function (err, vm, info) {
+//    // handle error
+//    // `info` is a Vue-specific error info, e.g. which lifecycle hook
+//    // the error was found in. Only available in 2.2.0+
 
-    console.log('damn it!');
-    console.log(info);
-    console.log(err);
-}
+//    console.log('damn it!');
+//    console.log(info);
+//    console.log(err);
+//}
 
 @Component({
     name: "App",

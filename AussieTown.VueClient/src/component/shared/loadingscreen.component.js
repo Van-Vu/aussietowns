@@ -16,22 +16,32 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import ImageUploadComponent from '../shared/imageupload.component.vue';
-var UserImageComponent = (function (_super) {
-    __extends(UserImageComponent, _super);
-    function UserImageComponent() {
+var LoadingScreenComponent = (function (_super) {
+    __extends(LoadingScreenComponent, _super);
+    function LoadingScreenComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    UserImageComponent.prototype.created = function () {
+    Object.defineProperty(LoadingScreenComponent.prototype, "notifications", {
+        get: function () {
+            return this.$store.state.notifications;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    LoadingScreenComponent.prototype.addNotification = function (notification) {
+        this.$store.dispatch('ADD_NOTIFICATION', notification);
     };
-    UserImageComponent = __decorate([
+    LoadingScreenComponent.prototype.removeNotification = function (notification) {
+        this.$store.dispatch('REMOVE_NOTIFICATION', notification);
+    };
+    LoadingScreenComponent.prototype.triggerClose = function () {
+        this.removeNotification(this.$store.state.notifications[0]);
+    };
+    LoadingScreenComponent = __decorate([
         Component({
-            name: "UserImageComponent",
-            components: {
-                "imageupload": ImageUploadComponent
-            }
+            name: "LoadingScreenComponent"
         })
-    ], UserImageComponent);
-    return UserImageComponent;
+    ], LoadingScreenComponent);
+    return LoadingScreenComponent;
 }(Vue));
-export default UserImageComponent;
+export default LoadingScreenComponent;

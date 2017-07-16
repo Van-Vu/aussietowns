@@ -157,7 +157,6 @@ router.beforeEach(function (to, from, next) {
     else {
         next(); // make sure to always call next()!
     }
-    console.log('hey I am from before each');
     next();
 });
 export default router;

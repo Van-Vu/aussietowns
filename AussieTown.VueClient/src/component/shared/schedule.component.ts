@@ -22,27 +22,19 @@ export default class ScheduleComponent extends Vue {
     isRepeated: boolean = true;
     model: ScheduleModel = null;
 
-    public repeatPeriods = [
+    repeatPeriods = [
         { value: '1', display: 'Daily' },
         { value: '2', display: 'Weekly' },
         { value: '3', display: 'Monthly' }
     ];
 
+    disableDays = {
+        days: [6, 0] // Disable Saturday's and Sunday's
+    };
+
     @Watch('schedule')
     onScheduleChanged(value: ScheduleModel, oldValue: ScheduleModel) {
         this.model = value;
-        if (typeof (this.model.startTime) === 'string') {
-            this.model.startTime = {
-                HH: this.model.startTime.toString().substring(0, 2),
-                mm: this.model.startTime.toString().substring(3, 5)
-            };
-        }
-        if (typeof (this.model.duration) === 'string') {
-            this.model.duration = {
-                HH: this.model.duration.toString().substring(0, 2),
-                mm: this.model.duration.toString().substring(3, 5)
-            };
-        }
     }
 
     @Watch('isRepeated')

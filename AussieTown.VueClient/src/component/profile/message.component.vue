@@ -1,5 +1,5 @@
 ﻿<template>
-    <ul>
+    <ul class="message">
         <li class="conversation" v-if="!isShowConversationContent" v-for="conversation in conversations">
             <a @click.prevent="openConversation(conversation)">
                 <div class="photo_wrapper">

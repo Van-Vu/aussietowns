@@ -1,10 +1,9 @@
 ﻿<template>
-    <ul class="tour-paticipant">
-        <div style="height:100px;"
-        <li class="li-horizontal" v-for="user of participants ">
+    <ul class="tile box is-vertical tour-paticipant">
+        <li class="tile" v-for="user of participants ">
             <miniprofile :data="user" :isRemovable="true" @removeUser="onUserRemove($event)"></miniprofile>
         </li>
-        <li class="li-horizontal">
+        <li v-if="isEditing" class="tile box">
             <a @click.prevent="toggleProfileSearch($event)" class="button mtl_button">
             <i class="glyphicon glyphicon-plus-sign"/><span>{{buttonText}}</span></a>
             <usersearch v-show="isAdding" @onSelected="onUserSelect($event)"></usersearch>

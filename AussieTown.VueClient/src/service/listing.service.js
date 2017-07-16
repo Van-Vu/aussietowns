@@ -8,10 +8,7 @@ var ListingService = (function () {
     }
     ListingService.prototype.getListingById = function (_id) {
         return http.get(this.baseUrl + _id)
-            .then(function (response) {
-            console.log('afete getlisting:' + response.data);
-            return response.data;
-        });
+            .then(function (response) { return response.data; });
     };
     ListingService.prototype.addListing = function (listing) {
         return http.post(this.baseUrl, listing)
@@ -49,6 +46,9 @@ var ListingService = (function () {
             .then(function (response) {
             return response.data;
         });
+    };
+    ListingService.prototype.deleteImage = function (listingId, url) {
+        return http.post("" + this.baseUrl + listingId + "/deleteImage", "url=" + url);
     };
     ListingService.prototype.jwt = function () {
         // create authorization header with jwt token

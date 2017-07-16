@@ -1,18 +1,41 @@
-﻿import { RepeatedType } from './enum';
+﻿import { RepeatedType, RepeatedDay } from './enum';
 
 export default class ScheduleModel {
-    public id: number;
-    public startDate: string;
-    public startTime: Object;
-    public duration: Object;
-    public endDate: string;
-    public repeatedType: RepeatedType;
+    id: number;
+    startDate: string;
+    startTime: Object;
+    duration: Object;
+    endDate: string;
+    repeatedType: RepeatedType;
+    repeatedDay: RepeatedDay[] = new Array<RepeatedDay>();
 
-    constructor(startDate, startTime, duration, endDate, repeatedType) {
+    constructor(startDate, startTime, duration, endDate, repeatedType, repeatedDay) {
         this.startDate = startDate;
         this.startTime = startTime;
         this.duration = duration;
         this.endDate = endDate;
         this.repeatedType = repeatedType;
+        this.repeatedDay = repeatedDay;
+    }
+
+    summaryText() {
+        let ret = '';
+        
+        switch (this.repeatedType) {
+            case RepeatedType.Daily:
+                ret = 'Everyday';
+                break;
+            case RepeatedType.Weekly:
+                let repeatedDayname = new Array<string>();
+                this.repeatedDay.map(day => repeatedDayname.push(RepeatedDay[day]));
+
+                ret = `Weekly on ${repeatedDayname.join(', ')}`;
+                break;
+            case RepeatedType.Monthly:
+                ret = `Every month on ${new Date(this.startDate).getDay()}`;
+                break;
+        }
+
+        return ret;
     }
 }

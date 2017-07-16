@@ -30,6 +30,7 @@ var AutoCompleteComponent = (function (_super) {
         //@Output() onSearch: EventEmitter<string> = new EventEmitter();
         _this.keyword = '';
         _this.selectedText = '';
+        _this.focus = false;
         _this.selected = new SelectedAutocompleteValue();
         _this.firstSet = true;
         //private list: AutocompleteItem[];
@@ -123,6 +124,7 @@ var AutoCompleteComponent = (function (_super) {
         if (this.cleanUp) {
             this.indexSelected = -1;
             this.selected = new SelectedAutocompleteValue();
+            this.selectedText = '';
         }
     };
     AutoCompleteComponent.prototype.refreshSelected = function () {

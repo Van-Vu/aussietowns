@@ -21,6 +21,7 @@ export default class AutoCompleteComponent extends Vue {
     //@Output() onSearch: EventEmitter<string> = new EventEmitter();
     keyword:string = '';
     selectedText: string = '';
+    focus: boolean = false;
 
     private selected: SelectedAutocompleteValue = new SelectedAutocompleteValue();
 
@@ -123,6 +124,7 @@ export default class AutoCompleteComponent extends Vue {
         if (this.cleanUp) {
             this.indexSelected = -1;
             this.selected = new SelectedAutocompleteValue();
+            this.selectedText = '';
         }
     }
 

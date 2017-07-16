@@ -34,5 +34,16 @@ namespace AussieTowns.Extensions
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             return await client.PutObjectAsync(putRequest);
         }
+
+        public static async Task<DeleteObjectResponse> DeleteObjectS3Async(AmazonS3Client client, string bucketName,
+            string keyName)
+        {
+            var deleteRequest = new DeleteObjectRequest
+            {
+                BucketName = bucketName,
+                Key = keyName
+            }; ;
+            return await client.DeleteObjectAsync(deleteRequest);
+        }
     }
 }

@@ -44,7 +44,7 @@ var UserService = (function () {
             .catch(this.handleError);
     };
     UserService.prototype.update = function (user) {
-        return http.put('api/user/' + user.Id, user)
+        return http.put('api/user/' + user.id, user)
             .then(function (response) { return response.data; })
             .catch(this.handleError);
     };

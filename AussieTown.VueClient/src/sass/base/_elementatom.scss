@@ -5,9 +5,12 @@
 }
 
 .mtl_button {
-@include button-bg($c-brand-primary);
+    @include button-bg($c-brand-primary);
     @include button-bg($c-brand-primary);
     @include button-round-border-all;
+    min-width: 100px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .mtl_button-round-left {
@@ -22,8 +25,44 @@
     @include button-round-border-right;
 }
 
+.mtl-btn-large {
+    height: 52px;
+    font-size: 20px;
+    text-align: center;
+    padding-left: 24px;
+    padding-right: 24px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.absolute-center {
+    @include absolutecenter;
+}
+
+.absolute-center-y {
+    @include absolutecenter("y");
+}
+
+.absolute-center-x {
+    @include absolutecenter("x");
+}
+
+.relative-center-y {
+    @include absolutecenter("y","relative");
+}
+
+.relative-center-x {
+    @include absolutecenter("x","relative");
+}
+
 a {
     cursor: pointer;
+}
+
+html,
+body{
+    background-color: $c-lightgrey-lightest;
 }
 
 html,
@@ -32,24 +71,24 @@ body,
   height: 100%; /* needed for proper layout */
 }
 
-body {
-  //overflow: hidden;
-}
-
 #app {
   //display: flex;
   flex-direction: column;
 }
 
-.hero-head {
-  //flex: 0 0 auto;
-  //background-color: #dcdcdc;
-}
-
 .hero-body {
-  //flex: 1 1 auto;
-  position: relative;/* need this to position inner content */
-  
+    position: relative;/* need this to position inner content */
+    width:100%;
+    top: calc(#{$size-header-height} + 30px) !important;
+    margin-bottom: $size-header-height !important;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media all and (min-width: $is-mobile) {
+        top: $size-header-height !important;
+        max-width: $is-desktop;
+        //background-color: $c-neutral-black;
+    }
 }
 
 .is-sticky-bottom {
@@ -58,12 +97,13 @@ body {
     left: 0px;
     right: 0px;
     z-index: 0;
-    width: 100%;
-    /*background-color: transparent;*/
     >button{
-        height: 4rem;
+        height: 2rem;
     }
 
+    @media all and (min-width: $is-mobile) {
+        position:relative;
+    }
 }
 
 .is-circle {

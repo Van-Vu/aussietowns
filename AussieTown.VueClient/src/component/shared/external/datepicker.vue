@@ -1,3 +1,5 @@
+<!--https://github.com/charliekassel/vuejs-datepicker-->
+
 <template>
     <div class="date-picker">
         <div class="input-wrapper" @mouseenter="showCancel = true" @mouseleave="showCancel = false">
@@ -49,7 +51,7 @@
                     </ul>
                     <ul class="date-list">
                         <li v-for="(item, index) in dateList"
-                            :class="{preMonth: item.previousMonth, nextMonth: item.nextMonth,
+                            :class="{preMonth: item.previousMonth, nextMonth: item.nextMonth, disable: item.isDisabled, 
                                 invalid: validateDate(item), firstItem: (index % 7) === 0}"
                             @click="selectDate(item)">
                             <div class="message" :class="{selected: isSelected('date', item)}">
@@ -101,18 +103,21 @@
             min: {default: '1970-01-01'},
             max: {default: '3016-01-01'},
             value: {
-                type: [String, Array],
-                default: ''
+            type: [String, Array],
+                        default: ''
+            },
+            disabled: {
+                type: Object
             },
             range: {
                 type: Boolean,
                 default: false
-            }
-        },
-        methods: {
-            togglePanel () {
-                this.panelState = !this.panelState
-                this.rangeStart = false
+                }
+            },
+            methods: {
+                    togglePanel () {
+                        this.panelState = !this.panelState
+                        this.rangeStart = false
             },
             isSelected (type, item) {
                 switch (type){
@@ -131,7 +136,7 @@
                         item.nextMonth && month++
                         return (new Date(this.tmpYear, month, item.value).getTime() >= new Date(this.tmpStartYear, this.tmpStartMonth, this.tmpStartDate).getTime() 
                             && new Date(this.tmpYear, month, item.value).getTime() <= new Date(this.tmpEndYear, this.tmpEndMonth, this.tmpEndDate).getTime())
-                }
+            }
             },
             chType (type) {
                 this.panelType = type
@@ -145,21 +150,23 @@
             },
             prevMonthPreview () {
                 this.tmpMonth = this.tmpMonth === 0 ? 0 : this.tmpMonth - 1
-            },
+    },
             nextMonthPreview () {
                 this.tmpMonth = this.tmpMonth === 11 ? 11 : this.tmpMonth + 1
-            },
+    },
             selectYear (year) {
                 if(this.validateYear(year)) return
                 this.tmpYear = year
                 this.panelType = 'month'
-            },
+    },
             selectMonth (month) {
                 if(this.validateMonth(month)) return
                 this.tmpMonth = month
                 this.panelType = 'date'
-            },
+    },
             selectDate (date) {
+                if (date.isDisabled) return
+
                 setTimeout(() => {
                     if(this.validateDate(date)) return
                     if(date.previousMonth){
@@ -263,7 +270,36 @@
             },
             clear() {
                 this.$emit('input', this.range ? ['', ''] : '')
-            }
+            },
+            /**
+             * Whether a day is disabled
+             * @param {Date}
+             * @return {Boolean}
+             */
+            isDisabledDate (date) {
+              let disabled = false
+              if (typeof this.disabled === 'undefined') {
+                return false
+                }
+                  if (typeof this.disabled.dates !== 'undefined') {
+                    this.disabled.dates.forEach((d) => {
+                      if (date.toDateString() === d.toDateString()) {
+                        disabled = true
+                        return true
+                }
+                })
+                }
+                  if (typeof this.disabled.to !== 'undefined' && this.disabled.to && date < this.disabled.to) {
+                    disabled = true
+                }
+                  if (typeof this.disabled.from !== 'undefined' && this.disabled.from && date > this.disabled.from) {
+                    disabled = true
+                }
+                  if (typeof this.disabled.days !== 'undefined' && this.disabled.days.indexOf(date.getDay()) !== -1) {
+                    disabled = true
+                }
+              return disabled
+            },
         },
         watch: {
             min (v) {
@@ -290,11 +326,14 @@
         },
         computed: {
             dateList () {
+                let dObj = new Date(this.tmpYear, this.tmpMonth + 1, 0)
                 let currentMonthLength = new Date(this.tmpYear, this.tmpMonth + 1, 0).getDate()
                 let dateList = Array.from({length: currentMonthLength}, (val, index) => {
+                    dObj.setDate(dObj.getDate() + 1)
                     return {
                         currentMonth: true,
-                        value: index + 1
+                        value: index + 1,
+                        isDisabled: this.isDisabledDate(dObj)
                     }
                 })
                 let startDay = new Date(this.tmpYear, this.tmpMonth, 1).getDay()
@@ -581,9 +620,17 @@
     .weeks, .date-list{
         width: 100%;
         text-align: center;
-        .preMonth, .nextMonth{
+        .preMonth, .nextMonth {
             color: #ccc;
         }
+
+        .disable {
+            color: #ccc;
+            .message {
+                background-color: red;
+            }
+        }
+
         li{
             font-family: Roboto;
             width: 30px;
