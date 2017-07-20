@@ -22,7 +22,7 @@ namespace AussieTowns.Repository
                           + "SELECT sd.* FROM SuburbDetail sd INNER JOIN Listing l ON sd.id = l.locationId WHERE l.id = @listingid;"
                           + "SELECT * FROM Image i WHERE ListingId = @listingId AND IsActive = true ORDER BY sortorder, createddate;"
                           + "SELECT * FROM TourOperator o INNER JOIN User u ON o.userid = u.id WHERE ListingId = @listingid;"
-                          + "SELECT * FROM TourGuest g INNER JOIN User u ON g.userid = u.id WHERE ListingId = @listingId";
+                          + "SELECT * FROM TourGuest g LEFT OUTER JOIN User u ON u.id = g.existingUserId WHERE ListingId = @listingId";
 
                 dbConnection.Open();
                 Listing listing;
@@ -63,8 +63,6 @@ namespace AussieTowns.Repository
                     listing.TourGuests.AddRange(guests);
 
                     listing.Location = location;
-
-                    
                 }
 
                 var scheduleSql = "SELECT s.id, s.startDate, s.duration, s.enddate, s.repeatedtype, s.repeatedday, s.listingid FROM Schedule s INNER JOIN Listing l ON s.listingid = l.id WHERE ListingId = @listingid;";
@@ -210,10 +208,10 @@ namespace AussieTowns.Repository
                         var tourGuests = await dbConnection.QueryAsync<TourGuest>(guestSql, new { listingId = listing.Id });
 
                         var newGuests =
-                            listing.TourGuests.Where(p => tourGuests.All(p2 => p2.UserId != p.UserId));
+                            listing.TourGuests.Where(p => tourGuests.All(p2 => p2.ExistingUserId != p.ExistingUserId));
                         var oldGuests =
-                            tourGuests.Where(p => listing.TourGuests.All(p2 => p2.UserId != p.UserId));
-                        var newGuestSql = "INSERT INTO TourGuest VALUES(@listingId, @userId, @isOwner)";
+                            tourGuests.Where(p => listing.TourGuests.All(p2 => p2.ExistingUserId != p.ExistingUserId));
+                        var newGuestSql = "INSERT INTO TourGuest VALUES(@listingId, @userId, @isPrimary)";
                         await dbConnection.ExecuteAsync(newGuestSql, newGuests);
 
                         var oldGuestSql =
@@ -283,6 +281,19 @@ namespace AussieTowns.Repository
                 var deleteSql = "DELETE FROM Image WHERE imageId = @imageId";
                 return await dbConnection.ExecuteAsync(deleteSql, new {imageId});
             }
+        }
+
+        public async Task<int> AddTourGuest(IList<Booking> bookings)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "INSERT INTO TourGuest(listingId, existingUserId, isPrimary, firstName, lastName, email, phone, address, emergencyContact) "
+                        + "VALUES(@listingId, @existingUserId, @isPrimary, @firstName, @lastName, @email, @phone, @address, @emergencyContact)";
+                dbConnection.Open();
+                var ret = await dbConnection.ExecuteAsync(sql, bookings );
+                return ret;
+            }
+
         }
     }
 }

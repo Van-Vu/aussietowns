@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace AussieTowns
 {
-    public class MappingProfile : Profile
+    public class MappingProfile : AutoMapper.Profile
     {
         public MappingProfile()
         {

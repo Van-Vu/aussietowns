@@ -12,6 +12,8 @@ import datepicker from '../component/shared/external/datepicker.vue';
 import ScheduleModel from '../model/schedule.model';
 import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
 import ImageUploadComponent from '../component/shared/imageupload.component.vue';
+import AvailabilityComponent from '../component/booking/availability.component.vue';
+import NumberChooser from '../component/shared/numberchooser.component.vue';
 
 Vue.use(VeeValidate);
 
@@ -22,7 +24,9 @@ Vue.use(VeeValidate);
         "participant": ParticipantComponent,
         "datepicker": datepicker,
         "schedulemodal": ScheduleModalComponent,
-        "imageupload": ImageUploadComponent
+        "imageupload": ImageUploadComponent,
+        "numberchooser": NumberChooser,
+        "availabilityCheck": AvailabilityComponent
     }
 })
 
@@ -35,7 +39,18 @@ export default class ListingPage extends Vue{
     isEditing: boolean = false;
     editingSchedule: ScheduleModel = null;
     showScheduleModal: boolean = false;
+    toggleAvailability: boolean = false;
+    availabilityText: string = "Check Availability";
+
+    bookingDate: any = new Date().toDateString();
+    bookingNumber: number = 0;
+
+    disableDays = {
+        days: [6, 0] // Disable Saturday's and Sunday's
+    };
+
     modelCache: any = null;
+
 
     model: ListingModel = null;
 
@@ -107,6 +122,29 @@ export default class ListingPage extends Vue{
 
     onUserRemoved(user) {
         
+    }
+
+    checkAvailability(schedule) {
+        if (this.toggleAvailability) {
+            this.$store.dispatch('UPDATE_BOOKING', { participants: this.bookingNumber, date: this.bookingDate, time: '09:00' });
+            this.$router.push({ name: "booking" });
+        }
+        this.toggleAvailability = true;
+        this.availabilityText = "Proceed";
+
+
+        //var bookingDayPanel = this.$children.find(x => x.$el.id === "availDay");
+        //if (bookingDayPanel) {
+        //    (bookingDayPanel as any).togglePanel();
+        //}
+    }
+
+    onBookingDateChanged(value) {
+        this.bookingDate = value;
+    }
+
+    onParticipantChanged(value) {
+        this.bookingNumber = value;
     }
 
     onSaveSchedule(scheduleObject) {

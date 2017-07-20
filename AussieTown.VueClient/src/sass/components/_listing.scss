@@ -1,0 +1,25 @@
+﻿.listing-main-content {
+    hr {
+        width: 83.33333%;
+        margin-left: 16.66667%;
+
+        @media all and (max-width: $is-mobile) {
+            width: 100%;
+            margin-left: 0;
+        }
+    }
+
+    .is-2 {
+        font-weight:500;
+    }
+}
+
+.cost {
+    border: 5px solid $c-brand-quaternary;
+    color: $c-brand-quaternary;
+    .price {
+        font-size: $font-big;
+        font-weight: bold;
+        text-align: center;
+    }
+}

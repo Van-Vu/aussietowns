@@ -2,7 +2,7 @@
 
 <template>
     <div class="date-picker">
-        <div class="input-wrapper" @mouseenter="showCancel = true" @mouseleave="showCancel = false">
+        <div class="input-wrapper" v-show="showTextbox" @mouseenter="showCancel = true" @mouseleave="showCancel = false">
             <div class="input-date" @click="togglePanel" v-text="range ? display[0] + ' -- ' + display[1] : display"></div>
             <transition name="fade">
                 <img class="cancel-btn" v-show="showCancel" @click="clear">
@@ -102,6 +102,7 @@
             language: {default: 'en'},
             min: {default: '1970-01-01'},
             max: {default: '3016-01-01'},
+            showTextbox: {default: true},
             value: {
             type: [String, Array],
                         default: ''
@@ -263,7 +264,7 @@
                 return true
             },
             close (e) {
-                if(!this.$el.contains(e.target)){
+                if((!this.$el.contains(e.target)) && (e.target.id != 'checkAvailability')) {
                     this.panelState = false
                     this.rangeStart = false
                 }
@@ -421,6 +422,7 @@
             })
         },
         beforeDestroy () {
+            console.log('destroy datepicker');
             window.removeEventListener('click', this.close)
         }
     }
@@ -462,7 +464,7 @@
     }
     .date-panel{
         position: absolute;
-        z-index: 5000;
+        z-index: 50;
         border: 1px solid #eee;
         box-sizing: border-box;
         width: 320px;

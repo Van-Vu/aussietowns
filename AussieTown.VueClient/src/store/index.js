@@ -22,13 +22,14 @@ export default new Vuex.Store({
     state: {
         currentPage: '',
         loggedInUser: '',
-        listing: {},
+        listing: ListingModel,
         profile: {},
         searchListings: [],
         conversations: [],
         conversationsContent: [],
         message: '',
-        notifications: []
+        notifications: [],
+        booking: {}
     },
     getters: {
         isLoggedIn: function (state) {
@@ -129,6 +130,10 @@ export default new Vuex.Store({
                 //commit('UPDATE_LISTING_IMAGES', response);
             });
         },
+        UPDATE_BOOKING: function (_a, payload) {
+            var commit = _a.commit;
+            commit('UPDATE_BOOKING', payload);
+        },
         TEST: function (_a, payload) {
             var commit = _a.commit, state = _a.state;
             (new UserService()).getMiniProfile(1).catch(function (error) { return commit('ADD_NOTIFICATION', error); });
@@ -140,7 +145,8 @@ export default new Vuex.Store({
         },
         UPDATE_LISTING: function (state, listing) {
             console.log('update listing');
-            Vue.set(state, 'listing', plainToClass(ListingModel, listing));
+            var listingObject = plainToClass(ListingModel, listing);
+            Vue.set(state, 'listing', listingObject);
         },
         UPDATE_PROFILE: function (state, profile) {
             state.profile = profile;
@@ -180,6 +186,9 @@ export default new Vuex.Store({
         },
         UPDATE_PROFILE_IMAGES: function (state, profileImages) {
             state.profile.images = profileImages;
+        },
+        UPDATE_BOOKING: function (state, payload) {
+            Vue.set(state, 'booking', payload);
         }
     }
 });

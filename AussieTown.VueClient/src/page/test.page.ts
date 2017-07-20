@@ -2,20 +2,23 @@
 import { Component, Prop } from "vue-property-decorator";
 import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
 import Swiper from '../component/shared/external/vue-swiper.vue';
-
+import NumberChooser from '../component/shared/numberchooser.component.vue';
 import UserService from '../service/user.service';
 
 @Component({
     name: 'TestPage',
     components: {
         "searchbar": SearchBarComponent,
-        "swiper": Swiper
+        "swiper": Swiper,
+        "numberchooser": NumberChooser
     }
 })
 
 export default class TestPage extends Vue {
     showListingRequest: boolean = false;
     showListingOffer: boolean = false;
+    numberChooser : number = 0;
+
 
     asyncData({ store, route }) {
         return store.dispatch('SET_CURRENT_PAGE', 'home');

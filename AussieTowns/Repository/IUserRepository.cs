@@ -13,7 +13,7 @@ namespace AussieTowns.Repository
         Task<User> GetByExternalInfo(string email, int source, string externalId);
         Task<IEnumerable<User>> SearchUser(string searchTerm);
         Task<int> Insert(User user);
-        Task<int> Update(User user);
+        Task<int> Update(Profile profile);
         Task<int> Deactivate(int id);
     }
 }

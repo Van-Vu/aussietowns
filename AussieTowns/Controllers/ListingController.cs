@@ -135,6 +135,27 @@ namespace AussieTowns.Controllers
             }
         }
 
+        [HttpPost("{id}/book")]
+        public async Task<RequestResult> Book(int id, [FromBody] BookingRequest bookingRequest)
+        {
+            try
+            {
+                return new RequestResult
+                {
+                    State = RequestState.Success,
+                    Data = await _listingService.Booking(bookingRequest)
+                };
+            }
+            catch (Exception ex)
+            {
+                return new RequestResult
+                {
+                    State = RequestState.Failed,
+                    Msg = "Something is wrong !"
+                };
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<RequestResult> DeleteTourOffer(int id)
         {
@@ -193,7 +214,7 @@ namespace AussieTowns.Controllers
             }
         }
 
-
+        
         [HttpGet]
         public async Task<RequestResult> GetToursByUserId([FromQuery] int user)
         {

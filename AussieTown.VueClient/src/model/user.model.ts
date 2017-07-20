@@ -20,12 +20,12 @@ export default class UserModel {
     public operatorListings: ListingModel[];
     public guestListings: ListingModel[];
 
-    //constructor(id, fullname, email, profileurl, photourl, description) {
-    //    this.id = id;
-    //    this.fullname = fullname;
-    //    this.email = email;
-    //    this.profileUrl = profileurl;
-    //    this.photoUrl = photourl;
-    //    this.shortDescription = description;
-    //}
+    constructor() {
+        this.firstName = '';
+        this.lastName = '';
+        this.email = '';
+        this.phone = '';
+        this.emergencyContact = '';
+        this.address = '';
+    }
 }

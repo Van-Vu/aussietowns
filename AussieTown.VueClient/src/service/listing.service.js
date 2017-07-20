@@ -50,6 +50,9 @@ var ListingService = (function () {
     ListingService.prototype.deleteImage = function (listingId, url) {
         return http.post("" + this.baseUrl + listingId + "/deleteImage", "url=" + url);
     };
+    ListingService.prototype.bookAListing = function (bookingRequest) {
+        return http.post("" + this.baseUrl + bookingRequest.listingId + "/book", bookingRequest);
+    };
     ListingService.prototype.jwt = function () {
         // create authorization header with jwt token
         var headers = new Headers();

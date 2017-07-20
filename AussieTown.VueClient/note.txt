@@ -14,6 +14,8 @@ Deployment guide: https://vuejs.org/v2/guide/deployment.html
 
 Vue class base: https://alligator.io/vuejs/typescript-class-components/
 
+No-SSR: https://github.com/egoist/vue-no-ssr
+
 Task:
 image & video
 book
@@ -23,6 +25,13 @@ final integration
 DONE about / T&C
 DONE Serve Root with dev server
 DONE encrypt password
+DONE Cost at floating box
+DONE Check availability
+Booking process
+Error handling
+
+
+Image processing
 dynamic loading module
 
 Tech debt:

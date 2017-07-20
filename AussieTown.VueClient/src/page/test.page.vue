@@ -5,6 +5,7 @@
                 <img src="/static/images/garie-beach.jpg" />
             </div>
             <div class="content">
+                <numberchooser v-model="numberChooser"></numberchooser>
                 <h1>Hello world!</h1>
                 <article id="searchBarHomepage">
                     <searchbar @onSelect="onSelect($event)" @onSearch="onSearch($event)"></searchbar>

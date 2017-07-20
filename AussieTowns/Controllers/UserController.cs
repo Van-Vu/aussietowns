@@ -192,11 +192,11 @@ namespace AussieTowns.Controllers
 
         [HttpPut("{id}")]
         //[Authorize("Bearer")]
-        public async Task<RequestResult> Update(int id,[FromBody] User userRequest)
+        public async Task<RequestResult> Update(int id,[FromBody] Model.Profile profile)
         {
             try
             {
-                await _userService.Update(userRequest);
+                await _userService.Update(profile);
                 return new RequestResult
                 {
                     State = RequestState.Success,

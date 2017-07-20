@@ -28,6 +28,8 @@ import { ListingType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
 import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
 import ImageUploadComponent from '../component/shared/imageupload.component.vue';
+import AvailabilityComponent from '../component/booking/availability.component.vue';
+import NumberChooser from '../component/shared/numberchooser.component.vue';
 Vue.use(VeeValidate);
 var ListingPage = (function (_super) {
     __extends(ListingPage, _super);
@@ -38,6 +40,13 @@ var ListingPage = (function (_super) {
         _this.isEditing = false;
         _this.editingSchedule = null;
         _this.showScheduleModal = false;
+        _this.toggleAvailability = false;
+        _this.availabilityText = "Check Availability";
+        _this.bookingDate = new Date().toDateString();
+        _this.bookingNumber = 0;
+        _this.disableDays = {
+            days: [6, 0] // Disable Saturday's and Sunday's
+        };
         _this.modelCache = null;
         _this.model = null;
         return _this;
@@ -103,6 +112,24 @@ var ListingPage = (function (_super) {
         this.model.tourOperators.push(new MiniProfile(user.id, user.name, '', '', user.imageUrl, ''));
     };
     ListingPage.prototype.onUserRemoved = function (user) {
+    };
+    ListingPage.prototype.checkAvailability = function (schedule) {
+        if (this.toggleAvailability) {
+            this.$store.dispatch('UPDATE_BOOKING', { participants: this.bookingNumber, date: this.bookingDate, time: '09:00' });
+            this.$router.push({ name: "booking" });
+        }
+        this.toggleAvailability = true;
+        this.availabilityText = "Proceed";
+        //var bookingDayPanel = this.$children.find(x => x.$el.id === "availDay");
+        //if (bookingDayPanel) {
+        //    (bookingDayPanel as any).togglePanel();
+        //}
+    };
+    ListingPage.prototype.onBookingDateChanged = function (value) {
+        this.bookingDate = value;
+    };
+    ListingPage.prototype.onParticipantChanged = function (value) {
+        this.bookingNumber = value;
     };
     ListingPage.prototype.onSaveSchedule = function (scheduleObject) {
         console.log(scheduleObject);
@@ -180,7 +207,9 @@ var ListingPage = (function (_super) {
                 "participant": ParticipantComponent,
                 "datepicker": datepicker,
                 "schedulemodal": ScheduleModalComponent,
-                "imageupload": ImageUploadComponent
+                "imageupload": ImageUploadComponent,
+                "numberchooser": NumberChooser,
+                "availabilityCheck": AvailabilityComponent
             }
         })
     ], ListingPage);

@@ -35,6 +35,7 @@ import ListingPage from '../page/listing.page.vue';
 import ProfilePage from '../page/profile.page.vue';
 import TestPage from '../page/test.page.vue';
 import HelpPage from '../page/static/help.page.vue';
+import BookingPage from '../page/booking.page.vue'
 import AboutPage from '../page/static/about.page.vue';
 import TermsAndConditionsPage from '../page/static/termsandconditions.page.vue';
 
@@ -119,6 +120,13 @@ const router = new Router({
             component: ListingPage,
             props: true
         },
+        {
+            path: "/booking",
+            name: "booking",
+            component: BookingPage,
+            props: true
+        },
+
         {
             path: "/login",
             name: "login",

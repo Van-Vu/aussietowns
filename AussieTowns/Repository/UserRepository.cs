@@ -92,16 +92,15 @@ namespace AussieTowns.Repository
             }
         }
 
-        public async Task<int> Update(User user)
+        public async Task<int> Update(Profile profile)
         {
             using (IDbConnection dbConnection = Connection)
             {
                 var sql = "UPDATE User SET firstname = @firstname, lastname = @lastname, email = @email, gender= @gender, birthday= @birthday, phone = @phone, language= @language, currency = @currency, "
-                    + "locationId = @locationId, description = @description, address= @address, emergencycontact= @emergencycontact, photourl = @photourl, videourl = @videourl, updatedDate=@updatedDate, isActive=@isActive WHERE id = @Id";
+                    + "locationId = @locationId, description = @description, address= @address, emergencycontact= @emergencycontact, updatedDate=@updatedDate WHERE id = @Id";
                 dbConnection.Open();
-                user.UpdatedDate = DateTime.Now;
-                user.IsActive = true;
-                return await dbConnection.ExecuteAsync(sql,user);
+                profile.UpdatedDate = DateTime.Now;
+                return await dbConnection.ExecuteAsync(sql, profile);
             }
         }
 

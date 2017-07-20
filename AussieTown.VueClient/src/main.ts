@@ -3,6 +3,8 @@
 import { app, router, store } from './root'
 import Vue from 'vue'
 import merge from 'lodash.merge';
+import ListingModel from './model/listing.model';
+import { plainToClass } from "class-transformer";
 
 // a global mixin that calls `asyncData` when a route component's params change
 Vue.mixin({
@@ -21,9 +23,14 @@ Vue.mixin({
 })
 
 if ((window as any).__INITIAL_STATE__) {
-    // Bodom hack
+    // Bodom hack: loggInUser is fetched from Cookies
     Reflect.deleteProperty((window as any).__INITIAL_STATE__, 'loggedInUser');
-    store.replaceState(merge({}, store.state, (window as any).__INITIAL_STATE__));
+
+    // Bodom hack: retain listing state in case of direct browsing
+    var initialState = (window as any).__INITIAL_STATE__;
+    initialState.listing = plainToClass(ListingModel, initialState.listing); 
+
+    store.replaceState(merge({}, store.state, initialState));
 }
 
 // wait until router has resolved all async before hooks

@@ -18,12 +18,14 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
 import Swiper from '../component/shared/external/vue-swiper.vue';
+import NumberChooser from '../component/shared/numberchooser.component.vue';
 var TestPage = (function (_super) {
     __extends(TestPage, _super);
     function TestPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.showListingRequest = false;
         _this.showListingOffer = false;
+        _this.numberChooser = 0;
         _this.requestSlides = [];
         return _this;
     }
@@ -54,7 +56,8 @@ var TestPage = (function (_super) {
             name: 'TestPage',
             components: {
                 "searchbar": SearchBarComponent,
-                "swiper": Swiper
+                "swiper": Swiper,
+                "numberchooser": NumberChooser
             }
         })
     ], TestPage);

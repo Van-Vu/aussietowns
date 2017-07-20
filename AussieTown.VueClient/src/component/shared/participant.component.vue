@@ -1,6 +1,6 @@
 ﻿<template>
-    <ul class="tile box is-vertical tour-paticipant">
-        <li class="tile" v-for="user of participants ">
+    <ul class="tile is-vertical tour-paticipant">
+        <li class="tile box" v-for="user of participants ">
             <miniprofile :data="user" :isRemovable="true" @removeUser="onUserRemove($event)"></miniprofile>
         </li>
         <li v-if="isEditing" class="tile box">
