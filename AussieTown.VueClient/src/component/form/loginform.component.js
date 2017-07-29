@@ -20,13 +20,13 @@ import UserService from '../../service/user.service';
 import VeeValidate from 'vee-validate';
 import LoginModel from '../../model/login.model';
 import { UserSource } from '../../model/enum';
-import { fetchPublicKey, decryptTextFromServer } from '../../service/auth.service';
-import { GlobalConfig } from '../../GlobalConfig';
+import { fetchPublicKey, decryptTextFromServer, requestPasswordReset, encryptText } from '../../service/auth.service';
 Vue.use(VeeValidate);
 var LoginForm = (function (_super) {
     __extends(LoginForm, _super);
     function LoginForm() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.isForgotPassword = false;
         _this.formSubmitted = false;
         _this.model = new LoginModel();
         // Login or Signup
@@ -58,7 +58,7 @@ var LoginForm = (function (_super) {
     LoginForm.prototype.login = function (model) {
         var _this = this;
         if (model.password) {
-            model.password = this.encryptText(model.password);
+            model.password = encryptText(model.password);
         }
         (new UserService()).login(model)
             .then(function (responseToken) {
@@ -70,7 +70,7 @@ var LoginForm = (function (_super) {
     LoginForm.prototype.signup = function (model) {
         var _this = this;
         if (model.password) {
-            model.password = this.encryptText(model.password);
+            model.password = encryptText(model.password);
         }
         (new UserService()).signup(model)
             .then(function (responseToken) {
@@ -82,14 +82,12 @@ var LoginForm = (function (_super) {
     LoginForm.prototype.setCookies = function (accessToken) {
         this.$cookie.set('mtltk', accessToken);
     };
-    LoginForm.prototype.encryptText = function (text) {
-        var encrypt = new JSEncrypt();
-        encrypt.setPublicKey(GlobalConfig.publicKey);
-        var encryptedText = encrypt.encrypt(text);
-        return encryptedText;
-    };
     LoginForm.prototype.submitForm = function () {
         this.formSubmitted = true;
+    };
+    LoginForm.prototype.onResetPassword = function () {
+        requestPasswordReset(this.model.email)
+            .then(function (x) { return console.log(x); });
     };
     LoginForm.prototype.onGgSignInSuccess = function (googleUser) {
         // `googleUser` is the GoogleUser object that represents the just-signed-in user. 
@@ -102,7 +100,7 @@ var LoginForm = (function (_super) {
         console.log('Image URL: ' + profile.getImageUrl());
         console.log('Email: ' + profile.getEmail());
         if (this.isLogin) {
-            this.login({ email: profile.getEmail(), source: UserSource.Google, externalId: this.encryptText(profile.getId()) });
+            this.login({ email: profile.getEmail(), source: UserSource.Google, externalId: encryptText(profile.getId()) });
         }
         else {
             this.signup({
@@ -111,7 +109,7 @@ var LoginForm = (function (_super) {
                 lastname: profile.getFamilyName(),
                 photoUrl: profile.getImageUrl(),
                 source: UserSource.Google,
-                externalId: this.encryptText(profile.getId())
+                externalId: encryptText(profile.getId())
             });
         }
     };
@@ -129,7 +127,7 @@ var LoginForm = (function (_super) {
             console.log("Last name: " + profile.last_name + ".");
             console.log("Picture: " + profile.picture.data.url + ".");
             if (_this.isLogin) {
-                _this.login({ email: profile.email, source: UserSource.Facebook, externalId: _this.encryptText(profile.id) });
+                _this.login({ email: profile.email, source: UserSource.Facebook, externalId: encryptText(profile.id) });
             }
             else {
                 _this.signup({
@@ -138,7 +136,7 @@ var LoginForm = (function (_super) {
                     lastname: profile.last_name,
                     photoUrl: profile.picture.data.url,
                     source: UserSource.Facebook,
-                    externalId: _this.encryptText(profile.id)
+                    externalId: encryptText(profile.id)
                 });
             }
         });

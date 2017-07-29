@@ -68,8 +68,7 @@
                     </p>
                 </div>
                 <div class="tile">
-                    <div class="tile is-2" for="firstName">Description</div>
-                    <label class="tile is-narrow">{{ model.listing.description }}</label>
+                    {{ model.listing.description }}
                 </div>
             </div>
             <div class="field">

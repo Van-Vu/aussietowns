@@ -8,9 +8,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import ScheduleModel from './schedule.model';
+import { AutocompleteItem } from './autocomplete.model';
 import { Type } from "class-transformer";
 var ListingModel = (function () {
     function ListingModel() {
+        this.tourOperators = new Array();
+        this.tourGuests = new Array();
+        this.locationDetail = new AutocompleteItem();
+        this.schedules = new Array();
+        this.imageList = new Array();
+        //this.schedules.push(new ScheduleModel(Utils.getDate(new Date()), { HH: '08', mm: '00' }, { HH: '08', mm: '00' }, Utils.getDate(new Date()), 1, ''));
     }
     __decorate([
         Type(function () { return ScheduleModel; }),

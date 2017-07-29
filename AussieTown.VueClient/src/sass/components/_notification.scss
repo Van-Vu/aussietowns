@@ -1,9 +1,78 @@
 ﻿  .notifications {
     position: fixed;
-    top: 50%;
-    width: 100%;
+    width: 70%;
+    top: 20px;
     z-index: 1000;
+    @include absolutecenter("x","relative");
+
+    .notification {
+        &.is-success {
+            background-color: #f6fef9;
+
+            .message-header {
+                background-color: #23d160;
+                color: #fff;
+            }
+
+            .message-body {
+                border-color: #23d160;
+                color: #0e301a;
+            }
+        }
+
+        &.is-warning {
+            background-color: #fffdf5;
+
+            .message-header {
+                background-color: #ffdd57;
+                color: rgba(0,0,0,.7);
+            }
+
+            .message-body {
+                border-color: #ffdd57;
+                color: #3b3108;
+            }
+        }
+
+        &.is-error {
+            background-color: #fff5f7;
+
+            .message-header {
+                background-color: #ff3860;
+                color: #fff;
+            }
+
+            .message-body {
+                border-color: #ff3860;
+                color: #cd0930;
+            }
+        }
+    }
   }
+
   .notification p {
     margin-right: 20px;
+  }
+
+  .loading-screen {
+    .loading-background {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 999;
+        background-color: $c-primary-modal-background;
+    }
+    
+    .loading-content {
+        z-index: 1000;
+
+        > span {
+            font-weight: 700;
+            width: 100px;
+        }
+    }
+
+    & * {
+        position: inherit;
+    }
   }

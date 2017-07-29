@@ -76,12 +76,16 @@ export default class AutoCompleteComponent extends Vue {
         var key = event.keyCode;
         // Enter
         if (key == 13) {
+            if (this.indexSelected >= 0) {
+                this.doSelectIndex(this.indexSelected);    
+            }
+            
+            this.showList = false;
+
             if ((this.selectedText != '') && (this.keyword == '')) {
-                this.$emit('HeyIAmDone!');
+                setTimeout(() => { this.$emit('HeyIAmDone'); }, 1000);
             }
 
-            this.doSelectIndex(this.indexSelected);
-            this.showList = false;
             event.preventDefault();
         }
 

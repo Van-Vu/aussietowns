@@ -13,8 +13,6 @@
                         :pagination-visible="true"
                         :pagination-clickable="true"
                         :loop="false"
-                        @slide-change-start="onSlideChangeStart"
-                        @slide-change-end="onSlideChangeEnd">
                     <div v-for="slide in slides">
                         <img v-lazy="slide.imgSrc" />
                     </div>

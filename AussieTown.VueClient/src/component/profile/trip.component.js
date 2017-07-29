@@ -16,7 +16,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import ListingCardComponent from '../shared/listingcard.component.vue';
+import CardFullComponent from '../shared/listingcard.component.vue';
 var TripComponent = (function (_super) {
     __extends(TripComponent, _super);
     function TripComponent() {
@@ -38,7 +38,7 @@ var TripComponent = (function (_super) {
         Component({
             name: "TripComponent",
             components: {
-                "listingcard": ListingCardComponent
+                "listingcard": CardFullComponent
             }
         })
     ], TripComponent);

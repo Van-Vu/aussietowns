@@ -2,7 +2,7 @@
     <div class="container">
         <section class="header-main">
             <div class="background">
-                <img src="/static/images/garie-beach.jpg" />
+                <img src="/static/images/homepage-background.jpg" />
             </div>
             <div class="content">
                 <numberchooser v-model="numberChooser"></numberchooser>
@@ -27,6 +27,7 @@
             </div>
         </section>
         <button @click="checkLogginUser"> check current user</button>
+        <button @click="addNotification"> Add notification</button>
         <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>
         <ul>

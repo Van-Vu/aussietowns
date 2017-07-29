@@ -16,32 +16,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-var LoadingScreenComponent = (function (_super) {
-    __extends(LoadingScreenComponent, _super);
-    function LoadingScreenComponent() {
+import RingLoader from './external/ringloader.vue';
+var LoadingComponent = (function (_super) {
+    __extends(LoadingComponent, _super);
+    function LoadingComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(LoadingScreenComponent.prototype, "notifications", {
+    Object.defineProperty(LoadingComponent.prototype, "isLoading", {
         get: function () {
-            return this.$store.state.notifications;
+            return this.$store.state.isLoading;
         },
         enumerable: true,
         configurable: true
     });
-    LoadingScreenComponent.prototype.addNotification = function (notification) {
-        this.$store.dispatch('ADD_NOTIFICATION', notification);
-    };
-    LoadingScreenComponent.prototype.removeNotification = function (notification) {
-        this.$store.dispatch('REMOVE_NOTIFICATION', notification);
-    };
-    LoadingScreenComponent.prototype.triggerClose = function () {
-        this.removeNotification(this.$store.state.notifications[0]);
-    };
-    LoadingScreenComponent = __decorate([
+    LoadingComponent = __decorate([
         Component({
-            name: "LoadingScreenComponent"
+            name: "LoadingComponent",
+            components: {
+                "ringloader": RingLoader
+            }
         })
-    ], LoadingScreenComponent);
-    return LoadingScreenComponent;
+    ], LoadingComponent);
+    return LoadingComponent;
 }(Vue));
-export default LoadingScreenComponent;
+export default LoadingComponent;

@@ -12,7 +12,7 @@ namespace AussieTowns.Model
         public int ExistingUserId { get; set; }
         public User User { get; set; }
         public bool IsPrimary { get; set; }
-
+        public bool IsConfirmed { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

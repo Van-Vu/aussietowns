@@ -2,29 +2,28 @@
     <div class="container">
         <section class="header-main">
             <div class="background">
-                <img src="/static/images/garie-beach.jpg" />
+                <img src="/static/images/homepage-background.jpg" />
             </div>
             <div class="content">
                 <h1>Hello world!</h1>
                 <article id="searchBarHomepage">
-                    <searchbar @onSelect="onSelect($event)" @onSearch="onSearch($event)"></searchbar>
+                    <searchbar @onSelect="onSelect($event)" @onSearch="onSearch($event)" ></searchbar>
                 </article>
-
-                <swiper ref="swiper"
-                        direction="horizontal"
-                        :mousewheel-control="true"
-                        :performance-mode="false"
-                        :pagination-visible="true"
-                        :pagination-clickable="true"
-                        :loop="false"
-                        @slide-change-start="onSlideChangeStart"
-                        @slide-change-end="onSlideChangeEnd">
-                    <div v-for="slide in requestSlides">
-                        <img v-lazy="slide.imgSrc"/>
-                    </div>
-                </swiper>
             </div>
         </section>
+
+        <swiper id="homepage-swipe" ref="swiper"
+                direction="horizontal"
+                :mousewheel-control="true"
+                :performance-mode="false"
+                :pagination-visible="false"
+                :pagination-clickable="true"
+                :loop="false">
+            <div v-for="listing in featuredListings" style="width: 300px;">
+                <cardsmall :listingDetail="listing"></cardsmall>
+            </div>
+        </swiper>
+
 
         <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>

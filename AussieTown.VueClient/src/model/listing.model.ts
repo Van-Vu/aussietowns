@@ -16,7 +16,7 @@ export default class ListingModel {
     public schedules: ScheduleModel[];
 
     public locationDetail: AutocompleteItem;
-    public images: ImageModel[];
+    public imageList: ImageModel[];
     public cost: number;
     public currency: number;
     public header: string;
@@ -25,10 +25,12 @@ export default class ListingModel {
     public expectation: string;
     public minParticipant: number;
 
-    //constructor() {
-    //    this.tourOperators = new Array<MiniProfile>();
-    //    this.tourGuests = new Array<MiniProfile>();
-    //    this.schedules = new Array<ScheduleModel>();
-    //    //this.schedules.push(new ScheduleModel(Utils.getDate(new Date()), { HH: '08', mm: '00' }, { HH: '08', mm: '00' }, Utils.getDate(new Date()), 1, ''));
-    //}
+    constructor() {
+        this.tourOperators = new Array<MiniProfile>();
+        this.tourGuests = new Array<MiniProfile>();
+        this.locationDetail = new AutocompleteItem();
+        this.schedules = new Array<ScheduleModel>();
+        this.imageList = new Array<ImageModel>();
+        //this.schedules.push(new ScheduleModel(Utils.getDate(new Date()), { HH: '08', mm: '00' }, { HH: '08', mm: '00' }, Utils.getDate(new Date()), 1, ''));
+    }
 }

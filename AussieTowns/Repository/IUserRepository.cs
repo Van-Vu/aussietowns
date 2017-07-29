@@ -14,6 +14,10 @@ namespace AussieTowns.Repository
         Task<IEnumerable<User>> SearchUser(string searchTerm);
         Task<int> Insert(User user);
         Task<int> Update(Profile profile);
+        Task<int> ChangePassword(User user, bool isChangePassword);
         Task<int> Deactivate(int id);
+
+        Task<int> RequestPasswordReset(int userId, string resetToken, DateTime expiryDate);
+        Task<User> GetUserByResetToken(string resetToken);
     }
 }

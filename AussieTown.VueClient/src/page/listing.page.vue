@@ -12,7 +12,7 @@
                     <div class="columns">
                         <div v-if="isEditing" class="column is-2" for="header">Header</div>
                         <div class="column is-10 control has-icon has-icon-right">
-                            <input name="description" v-if="isEditing" v-model="model.header" v-validate:header.initial="'required'"
+                            <input name="header" v-if="isEditing" v-model="model.header" v-validate="'required'"
                                    :class="{'input': true, 'is-danger': errors.has('header') }" type="text" placeholder="">
                             <span v-if="isEditing" class="icon">
                                 <i class="glyphicon glyphicon-lock"></i>
@@ -21,12 +21,12 @@
                             <label v-if="!isEditing">{{ model.header }}</label>
                         </div>
                     </div>
-                    <div class="field">
+                    <div v-show="isOffer" class="field">
                         <label v-if="isEditing" class="label" for="header">Images</label>
                         <imageupload id="imageupload" :isEditing="isEditing" :uploadType="0" :images="model.imageList" @uploadImageCompleted="onUploadImageCompleted"></imageupload>
                     </div>
 
-                    <div class="columns">
+                    <div v-show="isOffer" class="columns">
                         <div class="column is-2">Host</div>
                         <div class="column is-10">
                             <participant participantType="Host" :participants="model.tourOperators" :isEditing="isEditing"
@@ -49,8 +49,8 @@
                     <div class="columns">
                         <div class="column is-2">Description</div>
                         <div class="column is-10 control has-icon has-icon-right">
-                            <input name="description" v-if="isEditing" v-model="model.description" v-validate.initial="'required'"
-                                   :class="{'input': true, 'is-danger': errors.has('description') }" type="text" placeholder="">
+                            <textarea name="description" v-if="isEditing" v-model="model.description" v-validate="'required'"
+                                   :class="{'textarea': true, 'is-danger': errors.has('description') }" cols="40" rows="10" placeholder=""></textarea>
                             <span v-if="isEditing" class="icon user">
                                 <i class="glyphicon glyphicon-lock"></i>
                             </span>
@@ -58,7 +58,7 @@
                             <label v-if="!isEditing">{{ model.description }}</label>
                         </div>
                     </div>
-                    <hr />
+                    <hr v-show="isOffer"/>
                     <div v-show="isOffer" class="columns">
                         <div class="column is-2">What to expect</div>
                         <div class="column is-10 control has-icon has-icon-right">
@@ -74,7 +74,7 @@
                             <label v-if="!isEditing">{{ model.requirement }}</label>
                         </div>
                     </div>
-                    <hr />
+                    <hr v-show="isOffer"/>
                     <div class="columns">
                         <div class="column is-2" for="participants">Minimum participants</div>
                         <div class="column is-10">
@@ -97,7 +97,7 @@
                     </div>
                 </div>
             </div>
-            <div class="tile is-vertical is-parent">
+            <div v-show="isOffer" class="tile is-vertical is-parent">
                 <div class="field box cost">
                     <label v-if="isEditing" class="label" for="cost">Cost</label>
                     <div class="price" v-if="!isEditing">{{ model.cost }}</div>

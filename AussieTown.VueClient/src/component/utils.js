@@ -32,6 +32,13 @@ var Utils = (function () {
         var _this = this;
         return array.filter(function (target) { return !_this.valueCompare(item, target); });
     };
+    Utils.isElementInViewport = function (el) {
+        var rect = el.getBoundingClientRect();
+        return (rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */);
+    };
     return Utils;
 }());
 export { Utils };

@@ -1,9 +1,9 @@
 ﻿<template>
     <div>
-        <form class="searchbar"  style="border: 1px solid #CFD5DB;">
-            <locationsearch @onSelected="onSelect($event)"></locationsearch>
-            <input type="button" class="is-hidden-mobile searchBtn" value="Search" @click="onSearch" />
-            <button type="button" class="is-hidden-tablet searchBtn" @click="onSearch">
+        <form class="searchbar">
+            <locationsearch @onSelected="onSelect($event)" @HeyIAmDone="onSearch"></locationsearch>
+            <input type="button" class="is-hidden-mobile button mtl_button-no-round searchBtn" value="Search" @click="onSearch" />
+            <button type="button" class="is-hidden-tablet button mtl_button-no-round searchBtn" @click="onSearch">
                 <i class="glyphicon glyphicon-search"></i>
             </button>
         </form>

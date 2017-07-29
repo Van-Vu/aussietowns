@@ -1,6 +1,5 @@
 ﻿import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import ListingCardComponent from '../shared/listingcard.component.vue';
 import ConversationModel from '../../model/conversation.model';
 import MiniProfileComponent from '../shared/miniprofile.component.vue'
 import MessageModel from '../../model/message.model';

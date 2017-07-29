@@ -17,6 +17,7 @@ namespace AussieTowns.Model
         public string Requirement { get; set; }
         public int MinParticipant { get; set; }
         public string Schedules { get; set; }
+        public string FirstImageUrl { get; set; }
         public int SuburbId { get; set; }
         public string SuburbName { get; set; }
         public int PostCode { get; set; }

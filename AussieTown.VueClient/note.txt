@@ -16,6 +16,8 @@ Vue class base: https://alligator.io/vuejs/typescript-class-components/
 
 No-SSR: https://github.com/egoist/vue-no-ssr
 
+Choose font: http://www.websitebuilderexpert.com/pick-best-font-style-for-website/
+
 Task:
 image & video
 book
@@ -27,6 +29,8 @@ DONE Serve Root with dev server
 DONE encrypt password
 DONE Cost at floating box
 DONE Check availability
+DONE SES integration
+DONE Choose font
 Booking process
 Error handling
 

@@ -5,6 +5,12 @@
     -webkit-align-items: center;
     -webkit-box-align: center;
     align-items: center;
+    border-top: 1px solid #CFD5DB;
+    border-left: 1px solid #CFD5DB;
+    border-bottom: 1px solid #CFD5DB;
+    border-right: 0;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
 
     & > label {
         margin-left: 10px;
@@ -16,8 +22,8 @@
         height:100%;
         border:0;
         flex-grow:1;
-        @include input-border;
-        /*border-right-width: 0;
+        /*@include input-border;
+        border-right-width: 0;
         border-radius: 4px 0 0 4px;
         box-shadow: inset 1px 0px 1px 0px rgba(0, 0, 0, 0.075);
         border-right-width: 0;*/

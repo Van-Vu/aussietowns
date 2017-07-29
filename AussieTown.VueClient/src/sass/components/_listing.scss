@@ -12,6 +12,18 @@
     .is-2 {
         font-weight:500;
     }
+
+    .icon {
+        .glyphicon {
+            right: 10px;
+            top: 10px;
+        }
+    }
+
+    .glyphicon {
+        right: 16px;
+        top: 0;
+    }
 }
 
 .cost {

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import Router  from "vue-router";
+import store from '../store';
 
 // LAZY LOADING ATTEMP
 // https://github.com/vuejs/vue-router/issues/1379
@@ -47,6 +48,7 @@ import UserImageComponent from '../component/profile/userimage.component.vue';
 import UserDetailComponent from '../component/profile/userdetail.component.vue';
 import LoginForm from '../component/form/loginform.component.vue';
 import RegistrationForm from '../component/form/registration.component.vue';
+import ForgetPasswordForm from '../component/form/forgetpassword.component.vue';
 
 Vue.use(Router);
 
@@ -140,6 +142,12 @@ const router = new Router({
             props: true
         },
         {
+            path: "/resetpassword/:guidString",
+            name: "resetpassword",
+            component: ForgetPasswordForm,
+            props: true
+        },
+        {
             path: "/help",
             name: "help",
             component: HelpPage
@@ -172,11 +180,16 @@ router.beforeEach((to, from, next) => {
         // if not, redirect to login page.
         console.log('inside route of Auth')
         next()
-    } else {
-        next() // make sure to always call next()!
     }
 
+    store.dispatch("ENABLE_LOADING")
+
     next()
+})
+
+
+router.afterEach((to, from) => {
+    store.dispatch("DISABLE_LOADING")
 })
 
 export default router

@@ -1,8 +1,10 @@
 <template>
     <div id="app">
         <notifications></notifications>
+        <loading></loading>
         <header class="hero-head">
             <nav-menu></nav-menu>
+            <!--<header-banner></header-banner>-->
         </header>
         <section class="hero-body">
             <transition :duration="{ enter: 5000, leave: 500 }" name="fade">

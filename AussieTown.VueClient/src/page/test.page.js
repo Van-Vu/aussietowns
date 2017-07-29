@@ -51,6 +51,9 @@ var TestPage = (function (_super) {
     TestPage.prototype.checkLogginUser = function () {
         this.$store.dispatch('TEST');
     };
+    TestPage.prototype.addNotification = function () {
+        this.$store.dispatch('ADD_NOTIFICATION', { title: "this is title", text: "this is the text" });
+    };
     TestPage = __decorate([
         Component({
             name: 'TestPage',

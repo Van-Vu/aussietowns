@@ -4,8 +4,8 @@
          @touchstart="_onTouchStart"
          @mousedown="_onTouchStart"
          @wheel="_onWheel">
-        <div class="slide-button-prev" v-show="currentPage > 1">
-            <i class="glyphicon glyphicon-chevron-left absolute-center-y" @click.prevent="prev"></i>
+        <div class="slide-button-prev" v-show="currentPage > 1" @click.prevent="prev">
+            <i class="glyphicon glyphicon-chevron-left absolute-center-y"></i>
         </div>
         
         <div class="swiper-wrap"
@@ -16,21 +16,23 @@
              }"
              @transitionend="_onTransitionEnd">
             <slot></slot>
+            <div id="EndOfSlide" style="width: 1px; height: 1px;"></div>
         </div>
-        <!--<div class="swiper-pagination"
+        <div class="swiper-pagination"
              v-show="paginationVisible">
             <span class="swiper-pagination-bullet"
                   :class="{'active': index+1===currentPage}"
                   v-for="(slide,index) in slideEls"
                   @click="paginationClickable && setPage(index+1)"></span>
-        </div>-->
-        <div class="slide-button-next" v-show="currentPage < slideEls.length">
-            <i class="glyphicon glyphicon-chevron-right absolute-center-y" @click.prevent="next"></i>
+        </div>
+        <div class="slide-button-next" v-show="isNextAvailable()" @click.prevent="next">
+            <i class="glyphicon glyphicon-chevron-right absolute-center-y"></i>
         </div>
         
     </div>
 </template>
 <script>
+    import { Utils } from '../../utils';
     const VERTICAL = 'vertical';
     const HORIZONTAL = 'horizontal';
 
@@ -64,6 +66,10 @@
             speed: {
                 type: Number,
                 default: 500
+            },
+            slideWidth: {
+                type: Number,
+                default: 300
             }
         },
         data() {
@@ -99,7 +105,7 @@
         methods: {
             next() {
                 var page = this.currentPage;
-                if (page < this.slideEls.length || this.loop) {
+                if (this.isNextAvailable() || this.loop) {
                     this.setPage(page + 1);
                 } else {
                     this._revert();
@@ -115,6 +121,9 @@
             },
             refresh(){
                 this.slideEls = [].map.call(this.$refs.wrap.children, el => el);
+                var translateName = this.isHorizontal() ? 'translateX' : 'translateY';
+                this[translateName] = 0;
+
                 this.setPage(this.currentPage);
             },
             setPage(page, noAnimation) {
@@ -142,6 +151,13 @@
                     if (noAnimation) return;
                     this._onTransitionStart();
                 }
+            },
+            isNextAvailable(){
+                if (this.$refs.wrap){
+                    return !Utils.isElementInViewport(this.$refs.wrap.lastElementChild);
+                }
+                
+                return true;
             },
             isHorizontal() {
                 return this.direction === HORIZONTAL;

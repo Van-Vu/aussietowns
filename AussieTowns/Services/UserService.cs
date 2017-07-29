@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AussieTowns.Common;
+using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Repository;
 
@@ -65,6 +66,39 @@ namespace AussieTowns.Services
         public async Task<IEnumerable<User>> SearchUser(string searchTerm)
         {
             return await _userRepository.SearchUser(searchTerm);
+        }
+
+        public async Task<User> VerifyResetToken(string resetToken)
+        {
+            return await _userRepository.GetUserByResetToken(resetToken);
+            
+        }
+
+        public async Task<int> RequestPasswordReset(int userId)
+        {
+            try
+            {
+                var token = Guid.NewGuid().ToString();
+                var expiryDate = DateTime.Today.AddDays(1);
+
+                var resetLink = $"http://localhost:3000/resetpassword/{token}";
+                var subject = "Reset password";
+
+                resetLink.SendEmail(subject);
+
+                return await _userRepository.RequestPasswordReset(userId, token, expiryDate);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<int> UpdatePassword(User user, bool isChangePassword)
+        {
+            return await _userRepository.ChangePassword(user, isChangePassword);
         }
     }
 }

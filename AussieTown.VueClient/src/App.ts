@@ -1,7 +1,8 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
-import NotificationComponent from './component/shared/notification.component.vue'
+import NotificationComponent from './component/shared/notification.component.vue';
+import LoadingComponent from './component/shared/loading.component.vue';
 import "reflect-metadata";
 
 //if (process.env.VUE_ENV === 'client') {
@@ -68,13 +69,18 @@ Vue.use(VueMask)
     name: "App",
     components: {
         "nav-menu": NavMenuComponent,
-        "notifications": NotificationComponent
+        "notifications": NotificationComponent,
+        "loading": LoadingComponent
     }
 })
 
 
 export default class App extends Vue {
-    $cookie: any;
-//let process: any;
-	//console.log(`Bodom: ${process.env}`);
+    mounted() {
+        // Bodom hack: hacky way to hide loading screen on server load
+        (this.$el.parentElement.childNodes[0] as any).style.display = "none";
+
+        // Bodom hack: disable in case of jumping directly to a page
+        this.$store.dispatch("DISABLE_LOADING");
+    }
 }

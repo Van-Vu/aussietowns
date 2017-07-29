@@ -16,13 +16,11 @@ namespace AussieTowns.Controllers
     [Route("api/[controller]")]
     public class PhotoController
     {
-        private IHostingEnvironment _environment;
         private readonly AppSettings _appSettings;
         private readonly IListingService _listingService;
 
-        public PhotoController(IHostingEnvironment environment, IOptions<AppSettings> appSettings, IListingService listingService)
+        public PhotoController(IOptions<AppSettings> appSettings, IListingService listingService)
         {
-            _environment = environment;
             _appSettings = appSettings.Value;
             _listingService = listingService;
         }

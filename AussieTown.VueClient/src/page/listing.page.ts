@@ -63,20 +63,24 @@ export default class ListingPage extends Vue{
     created() {
         if (this.listingType) {
             this.isOffer = Utils.listingTypeConvert(this.listingType) === ListingType.Offer;
+            this.model = new ListingModel();
+            this.isEditing = true;
+        } else {
+            if (this.$store.state.listing) {
+                this.model = this.$store.state.listing;
+                this.isOffer = this.model.listingType == ListingType.Offer;
+            } else {
+                if (this.$route.params.listingId) {
+                    console.log('in CREATED');
+                    this.$store.dispatch('FETCH_LISTING_BY_ID', this.$route.params.listingId).then(() => {
+                        this.model = this.$store.state.listing;
+                        this.isOffer = this.model.listingType == ListingType.Offer;
+                    });
+                }
+            }
         }
 
-        if (this.$store.state.listing) {
-            this.model = this.$store.state.listing;
-            this.isOffer = this.model.listingType == ListingType.Offer;
-        } else {
-            if (this.$route.params.listingId) {
-                console.log('in CREATED');
-                this.$store.dispatch('FETCH_LISTING_BY_ID', this.$route.params.listingId).then(() => {
-                    this.model = this.$store.state.listing;
-                    this.isOffer = this.model.listingType == ListingType.Offer;
-                });                
-            }
-        }         
+
 
         this.$store.dispatch('SET_CURRENT_PAGE', 'listing');
     }

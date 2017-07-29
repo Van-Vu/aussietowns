@@ -5,7 +5,6 @@ import MenuModal from '../modal/menumodal.component.vue';
 import RegistrationModal from '../modal/registrationmodal.component.vue';
 import SearchBarComponent from '../shared/search/searchbar.component.vue';
 
-
 @Component({
     name: 'nav-menu',
     components: {
@@ -65,21 +64,31 @@ export default class NavMenuComponent extends Vue {
             }
 
             // Attach search bar
-            if (this.currentPage != null && this.currentPage === 'home') {
-                //console.log(this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top);
-                if (this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top < 0) {
-                    this.showSecondSearchBar = true;
-                } else {
-                    this.showSecondSearchBar = false;
-                }
-            }
+            this.triggerSecondSearchBar();
 
             this.currentTime = timeNow;
         }
     }
 
+    triggerSecondSearchBar() {
+        if (this.currentPage != null && this.currentPage === 'home') {
+            //console.log(this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top);
+            if (this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top < 0) {
+                this.showSecondSearchBar = true;
+            } else {
+                this.showSecondSearchBar = false;
+            }
+        }        
+    }
+
+
+    @Watch('currentPage')
+    onCurrentPageChanged(value: string, oldValue: string) {
+        this.triggerSecondSearchBar();
+    }
+
     @Watch('showSecondSearchBar')
-    onPropertyChanged(value: string, oldValue: string) {
+    onShowSecondSearchBarChanged(value: string, oldValue: string) {
         console.log(`secondbar value ${value}`);
     }
 

@@ -1,6 +1,16 @@
-﻿.listing-wrapper {
+﻿@mixin drop-shadow($params) {
+    -moz-box-shadow: $params;
+    -webkit-box-shadow: $params;
+    box-shadow: $params;
+}
+
+.listing-wrapper {
     position: relative;
     overflow: auto;
+    border: 2px solid #B6BABC;
+    margin: 2px 5px;
+    border-radius: 5px;
+    @include drop-shadow(10px 10px 5px #888888);
 }
 
 .listing-header {

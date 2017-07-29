@@ -59,12 +59,12 @@
         height: 100%;
     }
 
-    &:focus {
-      outline: none;
-    }
-
     &:active {
       box-shadow: inset 0 0 0 32px rgba(0,0,0,0.1);
+    }
+
+    &:hover, &:focus {
+        cursor: pointer;
     }
 }
 
@@ -72,7 +72,6 @@
 .fb-signin-button {
     background-color: #4C69BA;
     background-image: linear-gradient(#4C69BA, #3B55A0);
-    /*font-family: "Helvetica neue", Helvetica Neue, Helvetica, Arial, sans-serif;*/
     text-shadow: 0 -1px 0 #354C8C;
     color: #FFF;
 
@@ -80,22 +79,15 @@
       border-right: #364e92 1px solid;
       background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_facebook.png') 6px 6px no-repeat;
     }
-
-    &:hover, &:focus {
-      background-color: #5B7BD5;
-      background-image: linear-gradient(#5B7BD5, #4864B1);
-    }
-
 }
 
 /* Google */
 .g-signin-button {
-    /*font-family: "Roboto", Roboto, arial, sans-serif;*/
     color: $c-neutral-black;
 
-    &:hover,
-    &:focus {
-      background: #E74B37;
+    &:before {
+        margin-top: 2px;
+        background: url('/static/images/google_logo.png') 6px 6px no-repeat;
     }
 }
 
@@ -108,10 +100,10 @@ $nav-bar-height: 50px;
     z-index: 1;
     width: 100%;    
 
-    background: -webkit-linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)); /* For Safari */
-    background: -o-linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)); /* For Opera */
-    background: -moz-linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)); /* For Firefox */
-    background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)); /* Standard syntax */
+    /*background: -webkit-linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+    background: -o-linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+    background: -moz-linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+    background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));*/
 
     border-top: 5px solid $c-brand-primary;
 
@@ -125,62 +117,10 @@ $nav-bar-height: 50px;
         height: 30px;
         @include absolutecenter;
         top: 25px;
-        @media all and (min-width: $is-mobile) {
+        @media all and (min-width: $is-tablet) {
             float: left;
             left: 2%;
             //background-color: $c-neutral-black;
-        }
-    }
-
-    &__toggle {
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        position: relative;
-        float:left;
-        margin-top: 15px;
-        margin-left: 5px;
-        font-size: 10px;
-        font-weight: bold;
-        user-select: none;
-        //color: white;
-        //padding: 13px 14px;
-        //height: $nav-bar-height;
-
-        // &:hover {
-        //     // background: #2d2f30;
-        // }
-
-    }
-
-    &__menu {
-        position: relative;
-        float: right;
-        z-index: 11;
-        @media all and (max-width: $is-mobile) {
-            background-color: $c-neutral-black;
-        }
-        ul {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            display: block;
-            list-style: none;
-        }
-    }
-
-    &__menu-item-link {
-        color: $c-neutral-white;
-        text-decoration: none;
-        width: 100%;
-        float: left;
-        text-transform: uppercase;
-        font-size: 13px;
-        font-weight: bold;
-        display: block;
-        .new-search-bar & { // FIX: temporary until the new search bar and rebrand is rolled out
-            font-size: 15px;
-            text-transform: none;
         }
     }
 
@@ -190,6 +130,38 @@ $nav-bar-height: 50px;
         left: 0px;
         right: 0px;
         z-index: 101;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 2));
+        //background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 2));
+        background-color: $c-neutral-white;
+        border-bottom: 1px solid #e4e4e4 !important;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1) !important;
+
+        .nav-link {
+            > a {
+                color: $c-screen-black;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .nav-link {
+        margin: 0 10px;
+
+        @media all and (max-width: $is-desktop) {
+            margin: 0px 5px;
+        }
+
+        > a {
+            color: $c-neutral-white;
+            font-weight: bold;
+
+            &:hover {
+                padding-bottom: 7px;
+                border-bottom: 3px solid $c-brand-quaternary;
+            }
+        }
+    }
+
+    .second-search-bar {
+        margin-left: 65px;
     }
 }

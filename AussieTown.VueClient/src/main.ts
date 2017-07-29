@@ -10,6 +10,7 @@ import { plainToClass } from "class-transformer";
 Vue.mixin({
     beforeRouteUpdate(to, from, next) {
         console.log('beforeRouteUpdate')
+        store.dispatch("ENABLE_LOADING")
         const { asyncData } = this.$options
         if (asyncData) {
             asyncData({

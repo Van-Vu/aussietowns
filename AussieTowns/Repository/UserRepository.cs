@@ -32,7 +32,7 @@ namespace AussieTowns.Repository
                           +
                           "SELECT sd.* FROM SuburbDetail sd INNER JOIN User u ON sd.id = u.locationId WHERE u.id = @id;"
                           +
-                          "SELECT * FROM ListingView l INNER JOIN tourguest g ON l.id = g.ListingId WHERE g.UserId = @id;"
+                          "SELECT * FROM ListingView l INNER JOIN tourguest g ON l.id = g.ListingId WHERE g.existingUserId = @id;"
                           +
                           "SELECT * FROM ListingView l INNER JOIN touroperator o ON l.id = o.ListingId WHERE o.UserId = @id;";
 
@@ -123,6 +123,65 @@ namespace AussieTowns.Repository
                 dbConnection.Open();
                 var user = await dbConnection.QueryAsync<User>(sql, new { email, source,externalId });
                 return user.FirstOrDefault();
+            }
+        }
+
+        public async Task<User> GetUserByResetToken(string resetToken)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "SELECT * FROM User U INNER JOIN UserReset R ON R.userId = U.id WHERE R.resetToken = @resetToken AND R.isActive = 1;";
+                dbConnection.Open();
+                var user = await dbConnection.QueryAsync<User>(sql, new { resetToken });
+                return user.FirstOrDefault();
+            }
+        }
+
+        public async Task<int> RequestPasswordReset(int userId, string resetToken, DateTime expiryDate)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "INSERT INTO UserReset(UserId, ResetToken, ExpiryDate, IsActive)"
+                        + "VALUES (@userId, @resetToken, @expiryDate, @isActive)";
+                dbConnection.Open();
+                var ret = await dbConnection.ExecuteAsync(sql, new {userId, resetToken, expiryDate, isActive= 1});
+                return ret;
+            }
+        }
+
+        public async Task<int> ChangePassword(User user, bool isChangePassword)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+
+                using (var tran = dbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        var updateList = new List<Task<int>>();
+
+                        var userSql = "UPDATE User SET salt = @salt, password = @password, updatedDate = @updatedDate, source=@source WHERE id = @Id;";
+                        updateList.Add(dbConnection.ExecuteAsync(userSql, user));
+
+                        if (!isChangePassword)
+                        {
+                            var userResetSql = "UPDATE UserReset SET isActive = @isActive, expiryDate = @expiriDate WHERE userId = @userId;";
+                            updateList.Add(dbConnection.ExecuteAsync(userResetSql, new { isActive = 0, expiryDate = user.UpdatedDate, userId = user.Id }));
+                        }
+
+                        await Task.WhenAll(updateList);
+
+                        tran.Commit();
+                        return 2;
+                    }
+                    catch (Exception e)
+                    {
+                        tran.Rollback();
+                        throw e;
+                    }
+
+                }
             }
         }
     }

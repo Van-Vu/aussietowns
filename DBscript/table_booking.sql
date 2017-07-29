@@ -10,6 +10,7 @@ CREATE TABLE booking (
   startTime Time collate utf8_unicode_ci NOT NULL,  
   existingUserid int DEFAULT 0,
   isPrimary bit NOT NULL,
+  isConfirmed bit NOT NULL,
   firstname varchar(30) collate utf8_unicode_ci default NULL,
   lastname varchar(30) collate utf8_unicode_ci default NULL,
   email varchar(100) collate utf8_unicode_ci default NULL,

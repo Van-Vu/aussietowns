@@ -21,7 +21,8 @@ namespace AussieTowns
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => "/static/images/logo.png"))
                 .ForMember(dest => dest.ShortDescription, opts => opts.MapFrom(src => src.Description.PadLeft(30)));
 
-            CreateMap<User, UserLoggedIn>();
+            CreateMap<User, UserLoggedIn>()
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => string.IsNullOrEmpty(src.PhotoUrl) ? "/static/images/anonymous.png" : src.PhotoUrl));
 
             CreateMap<SuburbDetail, AutoCompleteItem>()
                 .ForMember(dest => dest.Name,
@@ -43,6 +44,8 @@ namespace AussieTowns
             CreateMap<ListingView, ListingSummary>()
                 .ForMember(dest => dest.Location,
                     opts => opts.MapFrom(src => $"{src.SuburbName} ({src.PostCode})"))
+                .ForMember(dest => dest.ImageUrl,
+                    opts => opts.MapFrom(src => src.FirstImageUrl))
                 .ForMember(dest => dest.PrimaryOwner,
                     opts => opts.MapFrom(src => src.OwnerName))
                 .ForMember(dest => dest.MinParticipant,
@@ -67,7 +70,8 @@ namespace AussieTowns
                 .ForMember(dest => dest.TourOperators,
                     opts => opts.MapFrom(src => src.TourOperators.Select(x => Mapper.Map<User, MiniProfile>(x.User))))
                 .ForMember(dest => dest.TourGuests,
-                    opts => opts.MapFrom(src => src.TourGuests.Select(x => Mapper.Map<User, MiniProfile>(x.User))));
+                    opts => opts.ResolveUsing<MiniProfileResolver>());
+            //opts.MapFrom(src =>  src.TourGuests.Select(x => Mapper.Map<User, MiniProfile>(x.User))));
 
             CreateMap<User, UserResponse>()
                 .ForMember(dest => dest.LocationDetail,
@@ -76,6 +80,37 @@ namespace AussieTowns
                     opts => opts.MapFrom(src => src.OperatorListings.Select(Mapper.Map<ListingView, ListingSummary>)))
                 .ForMember(dest => dest.GuestListings,
                     opts => opts.MapFrom(src => src.GuestListings.Select( Mapper.Map<ListingView, ListingSummary>)));
+        }
+    }
+
+    public class MiniProfileResolver : IValueResolver<Listing, ListingResponse, ICollection<MiniProfile>>
+    {
+        public ICollection<MiniProfile> Resolve(Listing source, ListingResponse dest, ICollection<MiniProfile> miniProfiles, ResolutionContext context)
+        {
+            var profiles = new List<MiniProfile>();
+
+            foreach (var tourGuest in source.TourGuests)
+            {
+                if (tourGuest.ExistingUserId > 0)
+                {
+                    profiles.Add(Mapper.Map<User, MiniProfile>(tourGuest.User));
+                }
+                else
+                {
+                    profiles.Add(new MiniProfile
+                    {
+                        Id = 0,
+                        Email = tourGuest.Email,
+                        Fullname = $"{tourGuest.FirstName} {tourGuest.LastName}",
+                        PhotoUrl = "/static/images/logo.png",
+                        ProfileUrl = "",
+                        ShortDescription = "Unregistered User"
+                    });
+                }
+            }
+
+            return profiles;
+            //return source.Value1 + source.Value2;
         }
     }
 }

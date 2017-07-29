@@ -29,7 +29,9 @@ export default new Vuex.Store({
         conversationsContent: [],
         message: '',
         notifications: [],
-        booking: {}
+        booking: {},
+        isLoading: '',
+        pageCss: ''
     },
     getters: {
         isLoggedIn: function (state) {
@@ -104,8 +106,9 @@ export default new Vuex.Store({
             });
         },
         ADD_NOTIFICATION: function (_a, notification) {
-            var commit = _a.commit;
+            var dispatch = _a.dispatch, commit = _a.commit;
             commit('ADD_NOTIFICATION', notification);
+            setTimeout(function () { dispatch('REMOVE_NOTIFICATION', notification); }, 10000);
         },
         REMOVE_NOTIFICATION: function (_a, notification) {
             var commit = _a.commit;
@@ -133,6 +136,14 @@ export default new Vuex.Store({
         UPDATE_BOOKING: function (_a, payload) {
             var commit = _a.commit;
             commit('UPDATE_BOOKING', payload);
+        },
+        ENABLE_LOADING: function (_a) {
+            var commit = _a.commit;
+            commit('ISLOADING', true);
+        },
+        DISABLE_LOADING: function (_a) {
+            var commit = _a.commit;
+            commit('ISLOADING', false);
         },
         TEST: function (_a, payload) {
             var commit = _a.commit, state = _a.state;
@@ -189,6 +200,9 @@ export default new Vuex.Store({
         },
         UPDATE_BOOKING: function (state, payload) {
             Vue.set(state, 'booking', payload);
+        },
+        ISLOADING: function (state, value) {
+            Vue.set(state, 'isLoading', value);
         }
     }
 });

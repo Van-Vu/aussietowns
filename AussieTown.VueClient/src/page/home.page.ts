@@ -3,8 +3,10 @@ import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import VueRouter from 'vue-router';
 import ListingOfferModalComponent from '../modal/listingoffermodal.component.vue';
 import SearchService from '../service/search.service';
+import ListingService from '../service/listing.service';
 import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
 import Swiper from '../component/shared/external/vue-swiper.vue';
+import CardSmallComponent from '../component/shared/cardsmall.component.vue'
 import { AutocompleteItem } from '../model/autocomplete.model';
 import { Utils } from '../component/utils';
 import * as Cookies from 'js-cookie';
@@ -13,7 +15,8 @@ import * as Cookies from 'js-cookie';
     name: 'HomePage',
     components: {
         "searchbar": SearchBarComponent,
-        "swiper": Swiper
+        "swiper": Swiper,
+        "cardsmall": CardSmallComponent
     },
     beforeRouteEnter(to, from, next) {
         // called before the route that renders this component is confirmed.
@@ -45,6 +48,7 @@ export default class HomePage extends Vue{
     showListingRequest: boolean = false;
     showListingOffer: boolean = false;
     searchSuburb: AutocompleteItem = null;
+    featuredListings: Array<any> = [];
 
     asyncData({ store, route }) {
         //return store.dispatch('SET_CURRENT_PAGE', 'home');
@@ -60,8 +64,7 @@ export default class HomePage extends Vue{
         { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/e6d82c83caba66519a39f427dda7d16a4e6ee4c6600739dc39ea2900f779a576/400/232/1.0" },
         { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/74c0d1d8346196311ba28caea05f2416273b5c0e156479bb3f30f65c446ce96a/400/232/1.0" },
         { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/35d6a6e29c5727ed466104eac7975a858a8182e707c1a92fa6cdf513166a68be/400/232/1.0" },
-        { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/c20a31bb5a3b657a603b8a792d691fa407410753a5617e7077386bb692169eae/400/232/1.0" },
-        { "text": "slide conten", "imgSrc": "/static/images/giphy.gif" }
+        { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/c20a31bb5a3b657a603b8a792d691fa407410753a5617e7077386bb692169eae/400/232/1.0" }
     ];
 
     onSelect(val: AutocompleteItem) {
@@ -75,24 +78,20 @@ export default class HomePage extends Vue{
     }
 
     created() {
+        (new ListingService()).getListingBySuburb(139)
+            .then(x => this.featuredListings = x.data);
         this.$store.dispatch('SET_CURRENT_PAGE', 'home');
     }
 
-    onSlideChangeStart(currentPage) {
-        console.log('onSlideChangeStart', currentPage);
-    }
+    mounted() {
+        //Bodom hack: fetch data offline Swiper need to wait for rendering first
+        setTimeout(() => {
+            (this.$children.find(x => x.$el.id === 'homepage-swipe') as any).refresh();    
+        }, 1000);
 
-    onSlideChangeEnd(currentPage) {
-        console.log('onSlideChangeEnd', currentPage);
     }
 
     checkLogginUser() {
-        //this.$store.dispatch('TEST', 'Hey bodom test');
-        //this.$store.dispatch('FETCH_CURRENT_USER').then(() => {
-        //    console.log(this.$store.state.loggedinUser);
-        //});
-        //console.log(Cookies.getJSON('vuex'));    
-
         console.log(this.$store.getters.doneTodos);
     }
 

@@ -52,4 +52,8 @@ export default class TestPage extends Vue {
         this.$store.dispatch('TEST');
     }
 
+    addNotification() {
+        this.$store.dispatch('ADD_NOTIFICATION', { title: "this is title", text: "this is the text" });
+    }
+
 }

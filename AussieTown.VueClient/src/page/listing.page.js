@@ -21,6 +21,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import ParticipantComponent from '../component/shared/participant.component.vue';
+import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
 import LocationSearchComponent from '../component/shared/search/locationsearch.component.vue';
 import { Utils } from '../component/utils';
@@ -61,18 +62,22 @@ var ListingPage = (function (_super) {
         var _this = this;
         if (this.listingType) {
             this.isOffer = Utils.listingTypeConvert(this.listingType) === ListingType.Offer;
-        }
-        if (this.$store.state.listing) {
-            this.model = this.$store.state.listing;
-            this.isOffer = this.model.listingType == ListingType.Offer;
+            this.model = new ListingModel();
+            this.isEditing = true;
         }
         else {
-            if (this.$route.params.listingId) {
-                console.log('in CREATED');
-                this.$store.dispatch('FETCH_LISTING_BY_ID', this.$route.params.listingId).then(function () {
-                    _this.model = _this.$store.state.listing;
-                    _this.isOffer = _this.model.listingType == ListingType.Offer;
-                });
+            if (this.$store.state.listing) {
+                this.model = this.$store.state.listing;
+                this.isOffer = this.model.listingType == ListingType.Offer;
+            }
+            else {
+                if (this.$route.params.listingId) {
+                    console.log('in CREATED');
+                    this.$store.dispatch('FETCH_LISTING_BY_ID', this.$route.params.listingId).then(function () {
+                        _this.model = _this.$store.state.listing;
+                        _this.isOffer = _this.model.listingType == ListingType.Offer;
+                    });
+                }
             }
         }
         this.$store.dispatch('SET_CURRENT_PAGE', 'listing');

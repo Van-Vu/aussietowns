@@ -1,11 +1,36 @@
 ﻿.content {
-    width: 40%;
-    margin-left: auto;
-    margin-right: auto;
+    width: 70%;
+    /*margin-left: auto;
+    margin-right: auto;*/
+    @include absolutecenter;
+    top: 20%;
     @media all and (max-width: $is-mobile) {
         width: 100%;
     }
 }
+
+#searchBarHomepage {
+    .searchbar {
+        background-color: $c-neutral-white;
+
+        .autocomplete-wrapper {
+            height:3.25rem;
+
+            > input {
+                height: 3.25rem;
+                font-size: 1.25rem;
+            }
+            .menu {
+                top: 3.25rem;
+            }
+        }
+
+        > input {
+            height: 3.25rem;
+        }
+    }
+}
+
 
 .content p, h1 {
     text-align: center;

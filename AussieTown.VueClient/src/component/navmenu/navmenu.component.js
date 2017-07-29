@@ -73,19 +73,25 @@ var NavMenuComponent = (function (_super) {
                 this.isSticky = false;
             }
             // Attach search bar
-            if (this.currentPage != null && this.currentPage === 'home') {
-                //console.log(this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top);
-                if (this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top < 0) {
-                    this.showSecondSearchBar = true;
-                }
-                else {
-                    this.showSecondSearchBar = false;
-                }
-            }
+            this.triggerSecondSearchBar();
             this.currentTime = timeNow;
         }
     };
-    NavMenuComponent.prototype.onPropertyChanged = function (value, oldValue) {
+    NavMenuComponent.prototype.triggerSecondSearchBar = function () {
+        if (this.currentPage != null && this.currentPage === 'home') {
+            //console.log(this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top);
+            if (this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top < 0) {
+                this.showSecondSearchBar = true;
+            }
+            else {
+                this.showSecondSearchBar = false;
+            }
+        }
+    };
+    NavMenuComponent.prototype.onCurrentPageChanged = function (value, oldValue) {
+        this.triggerSecondSearchBar();
+    };
+    NavMenuComponent.prototype.onShowSecondSearchBarChanged = function (value, oldValue) {
         console.log("secondbar value " + value);
     };
     NavMenuComponent.prototype.onRouteParamChanged = function (value, oldValue) {
@@ -105,11 +111,17 @@ var NavMenuComponent = (function (_super) {
         this.isLoggedIn = this.$store.getters.isLoggedIn;
     };
     __decorate([
+        Watch('currentPage'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String]),
+        __metadata("design:returntype", void 0)
+    ], NavMenuComponent.prototype, "onCurrentPageChanged", null);
+    __decorate([
         Watch('showSecondSearchBar'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, String]),
         __metadata("design:returntype", void 0)
-    ], NavMenuComponent.prototype, "onPropertyChanged", null);
+    ], NavMenuComponent.prototype, "onShowSecondSearchBarChanged", null);
     __decorate([
         Watch('$route.params'),
         __metadata("design:type", Function),

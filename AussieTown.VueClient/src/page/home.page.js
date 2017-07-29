@@ -16,8 +16,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
+import ListingService from '../service/listing.service';
 import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
 import Swiper from '../component/shared/external/vue-swiper.vue';
+import CardSmallComponent from '../component/shared/cardsmall.component.vue';
 import { Utils } from '../component/utils';
 var HomePage = (function (_super) {
     __extends(HomePage, _super);
@@ -26,6 +28,7 @@ var HomePage = (function (_super) {
         _this.showListingRequest = false;
         _this.showListingOffer = false;
         _this.searchSuburb = null;
+        _this.featuredListings = [];
         _this.requestSlides = [
             { "text": "slide conten asdfa sdfasfd asdf asdf asdf as dfasd", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/a5bdb2fc08f9096fb1ef3afca2e5c1ff5292daf9fe7b86b8710d091ae7fa5547/400/232/1.0" },
             { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/2466d2267dc2316b277610eafb1d957d7ce978df7e9bdd053fd8c67c40d57165/400/232/1.0" },
@@ -36,8 +39,7 @@ var HomePage = (function (_super) {
             { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/e6d82c83caba66519a39f427dda7d16a4e6ee4c6600739dc39ea2900f779a576/400/232/1.0" },
             { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/74c0d1d8346196311ba28caea05f2416273b5c0e156479bb3f30f65c446ce96a/400/232/1.0" },
             { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/35d6a6e29c5727ed466104eac7975a858a8182e707c1a92fa6cdf513166a68be/400/232/1.0" },
-            { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/c20a31bb5a3b657a603b8a792d691fa407410753a5617e7077386bb692169eae/400/232/1.0" },
-            { "text": "slide conten", "imgSrc": "/static/images/giphy.gif" }
+            { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/c20a31bb5a3b657a603b8a792d691fa407410753a5617e7077386bb692169eae/400/232/1.0" }
         ];
         return _this;
     }
@@ -54,20 +56,19 @@ var HomePage = (function (_super) {
         }
     };
     HomePage.prototype.created = function () {
+        var _this = this;
+        (new ListingService()).getListingBySuburb(139)
+            .then(function (x) { return _this.featuredListings = x.data; });
         this.$store.dispatch('SET_CURRENT_PAGE', 'home');
     };
-    HomePage.prototype.onSlideChangeStart = function (currentPage) {
-        console.log('onSlideChangeStart', currentPage);
-    };
-    HomePage.prototype.onSlideChangeEnd = function (currentPage) {
-        console.log('onSlideChangeEnd', currentPage);
+    HomePage.prototype.mounted = function () {
+        var _this = this;
+        //Bodom hack: fetch data offline Swiper need to wait for rendering first
+        setTimeout(function () {
+            _this.$children.find(function (x) { return x.$el.id === 'homepage-swipe'; }).refresh();
+        }, 1000);
     };
     HomePage.prototype.checkLogginUser = function () {
-        //this.$store.dispatch('TEST', 'Hey bodom test');
-        //this.$store.dispatch('FETCH_CURRENT_USER').then(() => {
-        //    console.log(this.$store.state.loggedinUser);
-        //});
-        //console.log(Cookies.getJSON('vuex'));    
         console.log(this.$store.getters.doneTodos);
     };
     HomePage = __decorate([
@@ -75,7 +76,8 @@ var HomePage = (function (_super) {
             name: 'HomePage',
             components: {
                 "searchbar": SearchBarComponent,
-                "swiper": Swiper
+                "swiper": Swiper,
+                "cardsmall": CardSmallComponent
             },
             beforeRouteEnter: function (to, from, next) {
                 // called before the route that renders this component is confirmed.

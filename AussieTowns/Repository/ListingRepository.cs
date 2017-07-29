@@ -165,7 +165,7 @@ namespace AussieTowns.Repository
                     catch (Exception e)
                     {
                         tran.Rollback();
-                        throw;
+                        throw e;
                     }
                 }
             }
@@ -225,7 +225,7 @@ namespace AussieTowns.Repository
                     catch (Exception e)
                     {
                         tran.Rollback();
-                        throw;
+                        throw e;
                     }
                 }
             }

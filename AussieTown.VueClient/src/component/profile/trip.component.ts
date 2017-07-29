@@ -1,13 +1,13 @@
 ﻿import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import ListingCardComponent from '../shared/listingcard.component.vue';
+import CardFullComponent from '../shared/listingcard.component.vue';
 import ListingModel from '../../model/listing.model';
 import UserModel from '../../model/user.model';
 
 @Component({
     name: "TripComponent",
     components: {
-        "listingcard": ListingCardComponent
+        "listingcard": CardFullComponent
     }
 })
 

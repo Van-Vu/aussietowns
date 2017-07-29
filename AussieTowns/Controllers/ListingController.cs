@@ -140,6 +140,10 @@ namespace AussieTowns.Controllers
         {
             try
             {
+                var jsonBookingRequest = JsonConvert.SerializeObject(bookingRequest);
+                var result = await jsonBookingRequest.PushToSqsAsync(AwsSqsExtensions.GetClient(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
+                    _appSettings.AwsS3Region), _appSettings.SqsUrl);
+
                 return new RequestResult
                 {
                     State = RequestState.Success,

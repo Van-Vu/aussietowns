@@ -76,14 +76,17 @@ var AutoCompleteComponent = (function (_super) {
         }, 200);
     };
     AutoCompleteComponent.prototype.onKeyDown = function (event) {
+        var _this = this;
         var key = event.keyCode;
         // Enter
         if (key == 13) {
-            if ((this.selectedText != '') && (this.keyword == '')) {
-                this.$emit('HeyIAmDone!');
+            if (this.indexSelected >= 0) {
+                this.doSelectIndex(this.indexSelected);
             }
-            this.doSelectIndex(this.indexSelected);
             this.showList = false;
+            if ((this.selectedText != '') && (this.keyword == '')) {
+                setTimeout(function () { _this.$emit('HeyIAmDone'); }, 1000);
+            }
             event.preventDefault();
         }
         // Backspace

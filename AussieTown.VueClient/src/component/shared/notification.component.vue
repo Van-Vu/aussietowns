@@ -1,13 +1,12 @@
-﻿<template>
+﻿<template> 
     <div class="notifications">
-        <div class="notification callout animated" v-for="notification in notifications" :class="notification.type ? notification.type : 'secondary'" transition="fade">
-            <button @click="triggerClose(notification)" class="close-button" aria-label="Close alert" type="button">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <h5 v-if="notification.title">{{notification.title}}</h5>
-            <p>
-                {{notification.text}}
-            </p>
+        <div class="notification is-success " v-for="notification in notifications" :class="notification.type" transition="fade">
+            <div class="message-header">
+                <button class="delete touchable" @click="triggerClose(notification)"></button>
+                <span class="icon"><i class="glyphicon glyphicon-warning-sign"></i></span>
+                <span>{{notification.title}}</span>
+            </div>
+            <div class="message-body">{{notification.text}}</div>
         </div>
     </div>
 </template>

@@ -14,7 +14,7 @@ CREATE TABLE user (
   phone varchar(20) collate utf8_unicode_ci default NULL,
   language SMALLINT collate utf8_unicode_ci DEFAULT 0 NOT NULL,
   currency TINYINT collate utf8_unicode_ci DEFAULT 0 NOT NULL,
-  location varchar(100) collate utf8_unicode_ci default NULL,
+  locationid int collate utf8_unicode_ci DEFAULT 0 NOT NULL,
   description varchar(1000) collate utf8_unicode_ci default NULL,
   address varchar(1000) collate utf8_unicode_ci default NULL,
   emergencycontact varchar(20) collate utf8_unicode_ci default NULL,

@@ -1,6 +1,6 @@
 ﻿import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import ListingCardComponent from '../component/shared/listingcard.component.vue';
+import CardFullComponent from '../component/shared/listingcard.component.vue';
 
 if (process.env.VUE_ENV === 'client') {
     const googleMaps = require('vue2-google-maps')
@@ -14,7 +14,7 @@ if (process.env.VUE_ENV === 'client') {
 @Component({
     name: "SearchPage",
     components: {
-        "listingcard": ListingCardComponent
+        "listingcard": CardFullComponent
     }
 })
 

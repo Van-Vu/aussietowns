@@ -6,7 +6,6 @@
 
 .mtl_button {
     @include button-bg($c-brand-primary);
-    @include button-bg($c-brand-primary);
     @include button-round-border-all;
     min-width: 100px;
     margin-left: 10px;
@@ -15,14 +14,16 @@
 
 .mtl_button-round-left {
     @include button-bg($c-brand-primary);
-    @include button-bg($c-brand-primary);
     @include button-round-border-left;
 }
 
 .mtl_button-round-right {
     @include button-bg($c-brand-primary);
-    @include button-bg($c-brand-primary);
     @include button-round-border-right;
+}
+
+.mtl_button-no-round {
+    @include button-bg($c-brand-primary);
 }
 
 .mtl-btn-large {
@@ -56,6 +57,11 @@
     @include absolutecenter("x","relative");
 }
 
+.checkbox {
+    margin-top: 6px;
+    margin-right: 6px;
+}
+
 a {
     cursor: pointer;
 }
@@ -76,8 +82,8 @@ body,
   flex-direction: column;
 }
 
-.hero-body {
-    position: relative;/* need this to position inner content */
+/*.hero-body {
+    position: relative;
     width:100%;
     top: calc(#{$size-header-height} + 30px) !important;
     margin-bottom: $size-header-height !important;
@@ -86,10 +92,9 @@ body,
 
     @media all and (min-width: $is-mobile) {
         top: $size-header-height !important;
-        max-width: $is-desktop;
-        //background-color: $c-neutral-black;
+        max-width: $is-maxscreen;
     }
-}
+}*/
 
 .is-sticky-bottom {
     position: fixed;

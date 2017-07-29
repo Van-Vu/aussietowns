@@ -11,7 +11,7 @@
       
       <script type="text/javascript" charset="UTF-8" src="/static/script/jsencrypt.min.js"></script>
       <script type="text/javascript" charset="UTF-8" src="https://apis.google.com/js/api:client.js"></script>
-      
+      <link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">
       <!--<% for (var chunk of webpack.chunks) {
       for (var file of chunk.files) {
       if (file.match(/\.(js|css)$/)) { %>
@@ -19,21 +19,21 @@
 
       <script>
           window.fbAsyncInit = function() {
-            FB.init({
-              appId      : '258898767921654',
-              cookie     : true,
-              xfbml      : true,
-              version    : 'v2.8'
-            });
-            FB.AppEvents.logPageView();
+              FB.init({
+                  appId      : '258898767921654',
+                  cookie     : true,
+                  xfbml      : true,
+                  version    : 'v2.8'
+              });
+              FB.AppEvents.logPageView();
           };
 
           (function(d, s, id){
-             var js, fjs = d.getElementsByTagName(s)[0];
-             if (d.getElementById(id)) {return;}
-             js = d.createElement(s); js.id = id;
-             js.src = "//connect.facebook.net/en_US/sdk.js";
-             fjs.parentNode.insertBefore(js, fjs);
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) {return;}
+              js = d.createElement(s); js.id = id;
+              js.src = "//connect.facebook.net/en_US/sdk.js";
+              fjs.parentNode.insertBefore(js, fjs);
           }(document, 'script', 'facebook-jssdk'));
 
 
@@ -42,8 +42,117 @@
           //    statusChangeCallback(response);
           //});
       </script>
+     
+      <style type="text/css">
+        .early-loading-wrapper {
+            z-index: 1000;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255,255,255,1);
+        }
+        .early-loading {
+            height: 60px;
+            width: 60px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            position: absolute;
+        }
+        .basic-ring {
+            height: 60px; 
+            width: 60px; 
+            border: 6px solid #00FF00; 
+            opacity: 0.4; 
+            borderRadius: 100%;
+        }
+           .v-spinner .v-ring2 {
+               -webkit-animation: v-ringRightRotate 2s 0s infinite linear;
+               animation: v-ringRightRotate 2s 0s infinite linear;
+               -webkit-animation-fill-mode: forwards;
+               animation-fill-mode: forwards;
+               perspective: 800px;
+               position: absolute;
+               top: 0;
+               left: 0;
+           }
+
+          .v-spinner .v-ring3 {
+              -webkit-animation: v-ringLeftRotate 2s 0s infinite linear;
+              animation: v-ringLeftRotate 2s 0s infinite linear;
+              -webkit-animation-fill-mode: forwards;
+              animation-fill-mode: forwards;
+              perspective: 800px;
+              position: absolute;
+              top: 0;
+              left: 0;
+          }
+
+          @-webkit-keyframes v-ringRightRotate {
+              0% {
+                  -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+                  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+              }
+
+              100% {
+                  -webkit-transform: rotateX(180deg) rotateY(360deg) rotateZ(360deg);
+                  transform: rotateX(180deg) rotateY(360deg) rotateZ(360deg);
+              }
+          }
+
+          @keyframes v-ringRightRotate {
+              0% {
+                  -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+                  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+              }
+
+              100% {
+                  -webkit-transform: rotateX(180deg) rotateY(360deg) rotateZ(360deg);
+                  transform: rotateX(180deg) rotateY(360deg) rotateZ(360deg);
+              }
+          }
+
+          @-webkit-keyframes v-ringLeftRotate {
+              0% {
+                  -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+                  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+              }
+
+              100% {
+                  -webkit-transform: rotateX(360deg) rotateY(180deg) rotateZ(360deg);
+                  transform: rotateX(360deg) rotateY(180deg) rotateZ(360deg);
+              }
+          }
+
+          @keyframes v-ringLeftRotate {
+              0% {
+                  -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+                  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+              }
+
+              100% {
+                  -webkit-transform: rotateX(360deg) rotateY(180deg) rotateZ(360deg);
+                  transform: rotateX(360deg) rotateY(180deg) rotateZ(360deg);
+              }
+          }
+      </style>
   </head>
-    <body>
+<body>
+<div class="early-loading-wrapper v-spinner">
+    <div style="text-align: center;" class="absolute-center">
+        <span style="font-weight: 700;">Your next adventure is </span>
+        <span style="font-weight: 900;">coming ... </span>        
+    </div>
+
+    <div class="early-loading v-ring v-ring1">
+        <div class="basic-ring v-ring v-ring2">
+        </div>
+        <div class="basic-ring v-ring v-ring3">
+        </div>
+    </div>
+</div>
+
 <!--vue-ssr-outlet-->
-    </body>
+</body>
 </html>

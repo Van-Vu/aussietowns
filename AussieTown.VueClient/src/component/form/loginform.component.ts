@@ -6,7 +6,7 @@ import VeeValidate from 'vee-validate';
 import LoginModel from '../../model/login.model';
 import { UserSource } from '../../model/enum';
 
-import { fetchPublicKey, decryptTextFromServer } from '../../service/auth.service';
+import { fetchPublicKey, decryptTextFromServer, requestPasswordReset, encryptText } from '../../service/auth.service';
 import { GlobalConfig } from '../../GlobalConfig';
 
 Vue.use(VeeValidate);
@@ -21,6 +21,7 @@ declare const JSEncrypt: any;
 
 
 export default class LoginForm extends Vue {
+    isForgotPassword: boolean = false;
     formSubmitted: boolean = false;
     model: LoginModel = new LoginModel();
     $cookie: any;
@@ -52,7 +53,7 @@ export default class LoginForm extends Vue {
 
     login(model) {
         if (model.password) {
-            model.password = this.encryptText(model.password);
+            model.password = encryptText(model.password);
         }
 
         (new UserService()).login(model)
@@ -65,7 +66,7 @@ export default class LoginForm extends Vue {
 
     signup(model) {
         if (model.password) {
-            model.password = this.encryptText(model.password);    
+            model.password = encryptText(model.password);    
         }
 
         (new UserService()).signup(model)
@@ -80,15 +81,13 @@ export default class LoginForm extends Vue {
         this.$cookie.set('mtltk', accessToken);
     }
 
-    encryptText(text) {
-        var encrypt = new JSEncrypt();
-        encrypt.setPublicKey(GlobalConfig.publicKey);
-        let encryptedText = encrypt.encrypt(text);
-        return encryptedText;
-    }
-
     submitForm() {
         this.formSubmitted = true;
+    }
+
+    onResetPassword() {
+        requestPasswordReset(this.model.email)
+            .then(x => console.log(x));
     }
 
     onGgSignInSuccess(googleUser) {
@@ -103,7 +102,7 @@ export default class LoginForm extends Vue {
         console.log('Email: ' + profile.getEmail());
 
         if (this.isLogin) {
-            this.login({ email: profile.getEmail(), source: UserSource.Google, externalId: this.encryptText(profile.getId()) });    
+            this.login({ email: profile.getEmail(), source: UserSource.Google, externalId: encryptText(profile.getId()) });    
         } else {
             this.signup({
                 email: profile.getEmail(),
@@ -111,7 +110,7 @@ export default class LoginForm extends Vue {
                 lastname: profile.getFamilyName(),
                 photoUrl: profile.getImageUrl(),
                 source: UserSource.Google,
-                externalId: this.encryptText(profile.getId())
+                externalId: encryptText(profile.getId())
             });
         }
         
@@ -134,7 +133,7 @@ export default class LoginForm extends Vue {
                 console.log(`Picture: ${profile.picture.data.url}.`);
 
                 if (this.isLogin) {
-                    this.login({ email: profile.email, source: UserSource.Facebook, externalId: this.encryptText(profile.id) });    
+                    this.login({ email: profile.email, source: UserSource.Facebook, externalId: encryptText(profile.id) });    
                 } else {
                     this.signup({
                         email: profile.email,
@@ -142,7 +141,7 @@ export default class LoginForm extends Vue {
                         lastname: profile.last_name,
                         photoUrl: profile.picture.data.url,
                         source: UserSource.Facebook,
-                        externalId: this.encryptText(profile.id)
+                        externalId: encryptText(profile.id)
                     });    
                 }
             });

@@ -65,6 +65,10 @@ var ParticipantComponent = (function (_super) {
         Prop,
         __metadata("design:type", Boolean)
     ], ParticipantComponent.prototype, "isEditing", void 0);
+    __decorate([
+        Prop({ default: true }),
+        __metadata("design:type", Boolean)
+    ], ParticipantComponent.prototype, "allowAdd", void 0);
     ParticipantComponent = __decorate([
         Component({
             name: "ParticipantComponent",

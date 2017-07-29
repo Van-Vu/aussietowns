@@ -38,7 +38,8 @@ export default new Vuex.Store({
         conversationsContent: [],
         message: '',
         notifications: [],
-        booking: {}
+        booking: {},
+        isLoading: ''
     },
     getters: {
         isLoggedIn: state => {
@@ -101,8 +102,9 @@ export default new Vuex.Store({
                 commit('ADD_MESSAGE', (response as any).data);
             });                
         },
-        ADD_NOTIFICATION({ commit }, notification) {
+        ADD_NOTIFICATION({ dispatch, commit }, notification) {
             commit('ADD_NOTIFICATION', notification);
+            setTimeout(() => {dispatch('REMOVE_NOTIFICATION', notification)}, 10000);
         },
         REMOVE_NOTIFICATION({ commit }, notification) {
             commit('REMOVE_NOTIFICATION', notification);
@@ -125,6 +127,12 @@ export default new Vuex.Store({
         },
         UPDATE_BOOKING({ commit }, payload) {
             commit('UPDATE_BOOKING', payload);
+        },
+        ENABLE_LOADING({commit}) {
+            commit('ISLOADING', true);    
+        },
+        DISABLE_LOADING({ commit }) {
+            commit('ISLOADING', false);
         },
         TEST({ commit, state }, payload) {
             (new UserService()).getMiniProfile(1).catch(error => commit('ADD_NOTIFICATION', error));
@@ -180,6 +188,9 @@ export default new Vuex.Store({
         },
         UPDATE_BOOKING(state, payload) {
             Vue.set(state,'booking', payload);
+        },
+        ISLOADING(state, value) {
+            Vue.set(state, 'isLoading', value);
         }
     }
 })

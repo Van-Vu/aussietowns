@@ -18,6 +18,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 import NotificationComponent from './component/shared/notification.component.vue';
+import LoadingComponent from './component/shared/loading.component.vue';
 import "reflect-metadata";
 //if (process.env.VUE_ENV === 'client') {
 //    Vue.component('datepicker', require('vuejs-datepicker'))
@@ -58,12 +59,28 @@ var App = (function (_super) {
     function App() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    Object.defineProperty(App.prototype, "pageCss", {
+        get: function () {
+            return this.$store.state.currentPage.toString();
+            //return "Bodom";
+        },
+        enumerable: true,
+        configurable: true
+    });
+    App.prototype.mounted = function () {
+        // Bodom hack: hacky way to hide loading screen on server load
+        this.$el.parentElement.childNodes[0].style.display = "none";
+        // Bodom hack: disable in case of jumping directly to a page
+        this.$store.dispatch("DISABLE_LOADING");
+        //this.pageCss = this.$store.state.currentPage.toString();
+    };
     App = __decorate([
         Component({
             name: "App",
             components: {
                 "nav-menu": NavMenuComponent,
-                "notifications": NotificationComponent
+                "notifications": NotificationComponent,
+                "loading": LoadingComponent
             }
         })
     ], App);

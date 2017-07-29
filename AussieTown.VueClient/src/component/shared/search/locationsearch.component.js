@@ -37,6 +37,9 @@ var LocationSearchComponent = (function (_super) {
     LocationSearchComponent.prototype.onLocationSelected = function (selectedItem) {
         this.$emit("onSelected", selectedItem);
     };
+    LocationSearchComponent.prototype.triggerSearch = function () {
+        this.$emit("HeyIAmDone");
+    };
     LocationSearchComponent.prototype.onRefreshSelect = function (selectedIndex) {
         this.locations = this.locations.filter(function (d, i) {
             if (i === selectedIndex)

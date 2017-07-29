@@ -10,5 +10,7 @@ namespace AussieTowns
         public string AwsS3Region { get; set; }
         public string AwsS3AccessKey { get; set; }
         public string AwsS3SecretKey { get; set; }
+
+        public string SqsUrl { get; set; }
     }
 }

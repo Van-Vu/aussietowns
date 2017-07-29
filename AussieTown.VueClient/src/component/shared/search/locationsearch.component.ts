@@ -27,6 +27,10 @@ export default class LocationSearchComponent extends Vue {
         this.$emit("onSelected", selectedItem);
     }
 
+    triggerSearch() {
+        this.$emit("HeyIAmDone");
+    }
+
     onRefreshSelect(selectedIndex) {
         this.locations = this.locations.filter((d, i) => {
             if (i === selectedIndex) d.selected = true;

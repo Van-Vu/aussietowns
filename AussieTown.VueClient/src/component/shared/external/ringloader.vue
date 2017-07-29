@@ -1,6 +1,6 @@
 ﻿// https://github.com/greyby/vue-spinner
 <template>
-    <div class="v-spinner" v-show="loading">
+    <div class="v-spinner">
         <div class="v-ring v-ring1" v-bind:style="spinnerBasicStyle">
             <div class="v-ring v-ring2" v-bind:style="spinnerStyle">
             </div><div class="v-ring v-ring3" v-bind:style="spinnerStyle">
@@ -14,10 +14,6 @@ export default {
 
   name: 'RingLoader',
   props: {
-    loading: {
-      type: Boolean,
-      default: true
-    },
     color: {
       type: String,
       default: '#5dc596'
@@ -56,7 +52,7 @@ export default {
 }
 </script>
 
-<style>
+<!--<style>
     .v-spinner .v-ring {
     }
 
@@ -132,4 +128,4 @@ export default {
             transform: rotateX(360deg) rotateY(180deg) rotateZ(360deg);
         }
     }
-</style>
+</style>-->

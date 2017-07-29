@@ -1,18 +1,24 @@
 ﻿// mixin for abslolute centering elements - http://www.andrewhoule.me/blog/5-sass-mixins-i-use-on-nearly-every-project/
 
 @mixin absolutecenter($axis: "both", $position: "absolute"){
-  position:$position;
-  @if $axis == "y"{
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  @if $axis == "x"{
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  @if $axis == "both"{
-    top:50%;
-    left:50%;
-    transform: translate(-50%,-50%);
-  }
+    @if $position == "absolute"{
+        position:absolute;
+    }
+    else{
+        position: relative;
+    }
+  
+    @if $axis == "y"{
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    @if $axis == "x"{
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    @if $axis == "both"{
+        top:50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+    }
 }

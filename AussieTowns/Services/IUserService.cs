@@ -11,6 +11,12 @@ namespace AussieTowns.Services
         Task<IEnumerable<User>> SearchUser(string searchTerm);
         Task<int> Register(User user);
         Task<int> Update(Profile user);
+
+        Task<int> UpdatePassword(User user, bool isChangePassword);
         Task<int> Deactivate(int id);
+
+        Task<User> VerifyResetToken(string resetToken);
+
+        Task<int> RequestPasswordReset(int userId);
     }
 }
