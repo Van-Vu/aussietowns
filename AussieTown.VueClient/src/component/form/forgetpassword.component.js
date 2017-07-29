@@ -20,13 +20,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
-import { verifyResetToken, resetPassword } from '../../service/auth.service';
+import { verifyResetToken, resetPassword, encryptText } from '../../service/auth.service';
 import ResetPasswordModel from '../../model/resetpassword.model';
 Vue.use(VeeValidate);
 var ForgetPasswordForm = (function (_super) {
     __extends(ForgetPasswordForm, _super);
     function ForgetPasswordForm() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.confirmPassword = '';
         _this.model = new ResetPasswordModel();
         _this.formSubmitted = false;
         return _this;
@@ -49,6 +50,7 @@ var ForgetPasswordForm = (function (_super) {
         //});
         this.model.isChangePassword = false;
         this.model.resetToken = this.guidString;
+        this.model.newPassword = encryptText(this.model.newPassword);
         resetPassword(this.model)
             .then(function (x) { return console.log(x); });
     };

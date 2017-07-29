@@ -130,7 +130,7 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT * FROM User U INNER JOIN UserReset R ON R.userId = U.id WHERE R.resetToken = @resetToken AND R.isActive = 1;";
+                var sql = "SELECT U.* FROM User U INNER JOIN UserReset R ON R.userId = U.id WHERE R.resetToken = @resetToken AND R.isActive = 1;";
                 dbConnection.Open();
                 var user = await dbConnection.QueryAsync<User>(sql, new { resetToken });
                 return user.FirstOrDefault();
@@ -166,7 +166,7 @@ namespace AussieTowns.Repository
 
                         if (!isChangePassword)
                         {
-                            var userResetSql = "UPDATE UserReset SET isActive = @isActive, expiryDate = @expiriDate WHERE userId = @userId;";
+                            var userResetSql = "UPDATE UserReset SET isActive = @isActive, expiryDate = @expiryDate WHERE userId = @userId;";
                             updateList.Add(dbConnection.ExecuteAsync(userResetSql, new { isActive = 0, expiryDate = user.UpdatedDate, userId = user.Id }));
                         }
 

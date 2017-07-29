@@ -20,20 +20,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
-import { changePassword } from '../../service/auth.service';
+import { changePassword, encryptText } from '../../service/auth.service';
 import ResetPasswordModel from '../../model/resetpassword.model';
 Vue.use(VeeValidate);
-var ChangePasswordForm = (function (_super) {
-    __extends(ChangePasswordForm, _super);
-    function ChangePasswordForm() {
+var ChangePasswordComponent = (function (_super) {
+    __extends(ChangePasswordComponent, _super);
+    function ChangePasswordComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.confirmPassword = '';
         _this.model = new ResetPasswordModel();
         _this.formSubmitted = false;
         return _this;
     }
-    ChangePasswordForm.prototype.created = function () {
+    ChangePasswordComponent.prototype.created = function () {
     };
-    ChangePasswordForm.prototype.onChangePassword = function () {
+    ChangePasswordComponent.prototype.onChangePassword = function () {
         //this.$validator.validateAll().then(() => {
         //    // eslint-disable-next-line
         //    (new UserService()).signup(this.model)
@@ -46,19 +47,21 @@ var ChangePasswordForm = (function (_super) {
         //});
         this.model.isChangePassword = true;
         this.model.email = this.$store.state.loggedInUser.Email;
+        this.model.newPassword = encryptText(this.model.newPassword);
+        this.model.oldPassword = encryptText(this.model.oldPassword);
         changePassword(this.model)
             .then(function (x) { return console.log(x); });
     };
     __decorate([
         Prop,
         __metadata("design:type", String)
-    ], ChangePasswordForm.prototype, "guidString", void 0);
-    ChangePasswordForm = __decorate([
+    ], ChangePasswordComponent.prototype, "guidString", void 0);
+    ChangePasswordComponent = __decorate([
         Component({
-            name: 'ChangePasswordForm',
+            name: 'ChangePasswordComponent',
             components: {}
         })
-    ], ChangePasswordForm);
-    return ChangePasswordForm;
+    ], ChangePasswordComponent);
+    return ChangePasswordComponent;
 }(Vue));
-export default ChangePasswordForm;
+export default ChangePasswordComponent;

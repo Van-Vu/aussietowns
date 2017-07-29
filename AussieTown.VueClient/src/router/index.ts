@@ -48,6 +48,7 @@ import UserImageComponent from '../component/profile/userimage.component.vue';
 import UserDetailComponent from '../component/profile/userdetail.component.vue';
 import LoginForm from '../component/form/loginform.component.vue';
 import RegistrationForm from '../component/form/registration.component.vue';
+import ChangePasswordComponent from '../component/profile/changepassword.component.vue';
 import ForgetPasswordForm from '../component/form/forgetpassword.component.vue';
 
 Vue.use(Router);
@@ -101,12 +102,16 @@ const router = new Router({
 
                 },
                 {
-                    // UserPosts will be rendered inside User's <router-view>
-                    // when /user/:id/posts is matched
                     path: 'trips',
                     name: 'profileTrips',
                     meta: { requiresAuth: true },
                     component: TripComponent
+                },
+                {
+                    path: 'changepassword',
+                    name: 'changePassword',
+                    meta: { requiresAuth: true },
+                    component: ChangePasswordComponent
                 }
             ]
         },

@@ -1,5 +1,5 @@
 ﻿<template>
-    <form @submit.prevent="onResetPassword">
+    <form @submit.prevent="onChangePassword">
         <div class="field">
             <p class="control has-icon has-icon-right">
                 <input name="oldPassword" v-model="model.oldPassword" v-validate="'required'"
@@ -22,12 +22,12 @@
         </div>
         <div class="field">
             <p class="control has-icon has-icon-right">
-                <input name="confirmNewPassword" v-model="model.confirmNewPassword" v-validate:lastname="'required'"
-                       :class="{'input': true, 'is-danger': errors.has('lastname') }" type="password" placeholder="Confirm new password">
+                <input name="confirmPassword" v-model="confirmPassword" v-validate="'required|confirmed:newPassword'"
+                       :class="{'input': true, 'is-danger': errors.has('confirmPassword') }" type="password" placeholder="Confirm new password">
                 <span class="icon user">
                     <i class="glyphicon glyphicon-lock"></i>
                 </span>
-                <span v-show="errors.has('confirmNewPassword')" class="help is-danger">{{ errors.first('confirmNewPassword') }}</span>
+                <span v-show="errors.has('confirmPassword')" class="help is-danger">{{ errors.first('confirmPassword') }}</span>
             </p>
         </div>
         <button type="submit" class="button">Submit</button>
@@ -35,6 +35,6 @@
 </template>
 
 <script lang="ts">
-import ChangePasswordForm from "./changepassword.component.ts";
-export default ChangePasswordForm;
+import ChangePasswordComponent from "./changepassword.component.ts";
+export default ChangePasswordComponent;
 </script>

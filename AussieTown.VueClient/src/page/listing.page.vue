@@ -38,7 +38,7 @@
                         <div class="column is-2">Where</div>
                         <div class="column is-10 control has-icon has-icon-right">
                             <locationsearch v-if="isEditing" :initialData="model.locationDetail" @onSelected="onLocationSelected($event)"></locationsearch>
-                            <label v-if="!isEditing">{{ model.locationDetail.name }}</label>
+                            <label v-if="!isEditing">{{ model.locationDetail ? model.locationDetail.name : ''}}</label>
                             <span v-if="isEditing" class="icon">
                                 <i class="glyphicon glyphicon-lock"></i>
                             </span>

@@ -13,18 +13,6 @@
             </p>
         </div>
         <div class="field">
-            <label class="label" for="password">Password</label>
-            <p class="control has-icon has-icon-right">
-                <input name="password" v-if="isEditing" v-model="model.password" v-validate="'required'"
-                       :class="{'input': true, 'is-danger': errors.has('password') }" type="text" placeholder="●●●●●●●">
-                <span v-if="isEditing" class="icon user">
-                    <i class="glyphicon glyphicon-lock"></i>
-                </span>
-                <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
-                <label v-if="!isEditing">●●●●●●●</label>
-            </p>
-        </div>
-        <div class="field">
             <label class="label" for="firstName">First Name</label>
             <p class="control has-icon has-icon-right">
                 <input name="firstname" v-if="isEditing" v-model="model.firstName" v-validate="'required'"
@@ -53,7 +41,7 @@
             <div class="control">
                 <locationsearch v-if="isEditing" :initialData="model.locationDetail" @onSelected="onLocationSelected($event)"></locationsearch>
                 <span v-show="errors.has('location')" class="help is-danger">{{ errors.first('location') }}</span>
-                <label v-if="!isEditing">{{ model.locationDetail.name }}</label>
+                <label v-if="!isEditing">{{ model.locationDetail ? model.locationDetail.name : ''}}</label>
             </div>
         </div>
         <div class="field">

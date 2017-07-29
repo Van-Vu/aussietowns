@@ -1,8 +1,7 @@
 ﻿import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
-import { verifyResetToken, resetPassword } from '../../service/auth.service';
-
+import { verifyResetToken, resetPassword, encryptText } from '../../service/auth.service';
 
 import ResetPasswordModel from '../../model/resetpassword.model';
 
@@ -19,6 +18,7 @@ Vue.use(VeeValidate);
 
 export default class ForgetPasswordForm extends Vue {
     @Prop guidString: string;
+    confirmPassword: string = '';
     model: ResetPasswordModel = new ResetPasswordModel();
 
     formSubmitted: boolean = false;
@@ -44,6 +44,7 @@ export default class ForgetPasswordForm extends Vue {
 
         this.model.isChangePassword = false;
         this.model.resetToken = this.guidString;
+        this.model.newPassword = encryptText(this.model.newPassword);
 
         resetPassword(this.model)
             .then(x => console.log(x));

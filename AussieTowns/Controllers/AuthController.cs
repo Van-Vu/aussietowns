@@ -85,7 +85,7 @@ namespace AussieTowns.Controllers
                 return new JsonResult("hey mate, what you're trying to do? Send me an email then we can sort this out. Peace");
             }
 
-            var realPassword = user.Password.RsaDecrypt();
+            var realPassword = request.NewPassword.RsaDecrypt();
             user.Salt = Sha512Hashing.GetSalt();
             user.Password = (realPassword + user.Salt).GetHash();
             user.UpdatedDate = DateTime.Now;
@@ -98,7 +98,7 @@ namespace AussieTowns.Controllers
         [HttpPost("changepassword")]
         public async Task<JsonResult> ChangePassword([FromBody] PasswordReset request)
         {
-            if ((!request.IsChangePassword) || (request.OldPassword != request.NewPassword))
+            if ((!request.IsChangePassword) || (request.OldPassword == request.NewPassword))
             {
                 return new JsonResult("hey mate, what you're trying to do? Send me an email then we can sort this out. Peace");
             }
@@ -115,9 +115,9 @@ namespace AussieTowns.Controllers
 
             if (oldPasswordHash == existingUser.Password)
             {
-                var realPassword = request.NewPassword.RsaDecrypt();
+                var newPassword = request.NewPassword.RsaDecrypt();
                 existingUser.Salt = Sha512Hashing.GetSalt();
-                existingUser.Password = (realPassword + existingUser.Salt).GetHash();
+                existingUser.Password = (newPassword + existingUser.Salt).GetHash();
                 existingUser.UpdatedDate = DateTime.Now;
                 existingUser.Source = UserSource.Native;
 

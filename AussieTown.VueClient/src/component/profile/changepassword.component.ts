@@ -1,7 +1,7 @@
 ﻿import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
-import { changePassword } from '../../service/auth.service';
+import { changePassword, encryptText } from '../../service/auth.service';
 import ResetPasswordModel from '../../model/resetpassword.model';
 
 
@@ -9,14 +9,15 @@ import ResetPasswordModel from '../../model/resetpassword.model';
 Vue.use(VeeValidate);
 
 @Component({
-    name: 'ChangePasswordForm',
+    name: 'ChangePasswordComponent',
     components: {
 
     }
 })
 
-export default class ChangePasswordForm extends Vue {
+export default class ChangePasswordComponent extends Vue {
     @Prop guidString: string;
+    confirmPassword: string = '';
     model: ResetPasswordModel = new ResetPasswordModel();
 
     formSubmitted: boolean = false;
@@ -39,7 +40,10 @@ export default class ChangePasswordForm extends Vue {
         //});
 
         this.model.isChangePassword = true;
-        this.model.email = this.$store.state.loggedInUser.Email;
+        this.model.email = this.$store.state.loggedInUser.email;
+        this.model.newPassword = encryptText(this.model.newPassword);
+        this.model.oldPassword = encryptText(this.model.oldPassword);
+
         changePassword(this.model)
             .then(x => console.log(x));
     }
