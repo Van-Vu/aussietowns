@@ -30,8 +30,7 @@ export default new Vuex.Store({
         message: '',
         notifications: [],
         booking: {},
-        isLoading: '',
-        pageCss: ''
+        isLoading: ''
     },
     getters: {
         isLoggedIn: function (state) {
