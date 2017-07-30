@@ -1,8 +1,13 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -66,40 +71,40 @@ var HomePage = (function (_super) {
     HomePage.prototype.checkLogginUser = function () {
         console.log(this.$store.getters.doneTodos);
     };
+    HomePage = __decorate([
+        Component({
+            name: 'HomePage',
+            components: {
+                "searchbar": SearchBarComponent,
+                "swiper": Swiper,
+                "cardsmall": CardSmallComponent
+            },
+            beforeRouteEnter: function (to, from, next) {
+                // called before the route that renders this component is confirmed.
+                // does NOT have access to `this` component instance,
+                // because it has not been created yet when this guard is called!
+                console.log('beforeRouteEnter from home page');
+                next();
+            },
+            beforeRouteUpdate: function (to, from, next) {
+                // called when the route that renders this component has changed,
+                // but this component is reused in the new route.
+                // For example, for a route with dynamic params /foo/:id, when we
+                // navigate between /foo/1 and /foo/2, the same Foo component instance
+                // will be reused, and this hook will be called when that happens.
+                // has access to `this` component instance.
+                console.log('beforeRouteUpdate  from home page');
+                next();
+            },
+            beforeRouteLeave: function (to, from, next) {
+                // called when the route that renders this component is about to
+                // be navigated away from.
+                // has access to `this` component instance.
+                console.log('beforeRouteLeave  from home page');
+                next();
+            }
+        })
+    ], HomePage);
     return HomePage;
 }(Vue));
-HomePage = __decorate([
-    Component({
-        name: 'HomePage',
-        components: {
-            "searchbar": SearchBarComponent,
-            "swiper": Swiper,
-            "cardsmall": CardSmallComponent
-        },
-        beforeRouteEnter: function (to, from, next) {
-            // called before the route that renders this component is confirmed.
-            // does NOT have access to `this` component instance,
-            // because it has not been created yet when this guard is called!
-            console.log('beforeRouteEnter from home page');
-            next();
-        },
-        beforeRouteUpdate: function (to, from, next) {
-            // called when the route that renders this component has changed,
-            // but this component is reused in the new route.
-            // For example, for a route with dynamic params /foo/:id, when we
-            // navigate between /foo/1 and /foo/2, the same Foo component instance
-            // will be reused, and this hook will be called when that happens.
-            // has access to `this` component instance.
-            console.log('beforeRouteUpdate  from home page');
-            next();
-        },
-        beforeRouteLeave: function (to, from, next) {
-            // called when the route that renders this component is about to
-            // be navigated away from.
-            // has access to `this` component instance.
-            console.log('beforeRouteLeave  from home page');
-            next();
-        }
-    })
-], HomePage);
 export default HomePage;

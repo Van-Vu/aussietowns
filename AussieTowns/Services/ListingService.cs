@@ -71,31 +71,22 @@ namespace AussieTowns.Services
 
         public async Task<int> Booking(BookingRequest bookingRequest)
         {
-            var bookings = new List<Booking>();
-            foreach (var participant in bookingRequest.Participants)
+            var bookings = bookingRequest.Participants.Select(participant => new Booking
             {
-                bookings.Add(new Booking
-                {
-                    ListingId = bookingRequest.ListingId,
-                    BookingDate = bookingRequest.BookingDate,
-                    Time = bookingRequest.Time,
-                    ExistingUserId = participant.Id,
-                    FirstName = participant.Id == 0 ? participant.FirstName : string.Empty,
-                    LastName = participant.Id == 0 ? participant.LastName : string.Empty,
-                    Email = participant.Id == 0 ? participant.Email : string.Empty,
-                    Phone = participant.Id == 0 ? participant.Phone : string.Empty,
-                    Address = participant.Id == 0 ? participant.Address : string.Empty,
-                    EmergencyContact = participant.Id == 0 ? participant.EmergencyContact : string.Empty
-                });
-            }
+                ListingId = bookingRequest.ListingId,
+                BookingDate = bookingRequest.BookingDate,
+                Time = bookingRequest.Time,
+                ExistingUserId = participant.Id,
+                FirstName = participant.Id == 0 ? participant.FirstName : string.Empty,
+                LastName = participant.Id == 0 ? participant.LastName : string.Empty,
+                Email = participant.Id == 0 ? participant.Email : string.Empty,
+                Phone = participant.Id == 0 ? participant.Phone : string.Empty,
+                Address = participant.Id == 0 ? participant.Address : string.Empty,
+                EmergencyContact = participant.Id == 0 ? participant.EmergencyContact : string.Empty
+            }).ToList();
 
-            if (bookings.Any())
-            {
-                bookings.FirstOrDefault().IsPrimary = true;
-                return await _listingRepository.AddTourGuest(bookings);
-            }
-            
-            throw new Exception("hey No Booking User");
+            bookings.FirstOrDefault().IsPrimary = true;
+            return await _listingRepository.AddTourGuest(bookings);
         }
     }
 }

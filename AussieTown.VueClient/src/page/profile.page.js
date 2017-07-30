@@ -1,8 +1,13 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -26,6 +31,7 @@ var ProfilePage = (function (_super) {
         console.log('profile id:' + route.params.profileId);
         if (route.params.profileId) {
             return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
+            //return store.dispatch('FETCH_CONVERSATIONS_BY_USER', route.params.profileId);
         }
     };
     ProfilePage.prototype.created = function () {
@@ -37,17 +43,17 @@ var ProfilePage = (function (_super) {
         //console.log(`route change ${value}`);
         this.currentTab = value.name;
     };
+    __decorate([
+        Watch('$route'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], ProfilePage.prototype, "onRouteParamChanged", null);
+    ProfilePage = __decorate([
+        Component({
+            name: 'ProfilePage'
+        })
+    ], ProfilePage);
     return ProfilePage;
 }(Vue));
-__decorate([
-    Watch('$route'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", void 0)
-], ProfilePage.prototype, "onRouteParamChanged", null);
-ProfilePage = __decorate([
-    Component({
-        name: 'ProfilePage'
-    })
-], ProfilePage);
 export default ProfilePage;

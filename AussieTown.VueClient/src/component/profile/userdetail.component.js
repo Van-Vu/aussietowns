@@ -1,8 +1,13 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -36,6 +41,7 @@ var UserDetailComponent = (function (_super) {
     UserDetailComponent.prototype.onInsertorUpdate = function () {
         if (this.model.id > 0) {
             return this.$store.dispatch('UPDATE_USER', this.contructBeforeSubmit(this.model));
+            //(new ListingService()).updateListing(this.contructBeforeSubmit(this.model));
         }
     };
     UserDetailComponent.prototype.onEdit = function () {
@@ -52,15 +58,15 @@ var UserDetailComponent = (function (_super) {
     };
     UserDetailComponent.prototype.onUpdate = function () { };
     UserDetailComponent.prototype.capture = function () { };
+    UserDetailComponent = __decorate([
+        Component({
+            name: 'UserDetail',
+            components: {
+                "locationsearch": LocationSearchComponent,
+                "datepicker": datepicker
+            }
+        })
+    ], UserDetailComponent);
     return UserDetailComponent;
 }(Vue));
-UserDetailComponent = __decorate([
-    Component({
-        name: 'UserDetail',
-        components: {
-            "locationsearch": LocationSearchComponent,
-            "datepicker": datepicker
-        }
-    })
-], UserDetailComponent);
 export default UserDetailComponent;

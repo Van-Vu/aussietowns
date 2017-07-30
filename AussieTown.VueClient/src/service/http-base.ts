@@ -18,6 +18,11 @@ const http = axios.create({
 })
 
 http.defaults.withCredentials = true;
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';
+axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
+axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Authorization';
+//axios.defaults.headers.common['Access-Control-Request-Method'] = "GET, POST, PUT, DELETE, OPTIONS";
+
 
 // Add a request interceptor
 http.interceptors.request.use(function (config) {

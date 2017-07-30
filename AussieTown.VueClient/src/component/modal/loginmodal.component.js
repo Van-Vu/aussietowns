@@ -1,8 +1,13 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -29,19 +34,19 @@ var LoginModal = (function (_super) {
     LoginModal.prototype.onSuccessfulLogin = function (responseToken) {
         this.$emit('onSuccessfulLogin', responseToken);
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", Boolean)
+    ], LoginModal.prototype, "show", void 0);
+    LoginModal = __decorate([
+        Component({
+            name: "login-modal",
+            components: {
+                "modalshell": ModalShellComponent,
+                "loginform": LoginForm
+            }
+        })
+    ], LoginModal);
     return LoginModal;
 }(Vue));
-__decorate([
-    Prop,
-    __metadata("design:type", Boolean)
-], LoginModal.prototype, "show", void 0);
-LoginModal = __decorate([
-    Component({
-        name: "login-modal",
-        components: {
-            "modalshell": ModalShellComponent,
-            "loginform": LoginForm
-        }
-    })
-], LoginModal);
 export default LoginModal;

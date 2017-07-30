@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AussieTowns.Extensions;
 using AussieTowns.Model;
@@ -40,14 +38,14 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (id < 100000 || id > 1000000) throw new ArgumentOutOfRangeException(nameof(id));
+                if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
 
                 var listing = await _listingService.GetListingDetail(id);
 
                 if (listing == null)
                 {
                     _logger.LogInformation("Can't find listing with id: {id}", id);
-                    throw new ArgumentOutOfRangeException(nameof(id), "Invalid Id");
+                    throw new ArgumentOutOfRangeException(nameof(id), "Can't find listing");
                 }
 
                 if (Request.Path.Value.IndexOf("listingsummary", 0, StringComparison.CurrentCultureIgnoreCase) > 0)
@@ -86,7 +84,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (id < 100000 || id > 1000000) throw new ArgumentOutOfRangeException(nameof(id));
+                if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
                 if (listing == null) throw new ArgumentNullException(nameof(listing));
 
                 return await _listingService.UpdateListing(listing);
@@ -103,8 +101,8 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (id < 100000 || id > 1000000) throw new ArgumentOutOfRangeException(nameof(id));
-                if (request == null) throw new ArgumentNullException(nameof(request));
+                if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
+                if (request == null || !request.Participants.Any()) throw new ArgumentNullException(nameof(request));
 
                 var jsonBookingRequest = JsonConvert.SerializeObject(request);
                 // Bodom hack: deal with this later
@@ -125,7 +123,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (id < 100000 || id > 1000000) throw new ArgumentOutOfRangeException(nameof(id));
+                if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
 
                 return await _listingService.DeActivateListing(id);
             }
@@ -141,14 +139,14 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (listingId < 100000 || listingId > 1000000) throw new ArgumentOutOfRangeException(nameof(listingId));
+                if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
 
                 var image = await _listingService.FetchImageByUrl(listingId, url);
 
                 if (image == null)
                 {
                     _logger.LogInformation("Can't find image with listingId: {listingId}, url: {url}", listingId, url);
-                    throw new ArgumentOutOfRangeException(nameof(listingId), "Invalid Request");
+                    throw new ArgumentOutOfRangeException(nameof(listingId), "Can't find image");
                 }
 
                 var filename = image.Url.Split('/').LastOrDefault();
@@ -174,7 +172,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (userId < 10000) throw new ArgumentOutOfRangeException(nameof(userId));
+                if (userId < 10000) throw new ValidationException(nameof(userId));
 
                 var listingsSummary = await _listingService.GetListingsByUserId(userId);
 
@@ -192,7 +190,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (suburbId < 0) throw new ArgumentOutOfRangeException(nameof(suburbId));
+                if (suburbId < 0) throw new ValidationException(nameof(suburbId));
 
                 var listingsSummary = await _listingService.GetListingsBySuburb(suburbId);
 

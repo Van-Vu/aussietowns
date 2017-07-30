@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using AussieTowns.Auth;
 using AussieTowns.Common;
 using AussieTowns.Model;
@@ -171,26 +173,26 @@ namespace AussieTowns
                 {
                     var error = context.Features[typeof(IExceptionHandlerFeature)] as IExceptionHandlerFeature;
 
-                    if (error != null && error.Error is SecurityTokenExpiredException)
+                    // Bodom: have to manually push this to response stream otherwise client will receive response=undefined
+                    context.Response.Headers.Add("Access-Control-Allow-Origin", context.Request.Headers["Access-Control-Allow-Origin"]);
+                    context.Response.Headers.Add("Access-Control-Allow-Credentials", context.Request.Headers["Access-Control-Allow-Credentials"]);
+                    context.Response.Headers.Add("Access-Control-Allow-Headers", context.Request.Headers["Access-Control-Allow-Headers"]);
+
+                    if (error != null && (error.Error is ArgumentNullException || error.Error is ValidationException))
                     {
                         context.Response.StatusCode = 401;
-                        context.Response.ContentType = "application/json";
-
-                        await context.Response.WriteAsync(JsonConvert.SerializeObject(new RequestResult
-                        {
-                            State = RequestState.NotAuth,
-                            Msg = "token expired"
-                        }));
                     }
-                    else if (error != null && error.Error != null)
+                    else if (error?.Error is SecurityTokenExpiredException)
+                    {
+                        context.Response.StatusCode = 401;
+                    }
+                    else if (error != null && (error?.Error is ArgumentOutOfRangeException || error.Error is KeyNotFoundException))
+                    {
+                        context.Response.StatusCode = 404;
+                    }
+                    else if (error?.Error != null)
                     {
                         context.Response.StatusCode = 500;
-                        context.Response.ContentType = "application/json";
-                        await context.Response.WriteAsync(JsonConvert.SerializeObject(new RequestResult
-                        {
-                            State = RequestState.Failed,
-                            Msg = error.Error.Message
-                        }));
                     }
                     else await next();
                 });

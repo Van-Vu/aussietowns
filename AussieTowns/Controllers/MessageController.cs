@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Model;
@@ -31,7 +32,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (userId < 10000) throw new ArgumentOutOfRangeException(nameof(userId));
+                if (userId < 10000) throw new ValidationException(nameof(userId));
 
                 return await _messageService.GetAllConversationsByUser(userId);
             }
@@ -49,7 +50,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (conversationId < 0) throw new ArgumentOutOfRangeException(nameof(conversationId));
+                if (conversationId < 0) throw new ValidationException(nameof(conversationId));
 
                 return await _messageService.GetMessagesInConversation(conversationId);
             }

@@ -19,13 +19,8 @@ var UserService = (function () {
             .catch(this.handleError);
     };
     UserService.prototype.login = function (user) {
-        return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId }).then(function (response) {
-            var result = response.data;
-            if (result.state == 1) {
-                return result.data;
-            }
-            return 0;
-        })
+        return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId })
+            .then(function (response) { return response.data; })
             .catch(this.handleError);
     };
     UserService.prototype.getMiniProfile = function (id) {

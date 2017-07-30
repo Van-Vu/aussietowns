@@ -38,7 +38,7 @@ namespace AussieTowns.Repository
                     if (listing == null)
                     {
                         _logger.LogInformation("Can't find listing with id: {listingId}", listingId);
-                        throw new ArgumentOutOfRangeException(nameof(listingId), "Invalid Id");
+                        throw new ArgumentOutOfRangeException(nameof(listingId), "Invalid Listing");
                     }
 
                     var location = multipleResults.Read<SuburbDetail>().FirstOrDefault();

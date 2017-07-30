@@ -116,44 +116,43 @@ namespace AussieTowns.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        //[Authorize("Bearer")]
-        public async Task<RequestResult> GetUserInfo(int id)
-        {
-            try
-            {
-                var claimsIdentity = User.Identity as ClaimsIdentity;
-                if (claimsIdentity == null)
-                    return new RequestResult
-                    {
-                        State = RequestState.Failed,
-                        Msg = "Can't find user"
-                    };
+        //[HttpGet("{id}")]
+        //public async Task<RequestResult> GetUserInfo(int id)
+        //{
+        //    try
+        //    {
+        //        var claimsIdentity = User.Identity as ClaimsIdentity;
+        //        if (claimsIdentity == null)
+        //            return new RequestResult
+        //            {
+        //                State = RequestState.Failed,
+        //                Msg = "Can't find user"
+        //            };
 
-                //var userId = Convert.ToInt32(claimsIdentity.Claims.FirstOrDefault(x=>x.Type=="userId")?.Value);
-                //var email = claimsIdentity.Name;
-                var user = await _userService.GetById(id);
-                if (user != null)
-                {
-                    return new RequestResult
-                    {
-                        State = RequestState.Success,
-                        Data = _mapper.Map<User, UserResponse>(user)
-                    };
-                }
+        //        //var userId = Convert.ToInt32(claimsIdentity.Claims.FirstOrDefault(x=>x.Type=="userId")?.Value);
+        //        //var email = claimsIdentity.Name;
+        //        var user = await _userService.GetById(id);
+        //        if (user != null)
+        //        {
+        //            return new RequestResult
+        //            {
+        //                State = RequestState.Success,
+        //                Data = _mapper.Map<User, UserResponse>(user)
+        //            };
+        //        }
 
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Msg = "Can't find user"
-                };
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message, e);
-                throw;
-            }
-        }
+        //        return new RequestResult
+        //        {
+        //            State = RequestState.Failed,
+        //            Msg = "Can't find user"
+        //        };
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _logger.LogError(e.Message, e);
+        //        throw;
+        //    }
+        //}
 
         [HttpGet("summary/{id}")]
         [Authorize(Policy = "AtLeastEditor")]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (listingId < 100000 || listingId > 1000000) throw new ArgumentOutOfRangeException(nameof(listingId));
+                if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
 
                 var imageUrls = new List<Image>();
                 foreach (var file in files)

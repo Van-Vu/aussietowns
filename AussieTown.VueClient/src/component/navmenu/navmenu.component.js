@@ -1,8 +1,13 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -105,35 +110,35 @@ var NavMenuComponent = (function (_super) {
         this.profilePhoto = this.$store.getters.profilePhoto;
         this.isLoggedIn = this.$store.getters.isLoggedIn;
     };
+    __decorate([
+        Watch('currentPage'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String]),
+        __metadata("design:returntype", void 0)
+    ], NavMenuComponent.prototype, "onCurrentPageChanged", null);
+    __decorate([
+        Watch('showSecondSearchBar'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String]),
+        __metadata("design:returntype", void 0)
+    ], NavMenuComponent.prototype, "onShowSecondSearchBarChanged", null);
+    __decorate([
+        Watch('$route.params'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String]),
+        __metadata("design:returntype", void 0)
+    ], NavMenuComponent.prototype, "onRouteParamChanged", null);
+    NavMenuComponent = __decorate([
+        Component({
+            name: 'nav-menu',
+            components: {
+                'loginmodal': LoginModal,
+                'registrationmodal': RegistrationModal,
+                'menumodal': MenuModal,
+                "searchbar": SearchBarComponent
+            }
+        })
+    ], NavMenuComponent);
     return NavMenuComponent;
 }(Vue));
-__decorate([
-    Watch('currentPage'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
-    __metadata("design:returntype", void 0)
-], NavMenuComponent.prototype, "onCurrentPageChanged", null);
-__decorate([
-    Watch('showSecondSearchBar'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
-    __metadata("design:returntype", void 0)
-], NavMenuComponent.prototype, "onShowSecondSearchBarChanged", null);
-__decorate([
-    Watch('$route.params'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
-    __metadata("design:returntype", void 0)
-], NavMenuComponent.prototype, "onRouteParamChanged", null);
-NavMenuComponent = __decorate([
-    Component({
-        name: 'nav-menu',
-        components: {
-            'loginmodal': LoginModal,
-            'registrationmodal': RegistrationModal,
-            'menumodal': MenuModal,
-            "searchbar": SearchBarComponent
-        }
-    })
-], NavMenuComponent);
 export default NavMenuComponent;

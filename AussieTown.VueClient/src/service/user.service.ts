@@ -22,13 +22,8 @@ export default class UserService {
     }
 
     login(user) {
-        return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId }).then(response => {
-            let result = response.data;
-            if (result.state == 1) {
-                return result.data;
-            }
-            return 0;
-        })
+        return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId })
+            .then(response => response.data)
         .catch(this.handleError);
     }
 

@@ -31,13 +31,13 @@ namespace AussieTowns.Services
         {
             switch (user.Source)
             {
-                    case UserSource.Native:
-                        return await GetByEmailAndPassword(user.Email, user.Password);
-                    case UserSource.Facebook:
-                    case UserSource.Google:
-                        return await GetUserByExternalInfo(user.Email, user.Source, user.ExternalId);
-                    default:
-                        throw new KeyNotFoundException();
+                case UserSource.Native:
+                    return await GetByEmailAndPassword(user.Email, user.Password);
+                case UserSource.Facebook:
+                case UserSource.Google:
+                    return await GetUserByExternalInfo(user.Email, user.Source, user.ExternalId);
+                default:
+                    throw new KeyNotFoundException($"Incorrect Source {user.Source}");
             }
             
         }
@@ -50,7 +50,6 @@ namespace AussieTowns.Services
         {
             return await _userRepository.GetByExternalInfo(email, (int)source, externalId);
         }
-
 
         public async Task<int> Register(User user)
         {

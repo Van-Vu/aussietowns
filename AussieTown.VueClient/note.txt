@@ -38,6 +38,10 @@ Unit test
 Booking process
 
 
+Bloc post:
+- Authentication
+- CORS: startup line 177
+
 
 Image processing
 dynamic loading module
