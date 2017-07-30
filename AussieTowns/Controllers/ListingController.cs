@@ -10,6 +10,7 @@ using AussieTowns.Model;
 using AussieTowns.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -22,269 +23,186 @@ namespace AussieTowns.Controllers
     {
         private readonly IListingService _listingService;
         private readonly IMapper _mapper;
+        private readonly ILogger<ListingController> _logger;
         private readonly AppSettings _appSettings;
 
-        public ListingController(IListingService listingService, IMapper mapper, IOptions<AppSettings> appSettings)
+        public ListingController(IListingService listingService, IMapper mapper, IOptions<AppSettings> appSettings, ILogger<ListingController> logger)
         {
             _listingService = listingService;
             _mapper = mapper;
+            _logger = logger;
             _appSettings = appSettings.Value;
         }
 
         [HttpGet("{id}")]
         [HttpGet("summary/{id}")]
-        public async Task<RequestResult> GetListingDetail(int id)
+        public async Task<ListingSummary> GetListingDetail(int id)
         {
             try
             {
+                if (id < 100000 || id > 1000000) throw new ArgumentOutOfRangeException(nameof(id));
+
                 var listing = await _listingService.GetListingDetail(id);
+
+                if (listing == null)
+                {
+                    _logger.LogInformation("Can't find listing with id: {id}", id);
+                    throw new ArgumentOutOfRangeException(nameof(id), "Invalid Id");
+                }
 
                 if (Request.Path.Value.IndexOf("listingsummary", 0, StringComparison.CurrentCultureIgnoreCase) > 0)
                 {
-                    return new RequestResult
-                    {
-                        State = RequestState.Success,
-                        Data = _mapper.Map<Listing, ListingSummary>(listing)
-                    };
+                    return _mapper.Map<Listing, ListingSummary>(listing);
                 }
 
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Data = _mapper.Map<Listing,ListingResponse>(listing)
-                };
-            }
-            catch (Exception ex)
-            {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Msg = "Something is wrong :" + ex
-                };
-            }
-        }
-
-        [HttpGet("map/{seoString}")]
-        public async Task<int> MapListingHeader(string seoString)
-        {
-            try
-            {
-                var header = Regex.Replace(seoString,"-",string.Empty);
-                var listingIds = await _listingService.MapListingHeaderToId(header);
-                return listingIds.FirstOrDefault();
+                return _mapper.Map<Listing, ListingSummary>(listing);
             }
             catch (Exception e)
             {
-                
-
+                _logger.LogError(e.Message,e);
                 throw;
             }
         }
 
-
         [HttpPost]
-        public async Task<RequestResult> InsertListing([FromBody] Listing listing)
+        public async Task<int> InsertListing([FromBody] Listing listing)
         {
             try
             {
-                if (listing == null)
-                {
-                    throw new Exception("Value cannot be null !");
-                }
+                if (listing == null) throw new ArgumentNullException(nameof(listing));
 
                 var newId = await _listingService.InsertListing(listing);
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Data = newId
-                };
+                return newId;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Msg = "Something is wrong !"
-                };
+                _logger.LogError(e.Message,e);
+                throw;
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<RequestResult> UpdateListing(int id,[FromBody] Listing listing)
+        public async Task<int> UpdateListing(int id,[FromBody] Listing listing)
         {
             try
             {
-                if (listing == null)
-                {
-                    throw new Exception("Value cannot be null !");
-                }
+                if (id < 100000 || id > 1000000) throw new ArgumentOutOfRangeException(nameof(id));
+                if (listing == null) throw new ArgumentNullException(nameof(listing));
 
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Data = await _listingService.UpdateListing(listing)
-                };
+                return await _listingService.UpdateListing(listing);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Msg = "Something is wrong !"
-                };
+                _logger.LogError(e.Message, e);
+                throw;
             }
         }
 
         [HttpPost("{id}/book")]
-        public async Task<RequestResult> Book(int id, [FromBody] BookingRequest bookingRequest)
+        public async Task<int> Book(int id, [FromBody] BookingRequest request)
         {
             try
             {
-                var jsonBookingRequest = JsonConvert.SerializeObject(bookingRequest);
+                if (id < 100000 || id > 1000000) throw new ArgumentOutOfRangeException(nameof(id));
+                if (request == null) throw new ArgumentNullException(nameof(request));
+
+                var jsonBookingRequest = JsonConvert.SerializeObject(request);
+                // Bodom hack: deal with this later
                 var result = await jsonBookingRequest.PushToSqsAsync(AwsSqsExtensions.GetClient(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
                     _appSettings.AwsS3Region), _appSettings.SqsUrl);
 
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Data = await _listingService.Booking(bookingRequest)
-                };
+                return await _listingService.Booking(request);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Msg = "Something is wrong !"
-                };
+                _logger.LogError(e.Message, e);
+                throw;
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<RequestResult> DeleteTourOffer(int id)
+        public async Task<int> DeleteTourOffer(int id)
         {
             try
             {
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Data = await _listingService.DeActivateListing(id)
-                };
+                if (id < 100000 || id > 1000000) throw new ArgumentOutOfRangeException(nameof(id));
+
+                return await _listingService.DeActivateListing(id);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Msg = "Something is wrong !"
-                };
+                _logger.LogError(e.Message, e);
+                throw;
             }
         }
 
         [HttpPost("{listingId}/deleteImage")]
-        public async Task<RequestResult> DeleteImage(int listingId, string url)
+        public async Task<int> DeleteImage(int listingId, string url)
         {
             try
             {
+                if (listingId < 100000 || listingId > 1000000) throw new ArgumentOutOfRangeException(nameof(listingId));
+
                 var image = await _listingService.FetchImageByUrl(listingId, url);
 
-                if (image != null)
+                if (image == null)
                 {
-                    var filename = image.Url.Split('/').LastOrDefault();
-                    var result = await AwsS3Extensions.DeleteObjectS3Async(
-                        AwsS3Extensions.GetS3Client(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
-                            _appSettings.AwsS3Region), "meetthelocal-development", $"images/listings/{listingId}/{filename}");
-
-                    var deleteImage = _listingService.DeleteImage(image.ImageId);
-
-                    return new RequestResult
-                    {
-                        State = RequestState.Success,
-                        Data = "allGood"
-                    };
+                    _logger.LogInformation("Can't find image with listingId: {listingId}, url: {url}", listingId, url);
+                    throw new ArgumentOutOfRangeException(nameof(listingId), "Invalid Request");
                 }
-                else
-                {
-                    throw new NullReferenceException("can't find image");
-                }
+
+                var filename = image.Url.Split('/').LastOrDefault();
+
+                // Bodom hack: deal with this later
+                var result = await AwsS3Extensions.DeleteObjectS3Async(
+                    AwsS3Extensions.GetS3Client(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
+                        _appSettings.AwsS3Region), "meetthelocal-development", $"images/listings/{listingId}/{filename}");
+
+
+
+                return await _listingService.DeleteImage(image.ImageId);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Msg = "Something is wrong !"
-                };
+                _logger.LogError(e.Message, e);
+                throw;
             }
         }
 
-        
         [HttpGet]
-        public async Task<RequestResult> GetToursByUserId([FromQuery] int user)
+        public async Task<IEnumerable<ListingSummary>> GetToursByUserId([FromQuery] int userId)
         {
             try
             {
-                var listingsSummary = await _listingService.GetListingsByUserId(user); //.Select(listing => _mapper.Map<Listing,ListingSummary>(listing));
-                
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Data = listingsSummary.Select(listing => _mapper.Map<Listing, ListingSummary>(listing))
-                };
+                if (userId < 10000) throw new ArgumentOutOfRangeException(nameof(userId));
 
+                var listingsSummary = await _listingService.GetListingsByUserId(userId);
+
+                return listingsSummary.Select(listing => _mapper.Map<Listing, ListingSummary>(listing));
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Data = "Something is wrong: " + ex.Message
-                };
+                _logger.LogError(e.Message, e);
+                throw;
             }
         }
 
         [HttpGet("suburb/{suburbid}")]
-        public async Task<RequestResult> GetToursBySuburb(int suburbid)
+        public async Task<IEnumerable<ListingSummary>> GetListingsBySuburb(int suburbId)
         {
             try
             {
-                //var listingsSummary = _listingService.GetListingsBySuburb(suburbid).Select(listing => _mapper.Map<Listing, ListingSummary>(listing));
-                var listingsSummary = await _listingService.GetListingsBySuburb(suburbid);
+                if (suburbId < 0) throw new ArgumentOutOfRangeException(nameof(suburbId));
 
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Data = listingsSummary.Select(x => _mapper.Map<ListingView, ListingSummary>(x))
-                };
+                var listingsSummary = await _listingService.GetListingsBySuburb(suburbId);
 
+                return listingsSummary.Select(x => _mapper.Map<ListingView, ListingSummary>(x));
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Data = "Something is wrong: " + ex.Message
-                };
+                _logger.LogError(e.Message, e);
+                throw;
             }
-        }
-
-        private HttpResponseMessage ResponseHandleException<TResult>(Task<TResult> taskResult, object originalRequest)
-        {
-            //if (!taskResult.IsFaulted && taskResult.Exception == null)
-            //{
-            //    return new HttpResponseMessage(HttpStatusCode.OK) { Content = taskResult.Result };
-            //}
-
-            ////_logger.Error(taskResult.Exception?.InnerExceptions[0], "[AussieTown-WebApi] ERROR found processing request");
-
-            //var aggException = taskResult.Exception as AggregateException;
-            //return new HttpResponseMessage(HttpStatusCode.InternalServerError)
-            //{
-            //    Content = new JsonContent(aggException?.InnerException),
-            //    RequestMessage = new HttpRequestMessage { Content = new JsonContent(originalRequest ?? "") }
-            //};
-
-            return null;
         }
     }
 }

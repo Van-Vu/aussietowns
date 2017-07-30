@@ -5,13 +5,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Model;
 using Dapper;
+using Microsoft.Extensions.Logging;
 
 namespace AussieTowns.Repository
 {
     public class UserRepository: RepositoryBase, IUserRepository
     {
-        public UserRepository(string connString): base(connString)
-        {}
+        private readonly ILogger<UserRepository> _logger;
+
+        public UserRepository(string connString, ILogger<UserRepository> logger) : base(connString)
+        {
+            _logger = logger;
+        }
 
         public async Task<User> GetByEmailAndPassword(string email, string password)
         {
@@ -43,19 +48,6 @@ namespace AussieTowns.Repository
 
                     var location = multipleResults.Read<SuburbDetail>().FirstOrDefault();
 
-                    //var operatorListings = multipleResults.Read<Listing, Schedule, Listing>((listing, schedule) =>
-                    //{
-                    //    listing.Schedules = new List<Schedule> {schedule};
-
-                    //    return listing;
-                    //})?.ToList();
-
-                    //var guestListings = multipleResults.Read<Listing, Schedule, Listing>((listing, schedule) =>
-                    //{
-                    //    listing.Schedules = new List<Schedule> { schedule };
-
-                    //    return listing;
-                    //})?.ToList();
                     var operatorListings = multipleResults.Read<ListingView>()?.ToList();
                     var guestListings = multipleResults.Read<ListingView>()?.ToList();
 
@@ -178,9 +170,9 @@ namespace AussieTowns.Repository
                     catch (Exception e)
                     {
                         tran.Rollback();
-                        throw e;
+                        _logger.LogCritical(e.Message, e);
+                        throw;
                     }
-
                 }
             }
         }

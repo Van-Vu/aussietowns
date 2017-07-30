@@ -5,6 +5,8 @@ using AussieTowns.Common;
 using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Repository;
+using Microsoft.AspNetCore.Hosting.Internal;
+using Microsoft.Extensions.Logging;
 
 
 namespace AussieTowns.Services
@@ -12,10 +14,12 @@ namespace AussieTowns.Services
     public class UserService: IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         public async Task<User> GetById(int id)
@@ -91,7 +95,7 @@ namespace AussieTowns.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e.Message, e);
                 throw;
             }
         }

@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 using AussieTowns.Common;
 using AussieTowns.Model;
 using Dapper;
+using Microsoft.Extensions.Logging;
 
 namespace AussieTowns.Repository
 {
     public class ListingRepository: RepositoryBase, IListingRepository
     {
-        public ListingRepository(string connString): base(connString)
-        {}
+        private readonly ILogger<ListingRepository> _logger;
+
+        public ListingRepository(string connString, ILogger<ListingRepository> logger) : base(connString)
+        {
+            _logger = logger;
+        }
 
         public async Task<Listing> GetListingById(int listingId)
         {
@@ -26,13 +31,17 @@ namespace AussieTowns.Repository
 
                 dbConnection.Open();
                 Listing listing;
-                using (var multipleResults = await dbConnection.QueryMultipleAsync(sql, new {listingId = listingId}))
+                using (var multipleResults = await dbConnection.QueryMultipleAsync(sql, new {listingId}))
                 {
                     listing = multipleResults.Read<Listing>().FirstOrDefault();
 
+                    if (listing == null)
+                    {
+                        _logger.LogInformation("Can't find listing with id: {listingId}", listingId);
+                        throw new ArgumentOutOfRangeException(nameof(listingId), "Invalid Id");
+                    }
+
                     var location = multipleResults.Read<SuburbDetail>().FirstOrDefault();
-                    //https://stackoverflow.com/questions/34929231/map-a-column-with-string-representing-a-list-to-a-list-object-using-dapper
-                    //var schedules = multipleResults.Query<int,DateTime,TimeSpan,DateTime,int,int,string,Schedule>()?.ToList();
                     var images = multipleResults.Read<Image>()?.ToList();
                     var operators = multipleResults.Read<TourOperator,User, TourOperator>((tourOperator, user) =>
                     {
@@ -50,9 +59,6 @@ namespace AussieTowns.Repository
                         return tourguest;
                     })?.ToList();
 
-                    //listing.Schedules = listing.Schedules ?? new List<Schedule>();
-                    //listing.Schedules.AddRange(schedules);
-
                     listing.ImageList = listing.ImageList ?? new List<Image>();
                     listing.ImageList.AddRange(images);
 
@@ -65,8 +71,9 @@ namespace AussieTowns.Repository
                     listing.Location = location;
                 }
 
+                //https://stackoverflow.com/questions/34929231/map-a-column-with-string-representing-a-list-to-a-list-object-using-dapper
                 var scheduleSql = "SELECT s.id, s.startDate, s.duration, s.enddate, s.repeatedtype, s.repeatedday, s.listingid FROM Schedule s INNER JOIN Listing l ON s.listingid = l.id WHERE ListingId = @listingid;";
-                //var schedules = multipleResults.Query
+                
                 var schedules = await dbConnection.QueryAsync<int, DateTime, TimeSpan, DateTime, RepeatedType?, string, int, Schedule>(scheduleSql,
                     (id, startDate, duration, endDate, repeatedType, repeatedDay, listingid) => new Schedule
                     {
@@ -125,6 +132,8 @@ namespace AussieTowns.Repository
 
                         var listingId = Convert.ToInt16(await dbConnection.ExecuteScalarAsync("SELECT LAST_INSERT_ID()"));
 
+                        var insertTasks = new List<Task<int>>();
+
                         if (listing.Schedules != null && listing.Schedules.Any())
                         {
                             foreach (var schedule in listing.Schedules)
@@ -134,7 +143,7 @@ namespace AussieTowns.Repository
                             var scheduleSql =
                                 "INSERT INTO Schedule(startdate, duration, enddate, repeatedtype, repeatedDay, listingid) "
                                 + " VALUES(@startDate, @duration, @endDate, @repeatedType, @repeatedDay, @listingId)";
-                            await dbConnection.ExecuteAsync(scheduleSql, listing.Schedules);
+                            insertTasks.Add(dbConnection.ExecuteAsync(scheduleSql, listing.Schedules));
                         }
 
                         if (listing.TourOperators != null && listing.TourOperators.Any())
@@ -145,7 +154,7 @@ namespace AussieTowns.Repository
                             }
                             var operatorSql = "INSERT INTO TourOperator(userid, listingid, isowner) "
                                 + " VALUES(@userId, @listingId, @isOwner)";
-                            await dbConnection.ExecuteAsync(operatorSql, listing.TourOperators);
+                            insertTasks.Add(dbConnection.ExecuteAsync(operatorSql, listing.TourOperators));
                         }
 
                         if (listing.TourGuests != null && listing.TourGuests.Any())
@@ -156,8 +165,11 @@ namespace AussieTowns.Repository
                             }
                             var guestSql = "INSERT INTO TourGuest(userid, listingid, isowner) "
                                 + "VALUES(@userId, @listingId, @isOwner)";
-                            await dbConnection.ExecuteAsync(guestSql, listing.TourGuests);
+
+                            insertTasks.Add(dbConnection.ExecuteAsync(guestSql, listing.TourGuests));
                         }
+
+                        await Task.WhenAll(insertTasks);
 
                         tran.Commit();
                         return listingId;
@@ -165,7 +177,8 @@ namespace AussieTowns.Repository
                     catch (Exception e)
                     {
                         tran.Rollback();
-                        throw e;
+                        _logger.LogCritical(e.Message, e);
+                        throw;
                     }
                 }
             }
@@ -180,15 +193,17 @@ namespace AussieTowns.Repository
                 {
                     try
                     {
+                        var updateTasks = new List<Task<int>>();
+
                         var sql = "UPDATE Listing SET LocationId = @locationId, Cost = @cost, Currency = @currency, Header = @header, Description = @description, "
                                   + "Requirement = @requirement, MinParticipant = @minParticipant, updatedDate=@updatedDate, isActive=@isActive WHERE Id = @id";
                         listing.UpdatedDate = DateTime.Now;
                         listing.IsActive = true;
-                        await dbConnection.ExecuteAsync(sql, listing);
+                        updateTasks.Add(dbConnection.ExecuteAsync(sql, listing));
 
                         var scheduleUpdate =
                             "UPDATE Schedule SET Startdate = @startDate, Duration = @duration, Enddate = @endDate, RepeatedType = @repeatedType, RepeatedDay = @repeatedDayText WHERE Id=@id";
-                        await dbConnection.ExecuteAsync(scheduleUpdate, listing.Schedules);
+                        updateTasks.Add(dbConnection.ExecuteAsync(scheduleUpdate, listing.Schedules));
 
                         var operatorSql = "SELECT * FROM TourOperator WHERE ListingId = @listingId";
                         var tourOperators = await dbConnection.QueryAsync<TourOperator>(operatorSql, new { listingId = listing.Id});
@@ -198,11 +213,11 @@ namespace AussieTowns.Repository
                         var oldOperators =
                             tourOperators.Where(p => listing.TourOperators.All(p2 => p2.UserId != p.UserId));
                         var newOperatorSql = "INSERT INTO TourOperator VALUES(@listingId, @userId, @isOwner)";
-                        await dbConnection.ExecuteAsync(newOperatorSql, newOperators);
+                        updateTasks.Add(dbConnection.ExecuteAsync(newOperatorSql, newOperators));
 
                         var oldOperatorSql =
                             "DELETE FROM TourOperator WHERE UserId = @userId AND ListingId = @listingId";
-                        await dbConnection.ExecuteAsync(oldOperatorSql, oldOperators);
+                        updateTasks.Add(dbConnection.ExecuteAsync(oldOperatorSql, oldOperators));
 
                         var guestSql = "SELECT * FROM TourGuest WHERE ListingId = @listingId";
                         var tourGuests = await dbConnection.QueryAsync<TourGuest>(guestSql, new { listingId = listing.Id });
@@ -212,11 +227,13 @@ namespace AussieTowns.Repository
                         var oldGuests =
                             tourGuests.Where(p => listing.TourGuests.All(p2 => p2.ExistingUserId != p.ExistingUserId));
                         var newGuestSql = "INSERT INTO TourGuest VALUES(@listingId, @userId, @isPrimary)";
-                        await dbConnection.ExecuteAsync(newGuestSql, newGuests);
+                        updateTasks.Add(dbConnection.ExecuteAsync(newGuestSql, newGuests));
 
                         var oldGuestSql =
                             "DELETE FROM TourGuest WHERE UserId = @userId AND ListingId = @listingId";
-                        await dbConnection.ExecuteAsync(oldGuestSql, oldGuests);
+                        updateTasks.Add(dbConnection.ExecuteAsync(oldGuestSql, oldGuests));
+
+                        await Task.WhenAll(updateTasks);
 
                         //Bodom
                         tran.Commit();
@@ -225,7 +242,8 @@ namespace AussieTowns.Repository
                     catch (Exception e)
                     {
                         tran.Rollback();
-                        throw e;
+                        _logger.LogCritical(e.Message, e);
+                        throw;
                     }
                 }
             }

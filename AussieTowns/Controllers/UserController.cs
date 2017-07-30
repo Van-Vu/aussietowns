@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -28,19 +30,23 @@ namespace AussieTowns.Controllers
         private readonly IUserService _userService;
         private readonly IHostingEnvironment _hostingEnv;
         private readonly IMapper _mapper;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserService userService, IHostingEnvironment hostingEnv, IMapper mapper)
+        public UserController(IUserService userService, IHostingEnvironment hostingEnv, IMapper mapper, ILogger<UserController> logger)
         {
             _userService = userService;
             _hostingEnv = hostingEnv;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpPost("register")]
-        public async Task<RequestResult> Register([FromBody] User user)
+        public async Task<dynamic> Register([FromBody] User user)
         {
             try
             {
+                if (user == null) throw new ArgumentNullException(nameof(user));
+
                 if (user.Source == UserSource.Native)
                 {
                     var realPassword = user.Password.RsaDecrypt();
@@ -55,18 +61,29 @@ namespace AussieTowns.Controllers
                 await _userService.Register(user);
                 return GenerateToken(user);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw ex;
+                _logger.LogError(e.Message, e);
+                throw;
             }
         }
 
         [HttpPost("login")]
-        public async Task<RequestResult> Login([FromBody] User user)
+        public async Task<dynamic> Login([FromBody] User user)
         {
             try
             {
+                if (string.IsNullOrEmpty(user?.Email) || string.IsNullOrEmpty(user.Password))
+                    throw new ArgumentNullException(nameof(user));
+
                 var existingUser = (await _userService.SearchUser(user.Email)).FirstOrDefault();
+
+                if (existingUser == null)
+                {
+                    _logger.LogInformation("Can't find user with email: {email}", user.Email);
+                    throw new ValidationException("Email or Password is incorrect");
+                }
+
 
                 if (user.Source == UserSource.Native)
                 {
@@ -77,6 +94,8 @@ namespace AussieTowns.Controllers
                     {
                         return GenerateToken(existingUser);
                     }
+                    _logger.LogInformation("{email} Old password is incorrect", user.Email);
+                    throw new ValidationException("Email or Password is incorrect");
                 }
                 else
                 {
@@ -88,16 +107,12 @@ namespace AussieTowns.Controllers
                     }
                 }
 
-
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Msg = "Username or password is invalid"
-                };
+                throw new ValidationException("Email or Password is incorrect");
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw ex;
+                _logger.LogError(e.Message, e);
+                throw;
             }
         }
 
@@ -135,52 +150,45 @@ namespace AussieTowns.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e.Message, e);
                 throw;
             }
         }
 
         [HttpGet("summary/{id}")]
         [Authorize(Policy = "AtLeastEditor")]
-        public async Task<RequestResult> GetUserMiniProfile(int id)
+        public async Task<MiniProfile> GetUserMiniProfile(int id)
         {
-            var user = await _userService.GetById(id);
-            if (user != null)
+            try
             {
-                return new RequestResult
+                var user = await _userService.GetById(id);
+                if (user != null)
                 {
-                    State = RequestState.Success,
-                    Data = _mapper.Map<User,MiniProfile>(user) 
-                };
-            }
+                    return _mapper.Map<User, MiniProfile>(user);
+                }
 
-            return new RequestResult
+                return null;
+            }
+            catch (Exception e)
             {
-                State = RequestState.Failed,
-                Msg = "Can't find user"
-            };
+                _logger.LogError(e.Message, e);
+                throw;
+            }
         }
 
 
         [HttpGet("search")]
-        public async Task<RequestResult> SearchUser([FromQuery]string term)
+        public async Task<IEnumerable<MiniProfile>> SearchUser([FromQuery]string term)
         {
             try
             {
                 var availableUsers = await _userService.SearchUser(term);
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Data = availableUsers.Select(user => _mapper.Map<User, MiniProfile>(user))
-                };
+                return availableUsers.Select(user => _mapper.Map<User, MiniProfile>(user));
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Data = "Something is wrong: " + ex.Message
-                };
+                _logger.LogError(e.Message, e);
+                throw;
             }
         }
 
@@ -192,24 +200,16 @@ namespace AussieTowns.Controllers
 
         [HttpPut("{id}")]
         //[Authorize("Bearer")]
-        public async Task<RequestResult> Update(int id,[FromBody] Model.Profile profile)
+        public async Task<int> Update(int id,[FromBody] Model.Profile profile)
         {
             try
             {
-                await _userService.Update(profile);
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Msg = "Update successful"
-                };
+                return await _userService.Update(profile);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Msg = "Update failed:" + ex.Message
-                };
+                _logger.LogError(e.Message, e);
+                throw;
             }
         }
         
@@ -238,23 +238,17 @@ namespace AussieTowns.Controllers
 
         }
 
-        private RequestResult GenerateToken(User user)
+        private dynamic GenerateToken(User user)
         {
-            var requestAt = DateTime.Now;
-            var expiresIn = requestAt + TokenAuthOption.ExpiresSpan;
+            var expiresIn = DateTime.Now + TokenAuthOption.ExpiresSpan;
             var token = GenerateToken(user, expiresIn);
 
-            return new RequestResult
+            return new 
             {
-                State = RequestState.Success,
-                Data = new
-                {
-                    requestAt = requestAt,
-                    expiresIn = TokenAuthOption.ExpiresSpan.TotalSeconds,
-                    tokeyType = TokenAuthOption.TokenType,
-                    accessToken = token,
-                    loggedInUser = _mapper.Map<User,UserLoggedIn>(user)
-                }
+                expiresIn = TokenAuthOption.ExpiresSpan.TotalSeconds,
+                tokeyType = TokenAuthOption.TokenType,
+                accessToken = token,
+                loggedInUser = _mapper.Map<User,UserLoggedIn>(user)
             };
         }
 

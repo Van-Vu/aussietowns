@@ -9,5 +9,7 @@ namespace AussieTowns.Repository
     {
         IEnumerable<SuburbDetail> GetLocationsByBoundingBox();
         Task<IEnumerable<SuburbDetail>> GetLocationBySuburbName(string suburbName);
+
+        Task<int> TestLogger();
     }
 }

@@ -4,7 +4,6 @@ var ListingService = (function () {
         this.baseUrl = '/api/listing/';
         this.getListingByUserUrl = this.baseUrl + '?user=';
         this.getListingBySuburbUrl = this.baseUrl + 'suburb/';
-        this.getListingIdByHeaderUrl = this.baseUrl + 'map/';
     }
     ListingService.prototype.getListingById = function (_id) {
         return http.get(this.baseUrl + _id)
@@ -36,13 +35,6 @@ var ListingService = (function () {
     };
     ListingService.prototype.getListingBySuburb = function (suburbId) {
         return http.get(this.getListingBySuburbUrl + suburbId)
-            .then(function (response) {
-            return response.data;
-        });
-    };
-    ListingService.prototype.mapListingHeaderToId = function (header) {
-        console.log('here in header to Id');
-        return http.get(this.getListingIdByHeaderUrl + header)
             .then(function (response) {
             return response.data;
         });

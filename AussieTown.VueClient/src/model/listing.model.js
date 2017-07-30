@@ -19,10 +19,10 @@ var ListingModel = (function () {
         this.imageList = new Array();
         //this.schedules.push(new ScheduleModel(Utils.getDate(new Date()), { HH: '08', mm: '00' }, { HH: '08', mm: '00' }, Utils.getDate(new Date()), 1, ''));
     }
-    __decorate([
-        Type(function () { return ScheduleModel; }),
-        __metadata("design:type", Array)
-    ], ListingModel.prototype, "schedules", void 0);
     return ListingModel;
 }());
 export default ListingModel;
+__decorate([
+    Type(function () { return ScheduleModel; }),
+    __metadata("design:type", Array)
+], ListingModel.prototype, "schedules", void 0);

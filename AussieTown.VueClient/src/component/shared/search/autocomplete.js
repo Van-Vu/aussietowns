@@ -1,15 +1,10 @@
 // Source: https://github.com/kEpEx/angular2-kpx-autocomplete
 // Note: can't import directly due to webpack build fail
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -145,31 +140,31 @@ var AutoCompleteComponent = (function (_super) {
         this.doSelectIndex(this.indexSelected);
         this.dontBlur = false;
     };
-    __decorate([
-        Prop,
-        __metadata("design:type", Number)
-    ], AutoCompleteComponent.prototype, "minChars", void 0);
-    __decorate([
-        Prop,
-        __metadata("design:type", String)
-    ], AutoCompleteComponent.prototype, "placeHolderText", void 0);
-    __decorate([
-        Prop,
-        __metadata("design:type", Object)
-    ], AutoCompleteComponent.prototype, "initialData", void 0);
-    __decorate([
-        Prop,
-        __metadata("design:type", Boolean)
-    ], AutoCompleteComponent.prototype, "cleanUp", void 0);
-    __decorate([
-        Prop,
-        __metadata("design:type", Array)
-    ], AutoCompleteComponent.prototype, "list", void 0);
-    AutoCompleteComponent = __decorate([
-        Component({
-            name: "AutoComplete"
-        })
-    ], AutoCompleteComponent);
     return AutoCompleteComponent;
 }(Vue));
+__decorate([
+    Prop,
+    __metadata("design:type", Number)
+], AutoCompleteComponent.prototype, "minChars", void 0);
+__decorate([
+    Prop,
+    __metadata("design:type", String)
+], AutoCompleteComponent.prototype, "placeHolderText", void 0);
+__decorate([
+    Prop,
+    __metadata("design:type", Object)
+], AutoCompleteComponent.prototype, "initialData", void 0);
+__decorate([
+    Prop,
+    __metadata("design:type", Boolean)
+], AutoCompleteComponent.prototype, "cleanUp", void 0);
+__decorate([
+    Prop,
+    __metadata("design:type", Array)
+], AutoCompleteComponent.prototype, "list", void 0);
+AutoCompleteComponent = __decorate([
+    Component({
+        name: "AutoComplete"
+    })
+], AutoCompleteComponent);
 export default AutoCompleteComponent;

@@ -7,6 +7,7 @@ using AussieTowns.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace AussieTowns.Controllers
 {
@@ -15,87 +16,65 @@ namespace AussieTowns.Controllers
     {
         private readonly IMessageService _messageService;
         private readonly IMapper _mapper;
+        private readonly ILogger<MessageController> _logger;
 
-        public MessageController(IMessageService messageService, IMapper mapper)
+        public MessageController(IMessageService messageService, IMapper mapper, ILogger<MessageController> logger)
         {
             _messageService = messageService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
         [Route("user/{userId}")]
-        public async Task<RequestResult>  GetConversationsByUser(int userId)
+        public async Task<IEnumerable<Conversation>>  GetConversationsByUser(int userId)
         {
             try
             {
-                var messages = await _messageService.GetAllConversationsByUser(userId);
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Data = messages
-                };
+                if (userId < 10000) throw new ArgumentOutOfRangeException(nameof(userId));
+
+                return await _messageService.GetAllConversationsByUser(userId);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Data = "Get conversation failed:" + ex.Message
-                };
+                _logger.LogError(e.Message, e);
+                throw;
             }
         }
 
         [HttpGet]
         [Route("conversation/{conversationId}")]
         //[Authorize]
-        public async Task<RequestResult> GetMessagesInConversation(int conversationId)
+        public async Task<IEnumerable<ConversationReply>> GetMessagesInConversation(int conversationId)
         {
             try
             {
-                var messages = await _messageService.GetMessagesInConversation(conversationId);
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Data = messages
-                };
+                if (conversationId < 0) throw new ArgumentOutOfRangeException(nameof(conversationId));
+
+                return await _messageService.GetMessagesInConversation(conversationId);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Data = "Get messages failed:" + ex.Message
-                };
+                _logger.LogError(e.Message, e);
+                throw;
             }
         }
 
         [HttpPost]
         [Route("conversation")]
-        public async Task<RequestResult> Send([FromBody] Message message)
+        public async Task<int> SendMessage([FromBody] Message message)
         {
             try
             {
-                if (message == null)
-                {
-                    throw new Exception("Value cannot be null !");
-                }
-                await _messageService.SendMessage(message);
-                return new RequestResult
-                {
-                    State = RequestState.Success,
-                    Msg = "Update successful",
-                    Data = new ConversationReply { ConversationId = message.ConversationId,MessageContent = message.MessageContent, UserId = message.UserId}
-                };
+                if (message == null) throw new ArgumentNullException(nameof(message));
+
+                return await _messageService.SendMessage(message);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new RequestResult
-                {
-                    State = RequestState.Failed,
-                    Msg = "Send failed:" + ex.Message
-                };
+                _logger.LogError(e.Message, e);
+                throw;
             }
         }
-
     }
 }

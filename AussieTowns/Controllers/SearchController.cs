@@ -7,6 +7,7 @@ using AussieTowns.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,29 +18,19 @@ namespace AussieTowns.Controllers
     {
         private readonly ISearchService _searchService;
         private readonly IMapper _mapper;
+        private readonly ILogger<SearchController> _logger;
 
-        public SearchController(ISearchService searchService, IMapper mapper)
+        public SearchController(ISearchService searchService, IMapper mapper, ILogger<SearchController> logger)
         {
             _searchService = searchService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpPost]
         public IEnumerable<SuburbDetail> SearchByBoundingBox(BoundingBox boundingBox)
         {
             return _searchService.SearchByBoundingBox();
-        }
-
-        [HttpGet]
-        [Route("detail/{postcode}")]
-        public SuburbDetail GetSuburbDetail(int postCode)
-        {
-            return new SuburbDetail
-            {
-                Detail = string.Format("this is a request on postcode {0}", postCode)
-            };
-
-            //return null;
         }
 
         [HttpGet]
@@ -53,10 +44,9 @@ namespace AussieTowns.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e.Message, e);
                 throw;
             }
-
         }
     }
 }

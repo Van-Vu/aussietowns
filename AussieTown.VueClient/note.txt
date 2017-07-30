@@ -20,7 +20,6 @@ Choose font: http://www.websitebuilderexpert.com/pick-best-font-style-for-websit
 
 Task:
 image & video
-book
 transition
 route guard
 final integration
@@ -31,8 +30,13 @@ DONE Cost at floating box
 DONE Check availability
 DONE SES integration
 DONE Choose font
+DONE Password change & forget
+PROGRESS Error handling:
+	- Log server
+	- Log client
+Unit test
 Booking process
-Error handling
+
 
 
 Image processing

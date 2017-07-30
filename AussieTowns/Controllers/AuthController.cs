@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using AussieTowns.Auth;
 using AussieTowns.Common;
 using AussieTowns.Model;
 using AussieTowns.Services;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using ThirdParty.BouncyCastle.OpenSsl;
+using Microsoft.Extensions.Logging;
 
 
 namespace AussieTowns.Controllers
@@ -28,93 +22,132 @@ namespace AussieTowns.Controllers
     public class AuthController
     {
         private readonly IUserService _userService;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IUserService userService)
+        public AuthController(IUserService userService, ILogger<AuthController> logger)
         {
             _userService = userService;
+            _logger = logger;
         }
 
         [HttpGet("verify")]
-        public async Task<JsonResult> VerifyResetToken(string token)
+        public async Task<string> VerifyResetToken(string token)
         {
-            var user = await _userService.VerifyResetToken(token);
+            try
+            {
+                if (string.IsNullOrEmpty(token)) throw new ArgumentNullException(nameof(token));
+                var user = await _userService.VerifyResetToken(token);
+                if (user == null)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(token),"Invalid Token");
+                }
 
-            if (user == null)
-            {
-                return new JsonResult("hey mate, what you're trying to do? Send me an email then we can sort this out. Peace");
+
+                return user.FirstName;
             }
-            else
+            catch (Exception e)
             {
-                return new JsonResult(user.FirstName);
+                _logger.LogError(e.Message,e);
+                throw;
             }
         }
 
         [HttpPost("requestreset")]
-        public async Task<JsonResult> RequestPasswordReset([FromBody] ResetRequest request)
+        public async Task<int> RequestPasswordReset([FromBody] ResetRequest request)
         {
-            if (string.IsNullOrEmpty(request?.Email))
+            try
             {
-                return new JsonResult("hey mate, what you're trying to do? Send me an email then we can sort this out. Peace");
+                if (request == null) throw new ArgumentNullException(nameof(request));
+                if (string.IsNullOrEmpty(request.Email))
+                {
+                    throw new ArgumentNullException(nameof(request), "Email is required");
+                }
+
+
+                var user = (await _userService.SearchUser(request.Email)).FirstOrDefault();
+
+                if (user == null)
+                {
+                    _logger.LogInformation("Can't find user with email: {email}", request.Email);
+                    throw new ArgumentOutOfRangeException(nameof(request), "Invalid Request");
+                }
+
+                var reset = await _userService.RequestPasswordReset(user.Id);
+
+                return reset;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                throw;
             }
 
-
-            var user = (await _userService.SearchUser(request.Email)).FirstOrDefault();
-
-            if (user == null)
-            {
-                return new JsonResult("hey mate, what you're trying to do? Send me an email then we can sort this out. Peace");
-            }
-
-            var reset = _userService.RequestPasswordReset(user.Id);
-
-            return new JsonResult(reset);
         }
 
         [HttpPost("resetpassword")]
-        public async Task<JsonResult> ResetPassword([FromBody] PasswordReset request)
+        public async Task<int> ResetPassword([FromBody] PasswordReset request)
         {
-            if (string.IsNullOrEmpty(request?.ResetToken) || request.IsChangePassword)
+            try
             {
-                return new JsonResult("hey mate, what you're trying to do? Send me an email then we can sort this out. Peace");
+                if (request == null) throw new ArgumentNullException(nameof(request));
+
+                if (string.IsNullOrEmpty(request.ResetToken) || request.IsChangePassword)
+                {
+                    throw new ArgumentNullException(nameof(request), "Token is required");
+                }
+
+                var user = await _userService.VerifyResetToken(request.ResetToken);
+                if (user == null)
+                {
+                    _logger.LogInformation("Can't find user with email: {email}", request.Email);
+                    throw new ArgumentOutOfRangeException(nameof(request), "Invalid Request");
+                }
+
+                var realPassword = request.NewPassword.RsaDecrypt();
+                user.Salt = Sha512Hashing.GetSalt();
+                user.Password = (realPassword + user.Salt).GetHash();
+                user.UpdatedDate = DateTime.Now;
+
+                var reset = await _userService.UpdatePassword(user, request.IsChangePassword);
+
+                return reset;
             }
-
-            var user = await _userService.VerifyResetToken(request.ResetToken);
-
-            if (user == null)
+            catch (Exception e)
             {
-                return new JsonResult("hey mate, what you're trying to do? Send me an email then we can sort this out. Peace");
+                _logger.LogError(e.Message,e);
+                throw;
             }
-
-            var realPassword = request.NewPassword.RsaDecrypt();
-            user.Salt = Sha512Hashing.GetSalt();
-            user.Password = (realPassword + user.Salt).GetHash();
-            user.UpdatedDate = DateTime.Now;
-
-            var reset = _userService.UpdatePassword(user, request.IsChangePassword);
-
-            return new JsonResult(reset);
         }
 
         [HttpPost("changepassword")]
-        public async Task<JsonResult> ChangePassword([FromBody] PasswordReset request)
+        public async Task<int> ChangePassword([FromBody] PasswordReset request)
         {
-            if ((!request.IsChangePassword) || (request.OldPassword == request.NewPassword))
+            try
             {
-                return new JsonResult("hey mate, what you're trying to do? Send me an email then we can sort this out. Peace");
-            }
+                if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var existingUser = (await _userService.SearchUser(request.Email)).FirstOrDefault();
+                if (!request.IsChangePassword || (request.OldPassword == request.NewPassword))
+                {
+                    throw new ArgumentOutOfRangeException(nameof(request), "Invalid Request");
+                }
 
-            if (existingUser == null)
-            {
-                return new JsonResult("hey mate, what you're trying to do? Send me an email then we can sort this out. Peace");
-            }
+                var existingUser = (await _userService.SearchUser(request.Email)).FirstOrDefault();
 
-            var oldPassword = request.OldPassword.RsaDecrypt();
-            var oldPasswordHash = (oldPassword + existingUser.Salt).GetHash();
+                if (existingUser == null)
+                {
+                    _logger.LogInformation("Can't find user with email {email}", request.Email);
+                    throw new ArgumentOutOfRangeException(nameof(request), "Invalid Request");
+                }
 
-            if (oldPasswordHash == existingUser.Password)
-            {
+                var oldPassword = request.OldPassword.RsaDecrypt();
+                var oldPasswordHash = (oldPassword + existingUser.Salt).GetHash();
+
+                if (oldPasswordHash != existingUser.Password)
+                {
+                    _logger.LogInformation("user {email}: oldPassword {oldPassword} is invalid", request.Email, request.OldPassword);
+                    throw new ArgumentOutOfRangeException(nameof(request), "Invalid Request");
+                }
+
                 var newPassword = request.NewPassword.RsaDecrypt();
                 existingUser.Salt = Sha512Hashing.GetSalt();
                 existingUser.Password = (newPassword + existingUser.Salt).GetHash();
@@ -123,10 +156,13 @@ namespace AussieTowns.Controllers
 
                 var reset = await _userService.UpdatePassword(existingUser, request.IsChangePassword);
 
-                return new JsonResult(reset);
+                return reset;
             }
-
-            return new JsonResult(string.Empty);
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message,e);
+                throw;
+            }
         }
     }
 }

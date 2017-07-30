@@ -1,13 +1,8 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -53,31 +48,31 @@ var ParticipantComponent = (function (_super) {
         //this.internalUsers.splice(this.internalUsers.indexOf(user), 1);
         this.$emit("userRemoved", user);
     };
-    __decorate([
-        Prop,
-        __metadata("design:type", Array)
-    ], ParticipantComponent.prototype, "participants", void 0);
-    __decorate([
-        Prop,
-        __metadata("design:type", String)
-    ], ParticipantComponent.prototype, "participantType", void 0);
-    __decorate([
-        Prop,
-        __metadata("design:type", Boolean)
-    ], ParticipantComponent.prototype, "isEditing", void 0);
-    __decorate([
-        Prop({ default: true }),
-        __metadata("design:type", Boolean)
-    ], ParticipantComponent.prototype, "allowAdd", void 0);
-    ParticipantComponent = __decorate([
-        Component({
-            name: "ParticipantComponent",
-            components: {
-                "miniprofile": MiniProfileComponent,
-                "usersearch": UserSearchComponent
-            }
-        })
-    ], ParticipantComponent);
     return ParticipantComponent;
 }(Vue));
+__decorate([
+    Prop,
+    __metadata("design:type", Array)
+], ParticipantComponent.prototype, "participants", void 0);
+__decorate([
+    Prop,
+    __metadata("design:type", String)
+], ParticipantComponent.prototype, "participantType", void 0);
+__decorate([
+    Prop,
+    __metadata("design:type", Boolean)
+], ParticipantComponent.prototype, "isEditing", void 0);
+__decorate([
+    Prop({ default: true }),
+    __metadata("design:type", Boolean)
+], ParticipantComponent.prototype, "allowAdd", void 0);
+ParticipantComponent = __decorate([
+    Component({
+        name: "ParticipantComponent",
+        components: {
+            "miniprofile": MiniProfileComponent,
+            "usersearch": UserSearchComponent
+        }
+    })
+], ParticipantComponent);
 export default ParticipantComponent;

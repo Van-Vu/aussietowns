@@ -34,7 +34,12 @@
     "AWSSDK.Core": "3.3.14.2",
     "AWSSDK.S3": "3.3.7",
     "AWSSDK.SQS": "3.3.1",
-    "MailKit": "1.16.2"
+    "MailKit": "1.16.2",
+    "Serilog": "2.5.0",
+    "Serilog.Extensions.Logging": "1.4.0",
+    "Serilog.Sinks.File": "3.2.0",
+    "Serilog.Sinks.RollingFile": "3.3.0",
+    "Serilog.Settings.Configuration": "2.4.0" 
   },
 
   "tools": {

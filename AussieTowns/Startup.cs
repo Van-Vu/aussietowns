@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using AussieTowns.Auth;
 using AussieTowns.Common;
 using AussieTowns.Model;
@@ -7,19 +6,19 @@ using AussieTowns.Repository;
 using AussieTowns.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Serilog;
+using Serilog.Formatting.Json;
+using Serilog.Sinks.RollingFile;
 
 
 namespace AussieTowns
@@ -35,6 +34,28 @@ namespace AussieTowns
                 .AddJsonFile("config.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            //Log.Logger = new LoggerConfiguration()
+            //    .ReadFrom.Configuration(Configuration)
+            //    .CreateLogger();
+
+            var jsonSink = new RollingFileSink(@"meeththelocal-{Date}.json", new JsonFormatter(), 104857600, null);
+            if (env.IsDevelopment())
+            {
+                Log.Logger = new LoggerConfiguration()
+                    .Enrich.FromLogContext()
+                    .MinimumLevel.Information()
+                    .WriteTo.Sink(jsonSink)
+                    .CreateLogger();
+            }
+            else
+            {
+                Log.Logger = new LoggerConfiguration()
+                    .Enrich.FromLogContext()
+                    .MinimumLevel.Error()
+                    .WriteTo.Sink(jsonSink)
+                    .CreateLogger();
+            }
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -99,25 +120,34 @@ namespace AussieTowns
             //Use a MySQL database
             var mySqlConnectionString = Configuration.GetConnectionString("DataAccessMySqlProvider");
 
-
             services.AddOptions();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
-            services.AddSingleton<ISearchService, SearchService>();
-            services.AddSingleton<IUserService, UserService>();
-            services.AddSingleton<IListingService, ListingService>();
-            services.AddSingleton<IMessageService, MessageService>();
-            services.AddSingleton<ILocationRepository, LocationRepository>(x => new LocationRepository(mySqlConnectionString));
-            services.AddSingleton<IUserRepository, UserRepository>(x => new UserRepository(mySqlConnectionString));
-            services.AddSingleton<IListingRepository, ListingRepository>(x => new ListingRepository(mySqlConnectionString));
-            services.AddSingleton<IMessageRepository, MessageRepository>(x => new MessageRepository(mySqlConnectionString));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient<ISearchService, SearchService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IListingService, ListingService>();
+            services.AddTransient<IMessageService, MessageService>();
+
+            // Bodom: resolve service in ConfigureServices
+            var serviceProvider = services.BuildServiceProvider();
+
+            services.AddTransient<ILocationRepository, LocationRepository>(x => new LocationRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<LocationRepository>>()));
+            services.AddTransient<IUserRepository, UserRepository>(x => new UserRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<UserRepository>>()));
+            services.AddTransient<IListingRepository, ListingRepository>(x => new ListingRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<ListingRepository>>()));
+            services.AddTransient<IMessageRepository, MessageRepository>(x => new MessageRepository(mySqlConnectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //loggerFactory.AddDebug();
+            loggerFactory.AddSerilog();
+
+            // Ensure any buffered events are sent at shutdown
+            appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
             if (env.IsDevelopment())
             {

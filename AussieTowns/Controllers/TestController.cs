@@ -1,20 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AussieTowns.Extensions;
 using AussieTowns.Model;
+using AussieTowns.Services;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MimeKit;
 using Newtonsoft.Json;
+
 
 namespace AussieTowns.Controllers
 {
     [Route("api/[controller]")]
     public class TestController
     {
+        private readonly ILogger _logger;
+        private readonly ISearchService _searchService;
+
+        public TestController(ILogger<TestController> logger, ISearchService searchService)
+        {
+            _logger = logger;
+            _searchService = searchService;
+        }
+
+        [HttpGet("test")]
+        public void TestLog()
+        {
+            var count = 456;
+            _logger.LogError("Retrieved {Count} records", count);
+            _searchService.SearchByBoundingBox();
+        }
+
         [HttpGet("sqs")]
         public void TestSqs()
         {

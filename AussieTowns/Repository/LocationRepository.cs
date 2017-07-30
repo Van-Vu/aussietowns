@@ -3,13 +3,18 @@ using System.Data;
 using System.Threading.Tasks;
 using AussieTowns.Model;
 using Dapper;
+using Microsoft.Extensions.Logging;
 
 namespace AussieTowns.Repository
 {
     public class LocationRepository: RepositoryBase, ILocationRepository
     {
-        public LocationRepository(string connString): base(connString)
-        {}
+        private readonly ILogger _logger;
+
+        public LocationRepository(string connString, ILogger<LocationRepository> logger) : base(connString)
+        {
+            _logger = logger;
+        }
 
         public IEnumerable<SuburbDetail> GetLocationsByBoundingBox()
         {
@@ -29,6 +34,13 @@ namespace AussieTowns.Repository
                 dbConnection.Open();
                 return await dbConnection.QueryAsync<SuburbDetail>(sql, new { name = suburbName });
             }
+        }
+
+        public Task<int> TestLogger()
+        {
+            _logger.LogError("from Location Repository");
+
+            return null;
         }
     }
 }
