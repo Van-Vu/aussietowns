@@ -19,8 +19,9 @@ import { Component } from "vue-property-decorator";
 import UserService from '../../service/user.service';
 import VeeValidate from 'vee-validate';
 import LoginModel from '../../model/login.model';
-import { UserSource } from '../../model/enum';
+import { UserSource, UserRole } from '../../model/enum';
 import { fetchPublicKey, decryptTextFromServer, requestPasswordReset, encryptText } from '../../service/auth.service';
+import { NotificationType } from '../../model/enum';
 Vue.use(VeeValidate);
 var LoginForm = (function (_super) {
     __extends(LoginForm, _super);
@@ -65,6 +66,9 @@ var LoginForm = (function (_super) {
             _this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
             _this.setCookies(responseToken.accessToken);
             _this.$emit('onSuccessfulLogin');
+        })
+            .catch(function (error) {
+            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: error, type: NotificationType.Error });
         });
     };
     LoginForm.prototype.signup = function (model) {
@@ -72,6 +76,7 @@ var LoginForm = (function (_super) {
         if (model.password) {
             model.password = encryptText(model.password);
         }
+        model.role = UserRole.User;
         (new UserService()).signup(model)
             .then(function (responseToken) {
             _this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);

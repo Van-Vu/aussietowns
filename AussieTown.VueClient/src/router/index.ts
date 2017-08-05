@@ -57,11 +57,6 @@ const router = new Router({
     mode: 'history',
     routes: [
         {
-            path: "/",
-            name: "defaultHome",
-            component: HomePage
-        },
-        {
             path: "/home",
             name: "home",
             component: HomePage
@@ -104,7 +99,7 @@ const router = new Router({
                 {
                     path: 'trips',
                     name: 'profileTrips',
-                    meta: { requiresAuth: true },
+                    meta: { requiresAuth: false },
                     component: TripComponent
                 },
                 {
@@ -171,25 +166,28 @@ const router = new Router({
             path: "/test",
             name: "TestPage",
             component: TestPage
-        },
-        {
-            path: "*",
-            redirect: "/"
         }
   ]
 })
 
 router.beforeEach((to, from, next) => {
+    store.dispatch("ENABLE_LOADING")
+
     if (to.matched.some(record => record.meta.requiresAuth)) {
         // this route requires auth, check if logged in
         // if not, redirect to login page.
+        //if (!auth.loggedIn()) {
+        //    next({
+        //        path: '/login',
+        //        query: { redirect: to.fullPath }
+        //    })
+        //} else {
         console.log('inside route of Auth')
         next()
+        
+    } else {
+        next() // make sure to always call next()!
     }
-
-    store.dispatch("ENABLE_LOADING")
-
-    next()
 })
 
 

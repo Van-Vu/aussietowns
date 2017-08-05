@@ -12,14 +12,17 @@ import UserModel from '../../model/user.model';
 })
 
 export default class TripComponent extends Vue {
-    offers: ListingModel[] = new Array<ListingModel>();
-    requests: ListingModel[] = new Array<ListingModel>();
-
-    created(): void {
-        if (this.$store.state.profile) {
-            var profile = this.$store.state.profile as UserModel;
-            if (profile.operatorListings) this.offers = profile.operatorListings;
-            if (profile.guestListings) this.requests = profile.guestListings;
+    asyncData({ store, route }) {
+        if (route.params.profileId) {
+            return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
         }
+    }
+
+    get offers() {
+        return this.$store.state.profile.operatorListings;
+    }
+
+    get requests() {
+        return this.$store.state.profile.guestListings;
     }
 }

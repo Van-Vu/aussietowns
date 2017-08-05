@@ -21,7 +21,7 @@ export default class UserSearchComponent extends Vue {
 
     onUserSearch(searchTerm) {
         (new SearchService()).getUser(searchTerm)
-            .then(response => this.users = response);
+            .then(response => this.users = response as any);
     }
 
     onUserSelected(selectedItem) {

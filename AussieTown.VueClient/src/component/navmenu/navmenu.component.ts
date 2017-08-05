@@ -4,6 +4,8 @@ import LoginModal from '../modal/loginmodal.component.vue';
 import MenuModal from '../modal/menumodal.component.vue';
 import RegistrationModal from '../modal/registrationmodal.component.vue';
 import SearchBarComponent from '../shared/search/searchbar.component.vue';
+import { AutocompleteItem } from '../../model/autocomplete.model';
+import { Utils } from '../utils';
 
 @Component({
     name: 'nav-menu',
@@ -21,10 +23,10 @@ export default class NavMenuComponent extends Vue {
     isMenuOpen = false;
     isSticky = false;
     process: any;
-    profilePhoto = '';
-    isLoggedIn = false;
+    //profilePhoto = '';
+    //isLoggedIn = false;
+    searchSuburb: AutocompleteItem = null;
 
-    showSecondSearchBar: boolean = false;
     showLoginModal: boolean = false;
     showRegistrationModal: boolean = false;
     showMenuModal: boolean = false;
@@ -36,13 +38,17 @@ export default class NavMenuComponent extends Vue {
         return this.$store.state.currentPage;
     }
 
+    get isLoggedIn() {
+        return this.$store.getters.isLoggedIn;
+    }
+
+    get profilePhoto() {
+        return this.$store.getters.profilePhoto;
+    }
+
     created() {
         if (process.env.VUE_ENV === 'client') {
             window.addEventListener('scroll', this.handleScroll);
-        }
-
-        if (this.currentPage != null && this.currentPage !== 'home') {
-            this.showSecondSearchBar = true;
         }
     }
 
@@ -53,63 +59,49 @@ export default class NavMenuComponent extends Vue {
     }
 
     handleScroll(event) {
-        let timeNow = Date.now();
-
-        if (timeNow - this.currentTime > 50) {
-            // Blacken header color
-            if (window.scrollY > 100) {
+        if (this.currentPage != null && this.currentPage === 'home') {
+            //console.log(this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top);
+            if (this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top < 0) {
                 this.isSticky = true;
             } else {
                 this.isSticky = false;
             }
-
-            // Attach search bar
-            this.triggerSecondSearchBar();
-
-            this.currentTime = timeNow;
         }
-    }
-
-    triggerSecondSearchBar() {
-        if (this.currentPage != null && this.currentPage === 'home') {
-            //console.log(this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top);
-            if (this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top < 0) {
-                this.showSecondSearchBar = true;
-            } else {
-                this.showSecondSearchBar = false;
-            }
-        }        
-    }
-
-
-    @Watch('currentPage')
-    onCurrentPageChanged(value: string, oldValue: string) {
-        this.triggerSecondSearchBar();
-    }
-
-    @Watch('showSecondSearchBar')
-    onShowSecondSearchBarChanged(value: string, oldValue: string) {
-        console.log(`secondbar value ${value}`);
     }
 
     @Watch('$route.params')
     onRouteParamChanged(value: string, oldValue: string) {
         this.showMenuModal = false;
         this.showLoginModal = false;
-        if (this.currentPage != null && this.currentPage != 'home') {
-            this.showSecondSearchBar = true;
+        if (this.$route.name != 'home') {
+            this.isSticky = true;
+        } else {
+            this.isSticky = false;
         }
+
+        this.searchSuburb = null;
     }
 
     onSuccessfulLogin() {
         this.showLoginModal = false;
     }
 
-    onSelect() { console.log('select'); }
-    onSearch() { console.log('search'); }
+    onSelect(val: AutocompleteItem) {
+        this.searchSuburb = val;
+    }
+
+    onSearch(val) {
+        if (this.searchSuburb) {
+            this.$router.push({ name: 'search', params: { seoString: Utils.seorizeString(this.searchSuburb.name), suburbId: this.searchSuburb.id } });
+        }
+    }
 
     mounted() {
-        this.profilePhoto = this.$store.getters.profilePhoto;
-        this.isLoggedIn = this.$store.getters.isLoggedIn;
+        //this.profilePhoto = this.$store.getters.profilePhoto;
+        //this.isLoggedIn = this.$store.getters.isLoggedIn;
+
+        if (this.$store.state.currentPage != 'home') {
+            this.isSticky = true;
+        }
     }
 }

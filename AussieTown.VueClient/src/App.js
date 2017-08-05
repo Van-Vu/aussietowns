@@ -15,10 +15,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import Vue from "vue";
-import Component from "vue-class-component";
+import { Component } from "vue-property-decorator";
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 import NotificationComponent from './component/shared/notification.component.vue';
 import LoadingComponent from './component/shared/loading.component.vue';
+import LogService from './service/log.service';
 import "reflect-metadata";
 //if (process.env.VUE_ENV === 'client') {
 //    Vue.component('datepicker', require('vuejs-datepicker'))
@@ -46,24 +47,42 @@ Vue.directive('focus', {
 });
 import VueMask from 'v-mask';
 Vue.use(VueMask);
-//Vue.config.errorHandler = function (err, vm, info) {
-//    // handle error
-//    // `info` is a Vue-specific error info, e.g. which lifecycle hook
-//    // the error was found in. Only available in 2.2.0+
-//    console.log('damn it!');
-//    console.log(info);
-//    console.log(err);
-//}
+import vMediaQuery from './component/shared/external/v-media-query';
+Vue.use(vMediaQuery);
+Vue.config.errorHandler = function (err, vm, info) {
+    // handle error
+    // `info` is a Vue-specific error info, e.g. which lifecycle hook
+    // the error was found in. Only available in 2.2.0+
+    console.log('damn it!');
+    console.log(info);
+    console.log(err);
+    (new LogService()).logError(err.message, err.stack);
+};
 var App = (function (_super) {
     __extends(App, _super);
     function App() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    Object.defineProperty(App.prototype, "currentPage", {
+        get: function () {
+            return this.$store.state.currentPage;
+        },
+        set: function (value) {
+            this.currentPage = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     App.prototype.mounted = function () {
         // Bodom hack: hacky way to hide loading screen on server load
         this.$el.parentElement.childNodes[0].style.display = "none";
         // Bodom hack: disable in case of jumping directly to a page
         this.$store.dispatch("DISABLE_LOADING");
+        // Bodom hack: https://stackoverflow.com/questions/41185809/vue-js-v-bindclass-doesnt-update-even-though-model-does
+        if (this.$store.state.currentPage == 'home') {
+            Vue.delete(this.$store.state, 'currentPage');
+            Vue.set(this.$store.state, 'currentPage', 'home');
+        }
     };
     App = __decorate([
         Component({

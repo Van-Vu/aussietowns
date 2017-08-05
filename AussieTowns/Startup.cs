@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Amazon.Runtime.Internal;
 using AussieTowns.Auth;
 using AussieTowns.Common;
 using AussieTowns.Model;
@@ -41,12 +42,12 @@ namespace AussieTowns
             //    .ReadFrom.Configuration(Configuration)
             //    .CreateLogger();
 
-            var jsonSink = new RollingFileSink(@"meeththelocal-{Date}.json", new JsonFormatter(), 104857600, null);
+            var jsonSink = new RollingFileSink(@"logs\meeththelocal-{Date}.json", new JsonFormatter(), 104857600, null);
             if (env.IsDevelopment())
             {
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
-                    .MinimumLevel.Information()
+                    .MinimumLevel.Error()
                     .WriteTo.Sink(jsonSink)
                     .CreateLogger();
             }
@@ -175,16 +176,20 @@ namespace AussieTowns
 
                     // Bodom: have to manually push this to response stream otherwise client will receive response=undefined
                     context.Response.Headers.Add("Access-Control-Allow-Origin", context.Request.Headers["Access-Control-Allow-Origin"]);
-                    context.Response.Headers.Add("Access-Control-Allow-Credentials", context.Request.Headers["Access-Control-Allow-Credentials"]);
-                    context.Response.Headers.Add("Access-Control-Allow-Headers", context.Request.Headers["Access-Control-Allow-Headers"]);
+                    context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
 
+                    // Bodom: refactor this to Switch
                     if (error != null && (error.Error is ArgumentNullException || error.Error is ValidationException))
                     {
-                        context.Response.StatusCode = 401;
+                        context.Response.StatusCode = 400;
                     }
                     else if (error?.Error is SecurityTokenExpiredException)
                     {
                         context.Response.StatusCode = 401;
+                    }
+                    else if (error?.Error is UnauthorizedAccessException)
+                    {
+                        context.Response.StatusCode = 403;
                     }
                     else if (error != null && (error?.Error is ArgumentOutOfRangeException || error.Error is KeyNotFoundException))
                     {
@@ -195,6 +200,12 @@ namespace AussieTowns
                         context.Response.StatusCode = 500;
                     }
                     else await next();
+
+                    if (error?.Error != null)
+                    {
+                        context.Response.ContentType = "application/json";
+                        await context.Response.WriteAsync(error.Error.Message);
+                    }
                 });
             });
             #endregion

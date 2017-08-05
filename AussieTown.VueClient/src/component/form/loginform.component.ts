@@ -4,10 +4,11 @@ import UserService from '../../service/user.service';
 
 import VeeValidate from 'vee-validate';
 import LoginModel from '../../model/login.model';
-import { UserSource } from '../../model/enum';
+import { UserSource, UserRole } from '../../model/enum';
 
 import { fetchPublicKey, decryptTextFromServer, requestPasswordReset, encryptText } from '../../service/auth.service';
 import { GlobalConfig } from '../../GlobalConfig';
+import { NotificationType } from '../../model/enum';
 
 Vue.use(VeeValidate);
 
@@ -57,17 +58,21 @@ export default class LoginForm extends Vue {
         }
 
         (new UserService()).login(model)
-        .then(responseToken => {
-            this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-            this.setCookies(responseToken.accessToken);
-            this.$emit('onSuccessfulLogin');
-        });
+            .then(responseToken => {
+                this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
+                this.setCookies(responseToken.accessToken);
+                this.$emit('onSuccessfulLogin');
+            })
+            .catch(error => {
+                this.$store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: error, type: NotificationType.Error });
+            });
     }
 
     signup(model) {
         if (model.password) {
             model.password = encryptText(model.password);    
         }
+        model.role = UserRole.User;
 
         (new UserService()).signup(model)
         .then(responseToken => {

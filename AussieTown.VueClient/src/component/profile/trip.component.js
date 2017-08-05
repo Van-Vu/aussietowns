@@ -20,20 +20,28 @@ import CardFullComponent from '../shared/listingcard.component.vue';
 var TripComponent = (function (_super) {
     __extends(TripComponent, _super);
     function TripComponent() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.offers = new Array();
-        _this.requests = new Array();
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    TripComponent.prototype.created = function () {
-        if (this.$store.state.profile) {
-            var profile = this.$store.state.profile;
-            if (profile.operatorListings)
-                this.offers = profile.operatorListings;
-            if (profile.guestListings)
-                this.requests = profile.guestListings;
+    TripComponent.prototype.asyncData = function (_a) {
+        var store = _a.store, route = _a.route;
+        if (route.params.profileId) {
+            return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
         }
     };
+    Object.defineProperty(TripComponent.prototype, "offers", {
+        get: function () {
+            return this.$store.state.profile.operatorListings;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TripComponent.prototype, "requests", {
+        get: function () {
+            return this.$store.state.profile.guestListings;
+        },
+        enumerable: true,
+        configurable: true
+    });
     TripComponent = __decorate([
         Component({
             name: "TripComponent",

@@ -24,6 +24,7 @@ export default new Vuex.Store({
         createPersistedState({
             getState: (key) => Cookies.getJSON(key),
             setState: (key, state) => Cookies.set(key, state, { expires: 3, secure: false }),
+            filter: (mutation) => { return mutation.type === 'UPDATE_CURRENT_USER' },
             key: 'mtl',
             paths: ['loggedInUser']
         })
@@ -39,7 +40,8 @@ export default new Vuex.Store({
         message: '',
         notifications: [],
         booking: {},
-        isLoading: ''
+        isLoading: '',
+        featureListings: ''
     },
     getters: {
         isLoggedIn: state => {
@@ -58,7 +60,15 @@ export default new Vuex.Store({
         },
         FETCH_LISTING_BY_ID({ commit, state }, id) {
             return (new ListingService()).getListingById(id)
-                .then(response => commit('UPDATE_LISTING', (response as any).data));
+                .then(response => {
+                    commit('UPDATE_LISTING', response);
+                });
+        },
+        FETCH_FEATURELISTINGS({ commit }) {
+            return (new ListingService()).getFeatureListings()
+                .then(response => {
+                    commit('UPDATE_FEATURELISTINGS', response);
+                });
         },
         UPDATE_LISTING({ commit, state }, listing) {
             (new ListingService()).updateListing(listing);
@@ -70,7 +80,7 @@ export default new Vuex.Store({
         },
         FETCH_PROFILE_BY_ID({ dispatch, commit, state }, id) {
             return (new UserService()).getById(id).then(response => {
-                commit('UPDATE_PROFILE', (response as any).data);
+                commit('UPDATE_PROFILE', response);
             });
         },
         UPDATE_USER({ commit, state }, profile) {
@@ -83,23 +93,23 @@ export default new Vuex.Store({
         },
         SEARCH_LISTINGS_BY_SUBURB({ commit, state }, suburbId) {
             return (new ListingService()).getListingBySuburb(suburbId).then(response => {
-                commit('UPDATE_SEARCH_LISTINGS', (response as any).data);
+                commit('UPDATE_SEARCH_LISTINGS', response);
             });
         },
         FETCH_CONVERSATIONS_BY_USER({dispatch, commit, state }, userId) {
             return (new MessageService()).getConversations(userId).then(response => {
-                commit('UPDATE_CONVERSATIONS', (response as any).data);
+                commit('UPDATE_CONVERSATIONS', response);
             });
         },
         FETCH_CONVERSATION_CONTENT({ commit, state }, conversationId) {
             return (new MessageService()).getConversationContent(conversationId).then(response => {
-                commit('UPDATE_CONVERSATION_MESSAGES', (response as any).data);
+                commit('UPDATE_CONVERSATION_MESSAGES', response);
             });            
         },
         SEND_MESSAGE({commit, state}, message)
         {
             return (new MessageService()).sendMessage(message).then(response => {
-                commit('ADD_MESSAGE', (response as any).data);
+                commit('ADD_MESSAGE', response);
             });                
         },
         ADD_NOTIFICATION({ dispatch, commit }, notification) {
@@ -143,9 +153,11 @@ export default new Vuex.Store({
             Vue.set(state, 'currentPage', page);
         },
         UPDATE_LISTING(state, listing) {
-            console.log('update listing');
             let listingObject = plainToClass(ListingModel, listing);
             Vue.set(state, 'listing', listingObject);
+        },
+        UPDATE_FEATURELISTINGS(state, listings) {
+            state.featureListings = listings;
         },
         UPDATE_PROFILE(state, profile) {
             state.profile = profile;

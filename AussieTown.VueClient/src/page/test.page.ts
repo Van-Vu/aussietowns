@@ -4,6 +4,8 @@ import SearchBarComponent from '../component/shared/search/searchbar.component.v
 import Swiper from '../component/shared/external/vue-swiper.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
 import UserService from '../service/user.service';
+import { NotificationType } from '../model/enum';
+
 
 @Component({
     name: 'TestPage',
@@ -53,7 +55,7 @@ export default class TestPage extends Vue {
     }
 
     addNotification() {
-        this.$store.dispatch('ADD_NOTIFICATION', { title: "this is title", text: "this is the text" });
+        this.$store.dispatch('ADD_NOTIFICATION', { title: "this is title", text: "this is the text", type: NotificationType.Success });
     }
 
 }

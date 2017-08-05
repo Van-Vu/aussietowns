@@ -17,14 +17,20 @@ Vue.use(VeeValidate);
 })
 
 export default class UserDetailComponent extends Vue {
-    model: UserModel = new UserModel();
     isEditing: boolean = false;
     modelCache: any = null;
 
-    created() {
-        if (this.$store.state.profile) {
-            this.model = this.$store.state.profile;
+    get model() {
+        return this.$store.state.profile;
+    }
+
+    asyncData({ store, route }) {
+        if (route.params.profileId) {
+            return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
         }
+    }
+
+    created() {
     }
 
     onLocationSelected(item: AutocompleteItem) {

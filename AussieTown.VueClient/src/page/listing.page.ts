@@ -1,5 +1,5 @@
 ﻿import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import { AutocompleteItem } from '../model/autocomplete.model';
 import ParticipantComponent from '../component/shared/participant.component.vue';
@@ -51,8 +51,15 @@ export default class ListingPage extends Vue{
 
     modelCache: any = null;
 
+    get model() {
+        this.isOffer = this.$store.state.listing.listingType == ListingType.Offer;
+        return this.$store.state.listing;
+    }
 
-    model: ListingModel = null;
+    //@Watch('$route.state.listing', { deep: true })
+    //onModelChanged(value: any, oldValue: any) {
+    //    this.isOffer = value.listingType == ListingType.Offer;
+    //}
 
     asyncData({ store, route }) {
         if (route.params.listingId) {
@@ -61,27 +68,6 @@ export default class ListingPage extends Vue{
     }
 
     created() {
-        if (this.listingType) {
-            this.isOffer = Utils.listingTypeConvert(this.listingType) === ListingType.Offer;
-            this.model = new ListingModel();
-            this.isEditing = true;
-        } else {
-            if (this.$store.state.listing) {
-                this.model = this.$store.state.listing;
-                this.isOffer = this.model.listingType == ListingType.Offer;
-            } else {
-                if (this.$route.params.listingId) {
-                    console.log('in CREATED');
-                    this.$store.dispatch('FETCH_LISTING_BY_ID', this.$route.params.listingId).then(() => {
-                        this.model = this.$store.state.listing;
-                        this.isOffer = this.model.listingType == ListingType.Offer;
-                    });
-                }
-            }
-        }
-
-
-
         this.$store.dispatch('SET_CURRENT_PAGE', 'listing');
     }
 

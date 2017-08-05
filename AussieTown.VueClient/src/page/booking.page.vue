@@ -1,5 +1,5 @@
 ﻿<template>
-    <div class="container is-fluid tile">
+    <div class="page-content container tile is-parent">
         <div class="listing-main-content tile is-vertical is-ancestor box is-7">
             <h2>Participant Details</h2>
             <details class="tile is-vertical is-parent box" v-for="(user, index) in model.participants">

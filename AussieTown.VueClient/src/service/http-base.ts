@@ -19,8 +19,8 @@ const http = axios.create({
 
 http.defaults.withCredentials = true;
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';
-axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
-axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Authorization';
+//axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
+//axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Authorization';
 //axios.defaults.headers.common['Access-Control-Request-Method'] = "GET, POST, PUT, DELETE, OPTIONS";
 
 
@@ -36,7 +36,11 @@ http.interceptors.request.use(function (config) {
 
 // Full code: https://github.com/mzabriskie/axios/issues/690
 // Add a response interceptor
-http.interceptors.response.use(response => response, error => {
+http.interceptors.response.use(response => {
+    console.log('from interceptor');
+    //console.log(response);
+    return response.data;
+}, error => {
     //let originalRequest = error.config;
     //if (error.response.status === 401) {
     //    return '401';
@@ -51,6 +55,8 @@ http.interceptors.response.use(response => response, error => {
     //    return;
     //}
     // Do something with response error
+    if (error.response) return Promise.reject(error.response);
+
     return Promise.reject(error);
 });
 

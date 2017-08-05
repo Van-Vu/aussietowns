@@ -2,6 +2,11 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import { app, router, store } from './root';
 export default function (context) {
+    if (context.cookies.mtl) {
+        var mtl = JSON.parse(context.cookies.mtl);
+        if (mtl.loggedInUser)
+            store.state.loggedInUser = mtl.loggedInUser;
+    }
     return new Promise(function (resolve, reject) {
         // set server-side router's location
         router.push(context.url);

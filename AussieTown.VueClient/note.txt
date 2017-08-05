@@ -31,14 +31,20 @@ DONE Check availability
 DONE SES integration
 DONE Choose font
 DONE Password change & forget
-PROGRESS Error handling:
-	- Log server
-	- Log client
+DONE Error handling:
+	DONE - Log server
+	DONE Log client
+DONE Refactor isSticky & showSecondSearchBar
+
+PROGRESS Page layout
+
+Throttle Location / User search
+Performance test
 Unit test
 Booking process
 
 
-Bloc post:
+Blog post:
 - Authentication
 - CORS: startup line 177
 

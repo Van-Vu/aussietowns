@@ -15,6 +15,7 @@ export default new Vuex.Store({
         createPersistedState({
             getState: function (key) { return Cookies.getJSON(key); },
             setState: function (key, state) { return Cookies.set(key, state, { expires: 3, secure: false }); },
+            filter: function (mutation) { return mutation.type === 'UPDATE_CURRENT_USER'; },
             key: 'mtl',
             paths: ['loggedInUser']
         })
@@ -30,7 +31,8 @@ export default new Vuex.Store({
         message: '',
         notifications: [],
         booking: {},
-        isLoading: ''
+        isLoading: '',
+        featureListings: ''
     },
     getters: {
         isLoggedIn: function (state) {
@@ -52,7 +54,16 @@ export default new Vuex.Store({
         FETCH_LISTING_BY_ID: function (_a, id) {
             var commit = _a.commit, state = _a.state;
             return (new ListingService()).getListingById(id)
-                .then(function (response) { return commit('UPDATE_LISTING', response.data); });
+                .then(function (response) {
+                commit('UPDATE_LISTING', response);
+            });
+        },
+        FETCH_FEATURELISTINGS: function (_a) {
+            var commit = _a.commit;
+            return (new ListingService()).getFeatureListings()
+                .then(function (response) {
+                commit('UPDATE_FEATURELISTINGS', response);
+            });
         },
         UPDATE_LISTING: function (_a, listing) {
             var commit = _a.commit, state = _a.state;
@@ -67,7 +78,7 @@ export default new Vuex.Store({
         FETCH_PROFILE_BY_ID: function (_a, id) {
             var dispatch = _a.dispatch, commit = _a.commit, state = _a.state;
             return (new UserService()).getById(id).then(function (response) {
-                commit('UPDATE_PROFILE', response.data);
+                commit('UPDATE_PROFILE', response);
             });
         },
         UPDATE_USER: function (_a, profile) {
@@ -83,25 +94,25 @@ export default new Vuex.Store({
         SEARCH_LISTINGS_BY_SUBURB: function (_a, suburbId) {
             var commit = _a.commit, state = _a.state;
             return (new ListingService()).getListingBySuburb(suburbId).then(function (response) {
-                commit('UPDATE_SEARCH_LISTINGS', response.data);
+                commit('UPDATE_SEARCH_LISTINGS', response);
             });
         },
         FETCH_CONVERSATIONS_BY_USER: function (_a, userId) {
             var dispatch = _a.dispatch, commit = _a.commit, state = _a.state;
             return (new MessageService()).getConversations(userId).then(function (response) {
-                commit('UPDATE_CONVERSATIONS', response.data);
+                commit('UPDATE_CONVERSATIONS', response);
             });
         },
         FETCH_CONVERSATION_CONTENT: function (_a, conversationId) {
             var commit = _a.commit, state = _a.state;
             return (new MessageService()).getConversationContent(conversationId).then(function (response) {
-                commit('UPDATE_CONVERSATION_MESSAGES', response.data);
+                commit('UPDATE_CONVERSATION_MESSAGES', response);
             });
         },
         SEND_MESSAGE: function (_a, message) {
             var commit = _a.commit, state = _a.state;
             return (new MessageService()).sendMessage(message).then(function (response) {
-                commit('ADD_MESSAGE', response.data);
+                commit('ADD_MESSAGE', response);
             });
         },
         ADD_NOTIFICATION: function (_a, notification) {
@@ -154,9 +165,11 @@ export default new Vuex.Store({
             Vue.set(state, 'currentPage', page);
         },
         UPDATE_LISTING: function (state, listing) {
-            console.log('update listing');
             var listingObject = plainToClass(ListingModel, listing);
             Vue.set(state, 'listing', listingObject);
+        },
+        UPDATE_FEATURELISTINGS: function (state, listings) {
+            state.featureListings = listings;
         },
         UPDATE_PROFILE: function (state, profile) {
             state.profile = profile;

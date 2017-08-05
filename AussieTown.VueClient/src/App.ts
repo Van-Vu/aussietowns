@@ -1,8 +1,10 @@
 import Vue from "vue";
-import Component from "vue-class-component";
+import { Component, Watch } from "vue-property-decorator";
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 import NotificationComponent from './component/shared/notification.component.vue';
 import LoadingComponent from './component/shared/loading.component.vue';
+import LogService from './service/log.service';
+
 import "reflect-metadata";
 
 //if (process.env.VUE_ENV === 'client') {
@@ -51,19 +53,23 @@ Vue.directive('focus', {
     //}
 })
 
-import VueMask from 'v-mask'
-Vue.use(VueMask)
+import VueMask from 'v-mask';
+Vue.use(VueMask);
 
+import vMediaQuery from './component/shared/external/v-media-query';
+Vue.use(vMediaQuery);
 
-//Vue.config.errorHandler = function (err, vm, info) {
-//    // handle error
-//    // `info` is a Vue-specific error info, e.g. which lifecycle hook
-//    // the error was found in. Only available in 2.2.0+
+Vue.config.errorHandler = function (err, vm, info) {
+    // handle error
+    // `info` is a Vue-specific error info, e.g. which lifecycle hook
+    // the error was found in. Only available in 2.2.0+
 
-//    console.log('damn it!');
-//    console.log(info);
-//    console.log(err);
-//}
+    console.log('damn it!');
+    console.log(info);
+    console.log(err);
+
+    (new LogService()).logError(err.message, err.stack);
+}
 
 @Component({
     name: "App",
@@ -76,11 +82,26 @@ Vue.use(VueMask)
 
 
 export default class App extends Vue {
+    get currentPage() {
+        return this.$store.state.currentPage;
+    }
+
+    set currentPage(value: string) {
+        this.currentPage = value;
+    }
+
     mounted() {
         // Bodom hack: hacky way to hide loading screen on server load
         (this.$el.parentElement.childNodes[0] as any).style.display = "none";
 
         // Bodom hack: disable in case of jumping directly to a page
         this.$store.dispatch("DISABLE_LOADING");
+
+        // Bodom hack: https://stackoverflow.com/questions/41185809/vue-js-v-bindclass-doesnt-update-even-though-model-does
+        if (this.$store.state.currentPage == 'home') {
+            Vue.delete(this.$store.state, 'currentPage');
+            Vue.set(this.$store.state, 'currentPage', 'home');
+        }
+
     }
 }

@@ -6,17 +6,7 @@
                 <div class="listing-cost">A${{cost }}</div>-->
             </div>
             <div class="listing-content">
-                <swiper ref="swiper"
-                        direction="horizontal"
-                        :mousewheel-control="true"
-                        :performance-mode="false"
-                        :pagination-visible="true"
-                        :pagination-clickable="true"
-                        :loop="false"
-                    <div v-for="slide in slides">
-                        <img v-lazy="slide.imgSrc" />
-                    </div>
-                </swiper>
+                <img v-lazy="imageUrl" />
             </div>
             <div class="container is-fluid listing-footer">
                 <h4 class="listing-header">{{header}}</h4>

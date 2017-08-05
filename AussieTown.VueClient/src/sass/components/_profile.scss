@@ -7,10 +7,6 @@
         }
     }
 
-    /*input[type="radio"] {
-        display:none;
-    }*/
-
     .router-link-exact-active {
         background: $c-brand-secondary;
     }
@@ -22,7 +18,7 @@
         }
     }
 
-    .tab-text {
+    /*.tab-text {
       display: inline-block;
       margin: 0 0 -1px;
       padding: 15px 25px;
@@ -42,17 +38,14 @@
           margin-right: 10px;
         }
 
-        /*user*/
         &[for*='1']:before {
           content: '\E008';
         }
 
-        /*camera*/
         &[for*='2']:before {
           content: '\E046';
         }
 
-        /*comment*/
         &[for*='3']:before {
           content: '\E111';
         }
@@ -60,16 +53,16 @@
         &[for*='4']:before {
           content: '\E006';
         }
-    }
+    }*/
 
-    input:checked + label {
+    /*input:checked + label {
       color: #555;
       border: 1px solid #ddd;
       border-top: 2px solid orange;
       border-bottom: 1px solid #fff;
-    }
+    }*/
 
-    @media screen and (max-width: 650px) {
+    /*@media screen and (max-width: 650px) {
       .tab-text {
         font-size: 0;
       }
@@ -83,5 +76,5 @@
       .tab-text {
         padding: 15px;
       }
-    }
+    }*/
 }

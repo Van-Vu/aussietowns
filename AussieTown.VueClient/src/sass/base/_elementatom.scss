@@ -7,9 +7,9 @@
 .mtl_button {
     @include button-bg($c-brand-primary);
     @include button-round-border-all;
-    min-width: 100px;
-    margin-left: 10px;
-    margin-right: 10px;
+    min-width: 80px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .mtl_button-round-left {
@@ -82,19 +82,19 @@ body,
   flex-direction: column;
 }
 
-/*.hero-body {
-    position: relative;
-    width:100%;
-    top: calc(#{$size-header-height} + 30px) !important;
+.page-content {
+    width: 100%;
+    top: $size-header-height;
     margin-bottom: $size-header-height !important;
     margin-left: auto;
     margin-right: auto;
 
     @media all and (min-width: $is-mobile) {
-        top: $size-header-height !important;
+        top: 0;
+        width:80%;
         max-width: $is-maxscreen;
     }
-}*/
+}
 
 .is-sticky-bottom {
     position: fixed;

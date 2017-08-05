@@ -7,20 +7,16 @@ export default class MessageService {
 
     getConversations(userId: number) {
         return http.get(this.getConversationByUserIdUrl + userId)
-            .then(response => {
-                return response.data;
-            });
+            .then(response => response);
     }
 
     getConversationContent(conversationId: number) {
         return http.get(this.getMessagesByConversationIdUrl + conversationId)
-            .then(response => {
-                return response.data;
-            });
+            .then(response => response);
     }
 
     sendMessage(message) {
         return http.post(this.sendMessageUrl, message)
-            .then(response => { return response.data });
+            .then(response => response);
     }
 }

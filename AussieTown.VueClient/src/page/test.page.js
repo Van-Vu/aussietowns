@@ -19,6 +19,7 @@ import { Component } from "vue-property-decorator";
 import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
 import Swiper from '../component/shared/external/vue-swiper.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
+import { NotificationType } from '../model/enum';
 var TestPage = (function (_super) {
     __extends(TestPage, _super);
     function TestPage() {
@@ -52,7 +53,7 @@ var TestPage = (function (_super) {
         this.$store.dispatch('TEST');
     };
     TestPage.prototype.addNotification = function () {
-        this.$store.dispatch('ADD_NOTIFICATION', { title: "this is title", text: "this is the text" });
+        this.$store.dispatch('ADD_NOTIFICATION', { title: "this is title", text: "this is the text", type: NotificationType.Success });
     };
     TestPage = __decorate([
         Component({

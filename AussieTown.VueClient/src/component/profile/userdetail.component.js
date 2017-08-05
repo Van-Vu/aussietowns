@@ -18,22 +18,30 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import LocationSearchComponent from "../shared/search/locationsearch.component.vue";
-import UserModel from '../../model/user.model';
 import datepicker from '../shared/external/datepicker.vue';
 Vue.use(VeeValidate);
 var UserDetailComponent = (function (_super) {
     __extends(UserDetailComponent, _super);
     function UserDetailComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.model = new UserModel();
         _this.isEditing = false;
         _this.modelCache = null;
         return _this;
     }
-    UserDetailComponent.prototype.created = function () {
-        if (this.$store.state.profile) {
-            this.model = this.$store.state.profile;
+    Object.defineProperty(UserDetailComponent.prototype, "model", {
+        get: function () {
+            return this.$store.state.profile;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    UserDetailComponent.prototype.asyncData = function (_a) {
+        var store = _a.store, route = _a.route;
+        if (route.params.profileId) {
+            return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
         }
+    };
+    UserDetailComponent.prototype.created = function () {
     };
     UserDetailComponent.prototype.onLocationSelected = function (item) {
         this.model.locationId = +item.id;

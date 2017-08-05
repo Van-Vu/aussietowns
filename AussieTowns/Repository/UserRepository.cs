@@ -73,8 +73,8 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "INSERT INTO User(Firstname, Lastname, email, salt, password, gender,birthday, phone, language, currency, locationId, description, address, emergencycontact, photourl, videourl,source, externalid, createdDate,updatedDate,isActive) "
-                        + "VALUES (@firstname, @lastname, @email, @salt, @password, @gender, @birthday, @phone, @language, @currency, @locationId, @description, @address, @emergencycontact, @photourl, @videourl, @source, @externalid, @createdDate,@updatedDate,@isActive)";
+                var sql = "INSERT INTO User(Firstname, Lastname, email, salt, password, gender,birthday, phone, language, currency, locationId, description, address, emergencycontact, photourl, videourl,source, externalid, createdDate,updatedDate,isActive,role) "
+                        + "VALUES (@firstname, @lastname, @email, @salt, @password, @gender, @birthday, @phone, @language, @currency, @locationId, @description, @address, @emergencycontact, @photourl, @videourl, @source, @externalid, @createdDate,@updatedDate,@isActive,@role)";
                 dbConnection.Open();
                 user.CreatedDate = DateTime.Now;
                 user.UpdatedDate = DateTime.Now;

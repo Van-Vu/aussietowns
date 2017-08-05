@@ -3,19 +3,16 @@
 export default class UserService {
 
     getAll() {
-        return http.get('/users').then(response => response.data);
+        return http.get('/users').then(response => response);
     }
 
     getById(_id: string) {
-        return http.get('api/user/' + _id).then(response => response.data);
+        return http.get('api/user/' + _id).then(response => response);
     }
 
     signup(user) {
         return http.post('api/user/register', user).then(response => {
-            let result = response.data;
-            if (result.state == 1) {
-                return result.data;
-            }
+            let result = response;
             return result;
         })
             .catch(this.handleError);
@@ -23,18 +20,15 @@ export default class UserService {
 
     login(user) {
         return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId })
-            .then(response => response.data)
+            .then(response => response)
         .catch(this.handleError);
     }
 
     getMiniProfile(id: number) {
         return http.get('api/user/summary/' + id)
             .then(response => {
-                let result = response.data;
-                if (result.state == 1) {
-                    return result.data;
-                }
-                return '';
+                let result = response;
+                return result;
             });
     }
 
@@ -76,7 +70,6 @@ export default class UserService {
     }
 
     private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
+        return Promise.reject(error.data || error);
     }
 }

@@ -12,7 +12,6 @@ import MessageModel from '../../model/message.model';
 })
 
 export default class MessageComponent extends Vue {
-    conversations: ConversationModel[] = new Array<ConversationModel>();
     conversationsContent: MessageModel[] = new Array<MessageModel>();
     test: any[];
     cookieValue: string;
@@ -21,16 +20,18 @@ export default class MessageComponent extends Vue {
     sendingMessage: string = '';
     currentConversation: number = 0;
 
+    asyncData({ store, route }) {
+        if (route.params.profileId) {
+            return store.dispatch('FETCH_CONVERSATIONS_BY_USER', route.params.profileId);
+        }
+    }
+
+    get conversations() {
+        return this.$store.state.conversations;
+    }
+
     created(): void {
         this.profileId = (this.$route.params as any).profileId;
-
-        if (this.$store.state.conversations.length > 0) {
-            this.conversations = this.$store.state.conversations;
-        } else {
-            this.$store.dispatch('FETCH_CONVERSATIONS_BY_USER', this.profileId).then(() => {
-                this.conversations = this.$store.state.conversations;
-            });
-        }
 
         //this.cookieValue = this.$cookie.get('bodomtest');
 

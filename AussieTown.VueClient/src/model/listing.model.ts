@@ -24,6 +24,7 @@ export default class ListingModel {
     public requirement: string;
     public expectation: string;
     public minParticipant: number;
+    public type: number;
 
     constructor() {
         this.tourOperators = new Array<MiniProfile>();

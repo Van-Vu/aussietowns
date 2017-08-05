@@ -21,24 +21,27 @@ var MessageComponent = (function (_super) {
     __extends(MessageComponent, _super);
     function MessageComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.conversations = new Array();
         _this.conversationsContent = new Array();
         _this.isShowConversationContent = false;
         _this.sendingMessage = '';
         _this.currentConversation = 0;
         return _this;
     }
+    MessageComponent.prototype.asyncData = function (_a) {
+        var store = _a.store, route = _a.route;
+        if (route.params.profileId) {
+            return store.dispatch('FETCH_CONVERSATIONS_BY_USER', route.params.profileId);
+        }
+    };
+    Object.defineProperty(MessageComponent.prototype, "conversations", {
+        get: function () {
+            return this.$store.state.conversations;
+        },
+        enumerable: true,
+        configurable: true
+    });
     MessageComponent.prototype.created = function () {
-        var _this = this;
         this.profileId = this.$route.params.profileId;
-        if (this.$store.state.conversations.length > 0) {
-            this.conversations = this.$store.state.conversations;
-        }
-        else {
-            this.$store.dispatch('FETCH_CONVERSATIONS_BY_USER', this.profileId).then(function () {
-                _this.conversations = _this.$store.state.conversations;
-            });
-        }
         //this.cookieValue = this.$cookie.get('bodomtest');
         //if (this.$store.state.conversationsContent) {
         //    this.conversationsContent = this.$store.state.conversationsContent;

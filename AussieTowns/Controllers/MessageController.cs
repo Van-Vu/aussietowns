@@ -32,7 +32,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (userId < 10000) throw new ValidationException(nameof(userId));
+                if (userId < 0) throw new ValidationException(nameof(userId));
 
                 return await _messageService.GetAllConversationsByUser(userId);
             }

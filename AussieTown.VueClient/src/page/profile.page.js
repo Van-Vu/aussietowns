@@ -26,18 +26,9 @@ var ProfilePage = (function (_super) {
         _this.currentTab = '';
         return _this;
     }
-    ProfilePage.prototype.asyncData = function (_a) {
-        var store = _a.store, route = _a.route;
-        console.log('profile id:' + route.params.profileId);
-        if (route.params.profileId) {
-            return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
-            //return store.dispatch('FETCH_CONVERSATIONS_BY_USER', route.params.profileId);
-        }
-    };
     ProfilePage.prototype.created = function () {
         this.$store.dispatch('SET_CURRENT_PAGE', 'profile');
         this.currentTab = this.$route.name;
-        console.log('create profile page');
     };
     ProfilePage.prototype.onRouteParamChanged = function (value, oldValue) {
         //console.log(`route change ${value}`);

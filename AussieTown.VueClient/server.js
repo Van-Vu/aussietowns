@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
+const cookieParser = require('cookie-parser')
+const compression = require('compression')
 const favicon = require('serve-favicon')
 const resolve = file => path.resolve(__dirname, file)
 
@@ -45,6 +47,8 @@ const serve = (path, cache) => express.static(resolve(path), {
 })
 
 
+app.use(cookieParser())
+app.use(compression({ threshold: 0 }))
 app.use('/dist', serve('./dist', true))
 app.use(express.static('dist', { index: false }))
 	
@@ -75,8 +79,9 @@ app.get('*', (req, res) => {
       console.error(err)
     }
   }
-
-  renderer.renderToStream({ url: req.url })
+  
+  const context = { url: req.url, cookies: req.cookies }
+  renderer.renderToStream(context)
     .on('error', errorHandler)
     .on('end', () => console.log(`whole request: ${Date.now() - s}ms`))
       .pipe(res)

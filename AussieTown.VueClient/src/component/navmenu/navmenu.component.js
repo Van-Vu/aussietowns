@@ -23,6 +23,7 @@ import LoginModal from '../modal/loginmodal.component.vue';
 import MenuModal from '../modal/menumodal.component.vue';
 import RegistrationModal from '../modal/registrationmodal.component.vue';
 import SearchBarComponent from '../shared/search/searchbar.component.vue';
+import { Utils } from '../utils';
 var NavMenuComponent = (function (_super) {
     __extends(NavMenuComponent, _super);
     function NavMenuComponent() {
@@ -32,9 +33,9 @@ var NavMenuComponent = (function (_super) {
         _this.hideNavToggle = false;
         _this.isMenuOpen = false;
         _this.isSticky = false;
-        _this.profilePhoto = '';
-        _this.isLoggedIn = false;
-        _this.showSecondSearchBar = false;
+        //profilePhoto = '';
+        //isLoggedIn = false;
+        _this.searchSuburb = null;
         _this.showLoginModal = false;
         _this.showRegistrationModal = false;
         _this.showMenuModal = false;
@@ -49,12 +50,23 @@ var NavMenuComponent = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(NavMenuComponent.prototype, "isLoggedIn", {
+        get: function () {
+            return this.$store.getters.isLoggedIn;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(NavMenuComponent.prototype, "profilePhoto", {
+        get: function () {
+            return this.$store.getters.profilePhoto;
+        },
+        enumerable: true,
+        configurable: true
+    });
     NavMenuComponent.prototype.created = function () {
         if (process.env.VUE_ENV === 'client') {
             window.addEventListener('scroll', this.handleScroll);
-        }
-        if (this.currentPage != null && this.currentPage !== 'home') {
-            this.showSecondSearchBar = true;
         }
     };
     NavMenuComponent.prototype.destroyed = function () {
@@ -63,65 +75,45 @@ var NavMenuComponent = (function (_super) {
         }
     };
     NavMenuComponent.prototype.handleScroll = function (event) {
-        var timeNow = Date.now();
-        if (timeNow - this.currentTime > 50) {
-            // Blacken header color
-            if (window.scrollY > 100) {
+        if (this.currentPage != null && this.currentPage === 'home') {
+            //console.log(this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top);
+            if (this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top < 0) {
                 this.isSticky = true;
             }
             else {
                 this.isSticky = false;
             }
-            // Attach search bar
-            this.triggerSecondSearchBar();
-            this.currentTime = timeNow;
         }
-    };
-    NavMenuComponent.prototype.triggerSecondSearchBar = function () {
-        if (this.currentPage != null && this.currentPage === 'home') {
-            //console.log(this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top);
-            if (this.$root.$el.querySelector('#searchBarHomepage').getBoundingClientRect().top < 0) {
-                this.showSecondSearchBar = true;
-            }
-            else {
-                this.showSecondSearchBar = false;
-            }
-        }
-    };
-    NavMenuComponent.prototype.onCurrentPageChanged = function (value, oldValue) {
-        this.triggerSecondSearchBar();
-    };
-    NavMenuComponent.prototype.onShowSecondSearchBarChanged = function (value, oldValue) {
-        console.log("secondbar value " + value);
     };
     NavMenuComponent.prototype.onRouteParamChanged = function (value, oldValue) {
         this.showMenuModal = false;
         this.showLoginModal = false;
-        if (this.currentPage != null && this.currentPage != 'home') {
-            this.showSecondSearchBar = true;
+        if (this.$route.name != 'home') {
+            this.isSticky = true;
         }
+        else {
+            this.isSticky = false;
+        }
+        this.searchSuburb = null;
     };
     NavMenuComponent.prototype.onSuccessfulLogin = function () {
         this.showLoginModal = false;
     };
-    NavMenuComponent.prototype.onSelect = function () { console.log('select'); };
-    NavMenuComponent.prototype.onSearch = function () { console.log('search'); };
-    NavMenuComponent.prototype.mounted = function () {
-        this.profilePhoto = this.$store.getters.profilePhoto;
-        this.isLoggedIn = this.$store.getters.isLoggedIn;
+    NavMenuComponent.prototype.onSelect = function (val) {
+        this.searchSuburb = val;
     };
-    __decorate([
-        Watch('currentPage'),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, String]),
-        __metadata("design:returntype", void 0)
-    ], NavMenuComponent.prototype, "onCurrentPageChanged", null);
-    __decorate([
-        Watch('showSecondSearchBar'),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, String]),
-        __metadata("design:returntype", void 0)
-    ], NavMenuComponent.prototype, "onShowSecondSearchBarChanged", null);
+    NavMenuComponent.prototype.onSearch = function (val) {
+        if (this.searchSuburb) {
+            this.$router.push({ name: 'search', params: { seoString: Utils.seorizeString(this.searchSuburb.name), suburbId: this.searchSuburb.id } });
+        }
+    };
+    NavMenuComponent.prototype.mounted = function () {
+        //this.profilePhoto = this.$store.getters.profilePhoto;
+        //this.isLoggedIn = this.$store.getters.isLoggedIn;
+        if (this.$store.state.currentPage != 'home') {
+            this.isSticky = true;
+        }
+    };
     __decorate([
         Watch('$route.params'),
         __metadata("design:type", Function),

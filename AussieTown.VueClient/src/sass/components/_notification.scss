@@ -6,6 +6,10 @@
     @include absolutecenter("x","relative");
 
     .notification {
+        .message-header {
+            justify-content: flex-start;
+        }
+
         &.is-success {
             background-color: #f6fef9;
 

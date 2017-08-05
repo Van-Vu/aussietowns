@@ -3,34 +3,28 @@ var UserService = (function () {
     function UserService() {
     }
     UserService.prototype.getAll = function () {
-        return http.get('/users').then(function (response) { return response.data; });
+        return http.get('/users').then(function (response) { return response; });
     };
     UserService.prototype.getById = function (_id) {
-        return http.get('api/user/' + _id).then(function (response) { return response.data; });
+        return http.get('api/user/' + _id).then(function (response) { return response; });
     };
     UserService.prototype.signup = function (user) {
         return http.post('api/user/register', user).then(function (response) {
-            var result = response.data;
-            if (result.state == 1) {
-                return result.data;
-            }
+            var result = response;
             return result;
         })
             .catch(this.handleError);
     };
     UserService.prototype.login = function (user) {
         return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId })
-            .then(function (response) { return response.data; })
+            .then(function (response) { return response; })
             .catch(this.handleError);
     };
     UserService.prototype.getMiniProfile = function (id) {
         return http.get('api/user/summary/' + id)
             .then(function (response) {
-            var result = response.data;
-            if (result.state == 1) {
-                return result.data;
-            }
-            return '';
+            var result = response;
+            return result;
         });
     };
     UserService.prototype.getUserInfo = function (id) {
@@ -63,8 +57,7 @@ var UserService = (function () {
         return '';
     };
     UserService.prototype.handleError = function (error) {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
+        return Promise.reject(error.data || error);
     };
     return UserService;
 }());

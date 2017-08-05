@@ -1,5 +1,5 @@
 ﻿<template>
-        <div class="container is-fluid tile" :class="{editing:isEditing}">
+        <div class="page-content container tile" :class="{editing:isEditing}">
             <div class="listing-main-content tile is-8 is-vertical is-parent">
                 <div class="box">
                     <div style="background-color: red;
@@ -34,6 +34,8 @@
                         </div>
                     </div>
                     <hr/>
+
+                    {{ model.testError }}
                     <div class="columns">
                         <div class="column is-2">Where</div>
                         <div class="column is-10 control has-icon has-icon-right">

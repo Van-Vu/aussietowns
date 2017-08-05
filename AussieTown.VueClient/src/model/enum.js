@@ -33,3 +33,15 @@ export var UserRole;
     UserRole[UserRole["Admin"] = 4] = "Admin";
     UserRole[UserRole["SuperAdmin"] = 8] = "SuperAdmin";
 })(UserRole || (UserRole = {}));
+export var NotificationType;
+(function (NotificationType) {
+    NotificationType["Success"] = "is-success";
+    NotificationType["Warning"] = "is-warning";
+    NotificationType["Error"] = "is-error";
+})(NotificationType || (NotificationType = {}));
+export var ScreenSize;
+(function (ScreenSize) {
+    ScreenSize[ScreenSize["Desktop"] = 0] = "Desktop";
+    ScreenSize[ScreenSize["Tablet"] = 1] = "Tablet";
+    ScreenSize[ScreenSize["Mobile"] = 2] = "Mobile";
+})(ScreenSize || (ScreenSize = {}));

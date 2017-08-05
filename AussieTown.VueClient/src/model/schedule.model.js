@@ -17,7 +17,9 @@ var ScheduleModel = (function () {
                 break;
             case RepeatedType.Weekly:
                 var repeatedDayname_1 = new Array();
-                this.repeatedDay.map(function (day) { return repeatedDayname_1.push(RepeatedDay[day]); });
+                if (this.repeatedDay) {
+                    this.repeatedDay.map(function (day) { return repeatedDayname_1.push(RepeatedDay[day]); });
+                }
                 ret = "Weekly on " + repeatedDayname_1.join(', ');
                 break;
             case RepeatedType.Monthly:

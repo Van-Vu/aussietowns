@@ -27,7 +27,10 @@ export default class ScheduleModel {
                 break;
             case RepeatedType.Weekly:
                 let repeatedDayname = new Array<string>();
-                this.repeatedDay.map(day => repeatedDayname.push(RepeatedDay[day]));
+                if (this.repeatedDay) {
+                    this.repeatedDay.map(day => repeatedDayname.push(RepeatedDay[day]));    
+                }
+                
 
                 ret = `Weekly on ${repeatedDayname.join(', ')}`;
                 break;

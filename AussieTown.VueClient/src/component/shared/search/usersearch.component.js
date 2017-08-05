@@ -33,7 +33,7 @@ var UserSearchComponent = (function (_super) {
     UserSearchComponent.prototype.onUserSearch = function (searchTerm) {
         var _this = this;
         (new SearchService()).getUser(searchTerm)
-            .then(function (response) { return _this.users = response; });
+            .then(function (response) { return _this.users = response.data; });
     };
     UserSearchComponent.prototype.onUserSelected = function (selectedItem) {
         this.$emit("onSelected", selectedItem);

@@ -7,6 +7,7 @@ using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -22,23 +23,26 @@ namespace AussieTowns.Controllers
         private readonly IListingService _listingService;
         private readonly IMapper _mapper;
         private readonly ILogger<ListingController> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppSettings _appSettings;
 
-        public ListingController(IListingService listingService, IMapper mapper, IOptions<AppSettings> appSettings, ILogger<ListingController> logger)
+        public ListingController(IListingService listingService, IMapper mapper, IOptions<AppSettings> appSettings,
+            ILogger<ListingController> logger, IHttpContextAccessor httpContextAccessor)
         {
             _listingService = listingService;
             _mapper = mapper;
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
             _appSettings = appSettings.Value;
         }
 
         [HttpGet("{id}")]
         [HttpGet("summary/{id}")]
-        public async Task<ListingSummary> GetListingDetail(int id)
+        public async Task<ListingResponse> GetListingDetail(int id)
         {
             try
             {
-                if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
+                //if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
 
                 var listing = await _listingService.GetListingDetail(id);
 
@@ -48,12 +52,12 @@ namespace AussieTowns.Controllers
                     throw new ArgumentOutOfRangeException(nameof(id), "Can't find listing");
                 }
 
-                if (Request.Path.Value.IndexOf("listingsummary", 0, StringComparison.CurrentCultureIgnoreCase) > 0)
-                {
-                    return _mapper.Map<Listing, ListingSummary>(listing);
-                }
+                //if (Request.Path.Value.IndexOf("listingsummary", 0, StringComparison.CurrentCultureIgnoreCase) > 0)
+                //{
+                //    return _mapper.Map<Listing, ListingSummary>(listing);
+                //}
 
-                return _mapper.Map<Listing, ListingSummary>(listing);
+                return _mapper.Map<Listing, ListingResponse>(listing);
             }
             catch (Exception e)
             {
@@ -84,7 +88,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
+                //if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
                 if (listing == null) throw new ArgumentNullException(nameof(listing));
 
                 return await _listingService.UpdateListing(listing);
@@ -119,7 +123,7 @@ namespace AussieTowns.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<int> DeleteTourOffer(int id)
+        public async Task<int> DeleteListing(int id)
         {
             try
             {
@@ -177,6 +181,24 @@ namespace AussieTowns.Controllers
                 var listingsSummary = await _listingService.GetListingsByUserId(userId);
 
                 return listingsSummary.Select(listing => _mapper.Map<Listing, ListingSummary>(listing));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                throw;
+            }
+        }
+
+        [HttpGet("feature")]
+        public async Task<IEnumerable<ListingSummary>> GetFeatureListings(string adfadfasdf)
+        {
+            try
+            {
+                var test = _httpContextAccessor.HttpContext.Request;
+
+                var listingsSummary = await _listingService.GetListingsBySuburb(139);
+
+                return listingsSummary.Select(x => _mapper.Map<ListingView, ListingSummary>(x));
             }
             catch (Exception e)
             {

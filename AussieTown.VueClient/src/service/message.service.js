@@ -7,19 +7,15 @@ var MessageService = (function () {
     }
     MessageService.prototype.getConversations = function (userId) {
         return http.get(this.getConversationByUserIdUrl + userId)
-            .then(function (response) {
-            return response.data;
-        });
+            .then(function (response) { return response; });
     };
     MessageService.prototype.getConversationContent = function (conversationId) {
         return http.get(this.getMessagesByConversationIdUrl + conversationId)
-            .then(function (response) {
-            return response.data;
-        });
+            .then(function (response) { return response; });
     };
     MessageService.prototype.sendMessage = function (message) {
         return http.post(this.sendMessageUrl, message)
-            .then(function (response) { return response.data; });
+            .then(function (response) { return response; });
     };
     return MessageService;
 }());

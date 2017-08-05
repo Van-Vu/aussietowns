@@ -2,7 +2,7 @@
     <div id="app">
         <notifications></notifications>
         <loading></loading>
-        <header class="hero-head">
+        <header class="hero-head" :class="{'is-home': currentPage == 'home'}">
             <nav-menu></nav-menu>
             <!--<header-banner></header-banner>-->
         </header>

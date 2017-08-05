@@ -5,26 +5,22 @@ export default class ListingService {
     private baseUrl = '/api/listing/';
     private getListingByUserUrl = this.baseUrl + '?user=';
     private getListingBySuburbUrl = this.baseUrl + 'suburb/';
+    private getFeatureListingsUrl = this.baseUrl + 'feature';
 
     getListingById(_id: number) {
         return http.get(this.baseUrl + _id)
-            .then(response => response.data);
+            .then(response => response);
     }
 
     addListing(listing) {
         return http.post(this.baseUrl, listing)
-            .then(response => {
-            let result = response.data;
-            if (result.state === 1) {
-                return result;
-            }
-        })
+            .then(response => response)
             .catch(this.handleError);
     }
 
     updateListing(listing) {
         return http.put(this.baseUrl + listing.id, listing)
-            .then(response => response.data)
+            .then(response => response)
             .catch(this.handleError);
     }
 
@@ -34,16 +30,17 @@ export default class ListingService {
 
     getListingsByUserId(userId: number){
         return http.get(this.getListingByUserUrl + userId)
-            .then(response => {
-                return response.data;
-            });
+            .then(response => response);
     }
 
     getListingBySuburb(suburbId: number) {
         return http.get(this.getListingBySuburbUrl + suburbId)
-            .then(response => {
-                return response.data;
-            });
+            .then(response => response);
+    }
+
+    getFeatureListings() {
+        return http.get(this.getFeatureListingsUrl)
+            .then(response => response);        
     }
 
     deleteImage(listingId: number, url: string) {

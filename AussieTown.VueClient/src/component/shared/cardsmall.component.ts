@@ -33,7 +33,7 @@ export default class CardSmallComponent extends Vue {
         this.header = this.listingDetail.header;
         this.cost = this.listingDetail.cost;
         this.hostName = this.listingDetail.primaryOwner;
-        this.imageUrl = this.listingDetail.imageUrl;
+        this.imageUrl = this.listingDetail.imageUrl ? this.listingDetail.imageUrl : '';
         var startDatetime = new Date(this.listingDetail.schedules[0].startDate);
         this.date = Utils.getDate(startDatetime);
         this.time = Utils.getTime(startDatetime);

@@ -11,9 +11,9 @@ Vue.mixin({
     beforeRouteUpdate(to, from, next) {
         console.log('beforeRouteUpdate')
         store.dispatch("ENABLE_LOADING")
-        const { asyncData } = this.$options
-        if (asyncData) {
-            asyncData({
+
+        if (this.asyncData) {
+            this.asyncData({
                 store: this.$store,
                 route: to
             }).then(next).catch(next)
@@ -25,7 +25,7 @@ Vue.mixin({
 
 if ((window as any).__INITIAL_STATE__) {
     // Bodom hack: loggInUser is fetched from Cookies
-    Reflect.deleteProperty((window as any).__INITIAL_STATE__, 'loggedInUser');
+    //Reflect.deleteProperty((window as any).__INITIAL_STATE__, 'loggedInUser');
 
     // Bodom hack: retain listing state in case of direct browsing
     var initialState = (window as any).__INITIAL_STATE__;
@@ -47,19 +47,28 @@ router.onReady(() => {
     router.beforeResolve((to, from, next) => {
         const matched = router.getMatchedComponents(to)
         const prevMatched = router.getMatchedComponents(from)
+
+        // we only care about none-previously-rendered components,
+        // so we compare them until the two matched lists differ
         let diffed = false
         const activated = matched.filter((c, i) => {
             return diffed || (diffed = (prevMatched[i] !== c))
         })
+
         if (!activated.length) {
             return next()
         }
+
+        // this is where we should trigger a loading indicator if there is one
 
         Promise.all(activated.map(c => {
             //console.log('here in client:' + (c as any).options.methods.asyncData)
             if ((c as any).options && (c as any).options.methods && (c as any).options.methods.asyncData) {
                 return (c as any).options.methods.asyncData({ store, route: to })
             }
+
+        // stop loading indicator
+
         })).then(() => {
             next()
         }).catch(next)

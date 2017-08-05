@@ -21,10 +21,8 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import ParticipantComponent from '../component/shared/participant.component.vue';
-import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
 import LocationSearchComponent from '../component/shared/search/locationsearch.component.vue';
-import { Utils } from '../component/utils';
 import { ListingType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
 import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
@@ -49,9 +47,20 @@ var ListingPage = (function (_super) {
             days: [6, 0] // Disable Saturday's and Sunday's
         };
         _this.modelCache = null;
-        _this.model = null;
         return _this;
     }
+    Object.defineProperty(ListingPage.prototype, "model", {
+        get: function () {
+            this.isOffer = this.$store.state.listing.listingType == ListingType.Offer;
+            return this.$store.state.listing;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    //@Watch('$route.state.listing', { deep: true })
+    //onModelChanged(value: any, oldValue: any) {
+    //    this.isOffer = value.listingType == ListingType.Offer;
+    //}
     ListingPage.prototype.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
         if (route.params.listingId) {
@@ -59,27 +68,6 @@ var ListingPage = (function (_super) {
         }
     };
     ListingPage.prototype.created = function () {
-        var _this = this;
-        if (this.listingType) {
-            this.isOffer = Utils.listingTypeConvert(this.listingType) === ListingType.Offer;
-            this.model = new ListingModel();
-            this.isEditing = true;
-        }
-        else {
-            if (this.$store.state.listing) {
-                this.model = this.$store.state.listing;
-                this.isOffer = this.model.listingType == ListingType.Offer;
-            }
-            else {
-                if (this.$route.params.listingId) {
-                    console.log('in CREATED');
-                    this.$store.dispatch('FETCH_LISTING_BY_ID', this.$route.params.listingId).then(function () {
-                        _this.model = _this.$store.state.listing;
-                        _this.isOffer = _this.model.listingType == ListingType.Offer;
-                    });
-                }
-            }
-        }
         this.$store.dispatch('SET_CURRENT_PAGE', 'listing');
     };
     ListingPage.prototype.onUploadImageCompleted = function () {

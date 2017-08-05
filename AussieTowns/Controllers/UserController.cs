@@ -116,43 +116,33 @@ namespace AussieTowns.Controllers
             }
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<RequestResult> GetUserInfo(int id)
-        //{
-        //    try
-        //    {
-        //        var claimsIdentity = User.Identity as ClaimsIdentity;
-        //        if (claimsIdentity == null)
-        //            return new RequestResult
-        //            {
-        //                State = RequestState.Failed,
-        //                Msg = "Can't find user"
-        //            };
+        [HttpGet("{userId}")]
+        public async Task<UserResponse> GetUserInfo(int userId)
+        {
+            try
+            {
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+                if (claimsIdentity == null)
+                {
+                    _logger.LogError("Unauthorized access {userId}", userId);
+                    throw new UnauthorizedAccessException();
+                }
+                    
 
-        //        //var userId = Convert.ToInt32(claimsIdentity.Claims.FirstOrDefault(x=>x.Type=="userId")?.Value);
-        //        //var email = claimsIdentity.Name;
-        //        var user = await _userService.GetById(id);
-        //        if (user != null)
-        //        {
-        //            return new RequestResult
-        //            {
-        //                State = RequestState.Success,
-        //                Data = _mapper.Map<User, UserResponse>(user)
-        //            };
-        //        }
+                //var userId = Convert.ToInt32(claimsIdentity.Claims.FirstOrDefault(x=>x.Type=="userId")?.Value);
+                //var email = claimsIdentity.Name;
+                var user = await _userService.GetById(userId);
 
-        //        return new RequestResult
-        //        {
-        //            State = RequestState.Failed,
-        //            Msg = "Can't find user"
-        //        };
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _logger.LogError(e.Message, e);
-        //        throw;
-        //    }
-        //}
+                if (user == null) throw new ArgumentNullException(nameof(userId));
+
+                return _mapper.Map<User,UserResponse>(user);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                throw;
+            }
+        }
 
         [HttpGet("summary/{id}")]
         [Authorize(Policy = "AtLeastEditor")]
