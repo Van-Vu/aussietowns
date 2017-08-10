@@ -1,6 +1,7 @@
 ﻿<template>
-    <div class="page-content container tile is-parent">
-        <div class="listing-main-content tile is-vertical is-ancestor box is-7">
+    <div class="page-content container tile">
+        <div class="tile is-8 is-vertical box">
+            <div class="box-header-strip"></div>
             <h2>Participant Details</h2>
             <details class="tile is-vertical is-parent box" v-for="(user, index) in model.participants">
                 <summary>User {{index}}</summary>
@@ -54,8 +55,9 @@
                 </div>
             </details>
         </div>
-        <div class="tile is-vertical box">
+        <div class="tile is-vertical is-parent is-sticky-box">
             <div class="field box">
+                <div class="box-header-strip"></div>
                 <h2>Listing Detail</h2>
                 <div class="tile">
                     <div class="tile is-2" for="firstName">Name</div>
@@ -70,10 +72,11 @@
                 <div class="tile">
                     {{ model.listing.description }}
                 </div>
+                <div class="tile">
+                    <button class="button mtl_button mtl-btn-large relative-center-x" @click="confirmBooking"> Confirm </button>
+                </div>
             </div>
-            <div class="field">
-                <button class="button mtl_button mtl-btn-large relative-center-x" @click="confirmBooking"> Confirm </button>
-            </div>
+
         </div>
 
     </div>

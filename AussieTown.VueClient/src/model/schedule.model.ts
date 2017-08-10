@@ -30,12 +30,15 @@ export default class ScheduleModel {
                 if (this.repeatedDay) {
                     this.repeatedDay.map(day => repeatedDayname.push(RepeatedDay[day]));    
                 }
-                
 
-                ret = `Weekly on ${repeatedDayname.join(', ')}`;
+                if (repeatedDayname.length > 0) {
+                    ret = `Weekly on ${repeatedDayname.join(', ')}`;
+                } else {
+                    ret = `Weekly`;  
+                }
                 break;
             case RepeatedType.Monthly:
-                ret = `Every month on ${new Date(this.startDate).getDay()}`;
+                ret = `Monthly ${new Date(this.startDate).getDay()}`;
                 break;
         }
 

@@ -3469,7 +3469,7 @@ button.button, input[type="submit"].button {
   -ms-flex-direction: column;
   flex-direction: column;
   max-height: calc(100vh - 40px);
-  overflow: hidden;
+  //overflow: hidden;
   margin-top: calc(-50vh);
 }
 

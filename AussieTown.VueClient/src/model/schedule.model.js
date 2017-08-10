@@ -20,10 +20,15 @@ var ScheduleModel = (function () {
                 if (this.repeatedDay) {
                     this.repeatedDay.map(function (day) { return repeatedDayname_1.push(RepeatedDay[day]); });
                 }
-                ret = "Weekly on " + repeatedDayname_1.join(', ');
+                if (repeatedDayname_1.length > 0) {
+                    ret = "Weekly on " + repeatedDayname_1.join(', ');
+                }
+                else {
+                    ret = "Weekly";
+                }
                 break;
             case RepeatedType.Monthly:
-                ret = "Every month on " + new Date(this.startDate).getDay();
+                ret = "Monthly " + new Date(this.startDate).getDay();
                 break;
         }
         return ret;

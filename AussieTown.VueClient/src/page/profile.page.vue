@@ -53,7 +53,7 @@
             </router-link>
         </div>-->
         <div class="tile box">
-            <section id="content1" class="profile-section">
+            <section class="profile-section">
                 <router-view></router-view>
             </section>
         </div>

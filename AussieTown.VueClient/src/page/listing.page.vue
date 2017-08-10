@@ -1,14 +1,7 @@
 ﻿<template>
         <div class="page-content container tile" :class="{editing:isEditing}">
-            <div class="listing-main-content tile is-8 is-vertical is-parent">
-                <div class="box">
-                    <div style="background-color: red;
-    width: calc(100% + 40px);
-    height: 10px;
-    position: relative;
-    top: -20px;
-    left: -20px;
-    border-radius: 5px 5px 0 0;"></div>
+            <div class="listing-main-content tile is-8 is-vertical box">
+                    <div class="box-header-strip"></div>
                     <div class="columns">
                         <div v-if="isEditing" class="column is-2" for="header">Header</div>
                         <div class="column is-10 control has-icon has-icon-right">
@@ -21,7 +14,7 @@
                             <label v-if="!isEditing">{{ model.header }}</label>
                         </div>
                     </div>
-                    <div v-show="isOffer" class="field">
+                    <div v-if="isOffer" class="field">
                         <label v-if="isEditing" class="label" for="header">Images</label>
                         <imageupload id="imageupload" :isEditing="isEditing" :uploadType="0" :images="model.imageList" @uploadImageCompleted="onUploadImageCompleted"></imageupload>
                     </div>
@@ -34,8 +27,6 @@
                         </div>
                     </div>
                     <hr/>
-
-                    {{ model.testError }}
                     <div class="columns">
                         <div class="column is-2">Where</div>
                         <div class="column is-10 control has-icon has-icon-right">
@@ -93,14 +84,13 @@
                         </div>
                     </div>
                     <div class="container is-gapless is-flex is-sticky-bottom">
-                        <button class="column is-full button mtl_button" v-if="!isEditing" @click="onEdit">Edit</button>
+                        <button class="column is-full button mtl_button-no-round" v-if="!isEditing" @click="onEdit">Edit</button>
                         <button class="column is-half button mtl_button-round-left" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
                         <button class="column is-half button mtl_button-round-right" v-if="isEditing" @click="onCancelEdit">Cancel</button>
                     </div>
-                </div>
             </div>
-            <div v-show="isOffer" class="tile is-vertical is-parent">
-                <div class="field box cost">
+            <div v-show="isOffer" class="tile is-vertical is-parent " :class="{'is-sticky-box': isStickyBoxRequired}">
+                <div class="box cost">
                     <label v-if="isEditing" class="label" for="cost">Cost</label>
                     <div class="price" v-if="!isEditing">{{ model.cost }}</div>
                     <div class="control has-icon has-icon-right">
@@ -114,34 +104,36 @@
                 </div>
 
                 <div class="field box">
+                    <div class="box-header-strip"></div>
                     <label class="label">Schedule</label>
                     <div v-show="isOffer" class="control">
-                        <ul>
+                        <ul v-show="!showAvailability">
                             <li v-for="schedule in model.schedules">
-                                <div>
-                                    <label class="label">Start from</label>
-                                    <label>{{ schedule.startTime }}</label>
+                                <div class="columns is-gapless">
+                                    <label class="column is-5">Start</label>
+                                    <label class="column">{{ schedule.startTime }}</label>
                                 </div>
-                                <div>
-                                    <label class="label">Duration</label>
-                                    <label>{{ schedule.duration }}</label>
+                                <div class="columns is-gapless">
+                                    <label class="column is-5">Duration</label>
+                                    <label class="column">{{ schedule.duration }}</label>
                                 </div>
-                                <div>
-                                    <label class="label">Repeated</label>
-
+                                <div class="columns is-gapless">
+                                    <label class="column is-5">Repeated</label>
                                     <!--Bodom hack: doesn't work when jump directly to URL-->
-                                    <label>{{ schedule.summaryText ? schedule.summaryText() : schedule.repeatedType == 1 ? 'Daily' : schedule.repeatedType == 2 ? 'Weekly' : 'Monthly'}}</label>
+                                    <label class="column">{{ schedule.summaryText ? schedule.summaryText() : schedule.repeatedType == 1 ? 'Daily' : schedule.repeatedType == 2 ? 'Weekly' : 'Monthly'}}</label>
                                 </div>
-                                <div>
-                                    <button v-if="!isEditing" id="checkAvailability" class="button mtl_button mtl-btn-large relative-center-x" @click.prevent="checkAvailability(schedule)">{{availabilityText}}</button>
-                                    <div v-show="toggleAvailability">
-                                        <availabilityCheck :bookingDate="bookingDate" @bookingDateChanged="onBookingDateChanged" 
-                                                           :participants="bookingNumber" @participantChanged="onParticipantChanged" 
-                                                           :disableDays="disableDays">
-                                        </availabilityCheck>
-                                    </div>
+                                <div class="columns is-gapless">
+                                    <button v-if="!isEditing" id="checkAvailability" class="button mtl_button-no-round mtl-btn-large relative-center-x" @click.prevent="checkAvailability(schedule)">Check Availability</button>
                                     <button v-if="isEditing" class="button  mtl_button relative-center-x" @click.prevent="onEditSchedule(schedule)">Edit Schedule</button>
                                 </div>
+                            </li>
+                        </ul>
+                        <ul v-show="showAvailability">
+                            <li>
+                                <availabilityCheck :bookingDate="bookingDate" @bookingDateChanged="onBookingDateChanged"
+                                                   :participants="bookingNumber" @participantChanged="onParticipantChanged"
+                                                   :disableDays="disableDays">
+                                </availabilityCheck>
                             </li>
                         </ul>
                     </div>
@@ -163,7 +155,6 @@
                     <p>test 1</p>
                 </div>
             </div>
-
             <schedulemodal :show="showScheduleModal" :schedule="editingSchedule" @onSave="onSaveSchedule" @onClose="showScheduleModal= !showScheduleModal"></schedulemodal>
         </div>
 </template>

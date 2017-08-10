@@ -143,7 +143,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
+                //if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
 
                 var image = await _listingService.FetchImageByUrl(listingId, url);
 

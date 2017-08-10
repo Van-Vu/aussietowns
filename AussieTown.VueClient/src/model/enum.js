@@ -28,6 +28,7 @@ export var UserSource;
 })(UserSource || (UserSource = {}));
 export var UserRole;
 (function (UserRole) {
+    UserRole[UserRole["Anonymous"] = 0] = "Anonymous";
     UserRole[UserRole["User"] = 1] = "User";
     UserRole[UserRole["Editor"] = 2] = "Editor";
     UserRole[UserRole["Admin"] = 4] = "Admin";

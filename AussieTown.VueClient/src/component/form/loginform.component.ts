@@ -26,6 +26,7 @@ export default class LoginForm extends Vue {
     formSubmitted: boolean = false;
     model: LoginModel = new LoginModel();
     $cookie: any;
+    $auth: any;
 
     // Login or Signup
     isLogin: boolean = true;
@@ -60,11 +61,12 @@ export default class LoginForm extends Vue {
         (new UserService()).login(model)
             .then(responseToken => {
                 this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
+                //this.$auth.setUser(responseToken.loggedInUser);
                 this.setCookies(responseToken.accessToken);
                 this.$emit('onSuccessfulLogin');
             })
             .catch(error => {
-                this.$store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: error, type: NotificationType.Error });
+                this.$store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: error.message ? error.message : error, type: NotificationType.Error });
             });
     }
 

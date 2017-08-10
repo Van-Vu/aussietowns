@@ -13,6 +13,7 @@
         </section>
         <section class="hero-foot">
         </section>
+        <loginmodal :show="showLoginModal" @onSuccessfulLogin="onSuccessfulLogin" @onClose="hideLoginModal"></loginmodal>
     </div>
 </template>
 

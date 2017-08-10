@@ -1,4 +1,7 @@
-﻿.swiper {
+﻿.swipe-main {
+    position:relative;
+}
+.swiper {
   position: relative;
   overflow: hidden;
 
@@ -10,53 +13,17 @@
     transition: all 0ms ease;
 
     > div {
-    display: flex;
+      display: flex;
       overflow: hidden;
       flex-shrink: 0;
       width: 100%;
       height: 100%;
       justify-content: center;
       align-self: center;
+
+
     }
   }
-
-    .slide-button {
-        @extend .absolute-center-y;
-        cursor: pointer;
-        border-radius: 50%;
-        background-color: transparent;
-        width: 70px;
-        height: 70px;
-        z-index:10;
-
-        &:hover {
-            box-shadow: 0px 1px 6px #666;
-            background-color: $c-neutral-white;
-            color: $c-brand-secondary;
-        }
-
-        & .glyphicon {
-            font-size: 1.2em;
-        }
-    }
-
-    .slide-button-prev{
-        @extend .slide-button;
-        left: -35px;
-        & .glyphicon {
-            left: 0;
-            margin-left: 40px;
-        }
-    }
-    
-    .slide-button-next{
-        @extend .slide-button;
-        right: -35px;
-        & .glyphicon {
-            right:0;
-            margin-right: 40px;
-        }
-    }
 
   &.horizontal .swiper-wrap {
     flex-direction: row;
@@ -109,4 +76,37 @@
       margin: 0 3px;
     }
   }
+}
+
+.slide-button {
+    @extend .absolute-center-y;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: transparent;
+    width: 50px;
+    height: 50px;
+    z-index:1;
+    background-color: $c-neutral-white;
+    box-shadow: 0px 1px 6px #666;
+
+    &:hover {
+        box-shadow: 0px 1px 6px $c-brand-secondary;
+        color: $c-brand-secondary;
+    }
+
+    & .glyphicon {
+        font-size: 1.4em;
+        margin-left: 14px;
+        margin-top: 12px;
+    }
+}
+
+.slide-button-prev{
+    @extend .slide-button;
+    left: -23px;
+}
+    
+.slide-button-next{
+    @extend .slide-button;
+    right: -19px;
 }

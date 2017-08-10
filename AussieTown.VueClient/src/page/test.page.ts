@@ -5,14 +5,15 @@ import Swiper from '../component/shared/external/vue-swiper.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
 import UserService from '../service/user.service';
 import { NotificationType } from '../model/enum';
-
+import datepicker from '../component/shared/external/datepicker.vue';
 
 @Component({
     name: 'TestPage',
     components: {
         "searchbar": SearchBarComponent,
         "swiper": Swiper,
-        "numberchooser": NumberChooser
+        "numberchooser": NumberChooser,
+        "datepicker": datepicker
     }
 })
 
@@ -21,6 +22,11 @@ export default class TestPage extends Vue {
     showListingOffer: boolean = false;
     numberChooser : number = 0;
 
+    disableDays = {
+        days: [6, 0] // Disable Saturday's and Sunday's
+    };
+
+    startDate = new Date();
 
     asyncData({ store, route }) {
         return store.dispatch('SET_CURRENT_PAGE', 'home');

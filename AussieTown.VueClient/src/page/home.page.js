@@ -30,6 +30,7 @@ var HomePage = (function (_super) {
         _this.showListingOffer = false;
         _this.searchSuburb = null;
         _this.backgroundImage = '';
+        _this.swiperDirection = 'horizontal';
         return _this;
         //requestSlides: Array<any> = [
         //    { "text": "slide conten asdfa sdfasfd asdf asdf asdf as dfasd", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/a5bdb2fc08f9096fb1ef3afca2e5c1ff5292daf9fe7b86b8710d091ae7fa5547/400/232/1.0" },
@@ -48,6 +49,13 @@ var HomePage = (function (_super) {
         var store = _a.store, route = _a.route;
         return store.dispatch('FETCH_FEATURELISTINGS');
     };
+    Object.defineProperty(HomePage.prototype, "currentPage", {
+        get: function () {
+            return this.$store.state.currentPage;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(HomePage.prototype, "featuredListings", {
         get: function () {
             return this.$store.state.featureListings;
@@ -76,12 +84,15 @@ var HomePage = (function (_super) {
         switch (screenSize) {
             case ScreenSize.Desktop:
                 this.backgroundImage = '/static/images/homepage_desktop.jpg';
+                this.swiperDirection = 'horizontal';
                 break;
             case ScreenSize.Tablet:
                 this.backgroundImage = '/static/images/homepage_tablet.jpg';
+                this.swiperDirection = 'vertical';
                 break;
             case ScreenSize.Mobile:
                 this.backgroundImage = '/static/images/homepage_mobile.jpg';
+                this.swiperDirection = 'vertical';
                 break;
         }
     };

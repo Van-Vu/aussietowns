@@ -1,5 +1,6 @@
 ﻿<template>
-    <div class="container is-fluid" :class="{editing:isEditing}">
+    <div class="container" :class="{editing:isEditing}">
+        <div class="box-header-strip"></div>
         <div class="field">
             <label class="label" for="email">Email Address</label>
             <p class="control has-icon has-icon-right">

@@ -19,7 +19,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
-import LoginModal from '../modal/loginmodal.component.vue';
 import MenuModal from '../modal/menumodal.component.vue';
 import RegistrationModal from '../modal/registrationmodal.component.vue';
 import SearchBarComponent from '../shared/search/searchbar.component.vue';
@@ -36,11 +35,7 @@ var NavMenuComponent = (function (_super) {
         //profilePhoto = '';
         //isLoggedIn = false;
         _this.searchSuburb = null;
-        _this.showLoginModal = false;
-        _this.showRegistrationModal = false;
         _this.showMenuModal = false;
-        // To handle scroll event
-        _this.currentTime = Date.now();
         return _this;
     }
     Object.defineProperty(NavMenuComponent.prototype, "currentPage", {
@@ -69,6 +64,11 @@ var NavMenuComponent = (function (_super) {
             window.addEventListener('scroll', this.handleScroll);
         }
     };
+    NavMenuComponent.prototype.mounted = function () {
+        if (this.$store.state.currentPage != 'home') {
+            this.isSticky = true;
+        }
+    };
     NavMenuComponent.prototype.destroyed = function () {
         if (process.env.VUE_ENV === 'client') {
             window.removeEventListener('scroll', this.handleScroll);
@@ -87,7 +87,6 @@ var NavMenuComponent = (function (_super) {
     };
     NavMenuComponent.prototype.onRouteParamChanged = function (value, oldValue) {
         this.showMenuModal = false;
-        this.showLoginModal = false;
         if (this.$route.name != 'home') {
             this.isSticky = true;
         }
@@ -95,9 +94,6 @@ var NavMenuComponent = (function (_super) {
             this.isSticky = false;
         }
         this.searchSuburb = null;
-    };
-    NavMenuComponent.prototype.onSuccessfulLogin = function () {
-        this.showLoginModal = false;
     };
     NavMenuComponent.prototype.onSelect = function (val) {
         this.searchSuburb = val;
@@ -107,12 +103,8 @@ var NavMenuComponent = (function (_super) {
             this.$router.push({ name: 'search', params: { seoString: Utils.seorizeString(this.searchSuburb.name), suburbId: this.searchSuburb.id } });
         }
     };
-    NavMenuComponent.prototype.mounted = function () {
-        //this.profilePhoto = this.$store.getters.profilePhoto;
-        //this.isLoggedIn = this.$store.getters.isLoggedIn;
-        if (this.$store.state.currentPage != 'home') {
-            this.isSticky = true;
-        }
+    NavMenuComponent.prototype.onShowLoginModal = function () {
+        this.$store.dispatch('SHOW_LOGIN_MODAL');
     };
     __decorate([
         Watch('$route.params'),
@@ -124,7 +116,6 @@ var NavMenuComponent = (function (_super) {
         Component({
             name: 'nav-menu',
             components: {
-                'loginmodal': LoginModal,
                 'registrationmodal': RegistrationModal,
                 'menumodal': MenuModal,
                 "searchbar": SearchBarComponent

@@ -1,34 +1,34 @@
 <template>
-    <div class="swiper"
-         :class="[direction, {'dragging': dragging}]"
-         @touchstart="_onTouchStart"
-         @mousedown="_onTouchStart"
-         @wheel="_onWheel">
-        <div class="slide-button-prev" v-show="currentPage > 1" @click.prevent="prev">
-            <i class="glyphicon glyphicon-chevron-left absolute-center-y"></i>
+    <div class="swipe-main">
+        <div class="slide-button-prev is-hidden-mobile" v-show="currentPage > 1" @click.prevent="prev">
+            <i class="glyphicon glyphicon-chevron-left"></i>
         </div>
-        
-        <div class="swiper-wrap"
-             ref="wrap"
-             :style="{
+        <div class="swiper"
+             :class="[direction, {'dragging': dragging}]"
+             @touchstart="_onTouchStart"
+             @mousedown="_onTouchStart"
+             @wheel="_onWheel">
+            <div class="swiper-wrap"
+                 ref="wrap"
+                 :style="{
                 'transform' : 'translate3d(' + translateX + 'px,' + translateY + 'px, 0)',
                 'transition-duration': transitionDuration + 'ms'
              }"
-             @transitionend="_onTransitionEnd">
-            <slot></slot>
-            <div id="EndOfSlide" style="width: 1px; height: 1px;"></div>
+                 @transitionend="_onTransitionEnd">
+                <slot></slot>
+                <div id="EndOfSlide" style="width: 1px; height: 1px;"></div>
+            </div>
+            <div class="swiper-pagination"
+                 v-show="paginationVisible">
+                <span class="swiper-pagination-bullet"
+                      :class="{'active': index+1===currentPage}"
+                      v-for="(slide,index) in slideEls"
+                      @click="paginationClickable && setPage(index+1)"></span>
+            </div>
         </div>
-        <div class="swiper-pagination"
-             v-show="paginationVisible">
-            <span class="swiper-pagination-bullet"
-                  :class="{'active': index+1===currentPage}"
-                  v-for="(slide,index) in slideEls"
-                  @click="paginationClickable && setPage(index+1)"></span>
+        <div class="slide-button-next is-hidden-mobile" v-show="isNextAvailable()" @click.prevent="next">
+            <i class="glyphicon glyphicon-chevron-right"></i>
         </div>
-        <div class="slide-button-next" v-show="isNextAvailable()" @click.prevent="next">
-            <i class="glyphicon glyphicon-chevron-right absolute-center-y"></i>
-        </div>
-        
     </div>
 </template>
 <script>

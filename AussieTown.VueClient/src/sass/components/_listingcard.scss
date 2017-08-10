@@ -4,26 +4,27 @@
     box-shadow: $params;
 }
 
-.listing-wrapper {
+.card-small {
     position: relative;
     overflow: auto;
-    border: 2px solid #B6BABC;
-    margin: 2px 5px;
+    margin: 10px 10px;
     border-radius: 5px;
-    @include drop-shadow(10px 10px 5px #888888);
+    width: 98%;
+    @include drop-shadow(0px 0px 10px $c-neutral-black);
+
+    @media all and (min-width: $is-tablet){
+        margin: 2px 8px;
+    }
+}
+
+.card-full, .card-small {
+    overflow: auto;
 }
 
 .listing-header {
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-
     .header-text {
-        white-space: nowrap; 
-        text-overflow: ellipsis; 
-        -o-text-overflow: ellipsis;
-         margin-left: 10px;
+        @include text-ellipsis;
+         margin: 0 10px 0 0;
     }
 
     .listing-cost {
@@ -38,9 +39,25 @@
     }
 }
 
-.listing-content {
+.listing-image { 
     position: relative;
-    width: 100%;
+    display:inline-block;
+    width: 45%;
+    width:180px;
+    height: 120px;
+    background-color: $c-lightgrey-light;
+
+    @media all and (min-width: $is-desktop){
+        width: 274px;
+        height: 182px;
+    }
+
+    > img {
+        position: relative;
+        top:50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+    }
 }
 
 .listing-description {
@@ -49,9 +66,7 @@
     vertical-align: top;
 }
 
-.listing-footer{
-    .listing-header{
-        display: inline-block;
-        @include text-ellipsis;
-    }
+.listing-content{
+    display: inline-block;
+    vertical-align: top;
 }

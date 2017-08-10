@@ -1,9 +1,9 @@
 ﻿<template>
-    <article class="listing-wrapper">
+    <article class="card-full">
         <router-link :to="{ name: 'listingDetail', params: { seoString: headerLink, listingId: id }}">
             <div class="listing-header">
-                <!--<div class="header-text"><h4>{{header }}</h4></div>
-                <div class="listing-cost">A${{cost }}</div>-->
+                <div class="header-text">{{header }}</div>
+                <!--<div class="listing-cost">A${{cost }}</div>-->
             </div>
             <div class="listing-content">
                 <img v-lazy="imageUrl" />

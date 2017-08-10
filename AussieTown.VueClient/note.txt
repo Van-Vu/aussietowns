@@ -38,10 +38,13 @@ DONE Refactor isSticky & showSecondSearchBar
 
 PROGRESS Page layout
 
-Throttle Location / User search
-Performance test
+Progress bar
+Performance / Load test
+https://www.sparkpost.com/pricing/#addon-plans
 Unit test
 Booking process
+Fix v-lazy when no image
+Icons
 
 
 Blog post:

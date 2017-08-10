@@ -34,7 +34,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
+                //if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
 
                 var imageUrls = new List<Image>();
                 foreach (var file in files)

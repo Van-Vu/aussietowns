@@ -1,17 +1,20 @@
 ﻿<template>
     <div>
-        <div v-show="!isForgotPassword">
-            <fb-signin-button :params="fbSignInParams"
-                              @success="onFbSignInSuccess"
-                              @error="onFbSignInError">
-                Continue with Facebook
-            </fb-signin-button>
-            <g-signin-button :params="googleSignInParams"
-                             @success="onGgSignInSuccess"
-                             @error="onGgSignInError">
-                Continue with Google
-            </g-signin-button>
-
+        <div v-show="!isForgotPassword" class="tile  is-vertical">
+            <div class="tile">
+                <fb-signin-button class="tile is-6 fb-signin-button box" :params="fbSignInParams"
+                                  @success="onFbSignInSuccess"
+                                  @error="onFbSignInError">
+                    <img src="/static/images/facebook_logo.jpg"/>
+                    <span>Facebook</span>
+                </fb-signin-button>
+                <g-signin-button class="tile is-6 g-signin-button box" :params="googleSignInParams"
+                                 @success="onGgSignInSuccess"
+                                 @error="onGgSignInError">
+                    <img src="/static/images/google_logo.png"/>
+                    <span>Google</span>
+                </g-signin-button>
+            </div>
             <div style="margin: 30px 0;text-align:center;">
                 <span style="width: 30px;height: 30px;padding: 10px;border-radius: 50%;background-color: #eaebed;">OR</span>
                 <hr style="margin-top: -10px;">

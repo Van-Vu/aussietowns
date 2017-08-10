@@ -1,5 +1,6 @@
 ﻿<template>
     <form @submit.prevent="onChangePassword">
+        <div class="box-header-strip"></div>
         <div class="field">
             <p class="control has-icon has-icon-right">
                 <input name="oldPassword" v-model="model.oldPassword" v-validate="'required'"

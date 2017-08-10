@@ -1,13 +1,14 @@
 ﻿<template>
     <div>
-        <div>
-            <numberchooser :value="participants" @input="onParticipantChanged"></numberchooser>
+        <div class="columns is-gapless">
+            <label class="column is-5">Participants</label>
+            <numberchooser class="column" :value="participants" @input="onParticipantChanged"></numberchooser>
         </div>
-        <div>
-            <datepicker id="availDay" :disabled="disableDays" :range="false" :showTextbox="true" :value="bookingDate" @input="onBookingDateChanged"></datepicker>
+        <div class="columns is-gapless">
+            <datepicker id="availDay" :disabled="disableDays" :range="false" :inline="true"
+                    :showTextbox="true" :value="bookingDate" @input="onBookingDateChanged"></datepicker>
         </div>
     </div>
-
 </template>
 
 <script lang="ts">

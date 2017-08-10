@@ -13,11 +13,11 @@ var UploadService = (function () {
     //}
     UploadService.prototype.uploadListing = function (formData, listingId) {
         return http.post(this.uploadListingUrl + listingId, formData)
-            .then(function (x) { return x.data; });
+            .then(function (x) { return x; });
     };
     UploadService.prototype.uploadProfile = function (formData, profileId) {
         return http.post(this.uploadProfileUrl + profileId, formData)
-            .then(function (x) { return x.data; });
+            .then(function (x) { return x; });
     };
     return UploadService;
 }());

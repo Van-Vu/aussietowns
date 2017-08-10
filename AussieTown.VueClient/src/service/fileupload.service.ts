@@ -14,12 +14,12 @@ export default class UploadService {
 
     uploadListing(formData, listingId) {
         return http.post(this.uploadListingUrl + listingId, formData)
-            .then(x => x.data);
+            .then(x => x);
     }
 
     uploadProfile(formData, profileId) {
         return http.post(this.uploadProfileUrl + profileId,formData)
             // get data
-            .then(x => x.data);
+            .then(x => x);
     }
 }

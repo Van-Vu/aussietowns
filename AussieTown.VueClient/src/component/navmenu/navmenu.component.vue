@@ -36,8 +36,8 @@
                     <!--<li class="li-horizontal"><router-link :to="{ name: 'termsandconditions' }">Terms and Conditions</router-link></li>-->
                     <li class="li-horizontal nav-link  is-hidden-mobile is-hidden"><router-link :to="{ name: 'about'}">About</router-link></li>
                     <li class="li-horizontal">
-                        <a v-show="!isLoggedIn" class="button is-pulled-right mtl_button" @click="showLoginModal = !showLoginModal">Join</a>
-                        <a v-show="isLoggedIn" class="is-pulled-right" @click="showLoginModal = !showLoginModal">
+                        <a v-show="!isLoggedIn" class="button is-pulled-right mtl_button" @click="onShowLoginModal">Join</a>
+                        <a v-show="isLoggedIn" class="is-pulled-right" @click="onShowLoginModal">
                             <figure class="image is-32x32">
                                 <img class="is-circle" :src="profilePhoto" />
                             </figure>
@@ -50,7 +50,7 @@
         <div class="is-hidden-tablet" v-show="isSticky">
             <searchbar @onSelect="onSelect($event)" @onSearch="onSearch($event)"></searchbar>
         </div>
-        <loginmodal :show="showLoginModal" @onSuccessfulLogin="onSuccessfulLogin" @onClose="showLoginModal = !showLoginModal"></loginmodal>
+        <!--<loginmodal :show="showLoginModal" @onSuccessfulLogin="onSuccessfulLogin" @onClose="showLoginModal = !showLoginModal"></loginmodal>-->
         <menumodal :show="showMenuModal" @onClose="showMenuModal = !showMenuModal"></menumodal>
     </div>
 

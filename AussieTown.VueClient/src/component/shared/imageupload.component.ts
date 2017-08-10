@@ -4,6 +4,8 @@ import UploadImage from './external/vueuploadimage.vue';
 import Swiper from './external/vue-swiper.vue';
 import ImageModel from '../../model/image.model';
 import RingLoader from './external/ringloader.vue';
+import { NotificationType } from '../../model/enum';
+
 
 @Component({
     name: "ImageUploadComponent",
@@ -33,7 +35,16 @@ export default class ImageUploadComponent extends Vue {
     }
 
     onRemoveImage() {
-        this.$store.dispatch('REMOVE_IMAGE', { listingId: this.$store.state.listing.id, url: this.images[this.carouselCurrentPage - 1].url });
+        this.isUploading = true;
+        this.$store.dispatch('REMOVE_IMAGE', { listingId: this.$store.state.listing.id, url: this.images[this.carouselCurrentPage - 1].url })
+            .then(response => {
+                this.$emit('uploadImageCompleted');
+                this.isUploading = false;
+            })
+            .catch(error => {
+                this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", text: error.message ? error.message : "Error uploading. We're on it !", type: NotificationType.Error });
+                this.isUploading = false;
+            });;
     }
 
     onUploadImages(formData) {
@@ -55,6 +66,10 @@ export default class ImageUploadComponent extends Vue {
             actionId: actionId
         }).then(response => {
             this.$emit('uploadImageCompleted');
+            this.isUploading = false;
+        })
+        .catch(error => {
+            this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", text: error.message ? error.message : "Error uploading. We're on it !", type: NotificationType.Error });
             this.isUploading = false;
         });
     }

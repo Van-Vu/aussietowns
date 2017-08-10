@@ -44,6 +44,7 @@ import LoginForm from '../component/form/loginform.component.vue';
 import RegistrationForm from '../component/form/registration.component.vue';
 import ChangePasswordComponent from '../component/profile/changepassword.component.vue';
 import ForgetPasswordForm from '../component/form/forgetpassword.component.vue';
+import { UserRole } from '../model/enum';
 Vue.use(Router);
 var router = new Router({
     mode: 'history',
@@ -51,12 +52,20 @@ var router = new Router({
         {
             path: "/home",
             name: "home",
-            component: HomePage
+            component: HomePage,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/home'
+            }
         },
         {
             path: "/search/:seoString-:suburbId(\\d+)",
             name: "search",
-            component: SearchPage
+            component: SearchPage,
+            meta: {
+                permission: UserRole.User,
+                fail: '/login'
+            }
         },
         {
             path: "/profile/:seoString-:profileId(\\d+)",
@@ -67,36 +76,51 @@ var router = new Router({
                     // when /user/:id/profile is matched
                     path: '',
                     name: "profileHome",
-                    meta: { child: 'home' },
-                    component: UserDetailComponent
+                    component: UserDetailComponent,
+                    meta: {
+                        permission: UserRole.User,
+                        fail: '/home'
+                    }
                 },
                 {
                     // UserProfile will be rendered inside User's <router-view>
                     // when /user/:id/profile is matched
                     path: 'images',
                     name: "profileImages",
-                    meta: { child: 'image' },
-                    component: UserImageComponent
+                    component: UserImageComponent,
+                    meta: {
+                        permission: UserRole.Editor,
+                        fail: '/home'
+                    }
                 },
                 {
                     // UserProfile will be rendered inside User's <router-view>
                     // when /user/:id/profile is matched
                     path: 'messages',
                     name: 'profileMessages',
-                    meta: { requiresAuth: true },
                     component: MessageComponent,
+                    meta: {
+                        permission: UserRole.SuperAdmin,
+                        fail: '/home'
+                    }
                 },
                 {
                     path: 'trips',
                     name: 'profileTrips',
-                    meta: { requiresAuth: false },
-                    component: TripComponent
+                    component: TripComponent,
+                    meta: {
+                        permission: UserRole.Admin,
+                        fail: '/home'
+                    }
                 },
                 {
                     path: 'changepassword',
                     name: 'changePassword',
-                    meta: { requiresAuth: true },
-                    component: ChangePasswordComponent
+                    component: ChangePasswordComponent,
+                    meta: {
+                        permission: UserRole.SuperAdmin,
+                        fail: '/home'
+                    }
                 }
             ]
         },
@@ -104,79 +128,102 @@ var router = new Router({
             path: "/listing/:listingType(offer|request)",
             name: "newListing",
             component: ListingPage,
-            props: true
+            props: true,
+            meta: {
+                permission: UserRole.User,
+                fail: '/home'
+            }
         },
         {
             path: "/listing/:seoString-:listingId(\\d+)",
             name: "listingDetail",
             component: ListingPage,
-            props: true
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/home'
+            }
         },
         {
             path: "/booking",
             name: "booking",
             component: BookingPage,
-            props: true
+            props: true,
+            meta: {
+                permission: UserRole.User,
+                fail: '/home'
+            }
         },
         {
             path: "/login",
             name: "login",
             component: LoginForm,
-            props: true
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/home'
+            }
         },
         {
             path: "/registration",
             name: "registration",
             component: RegistrationForm,
-            props: true
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/home'
+            }
         },
         {
             path: "/resetpassword/:guidString",
             name: "resetpassword",
             component: ForgetPasswordForm,
-            props: true
+            props: true,
+            meta: {
+                permission: UserRole.User,
+                fail: '/home'
+            }
         },
         {
             path: "/help",
             name: "help",
-            component: HelpPage
+            component: HelpPage,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/home'
+            }
         },
         {
             path: "/about",
             name: "about",
-            component: AboutPage
+            component: AboutPage,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/home'
+            }
         },
         {
             path: "/termsandconditions",
             name: "termsandconditions",
-            component: TermsAndConditionsPage
+            component: TermsAndConditionsPage,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/home'
+            }
         },
         {
             path: "/test",
             name: "TestPage",
-            component: TestPage
+            component: TestPage,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/home'
+            }
         }
     ]
 });
-router.beforeEach(function (to, from, next) {
-    store.dispatch("ENABLE_LOADING");
-    if (to.matched.some(function (record) { return record.meta.requiresAuth; })) {
-        // this route requires auth, check if logged in
-        // if not, redirect to login page.
-        //if (!auth.loggedIn()) {
-        //    next({
-        //        path: '/login',
-        //        query: { redirect: to.fullPath }
-        //    })
-        //} else {
-        console.log('inside route of Auth');
-        next();
-    }
-    else {
-        next(); // make sure to always call next()!
-    }
-});
 router.afterEach(function (to, from) {
     store.dispatch("DISABLE_LOADING");
+    store.dispatch('SET_CURRENT_PAGE', to.name);
 });
 export default router;

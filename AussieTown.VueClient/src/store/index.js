@@ -22,7 +22,7 @@ export default new Vuex.Store({
     ],
     state: {
         currentPage: '',
-        loggedInUser: '',
+        loggedInUser: {},
         listing: ListingModel,
         profile: {},
         searchListings: [],
@@ -32,14 +32,15 @@ export default new Vuex.Store({
         notifications: [],
         booking: {},
         isLoading: '',
-        featureListings: ''
+        featureListings: [],
+        showLoginModal: false
     },
     getters: {
         isLoggedIn: function (state) {
-            return ((typeof state.loggedInUser === 'object') && (state.loggedInUser.email !== ''));
+            return typeof state.loggedInUser.email != 'undefined' && state.loggedInUser.email !== '';
         },
         profilePhoto: function (state) {
-            return (typeof state.loggedInUser === 'object') ? state.loggedInUser.photoUrl : '';
+            return state.loggedInUser.photoUrl;
         }
     },
     actions: {
@@ -128,19 +129,19 @@ export default new Vuex.Store({
             var commit = _a.commit;
             return (new UploadService()).uploadListing(payload.data, payload.actionId)
                 .then(function (response) {
-                commit('UPDATE_LISTING_IMAGES', response.newImages);
+                commit('ADD_LISTING_IMAGES', response);
             });
         },
         UPLOAD_PROFILE_IMAGES: function (_a, payload) {
             var commit = _a.commit;
             return (new UploadService()).uploadProfile(payload.data, payload.actionId)
-                .then(function (response) { return commit('UPDATE_PROFILE_IMAGES', response.url); });
+                .then(function (response) { return commit('UPDATE_PROFILE_IMAGES', response); });
         },
         REMOVE_IMAGE: function (_a, payload) {
             var commit = _a.commit;
             return (new ListingService()).deleteImage(payload.listingId, payload.url)
                 .then(function (response) {
-                //commit('UPDATE_LISTING_IMAGES', response);
+                commit('REMOVE_LISTING_IMAGES', payload.url);
             });
         },
         UPDATE_BOOKING: function (_a, payload) {
@@ -154,6 +155,14 @@ export default new Vuex.Store({
         DISABLE_LOADING: function (_a) {
             var commit = _a.commit;
             commit('ISLOADING', false);
+        },
+        SHOW_LOGIN_MODAL: function (_a) {
+            var commit = _a.commit;
+            commit('LOGIN_MODAL', true);
+        },
+        HIDE_LOGIN_MODAL: function (_a) {
+            var commit = _a.commit;
+            commit('LOGIN_MODAL', false);
         },
         TEST: function (_a, payload) {
             var commit = _a.commit, state = _a.state;
@@ -199,13 +208,17 @@ export default new Vuex.Store({
         REMOVE_NOTIFICATION: function (state, notification) {
             Vue.set(state, 'notifications', Utils.removeFromArray(state.notifications, notification));
         },
-        UPDATE_LISTING_IMAGES: function (state, listingImages) {
+        ADD_LISTING_IMAGES: function (state, listingImages) {
             if (state.listing.imageList) {
                 listingImages.map(function (x) { return state.listing.imageList.push(x); });
             }
             else {
                 Vue.set(state.listing, 'imageList', listingImages);
             }
+        },
+        REMOVE_LISTING_IMAGES: function (state, imageUrl) {
+            var image = state.listing.imageList.find(function (x) { return x.url === imageUrl; });
+            Vue.set(state.listing, 'imageList', Utils.removeFromArray(state.listing.imageList, image));
         },
         UPDATE_PROFILE_IMAGES: function (state, profileImages) {
             state.profile.images = profileImages;
@@ -215,6 +228,9 @@ export default new Vuex.Store({
         },
         ISLOADING: function (state, value) {
             Vue.set(state, 'isLoading', value);
+        },
+        LOGIN_MODAL: function (state, value) {
+            Vue.set(state, 'showLoginModal', value);
         }
     }
 });

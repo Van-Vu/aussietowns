@@ -27,8 +27,10 @@ import { ListingType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
 import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
 import ImageUploadComponent from '../component/shared/imageupload.component.vue';
-import AvailabilityComponent from '../component/booking/availability.component.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
+import { ScreenSize, NotificationType } from '../model/enum';
+import { detectScreenSize } from '../service/screen.service';
+import AvailabilityComponent from '../component/booking/availability.component.vue';
 Vue.use(VeeValidate);
 var ListingPage = (function (_super) {
     __extends(ListingPage, _super);
@@ -39,8 +41,8 @@ var ListingPage = (function (_super) {
         _this.isEditing = false;
         _this.editingSchedule = null;
         _this.showScheduleModal = false;
-        _this.toggleAvailability = false;
-        _this.availabilityText = "Check Availability";
+        _this.showAvailability = false;
+        _this.isStickyBoxRequired = true;
         _this.bookingDate = new Date().toDateString();
         _this.bookingNumber = 0;
         _this.disableDays = {
@@ -49,6 +51,12 @@ var ListingPage = (function (_super) {
         _this.modelCache = null;
         return _this;
     }
+    ListingPage.prototype.asyncData = function (_a) {
+        var store = _a.store, route = _a.route;
+        if (route.params.listingId) {
+            return store.dispatch('FETCH_LISTING_BY_ID', route.params.listingId);
+        }
+    };
     Object.defineProperty(ListingPage.prototype, "model", {
         get: function () {
             this.isOffer = this.$store.state.listing.listingType == ListingType.Offer;
@@ -57,26 +65,26 @@ var ListingPage = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    //@Watch('$route.state.listing', { deep: true })
-    //onModelChanged(value: any, oldValue: any) {
-    //    this.isOffer = value.listingType == ListingType.Offer;
-    //}
-    ListingPage.prototype.asyncData = function (_a) {
-        var store = _a.store, route = _a.route;
-        if (route.params.listingId) {
-            return store.dispatch('FETCH_LISTING_BY_ID', route.params.listingId);
-        }
-    };
     ListingPage.prototype.created = function () {
-        this.$store.dispatch('SET_CURRENT_PAGE', 'listing');
+    };
+    ListingPage.prototype.mounted = function () {
+        var screenSize = detectScreenSize(this.$mq);
+        switch (screenSize) {
+            case ScreenSize.Desktop:
+                this.isStickyBoxRequired = true;
+                break;
+            case ScreenSize.Tablet:
+                this.isStickyBoxRequired = false;
+                break;
+            case ScreenSize.Mobile:
+                this.isStickyBoxRequired = false;
+                break;
+        }
     };
     ListingPage.prototype.onUploadImageCompleted = function () {
         this.model.imageList = this.$store.state.listing.imageList;
         this.$children.find(function (x) { return x.$el.id === 'imageupload'; }).$children[0].refresh();
-    };
-    ListingPage.prototype.test = function () {
-        var testvalue = this.$children;
-        console.log(testvalue);
+        this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
     };
     ListingPage.prototype.onInsertorUpdate = function () {
         this.isEditing = false;
@@ -107,22 +115,12 @@ var ListingPage = (function (_super) {
     ListingPage.prototype.onUserRemoved = function (user) {
     };
     ListingPage.prototype.checkAvailability = function (schedule) {
-        if (this.toggleAvailability) {
-            this.$store.dispatch('UPDATE_BOOKING', { participants: this.bookingNumber, date: this.bookingDate, time: '09:00' });
-            this.$router.push({ name: "booking" });
-        }
-        this.toggleAvailability = true;
-        this.availabilityText = "Proceed";
+        this.showAvailability = true;
+        this.isStickyBoxRequired = false;
         //var bookingDayPanel = this.$children.find(x => x.$el.id === "availDay");
         //if (bookingDayPanel) {
         //    (bookingDayPanel as any).togglePanel();
         //}
-    };
-    ListingPage.prototype.onBookingDateChanged = function (value) {
-        this.bookingDate = value;
-    };
-    ListingPage.prototype.onParticipantChanged = function (value) {
-        this.bookingNumber = value;
     };
     ListingPage.prototype.onSaveSchedule = function (scheduleObject) {
         console.log(scheduleObject);
@@ -187,6 +185,16 @@ var ListingPage = (function (_super) {
             tourGuests: this.constructParticipants(model.id, model.tourGuests),
             tourOperators: this.constructParticipants(model.id, model.tourOperators)
         };
+    };
+    ListingPage.prototype.onBookingDateChanged = function (value) {
+        this.bookingDate = value;
+    };
+    ListingPage.prototype.onParticipantChanged = function (value) {
+        this.bookingNumber = value;
+    };
+    ListingPage.prototype.onProceed = function () {
+        this.$store.dispatch('UPDATE_BOOKING', { participants: this.bookingNumber, date: this.bookingDate, time: '09:00' });
+        this.$router.push({ name: "booking" });
     };
     __decorate([
         Prop,

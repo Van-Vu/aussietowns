@@ -12,8 +12,10 @@ import datepicker from '../component/shared/external/datepicker.vue';
 import ScheduleModel from '../model/schedule.model';
 import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
 import ImageUploadComponent from '../component/shared/imageupload.component.vue';
-import AvailabilityComponent from '../component/booking/availability.component.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
+import { ScreenSize, NotificationType } from '../model/enum';
+import { detectScreenSize } from '../service/screen.service';
+import AvailabilityComponent from '../component/booking/availability.component.vue';
 
 Vue.use(VeeValidate);
 
@@ -39,8 +41,8 @@ export default class ListingPage extends Vue{
     isEditing: boolean = false;
     editingSchedule: ScheduleModel = null;
     showScheduleModal: boolean = false;
-    toggleAvailability: boolean = false;
-    availabilityText: string = "Check Availability";
+    showAvailability: boolean = false;
+    isStickyBoxRequired: boolean = true;
 
     bookingDate: any = new Date().toDateString();
     bookingNumber: number = 0;
@@ -49,17 +51,9 @@ export default class ListingPage extends Vue{
         days: [6, 0] // Disable Saturday's and Sunday's
     };
 
+    $mq: any;
+
     modelCache: any = null;
-
-    get model() {
-        this.isOffer = this.$store.state.listing.listingType == ListingType.Offer;
-        return this.$store.state.listing;
-    }
-
-    //@Watch('$route.state.listing', { deep: true })
-    //onModelChanged(value: any, oldValue: any) {
-    //    this.isOffer = value.listingType == ListingType.Offer;
-    //}
 
     asyncData({ store, route }) {
         if (route.params.listingId) {
@@ -67,20 +61,38 @@ export default class ListingPage extends Vue{
         }
     }
 
+    get model() {
+        this.isOffer = this.$store.state.listing.listingType == ListingType.Offer;
+        return this.$store.state.listing;
+    }
+
     created() {
-        this.$store.dispatch('SET_CURRENT_PAGE', 'listing');
+
+    }
+
+    mounted() {
+        var screenSize = detectScreenSize(this.$mq);
+        switch (screenSize) {
+            case ScreenSize.Desktop:
+                this.isStickyBoxRequired = true;
+                break;
+
+            case ScreenSize.Tablet:
+                this.isStickyBoxRequired = false;
+                break;
+
+            case ScreenSize.Mobile:
+                this.isStickyBoxRequired = false;
+                break;
+        }        
     }
 
     onUploadImageCompleted() {
         (this.model as any).imageList = this.$store.state.listing.imageList;
         (this.$children.find(x => x.$el.id === 'imageupload').$children[0] as any).refresh();
+        this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
     }
 
-    test() {
-        var testvalue = this.$children;
-        console.log(testvalue);
-
-    }
     onInsertorUpdate() {
         this.isEditing = false;
         if (this.model.id > 0) {
@@ -115,26 +127,13 @@ export default class ListingPage extends Vue{
     }
 
     checkAvailability(schedule) {
-        if (this.toggleAvailability) {
-            this.$store.dispatch('UPDATE_BOOKING', { participants: this.bookingNumber, date: this.bookingDate, time: '09:00' });
-            this.$router.push({ name: "booking" });
-        }
-        this.toggleAvailability = true;
-        this.availabilityText = "Proceed";
-
+        this.showAvailability = true;
+        this.isStickyBoxRequired = false;
 
         //var bookingDayPanel = this.$children.find(x => x.$el.id === "availDay");
         //if (bookingDayPanel) {
         //    (bookingDayPanel as any).togglePanel();
         //}
-    }
-
-    onBookingDateChanged(value) {
-        this.bookingDate = value;
-    }
-
-    onParticipantChanged(value) {
-        this.bookingNumber = value;
     }
 
     onSaveSchedule(scheduleObject) {
@@ -211,4 +210,16 @@ export default class ListingPage extends Vue{
         }
     }
 
+    onBookingDateChanged(value) {
+        this.bookingDate = value;
+    }
+
+    onParticipantChanged(value) {
+        this.bookingNumber = value;
+    }
+
+    onProceed() {
+        this.$store.dispatch('UPDATE_BOOKING', { participants: this.bookingNumber, date: this.bookingDate, time: '09:00' });
+        this.$router.push({ name: "booking" });
+    }
 }

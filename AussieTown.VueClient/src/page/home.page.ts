@@ -51,10 +51,15 @@ export default class HomePage extends Vue{
     showListingOffer: boolean = false;
     searchSuburb: AutocompleteItem = null;
     backgroundImage: string = '';
+    swiperDirection: string = 'horizontal';
     $mq: any;
 
     asyncData({ store, route }) {
         return store.dispatch('FETCH_FEATURELISTINGS');
+    }
+
+    get currentPage() {
+        return this.$store.state.currentPage;
     }
 
     get featuredListings() {
@@ -86,14 +91,17 @@ export default class HomePage extends Vue{
         switch (screenSize) {
             case ScreenSize.Desktop:
                 this.backgroundImage = '/static/images/homepage_desktop.jpg';
+                this.swiperDirection = 'horizontal';
                 break;
 
             case ScreenSize.Tablet:
                 this.backgroundImage = '/static/images/homepage_tablet.jpg';
+                this.swiperDirection = 'vertical';
                 break;
 
             case ScreenSize.Mobile:
                 this.backgroundImage = '/static/images/homepage_mobile.jpg';
+                this.swiperDirection = 'vertical';
                 break;
         }
 

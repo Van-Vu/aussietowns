@@ -50,12 +50,14 @@ router.onReady(function () {
             return next();
         }
         // this is where we should trigger a loading indicator if there is one
+        store.dispatch("ENABLE_LOADING");
         Promise.all(activated.map(function (c) {
             //console.log('here in client:' + (c as any).options.methods.asyncData)
             if (c.options && c.options.methods && c.options.methods.asyncData) {
                 return c.options.methods.asyncData({ store: store, route: to });
             }
             // stop loading indicator
+            store.dispatch("DISABLE_LOADING");
         })).then(function () {
             next();
         }).catch(next);

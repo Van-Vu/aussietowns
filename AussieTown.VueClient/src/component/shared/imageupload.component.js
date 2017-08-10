@@ -22,6 +22,7 @@ import { Component, Prop } from "vue-property-decorator";
 import UploadImage from './external/vueuploadimage.vue';
 import Swiper from './external/vue-swiper.vue';
 import RingLoader from './external/ringloader.vue';
+import { NotificationType } from '../../model/enum';
 var ImageUploadComponent = (function (_super) {
     __extends(ImageUploadComponent, _super);
     function ImageUploadComponent() {
@@ -39,7 +40,18 @@ var ImageUploadComponent = (function (_super) {
         this.carouselCurrentPage = currentPage;
     };
     ImageUploadComponent.prototype.onRemoveImage = function () {
-        this.$store.dispatch('REMOVE_IMAGE', { listingId: this.$store.state.listing.id, url: this.images[this.carouselCurrentPage - 1].url });
+        var _this = this;
+        this.isUploading = true;
+        this.$store.dispatch('REMOVE_IMAGE', { listingId: this.$store.state.listing.id, url: this.images[this.carouselCurrentPage - 1].url })
+            .then(function (response) {
+            _this.$emit('uploadImageCompleted');
+            _this.isUploading = false;
+        })
+            .catch(function (error) {
+            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", text: error.message ? error.message : "Error uploading. We're on it !", type: NotificationType.Error });
+            _this.isUploading = false;
+        });
+        ;
     };
     ImageUploadComponent.prototype.onUploadImages = function (formData) {
         var _this = this;
@@ -59,6 +71,10 @@ var ImageUploadComponent = (function (_super) {
             actionId: actionId
         }).then(function (response) {
             _this.$emit('uploadImageCompleted');
+            _this.isUploading = false;
+        })
+            .catch(function (error) {
+            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", text: error.message ? error.message : "Error uploading. We're on it !", type: NotificationType.Error });
             _this.isUploading = false;
         });
     };

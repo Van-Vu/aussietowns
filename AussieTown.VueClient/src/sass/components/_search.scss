@@ -6,12 +6,13 @@
     width: 40%;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
-    top: 55px;
+    top: 70px;
     z-index: 0;
     display: block;
     position: fixed;
     bottom: 0;
     left: 0;
+    background-color: $c-neutral-white;
 
     @media all and (max-width: $is-mobile) {
         width: 100%;
@@ -20,7 +21,7 @@
 
 .map{
     width: 60%;
-    top: 55px;
+    top: 68px;
     z-index: 0;
     display: block;
     position: fixed;
@@ -41,7 +42,7 @@
         width: 94%;
         margin-left: auto;
         margin-right: auto;
-        border-radius: 2%;
+        border-radius: 5px;
         border-width: 1px;
         border-style: solid;
         margin-top: 10px;
@@ -53,8 +54,8 @@
 
         &:hover {
             border-style: outset;
-            border-color: #f2b632;
-            border-width: 5px;
+            border-color: $c-brand-secondary;
+            border-width: 3px;
         }
 
         a {

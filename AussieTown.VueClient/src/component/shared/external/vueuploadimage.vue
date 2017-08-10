@@ -1,3 +1,5 @@
+//https://github.com/websanova/vue-upload
+
 <template>
     <div>
         <div class="upload-image" v-for="image in uploadedFiles" data-content="progress">
@@ -9,7 +11,7 @@
         </div>
         <form enctype="multipart/form-data" novalidate>
             <div class="dropbox">
-                <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" accept="image/*" class="input-file">
+                <input id="uploadZone" type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" accept="image/*" class="input-file">
                 <p>
                     Drag your file(s) here to begin<br> or click to browse
                 </p>
@@ -31,7 +33,7 @@
                 uploadedFiles: [],
                 uploadError: null,
                 currentStatus: null,
-                uploadFieldName: 'files' 
+                uploadFieldName: 'files'
             }
         },
         computed: {
@@ -115,6 +117,9 @@
                 });
 
                 this.$emit('uploadImages', formData);
+
+                // bodom hack: reset input zone for second time
+                document.getElementById('uploadZone').value = null;
             }
         }
     }

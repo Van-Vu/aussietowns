@@ -64,11 +64,12 @@ var LoginForm = (function (_super) {
         (new UserService()).login(model)
             .then(function (responseToken) {
             _this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
+            //this.$auth.setUser(responseToken.loggedInUser);
             _this.setCookies(responseToken.accessToken);
             _this.$emit('onSuccessfulLogin');
         })
             .catch(function (error) {
-            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: error, type: NotificationType.Error });
+            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: error.message ? error.message : error, type: NotificationType.Error });
         });
     };
     LoginForm.prototype.signup = function (model) {

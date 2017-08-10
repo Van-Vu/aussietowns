@@ -8,6 +8,8 @@
 }
 
 .header-main {
+    position: relative;
+
     .background {
         > img {
             width: 100%;
@@ -15,16 +17,35 @@
     }
 }
 
+.page-content {
+    &.is-home {
+        width: 100%;
+        @media all and (min-width: $is-desktop) {
+            width: 92%;
+        }
+
+        .swiper-wrap {
+            > div {
+                width: 100%;
+                @media all and (min-width: $is-desktop) {
+                    width: 290px;
+                }
+
+                @media all and (min-width: $is-tablet) {
+                    width: 290px;
+                }
+            }
+        }
+    }
+}
 #searchBarHomepage {
     width: 100%;
+    z-index:15;
     @include absolutecenter;
-    top: 15%;
 
     @media all and (min-width: $is-tablet) {
         width: 70%;
-        top: 20%;
     }
-
 
     .searchbar {
         background-color: $c-neutral-white;

@@ -20,6 +20,7 @@ import SearchBarComponent from '../component/shared/search/searchbar.component.v
 import Swiper from '../component/shared/external/vue-swiper.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
 import { NotificationType } from '../model/enum';
+import datepicker from '../component/shared/external/datepicker.vue';
 var TestPage = (function (_super) {
     __extends(TestPage, _super);
     function TestPage() {
@@ -27,6 +28,10 @@ var TestPage = (function (_super) {
         _this.showListingRequest = false;
         _this.showListingOffer = false;
         _this.numberChooser = 0;
+        _this.disableDays = {
+            days: [6, 0] // Disable Saturday's and Sunday's
+        };
+        _this.startDate = new Date();
         _this.requestSlides = [];
         return _this;
     }
@@ -61,7 +66,8 @@ var TestPage = (function (_super) {
             components: {
                 "searchbar": SearchBarComponent,
                 "swiper": Swiper,
-                "numberchooser": NumberChooser
+                "numberchooser": NumberChooser,
+                "datepicker": datepicker
             }
         })
     ], TestPage);

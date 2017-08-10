@@ -13,15 +13,15 @@
             </article>
         </section>
 
-        <section class="page-content">
+        <section class="page-content" :class="{'is-home': currentPage == 'home'}">
             <swiper id="homepage-swipe" ref="swiper"
-                    direction="horizontal"
+                    :direction="swiperDirection"
                     :mousewheel-control="true"
                     :performance-mode="false"
                     :pagination-visible="false"
                     :pagination-clickable="true"
                     :loop="false">
-                <div v-for="listing in featuredListings" style="width: 300px;">
+                <div v-for="listing in featuredListings">
                     <cardsmall :listingDetail="listing"></cardsmall>
                 </div>
             </swiper>

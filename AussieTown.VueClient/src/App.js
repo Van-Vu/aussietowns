@@ -19,7 +19,9 @@ import { Component } from "vue-property-decorator";
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 import NotificationComponent from './component/shared/notification.component.vue';
 import LoadingComponent from './component/shared/loading.component.vue';
+import LoginModal from './component/modal/loginmodal.component.vue';
 import LogService from './service/log.service';
+import router from './router';
 import "reflect-metadata";
 //if (process.env.VUE_ENV === 'client') {
 //    Vue.component('datepicker', require('vuejs-datepicker'))
@@ -34,9 +36,11 @@ import FBSignInButton from 'vue-facebook-signin-button';
 Vue.use(FBSignInButton);
 import lazy from 'vue-lazy-image';
 Vue.use(lazy, {
-    loading: '/static/images/giphy.gif',
+    loading: '/static/images/loading.gif',
     try: 2,
 });
+import Acl from './plugin/vue-acl';
+Vue.use(Acl, { router: router, init: 'any' });
 Vue.directive('focus', {
     inserted: function (el, binding) {
         if (binding.value)
@@ -73,6 +77,13 @@ var App = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(App.prototype, "showLoginModal", {
+        get: function () {
+            return this.$store.state.showLoginModal;
+        },
+        enumerable: true,
+        configurable: true
+    });
     App.prototype.mounted = function () {
         // Bodom hack: hacky way to hide loading screen on server load
         this.$el.parentElement.childNodes[0].style.display = "none";
@@ -84,13 +95,20 @@ var App = (function (_super) {
             Vue.set(this.$store.state, 'currentPage', 'home');
         }
     };
+    App.prototype.hideLoginModal = function () {
+        this.$store.dispatch('HIDE_LOGIN_MODAL');
+    };
+    App.prototype.onSuccessfulLogin = function () {
+        this.hideLoginModal();
+    };
     App = __decorate([
         Component({
             name: "App",
             components: {
                 "nav-menu": NavMenuComponent,
                 "notifications": NotificationComponent,
-                "loading": LoadingComponent
+                "loading": LoadingComponent,
+                'loginmodal': LoginModal
             }
         })
     ], App);

@@ -1,6 +1,5 @@
 import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import LoginModal from '../modal/loginmodal.component.vue';
 import MenuModal from '../modal/menumodal.component.vue';
 import RegistrationModal from '../modal/registrationmodal.component.vue';
 import SearchBarComponent from '../shared/search/searchbar.component.vue';
@@ -10,7 +9,6 @@ import { Utils } from '../utils';
 @Component({
     name: 'nav-menu',
     components: {
-        'loginmodal': LoginModal,
         'registrationmodal': RegistrationModal,
         'menumodal': MenuModal,
         "searchbar": SearchBarComponent
@@ -27,12 +25,7 @@ export default class NavMenuComponent extends Vue {
     //isLoggedIn = false;
     searchSuburb: AutocompleteItem = null;
 
-    showLoginModal: boolean = false;
-    showRegistrationModal: boolean = false;
     showMenuModal: boolean = false;
-
-    // To handle scroll event
-    currentTime = Date.now();
 
     get currentPage() {
         return this.$store.state.currentPage;
@@ -49,6 +42,12 @@ export default class NavMenuComponent extends Vue {
     created() {
         if (process.env.VUE_ENV === 'client') {
             window.addEventListener('scroll', this.handleScroll);
+        }
+    }
+
+    mounted() {
+        if (this.$store.state.currentPage != 'home') {
+            this.isSticky = true;
         }
     }
 
@@ -72,7 +71,6 @@ export default class NavMenuComponent extends Vue {
     @Watch('$route.params')
     onRouteParamChanged(value: string, oldValue: string) {
         this.showMenuModal = false;
-        this.showLoginModal = false;
         if (this.$route.name != 'home') {
             this.isSticky = true;
         } else {
@@ -80,10 +78,6 @@ export default class NavMenuComponent extends Vue {
         }
 
         this.searchSuburb = null;
-    }
-
-    onSuccessfulLogin() {
-        this.showLoginModal = false;
     }
 
     onSelect(val: AutocompleteItem) {
@@ -96,12 +90,7 @@ export default class NavMenuComponent extends Vue {
         }
     }
 
-    mounted() {
-        //this.profilePhoto = this.$store.getters.profilePhoto;
-        //this.isLoggedIn = this.$store.getters.isLoggedIn;
-
-        if (this.$store.state.currentPage != 'home') {
-            this.isSticky = true;
-        }
+    onShowLoginModal() {
+        this.$store.dispatch('SHOW_LOGIN_MODAL');
     }
 }

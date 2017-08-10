@@ -3,7 +3,9 @@ import { Component, Watch } from "vue-property-decorator";
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 import NotificationComponent from './component/shared/notification.component.vue';
 import LoadingComponent from './component/shared/loading.component.vue';
+import LoginModal from './component/modal/loginmodal.component.vue';
 import LogService from './service/log.service';
+import router from './router'
 
 import "reflect-metadata";
 
@@ -25,10 +27,12 @@ Vue.use(FBSignInButton);
 import lazy from 'vue-lazy-image';
 
 Vue.use(lazy, {
-    loading: '/static/images/giphy.gif', //loading image 
+    loading: '/static/images/loading.gif', //loading image 
     try: 2, // the count of try to load one image 
 });
 
+import Acl from './plugin/vue-acl';
+Vue.use(Acl, { router: router, init: 'any' });
 
 Vue.directive('focus', {
     inserted: function (el, binding) {
@@ -76,7 +80,8 @@ Vue.config.errorHandler = function (err, vm, info) {
     components: {
         "nav-menu": NavMenuComponent,
         "notifications": NotificationComponent,
-        "loading": LoadingComponent
+        "loading": LoadingComponent,
+        'loginmodal': LoginModal
     }
 })
 
@@ -84,6 +89,10 @@ Vue.config.errorHandler = function (err, vm, info) {
 export default class App extends Vue {
     get currentPage() {
         return this.$store.state.currentPage;
+    }
+
+    get showLoginModal() {
+        return this.$store.state.showLoginModal;
     }
 
     set currentPage(value: string) {
@@ -104,4 +113,13 @@ export default class App extends Vue {
         }
 
     }
+
+    hideLoginModal() {
+        this.$store.dispatch('HIDE_LOGIN_MODAL');
+    }
+
+    onSuccessfulLogin() {
+        this.hideLoginModal();
+    }
+
 }

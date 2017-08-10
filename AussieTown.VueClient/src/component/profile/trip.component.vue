@@ -1,5 +1,6 @@
 ﻿<template>
     <div>
+        <div class="box-header-strip"></div>
         <ul>
             <li v-for="offer in offers">
                 <listingcard :listingDetail="offer"></listingcard>
