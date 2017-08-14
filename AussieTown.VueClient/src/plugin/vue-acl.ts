@@ -1,6 +1,6 @@
 ﻿//https://github.com/leonardovilarinho/vue-acl
 import store from '../store';
-
+import User from '../model/user.model';
 import { UserRole, NotificationType } from '../model/enum';
 
 class Auth {
@@ -30,6 +30,10 @@ class Auth {
             //    return (this.permissions.indexOf(needed) !== -1) ? true : false;
             //}) !== undefined;
             const loggedInUser = store.state.loggedInUser;
+            //if (!(loggedInUser instanceof User)) {
+            //    return false;
+            //}
+
             if (userId === (loggedInUser as any).id) {
                 return true;
             }

@@ -1,5 +1,5 @@
 ﻿@mixin button-bg($bg) {
-  background: $bg;
+  background: $bg !important;
   &:hover, 
   &:focus {
     background:darken($bg,8%);

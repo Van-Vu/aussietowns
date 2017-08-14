@@ -43,11 +43,6 @@ var ListingPage = (function (_super) {
         _this.showScheduleModal = false;
         _this.showAvailability = false;
         _this.isStickyBoxRequired = true;
-        _this.bookingDate = new Date().toDateString();
-        _this.bookingNumber = 0;
-        _this.disableDays = {
-            days: [6, 0] // Disable Saturday's and Sunday's
-        };
         _this.modelCache = null;
         return _this;
     }
@@ -115,8 +110,7 @@ var ListingPage = (function (_super) {
     ListingPage.prototype.onUserRemoved = function (user) {
     };
     ListingPage.prototype.checkAvailability = function (schedule) {
-        this.showAvailability = true;
-        this.isStickyBoxRequired = false;
+        this.$router.push({ name: "booking" });
         //var bookingDayPanel = this.$children.find(x => x.$el.id === "availDay");
         //if (bookingDayPanel) {
         //    (bookingDayPanel as any).togglePanel();
@@ -185,16 +179,6 @@ var ListingPage = (function (_super) {
             tourGuests: this.constructParticipants(model.id, model.tourGuests),
             tourOperators: this.constructParticipants(model.id, model.tourOperators)
         };
-    };
-    ListingPage.prototype.onBookingDateChanged = function (value) {
-        this.bookingDate = value;
-    };
-    ListingPage.prototype.onParticipantChanged = function (value) {
-        this.bookingNumber = value;
-    };
-    ListingPage.prototype.onProceed = function () {
-        this.$store.dispatch('UPDATE_BOOKING', { participants: this.bookingNumber, date: this.bookingDate, time: '09:00' });
-        this.$router.push({ name: "booking" });
     };
     __decorate([
         Prop,

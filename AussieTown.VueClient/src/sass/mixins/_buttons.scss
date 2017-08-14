@@ -1,17 +1,16 @@
 ﻿@mixin button-bg($bg) {
-    background: $bg;
+    background-color: $bg;
     color: $c-neutral-white;
     text-align: center;
      
-    &:hover, 
-    &:focus {
-    background:darken($bg,8%);
-    transition: all $transition-standard;
-    color:darken($c-neutral-white,8%);
+    &:hover {
+        background-color: transparent;
+        color: $c-brand-primary;
+        box-shadow: 0 0 0 1px $c-brand-primary, 0 0 0 1px $c-brand-primary;
+        //background-color:darken($bg,8%);
+        transition: all $transition-standard;
+        //color:darken($c-neutral-white,8%);
     }
-    &:active {
-    background:darken($bg,25%);
-    } 
 }
 
 @mixin button-round-border-all() {

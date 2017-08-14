@@ -6,12 +6,10 @@ export default class BookingModel {
     public participants: User[];
     public listing: ListingModel;
     public bookingDate: any;
-    public time: any;
+    public bookingTime: any;
 
-    constructor(listing, participants, bookingDate, time) {
+    constructor(listing, participants) {
         this.listing = listing;
         this.participants = plainToClass(User, participants);
-        this.bookingDate = bookingDate;
-        this.time = time;
     }
 }

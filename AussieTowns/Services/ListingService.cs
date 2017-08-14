@@ -77,12 +77,12 @@ namespace AussieTowns.Services
                 BookingDate = bookingRequest.BookingDate,
                 Time = bookingRequest.Time,
                 ExistingUserId = participant.Id,
-                FirstName = participant.Id == 0 ? participant.FirstName : string.Empty,
-                LastName = participant.Id == 0 ? participant.LastName : string.Empty,
-                Email = participant.Id == 0 ? participant.Email : string.Empty,
-                Phone = participant.Id == 0 ? participant.Phone : string.Empty,
-                Address = participant.Id == 0 ? participant.Address : string.Empty,
-                EmergencyContact = participant.Id == 0 ? participant.EmergencyContact : string.Empty
+                FirstName = participant.FirstName,
+                LastName = participant.LastName,
+                Email = participant.Email,
+                Phone = participant.Phone,
+                Address = participant.Address,
+                EmergencyContact = participant.EmergencyContact
             }).ToList();
 
             bookings.FirstOrDefault().IsPrimary = true;

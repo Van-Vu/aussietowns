@@ -1,5 +1,5 @@
 ﻿import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import ListingCardComponent from '../shared/listingcard.component.vue';
 import ListingModel from '../../model/listing.model';
 import UserModel from '../../model/user.model';
@@ -15,18 +15,29 @@ import numberchooser from '../shared/numberchooser.component.vue';
 })
 
 export default class AvailabilityComponent extends Vue {
-    @Prop disableDays: any;
-    @Prop bookingDate: string;
-    @Prop participants: number;
+    bookingDate: string = '';
+    bookingTime: string = '';
+    disableDays = {
+        days: [6, 0] // Disable Saturday's and Sunday's
+    };
+
+    availableTimeslot: string[] = null;
 
     created(): void {
     }
 
-    onParticipantChanged(value) {
-        this.$emit('participantChanged', value);
+    @Watch('bookingTime')
+    onBookingTimeChanged(value: string, oldValue: string) {
+        this.$emit('bookingTimeChanged', value);
     }
 
     onBookingDateChanged(value) {
+        let currentListing = this.$store.state.booking.listing;
+        let timeslots = new Array<string>();
+        timeslots.push(currentListing.schedules[0].startTime);
+
+        this.availableTimeslot = timeslots;
+
         this.$emit('bookingDateChanged', value);
     }
 }

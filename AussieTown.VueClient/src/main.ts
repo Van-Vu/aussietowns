@@ -4,6 +4,7 @@ import { app, router, store } from './root'
 import Vue from 'vue'
 import merge from 'lodash.merge';
 import ListingModel from './model/listing.model';
+import UserModel from './model/user.model';
 import { plainToClass } from "class-transformer";
 
 // a global mixin that calls `asyncData` when a route component's params change
@@ -30,6 +31,7 @@ if ((window as any).__INITIAL_STATE__) {
     // Bodom hack: retain listing state in case of direct browsing
     var initialState = (window as any).__INITIAL_STATE__;
     initialState.listing = plainToClass(ListingModel, initialState.listing); 
+    initialState.loggedInUser = plainToClass(UserModel, initialState.loggedInUser); 
 
     store.replaceState(merge({}, store.state, initialState));
 }

@@ -1,18 +1,8 @@
-﻿@mixin mtl_button_hover() {
-    &:hover {
-        background-color: transparent;
-        color: $c-brand-primary;
-        box-shadow: 0 0 0 1px $c-brand-primary, 0 0 0 1px $c-brand-primary;
-    }
-}
-
-.mtl_button_base {
+﻿.mtl_button_base {
     @include button-bg($c-brand-primary);
     /*min-width: 80px;*/
     margin-left: 5px;
     margin-right: 5px;
-
-    @include mtl_button_hover;
 }
 
 .mtl_button {

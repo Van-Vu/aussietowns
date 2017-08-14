@@ -62,6 +62,11 @@ Vue.config.errorHandler = function (err, vm, info) {
     console.log(err);
     (new LogService()).logError(err.message, err.stack);
 };
+import VueFormWizard from 'vue-form-wizard';
+Vue.use(VueFormWizard);
+import VueTheMask from 'vue-the-mask';
+Vue.use(VueTheMask);
+import { Validator } from 'vee-validate';
 var App = (function (_super) {
     __extends(App, _super);
     function App() {
@@ -84,6 +89,33 @@ var App = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    App.prototype.created = function () {
+        var dictionary = {
+            en: {
+                custom: {
+                    email: {
+                        required: '*'
+                    },
+                    firstname: {
+                        required: '*'
+                    },
+                    lastname: {
+                        required: '*'
+                    },
+                    phone: {
+                        required: '*'
+                    },
+                    address: {
+                        required: '*'
+                    },
+                    emergencyContact: {
+                        required: '*'
+                    }
+                }
+            }
+        };
+        Validator.updateDictionary(dictionary);
+    };
     App.prototype.mounted = function () {
         // Bodom hack: hacky way to hide loading screen on server load
         this.$el.parentElement.childNodes[0].style.display = "none";

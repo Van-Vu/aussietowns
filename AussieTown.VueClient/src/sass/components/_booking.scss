@@ -1,0 +1,26 @@
+﻿.deleteButton {
+    /*display: none;*/
+    width: 30%;
+    justify-content: center;
+    margin-left:auto;
+    @include fade-out-right;
+}
+
+.participant-summary {
+    &:hover{
+        cursor: pointer;
+
+        .deleteButton {
+           display: flex; /* On :hover of div show button */
+           @include fade-in-left;
+        }
+    } 
+}
+
+summary:focus {
+    outline: none;
+}
+
+summary::-webkit-details-marker {
+  display: none
+}

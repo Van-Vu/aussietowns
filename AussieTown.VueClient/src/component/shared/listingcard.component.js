@@ -44,7 +44,7 @@ var CardFullComponent = (function (_super) {
         this.hostName = this.listingDetail.primaryOwner;
         this.imageUrl = this.listingDetail.imageUrl ? this.listingDetail.imageUrl : '';
         var startDatetime = new Date(this.listingDetail.schedules[0].startDate);
-        this.date = Utils.getDate(startDatetime);
+        this.date = Utils.formatDate(startDatetime);
         this.time = Utils.getTime(startDatetime);
         this.headerLink = Utils.seorizeString(this.header);
     };

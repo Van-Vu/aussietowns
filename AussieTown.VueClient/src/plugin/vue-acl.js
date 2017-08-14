@@ -30,6 +30,9 @@ var Auth = (function () {
             //    return (this.permissions.indexOf(needed) !== -1) ? true : false;
             //}) !== undefined;
             var loggedInUser = store.state.loggedInUser;
+            //if (!(loggedInUser instanceof User)) {
+            //    return false;
+            //}
             if (userId === loggedInUser.id) {
                 return true;
             }

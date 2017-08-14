@@ -44,13 +44,6 @@ export default class ListingPage extends Vue{
     showAvailability: boolean = false;
     isStickyBoxRequired: boolean = true;
 
-    bookingDate: any = new Date().toDateString();
-    bookingNumber: number = 0;
-
-    disableDays = {
-        days: [6, 0] // Disable Saturday's and Sunday's
-    };
-
     $mq: any;
 
     modelCache: any = null;
@@ -127,8 +120,7 @@ export default class ListingPage extends Vue{
     }
 
     checkAvailability(schedule) {
-        this.showAvailability = true;
-        this.isStickyBoxRequired = false;
+        this.$router.push({ name: "booking" });
 
         //var bookingDayPanel = this.$children.find(x => x.$el.id === "availDay");
         //if (bookingDayPanel) {
@@ -208,18 +200,5 @@ export default class ListingPage extends Vue{
             tourGuests: this.constructParticipants(model.id, model.tourGuests),
             tourOperators: this.constructParticipants(model.id, model.tourOperators)
         }
-    }
-
-    onBookingDateChanged(value) {
-        this.bookingDate = value;
-    }
-
-    onParticipantChanged(value) {
-        this.bookingNumber = value;
-    }
-
-    onProceed() {
-        this.$store.dispatch('UPDATE_BOOKING', { participants: this.bookingNumber, date: this.bookingDate, time: '09:00' });
-        this.$router.push({ name: "booking" });
     }
 }

@@ -18,34 +18,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Watch } from "vue-property-decorator";
 import datepicker from '../shared/external/datepicker.vue';
 import numberchooser from '../shared/numberchooser.component.vue';
 var AvailabilityComponent = (function (_super) {
     __extends(AvailabilityComponent, _super);
     function AvailabilityComponent() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.bookingDate = '';
+        _this.bookingTime = '';
+        _this.disableDays = {
+            days: [6, 0] // Disable Saturday's and Sunday's
+        };
+        _this.availableTimeslot = null;
+        return _this;
     }
     AvailabilityComponent.prototype.created = function () {
     };
-    AvailabilityComponent.prototype.onParticipantChanged = function (value) {
-        this.$emit('participantChanged', value);
+    AvailabilityComponent.prototype.onBookingTimeChanged = function (value, oldValue) {
+        this.$emit('bookingTimeChanged', value);
     };
     AvailabilityComponent.prototype.onBookingDateChanged = function (value) {
+        var currentListing = this.$store.state.booking.listing;
+        var timeslots = new Array();
+        timeslots.push(currentListing.schedules[0].startTime);
+        this.availableTimeslot = timeslots;
         this.$emit('bookingDateChanged', value);
     };
     __decorate([
-        Prop,
-        __metadata("design:type", Object)
-    ], AvailabilityComponent.prototype, "disableDays", void 0);
-    __decorate([
-        Prop,
-        __metadata("design:type", String)
-    ], AvailabilityComponent.prototype, "bookingDate", void 0);
-    __decorate([
-        Prop,
-        __metadata("design:type", Number)
-    ], AvailabilityComponent.prototype, "participants", void 0);
+        Watch('bookingTime'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String]),
+        __metadata("design:returntype", void 0)
+    ], AvailabilityComponent.prototype, "onBookingTimeChanged", null);
     AvailabilityComponent = __decorate([
         Component({
             name: "AvailabilityComponent",

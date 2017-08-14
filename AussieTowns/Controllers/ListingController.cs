@@ -105,13 +105,13 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
+                //if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
                 if (request == null || !request.Participants.Any()) throw new ArgumentNullException(nameof(request));
 
                 var jsonBookingRequest = JsonConvert.SerializeObject(request);
                 // Bodom hack: deal with this later
-                var result = await jsonBookingRequest.PushToSqsAsync(AwsSqsExtensions.GetClient(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
-                    _appSettings.AwsS3Region), _appSettings.SqsUrl);
+                //var result = await jsonBookingRequest.PushToSqsAsync(AwsSqsExtensions.GetClient(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
+                //    _appSettings.AwsS3Region), _appSettings.SqsUrl);
 
                 return await _listingService.Booking(request);
             }
@@ -196,9 +196,11 @@ namespace AussieTowns.Controllers
             {
                 var test = _httpContextAccessor.HttpContext.Request;
 
-                var listingsSummary = await _listingService.GetListingsBySuburb(139);
+                var listingsView = await _listingService.GetListingsBySuburb(139);
 
-                return listingsSummary.Select(x => _mapper.Map<ListingView, ListingSummary>(x));
+                var listingSummary = listingsView.Select(x => _mapper.Map<ListingView, ListingSummary>(x));
+
+                return listingSummary;
             }
             catch (Exception e)
             {

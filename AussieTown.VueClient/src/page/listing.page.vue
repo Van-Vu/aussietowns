@@ -107,8 +107,12 @@
                     <div class="box-header-strip"></div>
                     <label class="label">Schedule</label>
                     <div v-show="isOffer" class="control">
-                        <ul v-show="!showAvailability">
+                        <ul>
                             <li v-for="schedule in model.schedules">
+                                <div class="columns is-gapless">
+                                    <label class="column is-5">Date</label>
+                                    <label class="column">{{ schedule.startDate }}</label>
+                                </div>
                                 <div class="columns is-gapless">
                                     <label class="column is-5">Start</label>
                                     <label class="column">{{ schedule.startTime }}</label>
@@ -117,7 +121,7 @@
                                     <label class="column is-5">Duration</label>
                                     <label class="column">{{ schedule.duration }}</label>
                                 </div>
-                                <div class="columns is-gapless">
+                                <div v-if="isEditing" class="columns is-gapless">
                                     <label class="column is-5">Repeated</label>
                                     <!--Bodom hack: doesn't work when jump directly to URL-->
                                     <label class="column">{{ schedule.summaryText ? schedule.summaryText() : schedule.repeatedType == 1 ? 'Daily' : schedule.repeatedType == 2 ? 'Weekly' : 'Monthly'}}</label>
@@ -126,14 +130,6 @@
                                     <button v-if="!isEditing" id="checkAvailability" class="button mtl_button-no-round mtl-btn-large relative-center-x" @click.prevent="checkAvailability(schedule)">Check Availability</button>
                                     <button v-if="isEditing" class="button  mtl_button relative-center-x" @click.prevent="onEditSchedule(schedule)">Edit Schedule</button>
                                 </div>
-                            </li>
-                        </ul>
-                        <ul v-show="showAvailability">
-                            <li>
-                                <availabilityCheck :bookingDate="bookingDate" @bookingDateChanged="onBookingDateChanged"
-                                                   :participants="bookingNumber" @participantChanged="onParticipantChanged"
-                                                   :disableDays="disableDays">
-                                </availabilityCheck>
                             </li>
                         </ul>
                     </div>

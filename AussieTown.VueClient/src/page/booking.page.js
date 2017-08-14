@@ -18,15 +18,32 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import BookingModel from '../model/booking.model';
 import ListingModel from '../model/listing.model';
-import User from '../model/user.model';
+import UserModel from '../model/user.model';
 import ListingService from '../service/listing.service';
 import { plainToClass, classToPlain } from "class-transformer";
+import AvailabilityComponent from '../component/booking/availability.component.vue';
+import { ScreenSize } from '../model/enum';
+import { detectScreenSize } from '../service/screen.service';
+import UserSearchComponent from '../component/shared/search/usersearch.component.vue';
+import RingLoader from '../component/shared/external/ringloader.vue';
 var BookingPage = (function (_super) {
     __extends(BookingPage, _super);
     function BookingPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.model = null;
+        //model: BookingModel = null;
+        _this.isStickyBoxRequired = true;
+        _this.isBooked = false;
+        _this.isLoading = false;
+        _this.errorMsg = '';
         return _this;
+        //validateBeforeSubmit(e) {
+        //    e.preventDefault();
+        //    this.$validator.validateAll().then(() => {
+        //        alert('From Submitted!');
+        //    }).catch(() => {
+        //        return false;
+        //    });
+        //}
     }
     BookingPage.prototype.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
@@ -35,17 +52,46 @@ var BookingPage = (function (_super) {
             //route.next('/home');
         }
     };
+    Object.defineProperty(BookingPage.prototype, "model", {
+        get: function () {
+            return this.$store.state.booking;
+        },
+        enumerable: true,
+        configurable: true
+    });
     BookingPage.prototype.created = function () {
-        this.$store.dispatch('SET_CURRENT_PAGE', 'booking');
+        //this.$store.dispatch('SET_CURRENT_PAGE', 'booking');
         if (this.$store.state.listing instanceof ListingModel) {
-            this.model = new BookingModel(this.$store.state.listing, this.generateParticipants(), this.$store.state.booking.date, this.$store.state.booking.time);
+            this.$store.state.booking = new BookingModel(this.$store.state.listing, this.generateParticipants());
         }
         else {
             this.$router.push({ name: "home" });
         }
     };
+    BookingPage.prototype.mounted = function () {
+        var screenSize = detectScreenSize(this.$mq);
+        switch (screenSize) {
+            case ScreenSize.Desktop:
+                this.isStickyBoxRequired = true;
+                break;
+            case ScreenSize.Tablet:
+                this.isStickyBoxRequired = false;
+                break;
+            case ScreenSize.Mobile:
+                this.isStickyBoxRequired = false;
+                break;
+        }
+    };
     BookingPage.prototype.confirmBooking = function () {
-        (new ListingService()).bookAListing(this.constructBookingRequest());
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            (new ListingService()).bookAListing(_this.constructBookingRequest())
+                .then(function () { return resolve(true); })
+                .catch(function () { return reject('Please fill in participant information'); });
+            //if ((this.model.bookingDate) && (this.model.bookingTime)) resolve(true);
+        });
+        //alert('Form Submitted!');
+        this.isBooked = true;
     };
     BookingPage.prototype.constructBookingRequest = function () {
         return {
@@ -56,17 +102,92 @@ var BookingPage = (function (_super) {
         };
     };
     BookingPage.prototype.generateParticipants = function () {
-        var users = [plainToClass(User, classToPlain(this.$store.state.loggedInUser))];
+        var users = [plainToClass(UserModel, classToPlain(this.$store.state.loggedInUser))];
         if (this.$store.state.booking != null && this.$store.state.booking.participants > 0) {
             for (var i = 0; i < this.$store.state.booking.participants - 1; i++) {
-                users.push(new User());
+                users.push(new UserModel());
             }
         }
         return users;
     };
+    BookingPage.prototype.onBookingDateChanged = function (value) {
+        this.$store.state.booking.bookingDate = value;
+    };
+    BookingPage.prototype.onBookingTimeChanged = function (value) {
+        this.$store.state.booking.bookingTime = value;
+    };
+    //onProceed() {
+    //    this.$store.dispatch('UPDATE_BOOKING', { participants: this.bookingNumber, date: this.bookingDate, time: '09:00' });
+    //    this.$router.push({ name: "booking" });
+    //}
+    BookingPage.prototype.addMoreParticipant = function () {
+        this.$store.state.booking.participants.push(new UserModel());
+    };
+    BookingPage.prototype.removeParticipant = function (index) {
+        if (confirm('Are you sure?')) {
+            this.$store.state.booking.participants.splice(index, 1);
+        }
+    };
+    BookingPage.prototype.setLoading = function (value) {
+        this.isLoading = value;
+    };
+    BookingPage.prototype.handleErrorMessage = function (errorMsg) {
+        this.errorMsg = errorMsg;
+    };
+    BookingPage.prototype.validateParticipantInfo = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            setTimeout(function () {
+                _this.$validator.validateAll().then(function (result) {
+                    if (result) {
+                        resolve(true);
+                    }
+                    reject('Please fill in participant information');
+                });
+            }, 1000);
+            //this.$validator.validateAll().then(() => {
+            //    // Data is valid, so we can submit the form.
+            //    //document.querySelector('#myForm').submit();
+            //    alert('From Submitted!');
+            //    resolve(true);
+            //}).catch(() => {
+            //    reject('This is a custom validation error message. Click next again to get rid of the validation');
+            //});
+        });
+        //return new Promise((resolve, reject) => {
+        //    setTimeout(() => {
+        //            reject('This is a custom validation error message. Click next again to get rid of the validation')
+        //        },
+        //        1000);
+        //});
+        //return new Promise((resolve, reject) => {
+        //    setTimeout(() => {
+        //        if (this.count < 1) {
+        //            this.count++
+        //            reject('This is a custom validation error message. Click next again to get rid of the validation')
+        //        } else {
+        //            this.count = 0
+        //            resolve(true)
+        //        }
+        //    }, 1000)
+        //})
+    };
+    BookingPage.prototype.validateBookingTime = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            if ((_this.model.bookingDate) && (_this.model.bookingTime))
+                resolve(true);
+            reject('Please fill in participant information');
+        });
+    };
     BookingPage = __decorate([
         Component({
-            name: 'BookingPage'
+            name: 'BookingPage',
+            components: {
+                'availability': AvailabilityComponent,
+                "usersearch": UserSearchComponent,
+                'ringloader': RingLoader
+            }
         })
     ], BookingPage);
     return BookingPage;

@@ -2,10 +2,22 @@ import { ListingType } from '../model/enum';
 var Utils = (function () {
     function Utils() {
     }
-    Utils.getDate = function (datetime) {
-        var date = new Date(datetime);
-        return date.getFullYear() + '/' + this.ensureTwoDigit((date.getMonth()) + 1) + '/' + this.ensureTwoDigit(date.getDate());
+    Utils.formatDate = function (date) {
+        var monthNames = [
+            "January", "February", "March",
+            "April", "May", "June", "July",
+            "August", "September", "October",
+            "November", "December"
+        ];
+        var day = this.ensureTwoDigit(date.getDate());
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+        return day + ' ' + monthNames[monthIndex] + ' ' + year;
     };
+    //public static getDate(datetime: Date) {
+    //    var date = new Date(datetime);
+    //    return date.getFullYear() + '/' + this.ensureTwoDigit((date.getMonth()) + 1) + '/' + this.ensureTwoDigit(date.getDate());
+    //}
     Utils.getTime = function (datetime) {
         var date = new Date(datetime);
         return this.ensureTwoDigit(date.getHours()) + ':' + this.ensureTwoDigit(date.getMinutes());

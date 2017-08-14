@@ -32,28 +32,8 @@ var TestPage = (function (_super) {
             days: [6, 0] // Disable Saturday's and Sunday's
         };
         _this.startDate = new Date();
-        _this.requestSlides = [];
         return _this;
     }
-    TestPage.prototype.asyncData = function (_a) {
-        var store = _a.store, route = _a.route;
-        return store.dispatch('SET_CURRENT_PAGE', 'home');
-    };
-    TestPage.prototype.onSelect = function (val) {
-        console.log(val);
-    };
-    TestPage.prototype.onSearch = function (val) {
-        //{ name: 'user', params: { userId: 123 } }
-        this.$router.push('search');
-    };
-    TestPage.prototype.created = function () {
-    };
-    TestPage.prototype.onSlideChangeStart = function (currentPage) {
-        console.log('onSlideChangeStart', currentPage);
-    };
-    TestPage.prototype.onSlideChangeEnd = function (currentPage) {
-        console.log('onSlideChangeEnd', currentPage);
-    };
     TestPage.prototype.checkLogginUser = function () {
         this.$store.dispatch('TEST');
     };

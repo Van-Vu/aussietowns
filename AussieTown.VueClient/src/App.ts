@@ -75,6 +75,14 @@ Vue.config.errorHandler = function (err, vm, info) {
     (new LogService()).logError(err.message, err.stack);
 }
 
+import VueFormWizard from 'vue-form-wizard';
+Vue.use(VueFormWizard);
+
+import VueTheMask from 'vue-the-mask';
+Vue.use(VueTheMask);
+
+import { Validator } from 'vee-validate';
+
 @Component({
     name: "App",
     components: {
@@ -97,6 +105,36 @@ export default class App extends Vue {
 
     set currentPage(value: string) {
         this.currentPage = value;
+    }
+
+    created() {
+        const dictionary = {
+            en: {
+                custom: {
+                    email: {
+                        required: '*'
+                    },
+                    firstname: {
+                        required: '*'
+                    },
+                    lastname: {
+                        required: '*'
+                    },
+                    phone: {
+                        required: '*'
+                    },
+                    address: {
+                        required: '*'
+                    },
+                    emergencyContact: {
+                        required: '*'
+                    }
+                }
+            }
+        };
+
+        Validator.updateDictionary(dictionary);
+
     }
 
     mounted() {

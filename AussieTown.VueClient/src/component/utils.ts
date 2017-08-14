@@ -1,10 +1,25 @@
 ﻿import { ListingType } from '../model/enum';
 
 export class Utils {
-    public static getDate(datetime: Date) {
-        var date = new Date(datetime);
-        return date.getFullYear() + '/' + this.ensureTwoDigit((date.getMonth()) + 1) + '/' + this.ensureTwoDigit(date.getDate());
+    public static formatDate(date: Date) {
+        var monthNames = [
+            "January", "February", "March",
+            "April", "May", "June", "July",
+            "August", "September", "October",
+            "November", "December"
+        ];
+
+        var day = this.ensureTwoDigit(date.getDate());
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+
+        return day + ' ' + monthNames[monthIndex] + ' ' + year;
     }
+
+    //public static getDate(datetime: Date) {
+    //    var date = new Date(datetime);
+    //    return date.getFullYear() + '/' + this.ensureTwoDigit((date.getMonth()) + 1) + '/' + this.ensureTwoDigit(date.getDate());
+    //}
 
     public static  getTime(datetime: any) {
         var date = new Date(datetime);
