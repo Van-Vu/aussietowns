@@ -1,19 +1,20 @@
 ﻿.image-upload {
     position: relative;
-    //630,420
     min-width: 320px;
-    @media all and (min-width: $is-mobile) {
-        width: 728px;
-    }
-
-    @media all and (min-width: $is-desktop) {
-        width: 636px;
-    }
-
+    width:100%;
+    
+    // maintain 16:9 ratio
     padding-top: 56.25%;
 
-    .swiper, .swipe-wrapper {
+    .swiper {
+        height: 100%;
         @extend .absolute-center-y;
+    }
+
+    .swipe-wrapper {
+        @extend .absolute-center-y;
+        width: 100%;
+        height: 100%;
     }
 
     .removeImage{
