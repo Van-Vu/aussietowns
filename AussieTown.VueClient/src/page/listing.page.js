@@ -28,9 +28,10 @@ import datepicker from '../component/shared/external/datepicker.vue';
 import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
 import ImageUploadComponent from '../component/shared/imageupload.component.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
-import { ScreenSize, NotificationType } from '../model/enum';
+import { ScreenSize, NotificationType, UserRole, UserAction } from '../model/enum';
 import { detectScreenSize } from '../service/screen.service';
 import AvailabilityComponent from '../component/booking/availability.component.vue';
+import { Money } from 'v-money';
 Vue.use(VeeValidate);
 var ListingPage = (function (_super) {
     __extends(ListingPage, _super);
@@ -43,6 +44,14 @@ var ListingPage = (function (_super) {
         _this.showScheduleModal = false;
         _this.showAvailability = false;
         _this.isStickyBoxRequired = true;
+        _this.money = {
+            decimal: ',',
+            thousands: '.',
+            prefix: '$',
+            suffix: ' AUD',
+            precision: 0,
+            masked: false
+        };
         _this.modelCache = null;
         return _this;
     }
@@ -54,14 +63,12 @@ var ListingPage = (function (_super) {
     };
     Object.defineProperty(ListingPage.prototype, "model", {
         get: function () {
-            this.isOffer = this.$store.state.listing.listingType == ListingType.Offer;
+            this.isOffer = this.$store.state.listing.type == ListingType.Offer;
             return this.$store.state.listing;
         },
         enumerable: true,
         configurable: true
     });
-    ListingPage.prototype.created = function () {
-    };
     ListingPage.prototype.mounted = function () {
         var screenSize = detectScreenSize(this.$mq);
         switch (screenSize) {
@@ -76,23 +83,46 @@ var ListingPage = (function (_super) {
                 break;
         }
     };
+    Object.defineProperty(ListingPage.prototype, "canEdit", {
+        get: function () {
+            var primaryUser = this.model.tourOperators.filter(function (x) { return x.isPrimary === true; });
+            if (primaryUser.length > 0) {
+                return this.$auth.check(UserRole.Editor, primaryUser[0].id, UserAction.Edit);
+            }
+            return false;
+        },
+        enumerable: true,
+        configurable: true
+    });
     ListingPage.prototype.onUploadImageCompleted = function () {
-        this.model.imageList = this.$store.state.listing.imageList;
-        this.$children.find(function (x) { return x.$el.id === 'imageupload'; }).$children[0].refresh();
-        this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
+        if (this.canEdit) {
+            this.model.imageList = this.$store.state.listing.imageList;
+            this.$children.find(function (x) { return x.$el.id === 'imageupload'; }).$children[0].refresh();
+            this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
+        }
     };
     ListingPage.prototype.onInsertorUpdate = function () {
+        var _this = this;
         this.isEditing = false;
-        if (this.model.id > 0) {
-            return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model));
-        }
-        else {
-            return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model));
+        if (this.canEdit) {
+            this.$store.dispatch("ENABLE_LOADING");
+            if (this.model.id > 0) {
+                return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model))
+                    .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); })
+                    .catch(function (err) { });
+            }
+            else {
+                return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model))
+                    .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); })
+                    .catch(function (err) { });
+            }
         }
     };
     ListingPage.prototype.onEdit = function () {
-        this.isEditing = true;
-        this.modelCache = Object.assign({}, this.model);
+        if (this.canEdit) {
+            this.isEditing = true;
+            this.modelCache = Object.assign({}, this.model);
+        }
     };
     ListingPage.prototype.onCancelEdit = function () {
         this.isEditing = false;
@@ -167,7 +197,7 @@ var ListingPage = (function (_super) {
         //}
         return {
             id: model.id,
-            type: this.isOffer,
+            type: this.isOffer ? 0 : 1,
             locationId: model.locationDetail.id,
             cost: model.cost,
             currency: model.currency,
@@ -194,7 +224,8 @@ var ListingPage = (function (_super) {
                 "schedulemodal": ScheduleModalComponent,
                 "imageupload": ImageUploadComponent,
                 "numberchooser": NumberChooser,
-                "availabilityCheck": AvailabilityComponent
+                "availabilityCheck": AvailabilityComponent,
+                Money: Money
             }
         })
     ], ListingPage);

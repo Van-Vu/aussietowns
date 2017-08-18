@@ -10,7 +10,7 @@ namespace AussieTowns.Model
     public class ListingResponse
     {
         public int Id { get; set; }
-        public ListingType ListingType { get; set; }
+        public ListingType Type { get; set; }
         public AutoCompleteItem LocationDetail { get; set; }
         public int Cost { get; set; }
         public int Currency { get; set; }

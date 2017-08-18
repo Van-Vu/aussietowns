@@ -7,6 +7,7 @@ import MessageService from "../service/message.service";
 import UploadService from "../service/fileupload.service";
 
 import ListingModel from '../model/listing.model';
+import UserModel from '../model/user.model';
 import RequestResult from '../model/RequestResult';
 import ConversationModel from '../model/conversation.model';
 import MessageModel from '../model/message.model';
@@ -31,7 +32,7 @@ export default new Vuex.Store({
     ],
     state: {
         currentPage: '',
-        loggedInUser: {},
+        loggedInUser: UserModel,
         listing: ListingModel,
         profile: {},
         searchListings: [],
@@ -72,12 +73,14 @@ export default new Vuex.Store({
                 });
         },
         UPDATE_LISTING({ commit, state }, listing) {
-            (new ListingService()).updateListing(listing);
-            commit('UPDATE_LISTING', listing);
+            return (new ListingService()).updateListing(listing)
+                .then(response => response);
+            //commit('UPDATE_LISTING', listing);
         },
         INSERT_LISTING({ commit, state }, listing) {
-            (new ListingService()).addListing(listing);
-            commit('UPDATE_LISTING', listing);
+            return (new ListingService()).addListing(listing)
+                .then(response => response);
+            //commit('UPDATE_LISTING', listing);
         },
         FETCH_PROFILE_BY_ID({ dispatch, commit, state }, id) {
             return (new UserService()).getById(id).then(response => {
@@ -124,6 +127,7 @@ export default new Vuex.Store({
             return (new UploadService()).uploadListing(payload.data, payload.actionId)
                 .then(response => {
                     commit('ADD_LISTING_IMAGES', response);
+                    return (response as any).length;
                 });
         },
         UPLOAD_PROFILE_IMAGES({ commit }, payload) {

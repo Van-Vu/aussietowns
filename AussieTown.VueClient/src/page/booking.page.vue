@@ -5,8 +5,14 @@
             <form-wizard v-if="!isBooked" @on-complete="confirmBooking" 
                          @on-loading="setLoading" 
                          @on-error="handleErrorMessage"
-                         title="Booking" subtitle="Just simple steps to open up your amazing experience"
+                         title="Booking" subtitle=""
                          style="position:relative;">
+                <div slot="title">
+                    <h2>Just simple steps to open up your amazing experience</h2>
+                    <div v-if="errorMsg" class="booking-error">
+                        <span>{{errorMsg}}</span>
+                    </div>
+                </div>
                 <template slot="step" scope="props">
                     <wizard-step :tab="props.tab"
                                  :transition="props.transition"
@@ -16,7 +22,7 @@
                 </template>
                 <template slot="footer" scope="props">
                     <div class=wizard-footer-left>
-                        <wizard-button v-if="props.activeTabIndex > 0 && !props.isLastStep" @click.native="props.prevTab()" class="mtl_button">Previous</wizard-button>
+                        <wizard-button v-if="props.activeTabIndex > 0" @click.native="props.prevTab()" class="mtl_button">Previous</wizard-button>
                     </div>
                     <div class="wizard-footer-right">
                         <wizard-button v-if="!props.isLastStep" @click.native="props.nextTab()" class="wizard-footer-right mtl_button">Next</wizard-button>
@@ -26,23 +32,17 @@
                 </template>
                 <tab-content title="Schedule" :before-change="validateBookingTime"
                              icon="glyphicon glyphicon-time">
-                    <div v-if="errorMsg">
-                        <span class="error">{{errorMsg}}</span>
-                    </div>
                     <availability @bookingDateChanged="onBookingDateChanged" @bookingTimeChanged="onBookingTimeChanged">
                     </availability>
                 </tab-content>
                 <tab-content title="Participants" :before-change="validateParticipantInfo"
                              icon="glyphicon glyphicon-user">
-                    <div v-if="errorMsg">
-                        <span class="error">{{errorMsg}}</span>
-                    </div>
                     <div>
                         <a @click.prevent="addMoreParticipant" class="button mtl_button">
                             <i class="glyphicon glyphicon-plus-sign" /><span>Add participant</span>
                         </a>
                     </div>
-                    <details class="tile is-vertical is-parent box participant-summary " v-for="(user, index) in model.participants">
+                    <details class="tile is-vertical is-parent box participant-summary " v-for="(user, index) in model.participants" :data-vv-scope="index">
                         <summary class="is-flex">
                             <div>User {{index}}</div><div class="mtl_button deleteButton" @click.prevent="removeParticipant(index)">Remove</div>
                         </summary>
@@ -98,10 +98,8 @@
                 </tab-content>
                 <tab-content title="Review" :before-change="confirmBooking"
                              icon="glyphicon glyphicon-file">
-                    <details class="tile is-vertical is-parent box participant-summary " v-for="(user, index) in model.participants">
-                        <summary class="is-flex">
-                            <div>User {{index}}</div>
-                        </summary>
+                    <ul>
+                    <li class="tile is-vertical is-parent box participant-summary " v-for="(user, index) in model.participants">
                         <div class="tile is-parent">
                             <div class="tile is-4">Email</div>
                             <p class="tile control">
@@ -138,7 +136,8 @@
                                 <label>{{ user.emergencyContact }}</label>
                             </div>
                         </div>
-                    </details>
+                    </li>
+                    </ul>
                 </tab-content>
                 <div class="loading-screen is-flex is-overlay" v-if="isLoading">
                     <span class="absolute-center">In progress ...</span>
@@ -159,7 +158,7 @@
                 </tab-content>
             </form-wizard>
         </div>
-        <div class="tile is-vertical is-parent" :class="{'is-sticky-box': isStickyBoxRequired}">
+        <div v-if="!isBooked" class="tile is-vertical is-parent" :class="{'is-sticky-box': isStickyBoxRequired}">
             <div class="field box">
                 <div class="box-header-strip"></div>
                 <div class="tile">

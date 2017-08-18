@@ -9,7 +9,7 @@
             <img :src="image.src" />
             <i class="glyphicon glyphicon-trash" v-if="image.progress >= 100"@click="removeImage"></i>
         </div>
-        <form enctype="multipart/form-data" novalidate>
+        <form v-if="isUploadImageAllowed" enctype="multipart/form-data" novalidate>
             <div class="dropbox">
                 <input id="uploadZone" type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" accept="image/*" class="input-file">
                 <p>
@@ -20,14 +20,28 @@
                 </p>
             </div>
         </form>
+        <div v-else class="limit-warning">
+            <span>You've reached the limit of {{maxFileConfig}} images</span>
+        </div>
     </div>
 </template>
 
 <script>
+    import { GlobalConfig } from '../../../GlobalConfig';
     const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
     export default {
         name: 'UploadImage',
+        props: {
+            maxFileAllowed: {
+                type: Number,
+                default: 0
+            },
+            maxFileConfig: {                
+                type: Number,
+                default: 0
+            }
+        },
         data: function(){
             return {
                 uploadedFiles: [],
@@ -48,6 +62,9 @@
             },
             isFailed() {
                 return this.currentStatus === STATUS_FAILED;
+            },
+            isUploadImageAllowed() {
+                return this.maxFileAllowed > 0;
             }
         },
         mounted: function(){
@@ -100,6 +117,7 @@
             },
             filesChange(fieldName, fileList) {
                 if (!fileList.length) return;
+                if (fileList.length > this.maxFileAllowed) return;
 
                 // append the files to FormData
                 const formData = new FormData();
@@ -129,7 +147,7 @@
     .dropbox {
         outline: 2px dashed grey; /* the dash box */
         outline-offset: -10px;
-        background: lightcyan;
+        background: #B6BABC;
         color: dimgray;
         min-height: 50px; /* minimum height */
         position: relative;
@@ -185,5 +203,10 @@
     .upload-image img {
         width: 100%;
         vertical-align: top;
+    }
+
+    .limit-warning {
+        background: #FCD116;
+        text-align: center;
     }
 </style>

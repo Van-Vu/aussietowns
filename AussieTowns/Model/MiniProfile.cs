@@ -13,5 +13,6 @@ namespace AussieTowns.Model
         public string ProfileUrl { get; set; }
         public string PhotoUrl { get; set; }
         public string ShortDescription { get; set; }
+        public bool IsPrimary { get; set; }
     }
 }

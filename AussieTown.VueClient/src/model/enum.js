@@ -34,6 +34,12 @@ export var UserRole;
     UserRole[UserRole["Admin"] = 4] = "Admin";
     UserRole[UserRole["SuperAdmin"] = 8] = "SuperAdmin";
 })(UserRole || (UserRole = {}));
+export var UserAction;
+(function (UserAction) {
+    UserAction[UserAction["View"] = 0] = "View";
+    UserAction[UserAction["Edit"] = 1] = "Edit";
+    UserAction[UserAction["Delete"] = 2] = "Delete";
+})(UserAction || (UserAction = {}));
 export var NotificationType;
 (function (NotificationType) {
     NotificationType["Success"] = "is-success";

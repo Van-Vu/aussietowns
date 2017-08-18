@@ -1,4 +1,5 @@
 ﻿import { RepeatedType, RepeatedDay } from './enum';
+import { Utils } from '../component/utils';
 
 export default class ScheduleModel {
     id: number;
@@ -18,8 +19,8 @@ export default class ScheduleModel {
         this.repeatedDay = repeatedDay;
     }
 
-    summaryText() {
-        let ret = '';
+    get repeatedText(): string {
+        let ret = Utils.formatDate(new Date(this.startDate));
         
         switch (this.repeatedType) {
             case RepeatedType.Daily:
@@ -43,5 +44,9 @@ export default class ScheduleModel {
         }
 
         return ret;
+    }
+
+    get durationText(): string {
+        return `${this.duration} hrs`;
     }
 }

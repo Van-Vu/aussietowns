@@ -18,6 +18,11 @@ No-SSR: https://github.com/egoist/vue-no-ssr
 
 Choose font: http://www.websitebuilderexpert.com/pick-best-font-style-for-website/
 
+https://developers.google.com/web/progressive-web-apps/
+
+https://css-tricks.com/float-labels-css/
+
+
 Task:
 image & video
 transition

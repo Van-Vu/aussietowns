@@ -102,11 +102,11 @@
         width: 33%;
         padding: 10px 0;
         &:hover{
-            background-color: #FFCE00;
+            background-color: #FCD116;
             color: #fff;
         }
         &.selected{
-            background-color: #FFCE00;
+            background-color: #FCD116;
             color: #fff;
         }
         &.invalid{
@@ -139,7 +139,7 @@
             padding-bottom: 100%;
             &.selected{
                 .bg{
-                    background-color: #FFCE00;
+                    background-color: #FCD116;
                 }
                 span{
                     color: #fff;
@@ -152,7 +152,7 @@
                 }
                 &:hover{
                     .bg{
-                        background-color: #FFCE00;
+                        background-color: #FCD116;
                         transform: scale(1);
                         opacity: .6;
                     }
@@ -205,7 +205,8 @@
     .disable {
         color: #ccc;
         .message {
-            background-color: #E74C3C;
+            // $c-darkgrey-light
+            background-color: #B6BABC;
         }
     }
 

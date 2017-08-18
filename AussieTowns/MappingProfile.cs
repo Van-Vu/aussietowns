@@ -37,7 +37,7 @@ namespace AussieTowns
                 .ForMember(dest => dest.Location,
                     opts => opts.MapFrom(src => $"{src.Location.SuburbName}, {src.Location.State} ({src.Location.Postcode})"))
                 .ForMember(dest => dest.PrimaryOwner,
-                    opts => opts.MapFrom(src => src.TourOperators.Any(x => x.IsOwner) ? src.TourOperators.SingleOrDefault(x => x.IsOwner).User.FirstName : string.Empty))
+                    opts => opts.MapFrom(src => src.TourOperators.Any(x => x.IsPrimary) ? src.TourOperators.SingleOrDefault(x => x.IsPrimary).User.FirstName : string.Empty))
                 .ForMember(dest => dest.MinParticipant,
                     opts => opts.MapFrom(src => src.Type == ListingType.Offer ? src.MinParticipant : src.TourGuests.Count()));
 
@@ -62,15 +62,14 @@ namespace AussieTowns
                     opts => opts.MapFrom(src => src.EndDate.HasValue ? src.EndDate.Value.Date.ToString("yyyy/MM/dd") : string.Empty));
 
             CreateMap<Listing, ListingResponse>()
-                .ForMember(dest => dest.ListingType, opts => opts.MapFrom(src => src.Type))
                 .ForMember(dest => dest.LocationDetail,
                     opts => opts.MapFrom(src => Mapper.Map<SuburbDetail, AutoCompleteItem>(src.Location)))
                 .ForMember(dest => dest.Schedules,
                     opts => opts.MapFrom(src => src.Schedules.Select(x => Mapper.Map<Schedule, ScheduleResponse>(x))))
                 .ForMember(dest => dest.TourOperators,
-                    opts => opts.MapFrom(src => src.TourOperators.Select(x => Mapper.Map<User, MiniProfile>(x.User))))
+                    opts => opts.ResolveUsing<TourOperatorResolver>())
                 .ForMember(dest => dest.TourGuests,
-                    opts => opts.ResolveUsing<MiniProfileResolver>());
+                    opts => opts.ResolveUsing<TourGuestResolver>());
             //opts.MapFrom(src =>  src.TourGuests.Select(x => Mapper.Map<User, MiniProfile>(x.User))));
 
             CreateMap<User, UserResponse>()
@@ -83,7 +82,7 @@ namespace AussieTowns
         }
     }
 
-    public class MiniProfileResolver : IValueResolver<Listing, ListingResponse, ICollection<MiniProfile>>
+    public class TourGuestResolver : IValueResolver<Listing, ListingResponse, ICollection<MiniProfile>>
     {
         public ICollection<MiniProfile> Resolve(Listing source, ListingResponse dest, ICollection<MiniProfile> miniProfiles, ResolutionContext context)
         {
@@ -111,6 +110,23 @@ namespace AussieTowns
 
             return profiles;
             //return source.Value1 + source.Value2;
+        }
+    }
+
+    public class TourOperatorResolver : IValueResolver<Listing, ListingResponse, ICollection<MiniProfile>>
+    {
+        public ICollection<MiniProfile> Resolve(Listing source, ListingResponse dest, ICollection<MiniProfile> miniProfiles, ResolutionContext context)
+        {
+            var profiles = new List<MiniProfile>();
+
+            foreach (var tourOperator in source.TourOperators)
+            {
+                var profile = Mapper.Map<User, MiniProfile>(tourOperator.User);
+                profile.IsPrimary = tourOperator.IsPrimary;
+                profiles.Add(profile);
+            }
+
+            return profiles;
         }
     }
 }

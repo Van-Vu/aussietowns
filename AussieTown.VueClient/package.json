@@ -43,6 +43,7 @@
     "typescript": "^2.4.1",
     "url-loader": "^0.5.9",
     "v-mask": "^1.2.0",
+    "v-money": "^0.8.0",
     "vee-validate": "^2.0.0-rc.6",
     "vue": "^2.3.4",
     "vue-class-component": "^5.0.2",

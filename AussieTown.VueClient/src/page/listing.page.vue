@@ -84,18 +84,19 @@
                         </div>
                     </div>
                     <div class="container is-gapless is-flex is-sticky-bottom">
-                        <button class="column is-full button mtl_button-no-round" v-if="!isEditing" @click="onEdit">Edit</button>
-                        <button class="column is-half button mtl_button-round-left" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
-                        <button class="column is-half button mtl_button-round-right" v-if="isEditing" @click="onCancelEdit">Cancel</button>
+                        <button class="column is-full button mtl_button-no-round" v-if="!isEditing && canEdit" @click="onEdit">Edit</button>
+                        <button class="column is-half button mtl_button-no-round" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
+                        <button class="column is-half button mtl_button-no-round" v-if="isEditing" @click="onCancelEdit">Cancel</button>
                     </div>
             </div>
             <div v-show="isOffer" class="tile is-vertical is-parent " :class="{'is-sticky-box': isStickyBoxRequired}">
                 <div class="box cost">
                     <label v-if="isEditing" class="label" for="cost">Cost</label>
-                    <div class="price" v-if="!isEditing">{{ model.cost }}</div>
+                    <div class="price" v-if="!isEditing">${{ model.cost }} AUD</div>
                     <div class="control has-icon has-icon-right">
-                        <input name="cost" v-if="isEditing" v-model="model.cost" v-validate="'required|numeric'" v-mask="'###'"
-                               :class="{'input': true, 'is-danger': errors.has('cost') }" type="text" placeholder="Cost per person">
+                        <money v-if="isEditing" v-model="model.cost" v-bind="money"></money>
+                        <!--<input name="cost" v-if="isEditing" v-model="model.cost" v-validate="'required|numeric'" v-mask="'###'"
+                               :class="{'input': true, 'is-danger': errors.has('cost') }" type="text" placeholder="Cost per person">-->
                         <span v-if="isEditing" class="icon user">
                             <i class="glyphicon glyphicon-lock"></i>
                         </span>
@@ -111,15 +112,15 @@
                             <li v-for="schedule in model.schedules">
                                 <div class="columns is-gapless">
                                     <label class="column is-5">Date</label>
-                                    <label class="column">{{ schedule.startDate }}</label>
+                                    <label class="column">{{ schedule.repeatedText }}</label>
                                 </div>
                                 <div class="columns is-gapless">
-                                    <label class="column is-5">Start</label>
+                                    <label class="column is-5">Start time</label>
                                     <label class="column">{{ schedule.startTime }}</label>
                                 </div>
                                 <div class="columns is-gapless">
                                     <label class="column is-5">Duration</label>
-                                    <label class="column">{{ schedule.duration }}</label>
+                                    <label class="column">{{ schedule.durationText }}</label>
                                 </div>
                                 <div v-if="isEditing" class="columns is-gapless">
                                     <label class="column is-5">Repeated</label>

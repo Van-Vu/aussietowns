@@ -1,20 +1,41 @@
-﻿.swiper-wrap {
-    display: flex;
-
-    & > div {
-        align-items: stretch;
-    }
-}
-
-.image-upload {
+﻿.image-upload {
     position: relative;
-    & > i {
+    //630,420
+    min-width: 320px;
+    @media all and (min-width: $is-mobile) {
+        width: 728px;
+    }
+
+    @media all and (min-width: $is-desktop) {
+        width: 636px;
+    }
+
+    padding-top: 56.25%;
+
+    .swiper, .swipe-wrapper {
+        @extend .absolute-center-y;
+    }
+
+    .removeImage{
+        width: 35px;
         position: absolute;
-        top: 0;
+        bottom: 3px;
+        right: 3px;
+        font-size: 2rem;
+        height: 40px;
+        background-color: $c-brand-quaternary;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    /*& > i {
+        position: absolute;
+        top: auto;
+        bottom: 80px;
         right: 0;
         font-size: 2rem;
         &:hover {
             cursor: pointer;
         }
-    }
+    }*/
 }

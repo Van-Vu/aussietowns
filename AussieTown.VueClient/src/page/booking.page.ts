@@ -12,12 +12,22 @@ import UserSearchComponent from '../component/shared/search/usersearch.component
 import { Utils } from '../component/utils';
 import RingLoader from '../component/shared/external/ringloader.vue';
 
+import store from '../store';
+
 @Component({
     name: 'BookingPage',
     components: {
         'availability': AvailabilityComponent,
         "usersearch": UserSearchComponent,
         'ringloader': RingLoader
+    },
+    beforeRouteEnter(to, from, next) {
+        if (store.state.listing instanceof ListingModel) {
+            store.state.booking = new BookingModel(store.state.listing);
+            next();
+        } else {
+            next({ name: "home" });
+        }
     }
 })
 
@@ -30,10 +40,14 @@ export default class BookingPage extends Vue {
     $mq: any;
 
     asyncData({ store, route }) {
-        if (!(store.state.listing instanceof ListingModel) || (store.state.booking == null)) {
-            //route.push({ name: "home" });
-            //route.next('/home');
-        }
+        //if (store.state.listing instanceof ListingModel) {
+        //    //route.push({ name: "home" });
+        //    //route.next('/home');
+        //    store.state.booking = new BookingModel(store.state.listing);
+        //} else {
+        //    route.next({ name : "home" });
+        //}
+        store.state.booking.participants = plainToClass(UserModel, this.generateParticipants(store)); 
     }
 
     get model() {
@@ -41,12 +55,7 @@ export default class BookingPage extends Vue {
     }
 
     created() {
-        //this.$store.dispatch('SET_CURRENT_PAGE', 'booking');
-        if (this.$store.state.listing instanceof ListingModel) {
-            this.$store.state.booking = new BookingModel(this.$store.state.listing, this.generateParticipants());
-        } else {
-            this.$router.push({ name: "home" });
-        }
+        
     }
 
     mounted() {
@@ -90,10 +99,10 @@ export default class BookingPage extends Vue {
         };
     }
 
-    generateParticipants() {
-        let users = [plainToClass(UserModel, classToPlain(this.$store.state.loggedInUser))];
-        if (this.$store.state.booking != null && this.$store.state.booking.participants > 0) {
-            for (var i = 0; i < this.$store.state.booking.participants - 1; i++) {
+    generateParticipants(store) {
+        let users = [plainToClass(UserModel, classToPlain(store.state.loggedInUser))];
+        if (store.state.booking != null && store.state.booking.participants > 0) {
+            for (var i = 0; i < store.state.booking.participants - 1; i++) {
                 users.push(new UserModel());
             }
         }
@@ -139,7 +148,7 @@ export default class BookingPage extends Vue {
                     if (result) {
                         resolve(true);
                     }
-                    reject('Please fill in participant information');
+                    reject('Please fill in required information');
                 });
             },1000);
 
@@ -178,8 +187,13 @@ export default class BookingPage extends Vue {
 
     validateBookingTime() {
         return new Promise((resolve, reject) => {
-            if ((this.model.bookingDate) && (this.model.bookingTime)) resolve(true);
-            reject('Please fill in participant information');
+            setTimeout(() => {
+                if ((this.model.bookingDate) && (this.model.bookingTime)) resolve(true);
+                reject('Please choose your suitable date and time');
+            }, 1000);
+
+
+
         });
     }
     //validateBeforeSubmit(e) {

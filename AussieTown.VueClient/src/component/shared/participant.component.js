@@ -33,8 +33,10 @@ var ParticipantComponent = (function (_super) {
         return _this;
     }
     ParticipantComponent.prototype.created = function () {
-        this.buttonText = "Add " + this.participantType;
         //this.internalUsers = this.exixtingUsers;
+    };
+    ParticipantComponent.prototype.mounted = function () {
+        this.buttonText = "Add " + this.participantType;
     };
     ParticipantComponent.prototype.toggleProfileSearch = function (event) {
         this.isAdding = !this.isAdding;

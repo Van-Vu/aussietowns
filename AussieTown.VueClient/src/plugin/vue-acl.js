@@ -1,6 +1,6 @@
 //https://github.com/leonardovilarinho/vue-acl
 import store from '../store';
-import { UserRole, NotificationType } from '../model/enum';
+import { UserRole, UserAction, NotificationType } from '../model/enum';
 var Auth = (function () {
     function Auth() {
         this.role = 0;
@@ -15,9 +15,10 @@ var Auth = (function () {
         this.router = router;
         this.permissions = Array.isArray(permissions) ? permissions : [permissions];
     };
-    Auth.prototype.check = function (permission, userId) {
-        if (permission === void 0) { permission = 0; }
+    Auth.prototype.check = function (permission, userId, action) {
+        if (permission === void 0) { permission = UserRole.Anonymous; }
         if (userId === void 0) { userId = -1; }
+        if (action === void 0) { action = UserAction.View; }
         if (typeof permission != 'undefined') {
             //const permissions = (permission.indexOf('|') !== -1) ? permission.split('|') : [permission];
             //return permissions.find((permission) => {
@@ -29,15 +30,19 @@ var Auth = (function () {
             //    }
             //    return (this.permissions.indexOf(needed) !== -1) ? true : false;
             //}) !== undefined;
+            console.log('from here');
             var loggedInUser = store.state.loggedInUser;
-            //if (!(loggedInUser instanceof User)) {
-            //    return false;
-            //}
-            if (userId === loggedInUser.id) {
-                return true;
+            if (loggedInUser.id && loggedInUser.role) {
+                // Author
+                if (userId === loggedInUser.id) {
+                    return true;
+                }
+                if (loggedInUser.role < permission)
+                    return false;
             }
-            if (loggedInUser.role < permission)
-                return false;
+            else {
+                return action === UserAction.View;
+            }
             return true;
         }
         return false;

@@ -1,5 +1,6 @@
 ﻿import { AutocompleteItem } from './autocomplete.model';
 import ListingModel from './listing.model';
+import { UserRole } from './enum';
 
 export default class UserModel {
     public id: number;
@@ -17,15 +18,16 @@ export default class UserModel {
     public emergencyContact: string;
     public images: string;
     public video: string;
+    public role: UserRole;
     public operatorListings: ListingModel[];
     public guestListings: ListingModel[];
 
     constructor() {
-        this.firstName = '';
-        this.lastName = '';
-        this.email = '';
-        this.phone = '';
-        this.emergencyContact = '';
-        this.address = '';
+        //this.firstName = '';
+        //this.lastName = '';
+        //this.email = '';
+        //this.phone = '';
+        //this.emergencyContact = '';
+        //this.address = '';
     }
 }

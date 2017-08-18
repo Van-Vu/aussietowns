@@ -1,5 +1,5 @@
 <template>
-    <div class="swipe-main">
+    <div class="swipe-wrapper">
         <div class="slide-button-prev is-hidden-mobile" v-show="currentPage > 1" @click.prevent="prev">
             <i class="glyphicon glyphicon-chevron-left"></i>
         </div>
@@ -8,7 +8,7 @@
              @touchstart="_onTouchStart"
              @mousedown="_onTouchStart"
              @wheel="_onWheel">
-            <div class="swiper-wrap"
+            <div class="swiper-slide"
                  ref="wrap"
                  :style="{
                 'transform' : 'translate3d(' + translateX + 'px,' + translateY + 'px, 0)',

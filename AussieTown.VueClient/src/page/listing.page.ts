@@ -13,9 +13,10 @@ import ScheduleModel from '../model/schedule.model';
 import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
 import ImageUploadComponent from '../component/shared/imageupload.component.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
-import { ScreenSize, NotificationType } from '../model/enum';
+import { ScreenSize, NotificationType, UserRole, UserAction } from '../model/enum';
 import { detectScreenSize } from '../service/screen.service';
 import AvailabilityComponent from '../component/booking/availability.component.vue';
+import { Money } from 'v-money';
 
 Vue.use(VeeValidate);
 
@@ -28,7 +29,8 @@ Vue.use(VeeValidate);
         "schedulemodal": ScheduleModalComponent,
         "imageupload": ImageUploadComponent,
         "numberchooser": NumberChooser,
-        "availabilityCheck": AvailabilityComponent
+        "availabilityCheck": AvailabilityComponent,
+        Money
     }
 })
 
@@ -43,8 +45,17 @@ export default class ListingPage extends Vue{
     showScheduleModal: boolean = false;
     showAvailability: boolean = false;
     isStickyBoxRequired: boolean = true;
+    money= {
+        decimal: ',',
+        thousands: '.',
+        prefix: '$',
+        suffix: ' AUD',
+        precision: 0,
+        masked: false
+    };
 
     $mq: any;
+    $auth: any;
 
     modelCache: any = null;
 
@@ -55,12 +66,8 @@ export default class ListingPage extends Vue{
     }
 
     get model() {
-        this.isOffer = this.$store.state.listing.listingType == ListingType.Offer;
+        this.isOffer = this.$store.state.listing.type == ListingType.Offer;
         return this.$store.state.listing;
-    }
-
-    created() {
-
     }
 
     mounted() {
@@ -80,24 +87,44 @@ export default class ListingPage extends Vue{
         }        
     }
 
+    get canEdit() {
+        var primaryUser = this.model.tourOperators.filter(x => x.isPrimary === true);
+        if (primaryUser.length > 0) {
+            return this.$auth.check(UserRole.Editor, primaryUser[0].id, UserAction.Edit);    
+        }
+
+        return false;
+    }
+
     onUploadImageCompleted() {
-        (this.model as any).imageList = this.$store.state.listing.imageList;
-        (this.$children.find(x => x.$el.id === 'imageupload').$children[0] as any).refresh();
-        this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
+        if (this.canEdit) {
+            (this.model as any).imageList = this.$store.state.listing.imageList;
+            (this.$children.find(x => x.$el.id === 'imageupload').$children[0] as any).refresh();
+            this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });            
+        }
     }
 
     onInsertorUpdate() {
         this.isEditing = false;
-        if (this.model.id > 0) {
-            return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model));        
-        } else {
-            return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model));        
+        if (this.canEdit) {
+            this.$store.dispatch("ENABLE_LOADING");
+            if (this.model.id > 0) {
+                return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model))
+                    .then(() => this.$store.dispatch("DISABLE_LOADING"))
+                    .catch(err => { });
+            } else {
+                return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model))
+                    .then(() => this.$store.dispatch("DISABLE_LOADING"))
+                    .catch(err => { });
+            }            
         }
     }
 
     onEdit() {
-        this.isEditing = true;
-        this.modelCache = Object.assign({}, this.model);
+        if (this.canEdit) {
+            this.isEditing = true;
+            this.modelCache = Object.assign({}, this.model);            
+        }
     }
 
     onCancelEdit() {
@@ -188,7 +215,7 @@ export default class ListingPage extends Vue{
 
         return {
             id: model.id,
-            type: this.isOffer,
+            type: this.isOffer ? 0 : 1,
             locationId: model.locationDetail.id,
             cost: model.cost,
             currency: model.currency,

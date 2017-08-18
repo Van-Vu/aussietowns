@@ -8,6 +8,8 @@ export enum UserSource { Native, Facebook, Google }
 
 export enum UserRole { Anonymous = 0, User = 1, Editor = 2, Admin = 4, SuperAdmin = 8 }
 
+export enum UserAction { View, Edit, Delete }
+
 export enum NotificationType { Success = 'is-success', Warning = 'is-warning', Error = 'is-error' }
 
 export enum ScreenSize { Desktop, Tablet, Mobile }

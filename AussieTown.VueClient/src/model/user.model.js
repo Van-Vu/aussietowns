@@ -1,11 +1,11 @@
 var UserModel = (function () {
     function UserModel() {
-        this.firstName = '';
-        this.lastName = '';
-        this.email = '';
-        this.phone = '';
-        this.emergencyContact = '';
-        this.address = '';
+        //this.firstName = '';
+        //this.lastName = '';
+        //this.email = '';
+        //this.phone = '';
+        //this.emergencyContact = '';
+        //this.address = '';
     }
     return UserModel;
 }());

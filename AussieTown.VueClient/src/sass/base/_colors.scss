@@ -2,9 +2,9 @@
 $c-brand-primary-rgb: rgb(153,205,78); 
 $c-brand-primary-darker: #61892F !default;
 $c-brand-primary-bold: #00B22D !default;
-$c-brand-secondary: #99CD4E !default; //sunflowers
+$c-brand-secondary: #99CD4E !default; //green
 $c-brand-secondary-darker: #F19F4D !default; /// ivory darker
-$c-brand-quaternary: #E74C3C !default;
+$c-brand-quaternary: #E74C3C !default; // red
 $c-lightgrey: #E1E1E1 !default;
 $c-beige: #dbc9b8 !default;
 $c-blue: #0070ba !default;
@@ -18,13 +18,13 @@ $c-neutral-black: #000000 !default; // Black
 $c-lightgrey-light: #CFD5DB !default; // light grey
 $c-lightgrey-lightest: #F8F9FA !default; // lightest light grey
 $c-primary-modal-background: rgba(255,255,255,0.7);
-
+$c-darkgrey-light: #B6BABC !default; // light dark grey
 
 
 $c-darkgrey-darkest: #2C3941 !default; // darkest grey
 $c-darkgrey-lessdark: #4A565E !default; // less dark grey
 $c-darkgrey-dark: #6B747A !default; // dark grey
-$c-darkgrey-light: #B6BABC !default; // light dark grey
+
 $c-darkgrey-lightest: #EAEBEB !default; // lightest dark grey
 
 $c-lightgrey-darkest: #768A99 !default; // darkest light grey

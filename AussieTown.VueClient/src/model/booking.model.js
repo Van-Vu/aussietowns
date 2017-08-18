@@ -1,9 +1,7 @@
-import User from './user.model';
-import { plainToClass } from "class-transformer";
 var BookingModel = (function () {
-    function BookingModel(listing, participants) {
+    function BookingModel(listing) {
         this.listing = listing;
-        this.participants = plainToClass(User, participants);
+        //this.participants = plainToClass(User, participants);
     }
     return BookingModel;
 }());

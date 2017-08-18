@@ -26,6 +26,7 @@ import { ScreenSize } from '../model/enum';
 import { detectScreenSize } from '../service/screen.service';
 import UserSearchComponent from '../component/shared/search/usersearch.component.vue';
 import RingLoader from '../component/shared/external/ringloader.vue';
+import store from '../store';
 var BookingPage = (function (_super) {
     __extends(BookingPage, _super);
     function BookingPage() {
@@ -47,10 +48,14 @@ var BookingPage = (function (_super) {
     }
     BookingPage.prototype.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
-        if (!(store.state.listing instanceof ListingModel) || (store.state.booking == null)) {
-            //route.push({ name: "home" });
-            //route.next('/home');
-        }
+        //if (store.state.listing instanceof ListingModel) {
+        //    //route.push({ name: "home" });
+        //    //route.next('/home');
+        //    store.state.booking = new BookingModel(store.state.listing);
+        //} else {
+        //    route.next({ name : "home" });
+        //}
+        store.state.booking.participants = plainToClass(UserModel, this.generateParticipants(store));
     };
     Object.defineProperty(BookingPage.prototype, "model", {
         get: function () {
@@ -60,13 +65,6 @@ var BookingPage = (function (_super) {
         configurable: true
     });
     BookingPage.prototype.created = function () {
-        //this.$store.dispatch('SET_CURRENT_PAGE', 'booking');
-        if (this.$store.state.listing instanceof ListingModel) {
-            this.$store.state.booking = new BookingModel(this.$store.state.listing, this.generateParticipants());
-        }
-        else {
-            this.$router.push({ name: "home" });
-        }
     };
     BookingPage.prototype.mounted = function () {
         var screenSize = detectScreenSize(this.$mq);
@@ -86,12 +84,14 @@ var BookingPage = (function (_super) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             (new ListingService()).bookAListing(_this.constructBookingRequest())
-                .then(function () { return resolve(true); })
+                .then(function () {
+                _this.isBooked = true;
+                resolve(true);
+            })
                 .catch(function () { return reject('Please fill in participant information'); });
             //if ((this.model.bookingDate) && (this.model.bookingTime)) resolve(true);
         });
         //alert('Form Submitted!');
-        this.isBooked = true;
     };
     BookingPage.prototype.constructBookingRequest = function () {
         return {
@@ -101,10 +101,10 @@ var BookingPage = (function (_super) {
             participants: this.model.participants
         };
     };
-    BookingPage.prototype.generateParticipants = function () {
-        var users = [plainToClass(UserModel, classToPlain(this.$store.state.loggedInUser))];
-        if (this.$store.state.booking != null && this.$store.state.booking.participants > 0) {
-            for (var i = 0; i < this.$store.state.booking.participants - 1; i++) {
+    BookingPage.prototype.generateParticipants = function (store) {
+        var users = [plainToClass(UserModel, classToPlain(store.state.loggedInUser))];
+        if (store.state.booking != null && store.state.booking.participants > 0) {
+            for (var i = 0; i < store.state.booking.participants - 1; i++) {
                 users.push(new UserModel());
             }
         }
@@ -142,7 +142,7 @@ var BookingPage = (function (_super) {
                     if (result) {
                         resolve(true);
                     }
-                    reject('Please fill in participant information');
+                    reject('Please fill in required information');
                 });
             }, 1000);
             //this.$validator.validateAll().then(() => {
@@ -175,9 +175,11 @@ var BookingPage = (function (_super) {
     BookingPage.prototype.validateBookingTime = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            if ((_this.model.bookingDate) && (_this.model.bookingTime))
-                resolve(true);
-            reject('Please fill in participant information');
+            setTimeout(function () {
+                if ((_this.model.bookingDate) && (_this.model.bookingTime))
+                    resolve(true);
+                reject('Please choose your suitable date and time');
+            }, 1000);
         });
     };
     BookingPage = __decorate([
@@ -187,6 +189,15 @@ var BookingPage = (function (_super) {
                 'availability': AvailabilityComponent,
                 "usersearch": UserSearchComponent,
                 'ringloader': RingLoader
+            },
+            beforeRouteEnter: function (to, from, next) {
+                if (store.state.listing instanceof ListingModel) {
+                    store.state.booking = new BookingModel(store.state.listing);
+                    next();
+                }
+                else {
+                    next({ name: "home" });
+                }
             }
         })
     ], BookingPage);

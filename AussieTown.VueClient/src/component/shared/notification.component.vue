@@ -5,7 +5,7 @@
                 <button class="delete touchable" @click="triggerClose(notification)"></button>
                 <span>{{notification.title}}</span>
             </div>
-            <div class="message-body">{{notification.text}}</div>
+            <div v-if="notification.text" class="message-body">{{notification.text}}</div>
         </div>
     </div>
 </template>

@@ -30,8 +30,12 @@ export default class ParticipantComponent extends Vue {
     internalUsers: any[];
 
     created() {
-        this.buttonText = "Add " + this.participantType;
+
         //this.internalUsers = this.exixtingUsers;
+    }
+
+    mounted() {
+        this.buttonText = "Add " + this.participantType;        
     }
 
     toggleProfileSearch(event) {

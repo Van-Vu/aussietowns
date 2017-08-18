@@ -5,6 +5,7 @@ import UserService from "../service/user.service";
 import MessageService from "../service/message.service";
 import UploadService from "../service/fileupload.service";
 import ListingModel from '../model/listing.model';
+import UserModel from '../model/user.model';
 import { Utils } from '../component/utils';
 import { plainToClass } from "class-transformer";
 import createPersistedState from 'vuex-persistedstate';
@@ -22,7 +23,7 @@ export default new Vuex.Store({
     ],
     state: {
         currentPage: '',
-        loggedInUser: {},
+        loggedInUser: UserModel,
         listing: ListingModel,
         profile: {},
         searchListings: [],
@@ -68,13 +69,15 @@ export default new Vuex.Store({
         },
         UPDATE_LISTING: function (_a, listing) {
             var commit = _a.commit, state = _a.state;
-            (new ListingService()).updateListing(listing);
-            commit('UPDATE_LISTING', listing);
+            return (new ListingService()).updateListing(listing)
+                .then(function (response) { return response; });
+            //commit('UPDATE_LISTING', listing);
         },
         INSERT_LISTING: function (_a, listing) {
             var commit = _a.commit, state = _a.state;
-            (new ListingService()).addListing(listing);
-            commit('UPDATE_LISTING', listing);
+            return (new ListingService()).addListing(listing)
+                .then(function (response) { return response; });
+            //commit('UPDATE_LISTING', listing);
         },
         FETCH_PROFILE_BY_ID: function (_a, id) {
             var dispatch = _a.dispatch, commit = _a.commit, state = _a.state;
@@ -130,6 +133,7 @@ export default new Vuex.Store({
             return (new UploadService()).uploadListing(payload.data, payload.actionId)
                 .then(function (response) {
                 commit('ADD_LISTING_IMAGES', response);
+                return response.length;
             });
         },
         UPLOAD_PROFILE_IMAGES: function (_a, payload) {

@@ -1,11 +1,11 @@
-﻿.swipe-main {
+﻿.swipe-wrapper {
     position:relative;
 }
 .swiper {
   position: relative;
   overflow: hidden;
 
-  .swiper-wrap {
+  .swiper-slide {
     display: flex;
     justify-content: flex-start;
     width: 100%;
@@ -25,11 +25,11 @@
     }
   }
 
-  &.horizontal .swiper-wrap {
+  &.horizontal .swiper-slide {
     flex-direction: row;
   }
 
-  &.vertical .swiper-wrap {
+  &.vertical .swiper-slide {
     flex-direction: column;
   }
 

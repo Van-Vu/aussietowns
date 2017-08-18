@@ -8,8 +8,8 @@ export default class BookingModel {
     public bookingDate: any;
     public bookingTime: any;
 
-    constructor(listing, participants) {
+    constructor(listing) {
         this.listing = listing;
-        this.participants = plainToClass(User, participants);
+        //this.participants = plainToClass(User, participants);
     }
 }

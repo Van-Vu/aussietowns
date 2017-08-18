@@ -23,16 +23,19 @@ import UploadImage from './external/vueuploadimage.vue';
 import Swiper from './external/vue-swiper.vue';
 import RingLoader from './external/ringloader.vue';
 import { NotificationType } from '../../model/enum';
+import { GlobalConfig } from '../../GlobalConfig';
 var ImageUploadComponent = (function (_super) {
     __extends(ImageUploadComponent, _super);
     function ImageUploadComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.carouselCurrentPage = 1;
         _this.isUploading = false;
-        _this.maxFileAllowed = 5;
+        _this.maxFileAllowed = GlobalConfig.maxImagesPerListing;
+        _this.maxFileConfig = GlobalConfig.maxImagesPerListing;
         return _this;
     }
     ImageUploadComponent.prototype.created = function () {
+        this.maxFileAllowed -= this.images.length;
     };
     ImageUploadComponent.prototype.close = function () {
     };
@@ -44,6 +47,7 @@ var ImageUploadComponent = (function (_super) {
         this.isUploading = true;
         this.$store.dispatch('REMOVE_IMAGE', { listingId: this.$store.state.listing.id, url: this.images[this.carouselCurrentPage - 1].url })
             .then(function (response) {
+            _this.maxFileAllowed += 1;
             _this.$emit('uploadImageCompleted');
             _this.isUploading = false;
         })
@@ -70,6 +74,7 @@ var ImageUploadComponent = (function (_super) {
             data: formData,
             actionId: actionId
         }).then(function (response) {
+            _this.maxFileAllowed -= response;
             _this.$emit('uploadImageCompleted');
             _this.isUploading = false;
         })

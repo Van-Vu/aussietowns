@@ -5,7 +5,7 @@ import Swiper from './external/vue-swiper.vue';
 import ImageModel from '../../model/image.model';
 import RingLoader from './external/ringloader.vue';
 import { NotificationType } from '../../model/enum';
-
+import { GlobalConfig } from '../../GlobalConfig';
 
 @Component({
     name: "ImageUploadComponent",
@@ -22,9 +22,11 @@ export default class ImageUploadComponent extends Vue {
     @Prop isEditing: boolean;
     carouselCurrentPage: number = 1;
     isUploading: boolean = false;
-    maxFileAllowed: number = 5;
+    maxFileAllowed: number = GlobalConfig.maxImagesPerListing;
+    maxFileConfig: number = GlobalConfig.maxImagesPerListing;
 
-    created(): void {
+    created() {
+        this.maxFileAllowed -= this.images.length;
     }
 
     close() {
@@ -38,6 +40,7 @@ export default class ImageUploadComponent extends Vue {
         this.isUploading = true;
         this.$store.dispatch('REMOVE_IMAGE', { listingId: this.$store.state.listing.id, url: this.images[this.carouselCurrentPage - 1].url })
             .then(response => {
+                this.maxFileAllowed += 1;
                 this.$emit('uploadImageCompleted');
                 this.isUploading = false;
             })
@@ -65,6 +68,7 @@ export default class ImageUploadComponent extends Vue {
             data: formData,
             actionId: actionId
         }).then(response => {
+            this.maxFileAllowed -= response as any;
             this.$emit('uploadImageCompleted');
             this.isUploading = false;
         })

@@ -1,7 +1,7 @@
 ﻿//https://github.com/leonardovilarinho/vue-acl
 import store from '../store';
-import User from '../model/user.model';
-import { UserRole, NotificationType } from '../model/enum';
+import UserModel from '../model/user.model';
+import { UserRole, UserAction, NotificationType } from '../model/enum';
 
 class Auth {
     //public router: any;
@@ -14,7 +14,7 @@ class Auth {
         this.permissions = Array.isArray(permissions) ? permissions : [permissions];
     }
 
-    check(permission = 0, userId = -1) {
+    check(permission = UserRole.Anonymous, userId = -1, action = UserAction.View) {
         if (typeof permission != 'undefined') {
             //const permissions = (permission.indexOf('|') !== -1) ? permission.split('|') : [permission];
 
@@ -29,16 +29,19 @@ class Auth {
 
             //    return (this.permissions.indexOf(needed) !== -1) ? true : false;
             //}) !== undefined;
+
+            console.log('from here');
             const loggedInUser = store.state.loggedInUser;
-            //if (!(loggedInUser instanceof User)) {
-            //    return false;
-            //}
+            if ((loggedInUser as any).id && (loggedInUser as any).role) {
+                // Author
+                if (userId === (loggedInUser as any).id) {
+                    return true;
+                }
 
-            if (userId === (loggedInUser as any).id) {
-                return true;
+                if ((loggedInUser as any).role < permission) return false;                        
+            } else {
+                return action === UserAction.View;
             }
-
-            if ((loggedInUser as any).role < permission) return false;
 
             return true;
         }
