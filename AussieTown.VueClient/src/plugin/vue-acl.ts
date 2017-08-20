@@ -34,7 +34,7 @@ class Auth {
             const loggedInUser = store.state.loggedInUser;
             if ((loggedInUser as any).id && (loggedInUser as any).role) {
                 // Author
-                if (userId === (loggedInUser as any).id) {
+                if (userId == (loggedInUser as any).id) {
                     return true;
                 }
 
@@ -54,7 +54,7 @@ class Auth {
             if (typeof to.meta.permission == 'undefined')
                 next()
             else {
-                if (!this.check(to.meta.permission)) {
+                if (!this.check(to.meta.permission,to.params.profileId)) {
                     if (this.userId == UserRole.Anonymous) {
                         //trigger Login
                         //store.dispatch('SHOW_LOGIN_MODAL')

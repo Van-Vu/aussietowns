@@ -18,6 +18,7 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import LocationSearchComponent from "../shared/search/locationsearch.component.vue";
+import { UserRole, UserAction } from '../../model/enum';
 import datepicker from '../shared/external/datepicker.vue';
 Vue.use(VeeValidate);
 var UserDetailComponent = (function (_super) {
@@ -41,8 +42,13 @@ var UserDetailComponent = (function (_super) {
             return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
         }
     };
-    UserDetailComponent.prototype.created = function () {
-    };
+    Object.defineProperty(UserDetailComponent.prototype, "canEdit", {
+        get: function () {
+            return this.$auth.check(UserRole.Editor, this.$route.params.profileId, UserAction.Edit);
+        },
+        enumerable: true,
+        configurable: true
+    });
     UserDetailComponent.prototype.onLocationSelected = function (item) {
         this.model.locationId = +item.id;
     };

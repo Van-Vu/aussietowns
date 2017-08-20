@@ -34,7 +34,7 @@ var Auth = (function () {
             var loggedInUser = store.state.loggedInUser;
             if (loggedInUser.id && loggedInUser.role) {
                 // Author
-                if (userId === loggedInUser.id) {
+                if (userId == loggedInUser.id) {
                     return true;
                 }
                 if (loggedInUser.role < permission)
@@ -55,7 +55,7 @@ var Auth = (function () {
                 if (typeof to.meta.permission == 'undefined')
                     next();
                 else {
-                    if (!_this.check(to.meta.permission)) {
+                    if (!_this.check(to.meta.permission, to.params.profileId)) {
                         if (_this.userId == UserRole.Anonymous) {
                             //trigger Login
                             //store.dispatch('SHOW_LOGIN_MODAL')

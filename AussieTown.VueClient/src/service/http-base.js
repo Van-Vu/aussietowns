@@ -4,12 +4,12 @@ Vue.prototype.$http = axios;
 //export const http = axios.create({
 //    baseURL: `http://10.0.0.98/meetthelocal/`
 //})
-//export const http = axios.create({
-//    baseURL: `http://localhost/meetthelocal/`
-//})
-var http = axios.create({
-    baseURL: "http://localhost:3514/",
+export var http = axios.create({
+    baseURL: "http://localhost/meetthelocal/"
 });
+//const http = axios.create({
+//    baseURL: `http://localhost:3514/`,
+//})
 http.defaults.withCredentials = true;
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';
 //axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;

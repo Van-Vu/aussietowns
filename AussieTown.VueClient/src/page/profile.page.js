@@ -19,6 +19,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
+import { UserRole, UserAction } from '../model/enum';
 var ProfilePage = (function (_super) {
     __extends(ProfilePage, _super);
     function ProfilePage() {
@@ -30,6 +31,13 @@ var ProfilePage = (function (_super) {
         this.$store.dispatch('SET_CURRENT_PAGE', 'profile');
         this.currentTab = this.$route.name;
     };
+    Object.defineProperty(ProfilePage.prototype, "canEdit", {
+        get: function () {
+            return this.$auth.check(UserRole.Editor, this.$route.params.profileId, UserAction.Edit);
+        },
+        enumerable: true,
+        configurable: true
+    });
     ProfilePage.prototype.onRouteParamChanged = function (value, oldValue) {
         //console.log(`route change ${value}`);
         this.currentTab = value.name;

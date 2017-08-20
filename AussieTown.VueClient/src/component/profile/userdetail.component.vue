@@ -106,16 +106,16 @@
             <canvas></canvas>
             <label role="button" @click="capture">Capture</label>
         </div>
-        <div class="container is-gapless is-flex is-sticky-bottom is-hidden-tablet">
-            <button class="column is-full button mtl_button" v-if="!isEditing" @click="onEdit">Edit</button>
-            <button class="column is-half button mtl_button-round-left" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
-            <button class="column is-half button mtl_button-round-right" v-if="isEditing" @click="onCancelEdit">Cancel</button>
+        <div class="container is-gapless is-flex is-sticky-bottom">
+            <button class="column is-full button mtl_button-no-round" v-if="!isEditing && canEdit" @click="onEdit">Edit</button>
+            <button class="column is-half button mtl_button-no-round" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
+            <button class="column is-half button mtl_button-no-round" v-if="isEditing" @click="onCancelEdit">Cancel</button>
         </div>
-        <div class="columns container is-flex is-hidden-mobile">
+        <!--<div class="columns container is-flex is-hidden-mobile">
             <button class="column hero-buttons mtl_button" v-if="!isEditing" @click.prevent="onEdit">Edit</button>
             <button class="column hero-buttons mtl_button" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
             <button class="column hero-buttons mtl_button" v-if="isEditing" @click="onCancelEdit">Cancel</button>
-        </div>
+        </div>-->
     </div>
 </template>
 

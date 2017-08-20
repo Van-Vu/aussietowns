@@ -3,6 +3,7 @@ import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import LocationSearchComponent from "../shared/search/locationsearch.component.vue";
 import UserModel from '../../model/user.model';
+import { UserRole, UserAction } from '../../model/enum';
 import { AutocompleteItem } from '../../model/autocomplete.model';
 import datepicker from '../shared/external/datepicker.vue';
 
@@ -19,6 +20,7 @@ Vue.use(VeeValidate);
 export default class UserDetailComponent extends Vue {
     isEditing: boolean = false;
     modelCache: any = null;
+    $auth: any;
 
     get model() {
         return this.$store.state.profile;
@@ -30,7 +32,8 @@ export default class UserDetailComponent extends Vue {
         }
     }
 
-    created() {
+    get canEdit() {
+        return this.$auth.check(UserRole.Editor, (this.$route.params as any).profileId, UserAction.Edit);
     }
 
     onLocationSelected(item: AutocompleteItem) {

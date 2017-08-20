@@ -1,6 +1,6 @@
 ﻿<template>
     <div class="page-content container tile is-vertical is-parent profile-content">
-        <div class="tabs is-toggle is-fullwidth is-medium">
+        <div v-if="canEdit" class="tabs is-toggle is-fullwidth is-medium">
             <ul>
                 <li>
                     <router-link :to="{ name: 'profileHome' }">
@@ -29,29 +29,6 @@
                 </li>
             </ul>
         </div>
-
-
-        <!--<div class="tabs tile is-3 is-vertical box profile-menu">
-            <router-link :to="{ name: 'profileHome' }">
-                <label class="tab-text">Profile</label>
-            </router-link>
-
-            <router-link :to="{ name: 'changePassword' }">
-                <label class="tab-text">Change password</label>
-            </router-link>
-
-            <router-link :to="{ name: 'profileImages' }">
-                <label class="tab-text">Photos</label>
-            </router-link>
-
-            <router-link :to="{ name: 'profileMessages' }">
-                <label class="tab-text">Messages</label>
-            </router-link>
-
-            <router-link :to="{ name: 'profileTrips' }">
-                <label class="tab-text">Trips</label>
-            </router-link>
-        </div>-->
         <div class="tile box">
             <section class="profile-section">
                 <router-view></router-view>
