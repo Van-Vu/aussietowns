@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Model;
 using Dapper;
@@ -14,8 +15,8 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT C.id, C.lastmessagetime, R.messageContent, U.* "
-                        + "FROM user U,conversation C, conversation_reply R "
+                var sql = "SELECT C.id, C.lastmessagetime, R.messageContent, U.*"
+                        + "FROM user U, conversation C, conversation_reply R "
                         + "WHERE "
                         + "CASE "
                         + "WHEN C.userone = @userId "
@@ -32,14 +33,16 @@ namespace AussieTowns.Repository
                         + "GROUP BY U.id "
                         + "ORDER BY C.lastmessagetime DESC"; 
                 dbConnection.Open();
-                return  await dbConnection.QueryAsync<Conversation, User,Conversation>(sql, (conversation, user) =>
+                return  await dbConnection.QueryAsync<Conversation, User, Conversation>(sql, (conversation, user) =>
                 {
+                    //Bodom hack: deal later
                     conversation.UserTwo = new MiniProfile
                     {
                         Id = user.Id,
                         Fullname = $"{user.FirstName} {user.LastName}",
                         Email = user.Email,
-                        PhotoUrl = user.PhotoUrl
+                        //PhotoUrl = user.Images.Any() ? user.Images.FirstOrDefault().Url : "/static/images/anonymous.png"
+                        PhotoUrl = "/static/images/anonymous.png"
                     };
 
                     return conversation;
@@ -52,7 +55,7 @@ namespace AussieTowns.Repository
             using (IDbConnection dbConnection = Connection)
             {
                 var sql = "SELECT R.id,R.time,R.messageContent, R.conversationId, U.id as userId FROM user U, conversation_reply R "
-                          + "WHERE R.userId = U.id AND R.conversationId = @conversationId ORDER BY R.time ASC";
+                          + "WHERE R.userId = U.id AND R.conversationId = @conversationId ORDER BY R.time DESC";
 
                 dbConnection.Open();
                 return await dbConnection.QueryAsync<ConversationReply>(sql, new { conversationId });

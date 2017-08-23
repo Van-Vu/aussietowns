@@ -1,6 +1,12 @@
-﻿.image-upload {
+﻿.is-profile {
+    .image-upload {
+        padding-top: 100%;
+    }
+}
+
+.image-upload {
     position: relative;
-    min-width: 320px;
+    /*min-width: 320px;*/
     width:100%;
     
     // maintain 16:9 ratio
@@ -8,6 +14,7 @@
 
     .swiper {
         height: 100%;
+        width: 100%;
         @extend .absolute-center-y;
     }
 

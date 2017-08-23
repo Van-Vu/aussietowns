@@ -94,9 +94,9 @@
                     <label v-if="isEditing" class="label" for="cost">Cost</label>
                     <div class="price" v-if="!isEditing">${{ model.cost }} AUD</div>
                     <div class="control has-icon has-icon-right">
-                        <money v-if="isEditing" v-model="model.cost" v-bind="money"></money>
-                        <!--<input name="cost" v-if="isEditing" v-model="model.cost" v-validate="'required|numeric'" v-mask="'###'"
-                               :class="{'input': true, 'is-danger': errors.has('cost') }" type="text" placeholder="Cost per person">-->
+                        <!--<money v-if="isEditing" v-model="model.cost" v-bind="money"></money>-->
+                        $<input name="cost" v-if="isEditing" v-model="model.cost" v-validate="'required|numeric'" v-mask="'###'" style="width:180px;"
+                               :class="{'input': true, 'is-danger': errors.has('cost') }" type="text" placeholder="Cost per person">
                         <span v-if="isEditing" class="icon user">
                             <i class="glyphicon glyphicon-lock"></i>
                         </span>
@@ -142,7 +142,7 @@
                     </div>-->
                 </div>
 
-                <div class="field box is-hidden-mobile is-child">
+                <!--<div class="field box is-hidden-mobile is-child">
                     <label class="label">Other </label>
                     <p>test 1</p>
                     <p>test 1</p>
@@ -150,7 +150,7 @@
                     <p>test 1</p>
                     <p>test 1</p>
                     <p>test 1</p>
-                </div>
+                </div>-->
             </div>
             <schedulemodal :show="showScheduleModal" :schedule="editingSchedule" @onSave="onSaveSchedule" @onClose="showScheduleModal= !showScheduleModal"></schedulemodal>
         </div>

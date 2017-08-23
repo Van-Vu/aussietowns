@@ -6,24 +6,20 @@ import UserModel from '../../model/user.model';
 import { ListingType } from '../../model/enum';
 
 @Component({
-    name: "TripComponent",
+    name: "ListingsComponent",
     components: {
         "cardsmall": CardSmallComponent
     }
 })
 
-export default class TripComponent extends Vue {
+export default class ListingsComponent extends Vue {
     asyncData({ store, route }) {
         if (route.params.profileId) {
             return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
         }
     }
 
-    get requests() {
-        return this.$store.state.profile.operatorListings.filter(x => x.type == ListingType.Request);
-    }
-
-    get confirmedGuests() {
-        return this.$store.state.profile.guestListings;
+    get listings() {
+        return this.$store.state.profile.operatorListings.filter(x => x.type == ListingType.Offer);
     }
 }

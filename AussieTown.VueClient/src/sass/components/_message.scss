@@ -13,8 +13,24 @@
 }
 
 .message-icon {
-    pointer-events: auto !important;
-    color: $c-brand-primary-darker !important;
+    width: 100%;
+    
+    > input {
+        @media all and (min-width: $is-desktop) {
+            padding-right: 150px !important;
+        }
+    }
+    > button {
+        position: absolute;
+        top:0;
+        right:0;
+        height: 2.25em;
+        margin-right:0;
+        @media all and (min-width: $is-desktop) {
+            width: 150px !important;
+        }
+    }
+
 }
 
 @mixin talk-bubble-base() {
@@ -32,12 +48,13 @@
 .talk-bubble-main {
     @include talk-bubble-base;
     margin-left: 20%;
-    background-color: $c-brand-primary;
+    color: $c-screen-black;
+    background-color: $c-lightgrey-light;
 }
 
 .talk-bubble {
     @include talk-bubble-base;
-    background-color: $c-brand-secondary;
+    background-color: $c-neutral-white;
 }
 
 

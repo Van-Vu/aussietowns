@@ -249,18 +249,6 @@ namespace AussieTowns.Repository
             }
         }
 
-        public async Task<int> InsertImage(int listingId, string url)
-        {
-            using (IDbConnection dbConnection = Connection)
-            {
-                var sql = "INSERT INTO Image(listingId, url, createdDate, isActive) "
-                        + "VALUES (@listingId, @url, @createdDate, @isActive)";
-                dbConnection.Open();
-                var ret = await dbConnection.ExecuteAsync(sql, new { listingId = listingId, url = url, createdDate = DateTime.Now, isActive = true });
-                return ret;
-            }
-        }
-
         public async Task<int> DeActivateListing(int listingId)
         {
             using (IDbConnection dbConnection = Connection)

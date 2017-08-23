@@ -2,7 +2,7 @@ import http from './http-base';
 var UploadService = (function () {
     function UploadService() {
         this.uploadListingUrl = "/api/photo/uploadListing/";
-        this.uploadProfileUrl = "/api/photo/uploadProfile";
+        this.uploadProfileUrl = "/api/photo/uploadProfile/";
     }
     //uploadListing(formData, listingId, progressCallback) {
     //    return http.post(this.uploadListingUrl,

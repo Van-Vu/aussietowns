@@ -22,7 +22,7 @@ namespace AussieTowns.Model
         public string Description { get; set; }
         public string Address { get; set; }
         public string EmergencyContact { get; set; }
-        public string PhotoUrl { get; set; }
+        public ICollection<Image> Images { get; set; }
         public string VideoUrl { get; set; }
 
         public ICollection<ListingSummary> OperatorListings { get; set; }

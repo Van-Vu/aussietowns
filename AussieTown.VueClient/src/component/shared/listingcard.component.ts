@@ -23,7 +23,7 @@ export default class CardFullComponent extends Vue {
     date: string = '';
     time: string = '';
     headerLink: string = '';
-    imageUrl: string = '';
+    imageUrls: string = '';
 
     created(): void {
         this.id = this.listingDetail.id;
@@ -31,7 +31,7 @@ export default class CardFullComponent extends Vue {
         this.header = this.listingDetail.header;
         this.cost = this.listingDetail.cost;
         this.hostName = this.listingDetail.primaryOwner;
-        this.imageUrl = this.listingDetail.imageUrl ? this.listingDetail.imageUrl : '';
+        this.imageUrls = this.listingDetail.imageUrls ? this.listingDetail.imageUrls.split(';') : '';
         var startDatetime = new Date(this.listingDetail.schedules[0].startDate);
         this.date = Utils.formatDate(startDatetime);
         this.time = Utils.getTime(startDatetime);

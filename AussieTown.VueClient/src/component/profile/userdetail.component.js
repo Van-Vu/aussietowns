@@ -18,8 +18,12 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import LocationSearchComponent from "../shared/search/locationsearch.component.vue";
-import { UserRole, UserAction } from '../../model/enum';
+import UserModel from '../../model/user.model';
+import ImageModel from '../../model/image.model';
+import { UserRole, UserAction, NotificationType } from '../../model/enum';
 import datepicker from '../shared/external/datepicker.vue';
+import { plainToClass } from "class-transformer";
+import ImageUploadComponent from '../shared/imageupload.component.vue';
 Vue.use(VeeValidate);
 var UserDetailComponent = (function (_super) {
     __extends(UserDetailComponent, _super);
@@ -31,7 +35,7 @@ var UserDetailComponent = (function (_super) {
     }
     Object.defineProperty(UserDetailComponent.prototype, "model", {
         get: function () {
-            return this.$store.state.profile;
+            return plainToClass(UserModel, this.$store.state.profile);
         },
         enumerable: true,
         configurable: true
@@ -40,6 +44,12 @@ var UserDetailComponent = (function (_super) {
         var store = _a.store, route = _a.route;
         if (route.params.profileId) {
             return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
+        }
+    };
+    UserDetailComponent.prototype.created = function () {
+        if (this.model) {
+            if (this.model.images.length === 0)
+                this.model.images.push(new ImageModel("http://via.placeholder.com/240x240"));
         }
     };
     Object.defineProperty(UserDetailComponent.prototype, "canEdit", {
@@ -53,9 +63,12 @@ var UserDetailComponent = (function (_super) {
         this.model.locationId = +item.id;
     };
     UserDetailComponent.prototype.onInsertorUpdate = function () {
+        var _this = this;
         if (this.model.id > 0) {
-            return this.$store.dispatch('UPDATE_USER', this.contructBeforeSubmit(this.model));
-            //(new ListingService()).updateListing(this.contructBeforeSubmit(this.model));
+            return this.$store.dispatch('UPDATE_USER', this.contructBeforeSubmit(this.model))
+                .then(function (response) {
+                _this.$store.dispatch('ADD_NOTIFICATION', { title: "Update Succeed", type: NotificationType.Success });
+            });
         }
     };
     UserDetailComponent.prototype.onEdit = function () {
@@ -70,6 +83,13 @@ var UserDetailComponent = (function (_super) {
     UserDetailComponent.prototype.contructBeforeSubmit = function (model) {
         return this.model;
     };
+    UserDetailComponent.prototype.onUploadImageCompleted = function () {
+        if (this.canEdit) {
+            this.model.imageList = this.$store.state.listing.imageList;
+            this.$children.find(function (x) { return x.$el.id === 'imageupload'; }).$children[0].refresh();
+            this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
+        }
+    };
     UserDetailComponent.prototype.onUpdate = function () { };
     UserDetailComponent.prototype.capture = function () { };
     UserDetailComponent = __decorate([
@@ -77,7 +97,8 @@ var UserDetailComponent = (function (_super) {
             name: 'UserDetail',
             components: {
                 "locationsearch": LocationSearchComponent,
-                "datepicker": datepicker
+                "datepicker": datepicker,
+                "imageupload": ImageUploadComponent
             }
         })
     ], UserDetailComponent);

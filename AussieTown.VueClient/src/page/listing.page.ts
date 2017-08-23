@@ -16,7 +16,6 @@ import NumberChooser from '../component/shared/numberchooser.component.vue';
 import { ScreenSize, NotificationType, UserRole, UserAction } from '../model/enum';
 import { detectScreenSize } from '../service/screen.service';
 import AvailabilityComponent from '../component/booking/availability.component.vue';
-import { Money } from 'v-money';
 
 Vue.use(VeeValidate);
 
@@ -29,8 +28,7 @@ Vue.use(VeeValidate);
         "schedulemodal": ScheduleModalComponent,
         "imageupload": ImageUploadComponent,
         "numberchooser": NumberChooser,
-        "availabilityCheck": AvailabilityComponent,
-        Money
+        "availabilityCheck": AvailabilityComponent
     }
 })
 
@@ -45,14 +43,6 @@ export default class ListingPage extends Vue{
     showScheduleModal: boolean = false;
     showAvailability: boolean = false;
     isStickyBoxRequired: boolean = true;
-    money= {
-        decimal: ',',
-        thousands: '.',
-        prefix: '$',
-        suffix: ' AUD',
-        precision: 0,
-        masked: false
-    };
 
     $mq: any;
     $auth: any;

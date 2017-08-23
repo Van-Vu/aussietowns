@@ -87,8 +87,11 @@ export default new Vuex.Store({
         },
         UPDATE_USER: function (_a, profile) {
             var commit = _a.commit, state = _a.state;
-            (new UserService()).update(profile);
-            commit('UPDATE_PROFILE', profile);
+            return (new UserService()).update(profile)
+                .then(function (response) {
+                commit('UPDATE_PROFILE', profile);
+                return response;
+            });
         },
         INSERT_USER: function (_a, profile) {
             var commit = _a.commit, state = _a.state;
@@ -116,7 +119,9 @@ export default new Vuex.Store({
         SEND_MESSAGE: function (_a, message) {
             var commit = _a.commit, state = _a.state;
             return (new MessageService()).sendMessage(message).then(function (response) {
-                commit('ADD_MESSAGE', response);
+                if (response == 1) {
+                    commit('ADD_MESSAGE', message);
+                }
             });
         },
         ADD_NOTIFICATION: function (_a, notification) {
@@ -139,7 +144,7 @@ export default new Vuex.Store({
         UPLOAD_PROFILE_IMAGES: function (_a, payload) {
             var commit = _a.commit;
             return (new UploadService()).uploadProfile(payload.data, payload.actionId)
-                .then(function (response) { return commit('UPDATE_PROFILE_IMAGES', response); });
+                .then(function (response) { return commit('ADD_PROFILE_IMAGES', response); });
         },
         REMOVE_IMAGE: function (_a, payload) {
             var commit = _a.commit;
@@ -201,7 +206,7 @@ export default new Vuex.Store({
             Vue.set(state, 'conversationsContent', messages);
         },
         ADD_MESSAGE: function (state, message) {
-            state.conversationsContent.push(message);
+            state.conversationsContent.unshift(message);
         },
         UPDATE_CURRENT_USER: function (state, loggedInUser) {
             state.loggedInUser = loggedInUser;
@@ -224,8 +229,17 @@ export default new Vuex.Store({
             var image = state.listing.imageList.find(function (x) { return x.url === imageUrl; });
             Vue.set(state.listing, 'imageList', Utils.removeFromArray(state.listing.imageList, image));
         },
-        UPDATE_PROFILE_IMAGES: function (state, profileImages) {
-            state.profile.images = profileImages;
+        ADD_PROFILE_IMAGES: function (state, profileImages) {
+            if (state.profile.images) {
+                profileImages.map(function (x) { return state.profile.images.push(x); });
+            }
+            else {
+                Vue.set(state.profile, 'images', profileImages);
+            }
+        },
+        REMOVE_PROFILE_IMAGE: function (state, imageUrl) {
+            var image = state.profile.images.find(function (x) { return x.url === imageUrl; });
+            Vue.set(state.profile, 'images', Utils.removeFromArray(state.profile.images, image));
         },
         UPDATE_BOOKING: function (state, payload) {
             Vue.set(state, 'booking', payload);

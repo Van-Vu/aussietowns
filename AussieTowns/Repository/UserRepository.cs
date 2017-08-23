@@ -34,12 +34,10 @@ namespace AussieTowns.Repository
             using (IDbConnection dbConnection = Connection)
             {
                 var sql = "SELECT * FROM User WHERE id=@id;"
-                          +
-                          "SELECT sd.* FROM SuburbDetail sd INNER JOIN User u ON sd.id = u.locationId WHERE u.id = @id;"
-                          +
-                          "SELECT * FROM ListingView l INNER JOIN tourguest g ON l.id = g.ListingId WHERE g.existingUserId = @id;"
-                          +
-                          "SELECT * FROM ListingView l INNER JOIN touroperator o ON l.id = o.ListingId WHERE o.UserId = @id;";
+                          + "SELECT sd.* FROM SuburbDetail sd INNER JOIN User u ON sd.id = u.locationId WHERE u.id = @id;"
+                          + "SELECT * FROM ListingView l INNER JOIN tourguest g ON l.id = g.ListingId WHERE g.existingUserId = @id;"
+                          + "SELECT * FROM ListingView l INNER JOIN touroperator o ON l.id = o.ListingId WHERE o.UserId = @id;"
+                          + "SELECT * FROM Image i WHERE UserID = @id AND IsActive = true ORDER BY sortorder, createddate;";
 
                 dbConnection.Open();
                 using (var multipleResults = await dbConnection.QueryMultipleAsync(sql, new { id }))
@@ -48,12 +46,14 @@ namespace AussieTowns.Repository
 
                     var location = multipleResults.Read<SuburbDetail>().FirstOrDefault();
 
-                    var operatorListings = multipleResults.Read<ListingView>()?.ToList();
                     var guestListings = multipleResults.Read<ListingView>()?.ToList();
+                    var operatorListings = multipleResults.Read<ListingView>()?.ToList();
+                    var images = multipleResults.Read<Image>()?.ToList();
 
                     user.Location = location;
                     user.OperatorListings = operatorListings;
                     user.GuestListings= guestListings;
+                    user.Images = images;
                     return user;
                 }
             }
@@ -63,9 +63,13 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT * FROM User WHERE firstname like CONCAT('%',@term,'%') OR lastname like CONCAT('%',@term,'%') OR email like CONCAT('%',@term,'%')";
+                var sql = "SELECT * FROM User LEFT JOIN Image ON user.id=image.userid WHERE firstname like CONCAT('%',@term,'%') OR lastname like CONCAT('%',@term,'%') OR email like CONCAT('%',@term,'%')";
                 dbConnection.Open();
-                return  await dbConnection.QueryAsync<User>(sql, new { term = searchTerm });
+                return  await dbConnection.QueryAsync<User, Image, User>(sql, (user, image) =>
+                {
+                    user.Images = new List<Image> {image};
+                    return user;
+                }, new { term = searchTerm }, splitOn:"imageid");
             }
         }
 

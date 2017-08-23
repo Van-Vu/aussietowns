@@ -22,7 +22,7 @@ namespace AussieTowns
                 .ForMember(dest => dest.ShortDescription, opts => opts.MapFrom(src => src.Description.PadLeft(30)));
 
             CreateMap<User, UserLoggedIn>()
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => string.IsNullOrEmpty(src.PhotoUrl) ? "/static/images/anonymous.png" : src.PhotoUrl));
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Images.Any() ? src.Images.FirstOrDefault().Url : "/static/images/anonymous.png"));
 
             CreateMap<SuburbDetail, AutoCompleteItem>()
                 .ForMember(dest => dest.Name,
@@ -44,8 +44,6 @@ namespace AussieTowns
             CreateMap<ListingView, ListingSummary>()
                 .ForMember(dest => dest.Location,
                     opts => opts.MapFrom(src => $"{src.SuburbName} ({src.PostCode})"))
-                .ForMember(dest => dest.ImageUrl,
-                    opts => opts.MapFrom(src => src.FirstImageUrl))
                 .ForMember(dest => dest.PrimaryOwner,
                     opts => opts.MapFrom(src => src.OwnerName))
                 .ForMember(dest => dest.MinParticipant,
@@ -78,7 +76,8 @@ namespace AussieTowns
                 .ForMember(dest => dest.OperatorListings,
                     opts => opts.MapFrom(src => src.OperatorListings.Select(Mapper.Map<ListingView, ListingSummary>)))
                 .ForMember(dest => dest.GuestListings,
-                    opts => opts.MapFrom(src => src.GuestListings.Select( Mapper.Map<ListingView, ListingSummary>)));
+                    opts => opts.MapFrom(src => src.GuestListings.Select( Mapper.Map<ListingView, ListingSummary>)))
+                .ForMember(dest => dest.Images, opts => opts.MapFrom(src => src.Images));
         }
     }
 

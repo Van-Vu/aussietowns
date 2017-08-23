@@ -26,7 +26,9 @@ export default class ImageUploadComponent extends Vue {
     maxFileConfig: number = GlobalConfig.maxImagesPerListing;
 
     created() {
-        this.maxFileAllowed -= this.images.length;
+        if (this.images) {
+            this.maxFileAllowed -= this.images.length;    
+        }
     }
 
     close() {

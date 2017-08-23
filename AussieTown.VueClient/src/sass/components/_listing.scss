@@ -19,11 +19,6 @@
             top: 10px;
         }
     }
-
-    .glyphicon {
-        /*right: 16px;
-        top: 0;*/
-    }
 }
 
 .cost {
@@ -34,4 +29,48 @@
         font-weight: bold;
         text-align: center;
     }
+}
+
+.card-full {
+    /*width: 100%;
+    @media all and (min-width: $is-desktop) {
+        width: 320px;
+    }
+
+    @media all and (min-width: $is-tablet) {
+        width: 320px;
+    }*/
+}
+
+.listing-swiper {
+    position: relative;
+    min-width: 320px;
+    width:100%;
+    
+    // maintain 16:9 ratio
+    padding-top: 56.25%;
+
+    .swiper {
+        height: 100%;
+        @extend .absolute-center-y;
+    }
+
+    .swipe-wrapper {
+        @extend .absolute-center-y;
+        width: 100%;
+        height: 100%;
+    }
+
+    /*.swiper-slide {
+        > div {
+            width: 100%;
+            @media all and (min-width: $is-desktop) {
+                width: 290px;
+            }
+
+            @media all and (min-width: $is-tablet) {
+                width: 290px;
+            }
+        }
+    }*/
 }

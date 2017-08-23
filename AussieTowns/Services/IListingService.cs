@@ -18,7 +18,6 @@ namespace AussieTowns.Services
         Task<int> Booking(BookingRequest bookingRequest);
         Task<Image> FetchImageByUrl(int listingId, string url);
         Task<IEnumerable<int>> MapListingHeaderToId(string header);
-        Task<int> InsertImage(int listingId, string url);
         Task<int> DeleteImage(int imageId);
     }
 }

@@ -35,7 +35,9 @@ var ImageUploadComponent = (function (_super) {
         return _this;
     }
     ImageUploadComponent.prototype.created = function () {
-        this.maxFileAllowed -= this.images.length;
+        if (this.images) {
+            this.maxFileAllowed -= this.images.length;
+        }
     };
     ImageUploadComponent.prototype.close = function () {
     };

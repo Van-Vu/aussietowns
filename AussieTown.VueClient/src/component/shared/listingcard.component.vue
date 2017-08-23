@@ -5,8 +5,19 @@
                 <div class="header-text">{{header }}</div>
                 <!--<div class="listing-cost">A${{cost }}</div>-->
             </div>
-            <div class="listing-content">
-                <img v-lazy="imageUrl" />
+            <div class="listing-swiper">
+                <swiper id="homepage-swipe" ref="swiper"
+                        direction="horizontal"
+                        :mousewheel-control="true"
+                        :performance-mode="false"
+                        :pagination-visible="false"
+                        :pagination-clickable="true"
+                        :loop="false">
+                    <div v-for="url in imageUrls">
+                        <img v-lazy="url" />
+                    </div>
+                    
+                </swiper>
             </div>
             <div class="container is-fluid listing-footer">
                 <h4 class="listing-header">{{header}}</h4>

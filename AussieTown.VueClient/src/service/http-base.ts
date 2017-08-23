@@ -9,13 +9,13 @@ import Vue from "vue";
 //    baseURL: `http://10.0.0.98/meetthelocal/`
 //})
 
-export const http = axios.create({
-    baseURL: `http://localhost/meetthelocal/`
-})
-
-//const http = axios.create({
-//    baseURL: `http://localhost:3514/`,
+//export const http = axios.create({
+//    baseURL: `http://localhost/meetthelocal/`
 //})
+
+const http = axios.create({
+    baseURL: `http://localhost:3514/`,
+})
 
 http.defaults.withCredentials = true;
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';

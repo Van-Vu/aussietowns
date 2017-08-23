@@ -9,13 +9,13 @@ CAST(concat(
 u.id AS ownerId,
 concat(u.FirstName, ' ', u.lastname) AS ownerName,
 u.email AS ownerEmail,
-i.url AS firstImageUrl
+i.url AS imageUrls
 from listing l
 inner join schedule s on s.listingId = l.id
 inner join suburbdetail d on d.id = l.locationid
 inner join touroperator o on o.listingid = l.id
 inner join user u on u.id = o.userid
-left outer join (select url, listingid from image group by listingid order by sortorder, createddate limit 1) as i on i.listingid = l.id
+left outer join (select CAST(concat(group_concat(url SEPARATOR ';')) AS char(1000)) as url, listingid from image group by listingid order by sortorder, createddate) as i on i.listingid = l.id
 where o.isPrimary = 1 group by l.id
 union
 select l.id, l.type, l.cost, l.currency, l.header, l.description, l.requirement, l.minParticipant,
@@ -28,10 +28,10 @@ CAST(concat(
 u.id AS ownerId,
 concat(u.FirstName, ' ', u.lastname) AS ownerName,
 u.email AS ownerEmail,
-i.url AS firstImageUrl
+i.url AS imageUrls
 from listing l
 inner join schedule s on s.listingId = l.id
 inner join suburbdetail d on d.id = l.locationid
 inner join user u on u.id = l.requestorid
-left outer join (select url, listingid from image group by listingid order by sortorder, createddate limit 1) as i on i.listingid = l.id
+left outer join (select CAST(concat(group_concat(url SEPARATOR ';')) AS char(1000)) as url, listingid from image group by listingid order by sortorder, createddate) as i on i.listingid = l.id
 group by l.id;

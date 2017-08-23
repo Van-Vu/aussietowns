@@ -1,5 +1,5 @@
 ﻿.box-header-strip {
-    background-color: $c-brand-secondary;
+    background-color: $c-brand-primary;
     width: calc(100% + 40px);
     height: 10px;
     position: relative;
@@ -15,7 +15,7 @@
     right: 0px;
     z-index: 0;
     >button{
-        height: 2rem;
+        height: 2.25rem;
     }
 
     @media all and (min-width: $is-mobile) {

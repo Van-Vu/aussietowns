@@ -2,7 +2,7 @@
 
 export default class UploadService {
     private uploadListingUrl = "/api/photo/uploadListing/";
-    private uploadProfileUrl = "/api/photo/uploadProfile";
+    private uploadProfileUrl = "/api/photo/uploadProfile/";
 
     //uploadListing(formData, listingId, progressCallback) {
     //    return http.post(this.uploadListingUrl,

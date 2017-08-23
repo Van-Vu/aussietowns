@@ -1,5 +1,6 @@
 var ImageModel = (function () {
-    function ImageModel() {
+    function ImageModel(url) {
+        this.url = url;
     }
     return ImageModel;
 }());

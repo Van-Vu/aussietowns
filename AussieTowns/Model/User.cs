@@ -22,7 +22,6 @@ namespace AussieTowns.Model
         public string Description { get; set; }
         public string Address { get; set; }
         public string EmergencyContact { get; set; }
-        public string PhotoUrl { get; set; }
         public string VideoUrl { get; set; }
 
         public ICollection<ListingView> OperatorListings { get; set; }
@@ -35,6 +34,6 @@ namespace AussieTowns.Model
         public string ExternalId { get; set; }
         public int Role { get; set; }
 
-        public List<string> Images { get; set; }
+        public List<Image> Images { get; set; }
     }
 }

@@ -132,6 +132,7 @@ namespace AussieTowns
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IListingService, ListingService>();
             services.AddTransient<IMessageService, MessageService>();
+            services.AddTransient<IImageService, ImageService>();
 
             // Bodom: resolve service in ConfigureServices
             var serviceProvider = services.BuildServiceProvider();
@@ -139,6 +140,7 @@ namespace AussieTowns
             services.AddTransient<ILocationRepository, LocationRepository>(x => new LocationRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<LocationRepository>>()));
             services.AddTransient<IUserRepository, UserRepository>(x => new UserRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<UserRepository>>()));
             services.AddTransient<IListingRepository, ListingRepository>(x => new ListingRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<ListingRepository>>()));
+            services.AddTransient<IImageRepository, ImageRepository>(x => new ImageRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<ImageRepository>>()));
             services.AddTransient<IMessageRepository, MessageRepository>(x => new MessageRepository(mySqlConnectionString));
         }
 

@@ -1,4 +1,13 @@
-﻿.profile-content{
+﻿.page-content {
+    &.is-profile {
+        width: 100%;
+        @media all and (min-width: $is-desktop) {
+            width: 92%;
+        }
+    }
+}
+
+.profile-content{
     .profile-section {
         width: 100%;
 
@@ -10,7 +19,8 @@
     }
 
     .router-link-exact-active {
-        background: $c-brand-secondary;
+        background: $c-darkgrey;
+        color: $c-neutral-white;
     }
 
     .profile-menu {
@@ -19,64 +29,35 @@
             padding-bottom: 0;
         }
     }
+    
+    .userdetail {
+        hr {
+            width: 75%;
+            margin-left: 25%;
 
-    /*.tab-text {
-      display: inline-block;
-      margin: 0 0 -1px;
-      padding: 15px 25px;
-      font-weight: 600;
-      text-align: center;
-      color: #bbb;
-      border: 1px solid transparent;
-
-      &:hover {
-            color: #888;
-            cursor: pointer;
+            @media all and (max-width: $is-mobile) {
+                width: 100%;
+                margin-left: 0;
+            }
         }
 
-      &:before {
-          font-family: "Glyphicons Halflings";
-          font-weight: normal;
-          margin-right: 10px;
+        .icon {
+            .glyphicon {
+                right: 10px;
+                top: 10px;
+            }
         }
-
-        &[for*='1']:before {
-          content: '\E008';
-        }
-
-        &[for*='2']:before {
-          content: '\E046';
-        }
-
-        &[for*='3']:before {
-          content: '\E111';
-        }
-
-        &[for*='4']:before {
-          content: '\E006';
-        }
-    }*/
-
-    /*input:checked + label {
-      color: #555;
-      border: 1px solid #ddd;
-      border-top: 2px solid orange;
-      border-bottom: 1px solid #fff;
-    }*/
-
-    /*@media screen and (max-width: 650px) {
-      .tab-text {
-        font-size: 0;
-      }
-
-      .tab-text:before {
-        margin: 0;
-        font-size: 18px;
-      }
     }
-    @media screen and (max-width: 400px) {
-      .tab-text {
-        padding: 15px;
-      }
-    }*/
+
+    .trip-content {
+        > ul > li {
+            width:100%;
+            display: flex;
+            overflow: hidden;
+
+            @media all and (min-width: $is-desktop) {
+                width:290px;
+            }
+        }
+    }
 }

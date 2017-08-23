@@ -1,18 +1,18 @@
 ﻿<template>
-    <div>
-        <div class="box-header-strip"></div>
-        <ul>
-            <li v-for="offer in offers">
-                <listingcard :listingDetail="offer"></listingcard>
+    <div class="trip-content">
+        <h2>Upcoming</h2>
+        <ul class="columns is-multiline is-gapless">
+            <li class="column is-one-quarter" v-for="listing in confirmedGuests">
+                <cardsmall :listingDetail="listing"></cardsmall>
             </li>
         </ul>
-        <ul>
-            <li v-for="request in requests">
-                <listingcard :listingDetail="request"></listingcard>
+        <h2>Requests</h2>
+        <ul class="columns is-multiline is-gapless">
+            <li class="column is-one-quarter" v-for="request in requests">
+                <cardsmall :listingDetail="request"></cardsmall>
             </li>
         </ul>
     </div>
-
 </template>
 
 <script lang="ts">

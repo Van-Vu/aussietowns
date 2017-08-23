@@ -42,7 +42,8 @@
                             <i class="glyphicon glyphicon-plus-sign" /><span>Add participant</span>
                         </a>
                     </div>
-                    <details class="tile is-vertical is-parent box participant-summary " v-for="(user, index) in model.participants" :data-vv-scope="index">
+                    <!--<details class="tile is-vertical is-parent box participant-summary " v-for="(user, index) in model.participants" :data-vv-scope="index">-->
+                    <details class="tile is-vertical is-parent box participant-summary " v-for="(user, index) in model.participants">
                         <summary class="is-flex">
                             <div>User {{index}}</div><div class="mtl_button deleteButton" @click.prevent="removeParticipant(index)">Remove</div>
                         </summary>

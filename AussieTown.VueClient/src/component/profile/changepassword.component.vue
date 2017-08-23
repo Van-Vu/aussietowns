@@ -1,6 +1,5 @@
 ﻿<template>
-    <form @submit.prevent="onChangePassword">
-        <div class="box-header-strip"></div>
+    <form class="column is-half is-offset-one-quarter" @submit.prevent="onChangePassword">
         <div class="field">
             <p class="control has-icon has-icon-right">
                 <input name="oldPassword" v-model="model.oldPassword" v-validate="'required'"
@@ -31,7 +30,7 @@
                 <span v-show="errors.has('confirmPassword')" class="help is-danger">{{ errors.first('confirmPassword') }}</span>
             </p>
         </div>
-        <button type="submit" class="button">Submit</button>
+        <button type="submit" class="button is-2 mtl_button-no-round">Submit</button>
     </form>
 </template>
 

@@ -19,13 +19,13 @@ namespace AussieTowns.Controllers
     public class PhotoController
     {
         private readonly AppSettings _appSettings;
-        private readonly IListingService _listingService;
+        private readonly IImageService _imageService;
         private readonly ILogger<PhotoController> _logger;
 
-        public PhotoController(IOptions<AppSettings> appSettings, IListingService listingService, ILogger<PhotoController> logger)
+        public PhotoController(IOptions<AppSettings> appSettings, IImageService imageService, ILogger<PhotoController> logger)
         {
             _appSettings = appSettings.Value;
-            _listingService = listingService;
+            _imageService = imageService;
             _logger = logger;
         }
 
@@ -48,7 +48,7 @@ namespace AussieTowns.Controllers
                             file.OpenReadStream(), "meetthelocal-development", $"images/listings/{listingId}/{file.FileName}" );
 
                         var imageUrl = $"https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/listings/{listingId}/{file.FileName}";
-                        await _listingService.InsertImage(listingId, imageUrl);
+                        await _imageService.InsertListingImage(listingId, imageUrl);
 
                         imageUrls.Add(new Image { Url = imageUrl });
                     }
@@ -64,10 +64,37 @@ namespace AussieTowns.Controllers
         }
 
         [HttpPost("uploadProfile/{id}")]
-        public async Task<JsonResult> UploadProfile(int id, IList<IFormFile> files)
+        public async Task<IEnumerable<Image>> UploadProfile(int id, IList<IFormFile> files)
         {
-            
-            return new JsonResult(new { state = 0, message = string.Empty });
+            try
+            {
+                //if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
+
+                var imageUrls = new List<Image>();
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        // Bodom hack: deal with this later
+                        var result = await AwsS3Extensions.SaveToS3Async(
+                            AwsS3Extensions.GetS3Client(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
+                                _appSettings.AwsS3Region),
+                            file.OpenReadStream(), "meetthelocal-development", $"images/profiles/{id}/{file.FileName}");
+
+                        var imageUrl = $"https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/profiles/{id}/{file.FileName}";
+                        await _imageService.InsertProfileImage(id, imageUrl);
+
+                        imageUrls.Add(new Image { Url = imageUrl });
+                    }
+                }
+
+                return imageUrls;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                throw;
+            }
         }
     }
 }

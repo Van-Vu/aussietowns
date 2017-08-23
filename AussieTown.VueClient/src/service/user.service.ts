@@ -40,7 +40,7 @@ export default class UserService {
 
     update(user: any) {
         return http.put('api/user/' + user.id, user)
-            .then(response => response.data)
+            .then(response => response)
             .catch(this.handleError);
     }
 

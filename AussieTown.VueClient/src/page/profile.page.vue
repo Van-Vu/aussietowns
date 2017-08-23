@@ -1,5 +1,5 @@
 ﻿<template>
-    <div class="page-content container tile is-vertical is-parent profile-content">
+    <div class="page-content container tile is-vertical profile-content is-profile">
         <div v-if="canEdit" class="tabs is-toggle is-fullwidth is-medium">
             <ul>
                 <li>
@@ -13,27 +13,26 @@
                     </router-link>
                 </li>
                 <li>
-                    <router-link :to="{ name: 'profileImages' }">
-                        <label class="tab-text">Photos</label>
-                    </router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'profileMessages' }">
-                        <label class="tab-text">Messages</label>
+                    <router-link :to="{ name: 'profileListings' }">
+                        <label class="tab-text">Your Listings</label>
                     </router-link>
                 </li>
                 <li>
                     <router-link :to="{ name: 'profileTrips' }">
-                        <label class="tab-text">Trips</label>
+                        <label class="tab-text">Your Trips</label>
                     </router-link>
                 </li>
+                <li>
+                    <router-link :to="{ name: 'profileMessages' }">
+                        <label class="tab-text">Inbox</label>
+                    </router-link>
+                </li>
+
             </ul>
         </div>
-        <div class="tile box">
-            <section class="profile-section">
-                <router-view></router-view>
-            </section>
-        </div>
+        <section>
+            <router-view></router-view>
+        </section>
     </div>
 </template>
 

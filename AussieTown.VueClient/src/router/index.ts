@@ -46,6 +46,8 @@ import MessageComponent from '../component/profile/message.component.vue';
 import TripComponent from '../component/profile/trip.component.vue';
 import UserImageComponent from '../component/profile/userimage.component.vue';
 import UserDetailComponent from '../component/profile/userdetail.component.vue';
+import ListingsComponent from '../component/profile/listings.component.vue';
+
 import LoginForm from '../component/form/loginform.component.vue';
 import RegistrationForm from '../component/form/registration.component.vue';
 import ChangePasswordComponent from '../component/profile/changepassword.component.vue';
@@ -126,6 +128,15 @@ const router = new Router({
                     path: 'changepassword',
                     name: 'changePassword',
                     component: ChangePasswordComponent,
+                    meta: {
+                        permission: UserRole.SuperAdmin,
+                        fail: '/home'
+                    }
+                },
+                {
+                    path: 'listings',
+                    name: 'profileListings',
+                    component: ListingsComponent,
                     meta: {
                         permission: UserRole.SuperAdmin,
                         fail: '/home'

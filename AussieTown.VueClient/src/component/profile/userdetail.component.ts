@@ -3,9 +3,13 @@ import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import LocationSearchComponent from "../shared/search/locationsearch.component.vue";
 import UserModel from '../../model/user.model';
-import { UserRole, UserAction } from '../../model/enum';
+import ImageModel from '../../model/image.model';
+import { UserRole, UserAction, NotificationType } from '../../model/enum';
 import { AutocompleteItem } from '../../model/autocomplete.model';
 import datepicker from '../shared/external/datepicker.vue';
+import { plainToClass } from "class-transformer";
+import { Utils } from '../utils'; 
+import ImageUploadComponent from '../shared/imageupload.component.vue';
 
 Vue.use(VeeValidate);
 
@@ -13,7 +17,8 @@ Vue.use(VeeValidate);
     name: 'UserDetail',
     components: {
         "locationsearch": LocationSearchComponent,
-        "datepicker": datepicker
+        "datepicker": datepicker,
+        "imageupload": ImageUploadComponent
     }
 })
 
@@ -23,12 +28,18 @@ export default class UserDetailComponent extends Vue {
     $auth: any;
 
     get model() {
-        return this.$store.state.profile;
+        return plainToClass<UserModel, Object>(UserModel, this.$store.state.profile);
     }
 
     asyncData({ store, route }) {
         if (route.params.profileId) {
             return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
+        }
+    }
+
+    created() {
+        if (this.model) {
+            if (this.model.images.length === 0) this.model.images.push(new ImageModel("http://via.placeholder.com/240x240"));
         }
     }
 
@@ -42,8 +53,10 @@ export default class UserDetailComponent extends Vue {
 
     onInsertorUpdate() {
         if (this.model.id > 0) {
-            return this.$store.dispatch('UPDATE_USER', this.contructBeforeSubmit(this.model));
-            //(new ListingService()).updateListing(this.contructBeforeSubmit(this.model));
+            return this.$store.dispatch('UPDATE_USER', this.contructBeforeSubmit(this.model))
+                .then (response => {
+                    this.$store.dispatch('ADD_NOTIFICATION', { title: "Update Succeed", type: NotificationType.Success });            
+                });
         }
     }
 
@@ -60,6 +73,14 @@ export default class UserDetailComponent extends Vue {
 
     contructBeforeSubmit(model) {
         return this.model;
+    }
+
+    onUploadImageCompleted() {
+        if (this.canEdit) {
+            (this.model as any).imageList = this.$store.state.listing.imageList;
+            (this.$children.find(x => x.$el.id === 'imageupload').$children[0] as any).refresh();
+            this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
+        }
     }
 
 onUpdate(){}

@@ -31,7 +31,6 @@ import NumberChooser from '../component/shared/numberchooser.component.vue';
 import { ScreenSize, NotificationType, UserRole, UserAction } from '../model/enum';
 import { detectScreenSize } from '../service/screen.service';
 import AvailabilityComponent from '../component/booking/availability.component.vue';
-import { Money } from 'v-money';
 Vue.use(VeeValidate);
 var ListingPage = (function (_super) {
     __extends(ListingPage, _super);
@@ -44,14 +43,6 @@ var ListingPage = (function (_super) {
         _this.showScheduleModal = false;
         _this.showAvailability = false;
         _this.isStickyBoxRequired = true;
-        _this.money = {
-            decimal: ',',
-            thousands: '.',
-            prefix: '$',
-            suffix: ' AUD',
-            precision: 0,
-            masked: false
-        };
         _this.modelCache = null;
         return _this;
     }
@@ -224,8 +215,7 @@ var ListingPage = (function (_super) {
                 "schedulemodal": ScheduleModalComponent,
                 "imageupload": ImageUploadComponent,
                 "numberchooser": NumberChooser,
-                "availabilityCheck": AvailabilityComponent,
-                Money: Money
+                "availabilityCheck": AvailabilityComponent
             }
         })
     ], ListingPage);

@@ -34,7 +34,7 @@ var UserService = (function () {
     };
     UserService.prototype.update = function (user) {
         return http.put('api/user/' + user.id, user)
-            .then(function (response) { return response.data; })
+            .then(function (response) { return response; })
             .catch(this.handleError);
     };
     UserService.prototype.getToursByUserId = function (id) {
