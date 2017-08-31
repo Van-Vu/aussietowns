@@ -21,19 +21,30 @@ import Swiper from '../component/shared/external/vue-swiper.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
 import { NotificationType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
-var TestPage = (function (_super) {
+import LoginForm from '../component/form/loginform.component.vue';
+import ScheduleComponent from '../component/shared/schedule.component.vue';
+var TestPage = /** @class */ (function (_super) {
     __extends(TestPage, _super);
     function TestPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.showListingRequest = false;
         _this.showListingOffer = false;
         _this.numberChooser = 0;
+        _this.currentView = 'loginmodal';
         _this.disableDays = {
             days: [6, 0] // Disable Saturday's and Sunday's
         };
         _this.startDate = new Date();
         return _this;
     }
+    TestPage.prototype.switchModal = function () {
+        if (this.currentView == 'loginmodal') {
+            this.currentView = 'schedulemodal';
+        }
+        else {
+            this.currentView = 'loginmodal';
+        }
+    };
     TestPage.prototype.checkLogginUser = function () {
         this.$store.dispatch('TEST');
     };
@@ -47,7 +58,9 @@ var TestPage = (function (_super) {
                 "searchbar": SearchBarComponent,
                 "swiper": Swiper,
                 "numberchooser": NumberChooser,
-                "datepicker": datepicker
+                "datepicker": datepicker,
+                "loginmodal": LoginForm,
+                "schedulemodal": ScheduleComponent
             }
         })
     ], TestPage);

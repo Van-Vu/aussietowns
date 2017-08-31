@@ -1,24 +1,28 @@
 ﻿.miniprofile-wrapper{
     display:inline-block;
     position:relative;
+    width: 100%;
+
+    &:hover {
+        background-color:  $c-lightgrey-light;
+    }
 
     .overlay{
         width: 100%; 
         height: 100%; 
-        z-index: 100; 
-        background: rgba(64, 64, 64, 0.3);
+        z-index: 10; 
         position:absolute;
-        color: red;
-        border-radius: 12px;
+        color: $c-screen-black;;
 
         &:hover {
             cursor:pointer;
+            color: $c-brand-quaternary;
         }
 
         span {
             right: 0;
-            position: absolute;
             font-size: 1.5em;
+            @include absolutecenter("y");
         }
     }
 

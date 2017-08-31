@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using AussieTowns.Common;
 using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
@@ -82,6 +84,31 @@ namespace AussieTowns.Controllers
                 }
 
                 Console.WriteLine("Email sent!");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+
+        [HttpGet("em")]
+        public void TestElasticMail()
+        {
+            var message = new MimeMessage();
+            //var from new MailboxAddress("Van", "cob911@gmail.com"));
+            message.To.Add(new MailboxAddress("Bodom", "bodom0911@gmail.com"));
+            var subject = "This is a test from Elastic Mail";
+            var bodyBuilder = new BodyBuilder { HtmlBody = @"<b>This is bold and this is <i>italic</i></b>" };
+            message.Body = bodyBuilder.ToMessageBody();
+
+            try
+            {
+                var result = ElasticEmailClient.Send(subject, "test@test.com", "Van", "sender", "senderName",
+                    to: new List<string> { "cob911@gmail.com" }, bodyHtml: @"<b>This is bold and this is <i>italic</i></b>");
+
+                var test = result.Result;
             }
             catch (Exception e)
             {

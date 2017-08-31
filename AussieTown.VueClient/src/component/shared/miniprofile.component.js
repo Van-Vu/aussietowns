@@ -20,7 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { Utils } from '../utils';
-var MiniProfileComponent = (function (_super) {
+var MiniProfileComponent = /** @class */ (function (_super) {
     __extends(MiniProfileComponent, _super);
     function MiniProfileComponent() {
         return _super !== null && _super.apply(this, arguments) || this;

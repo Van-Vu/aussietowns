@@ -50,7 +50,21 @@ export class Utils {
     }
 
     public static removeFromArray(array, item) {
-        return array.filter(target => !this.valueCompare(item, target));
+        return array.filter(x => !this.valueCompare(x, item));
+    }
+
+    public static spliceArray(array, item) {
+        var index = array.indexOf(item);
+        if (index >= 0) {
+            array.splice(index, 1);
+        }
+    }
+
+    public static stripHtml(text) {
+        var regex = /(<([^>]+)>)/ig
+            , result = text.replace(regex, "");
+
+        return result;
     }
 
     public static isElementInViewport(el) {

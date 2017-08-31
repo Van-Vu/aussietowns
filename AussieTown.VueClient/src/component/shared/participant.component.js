@@ -21,7 +21,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import MiniProfileComponent from './miniprofile.component.vue';
 import UserSearchComponent from './search/usersearch.component.vue';
-var ParticipantComponent = (function (_super) {
+var ParticipantComponent = /** @class */ (function (_super) {
     __extends(ParticipantComponent, _super);
     function ParticipantComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -71,6 +71,10 @@ var ParticipantComponent = (function (_super) {
         Prop({ default: true }),
         __metadata("design:type", Boolean)
     ], ParticipantComponent.prototype, "allowAdd", void 0);
+    __decorate([
+        Prop({ default: true }),
+        __metadata("design:type", Boolean)
+    ], ParticipantComponent.prototype, "allowRemove", void 0);
     ParticipantComponent = __decorate([
         Component({
             name: "ParticipantComponent",

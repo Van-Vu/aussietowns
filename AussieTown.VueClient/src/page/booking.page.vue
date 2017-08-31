@@ -9,9 +9,6 @@
                          style="position:relative;">
                 <div slot="title">
                     <h2>Just simple steps to open up your amazing experience</h2>
-                    <div v-if="errorMsg" class="booking-error">
-                        <span>{{errorMsg}}</span>
-                    </div>
                 </div>
                 <template slot="step" scope="props">
                     <wizard-step :tab="props.tab"
@@ -32,70 +29,86 @@
                 </template>
                 <tab-content title="Schedule" :before-change="validateBookingTime"
                              icon="glyphicon glyphicon-time">
+                    <div v-if="errorMsg" class="booking-error">
+                        <span>{{errorMsg}}</span>
+                    </div>
                     <availability @bookingDateChanged="onBookingDateChanged" @bookingTimeChanged="onBookingTimeChanged">
                     </availability>
                 </tab-content>
                 <tab-content title="Participants" :before-change="validateParticipantInfo"
                              icon="glyphicon glyphicon-user">
-                    <div>
+                    <!--<div>
                         <a @click.prevent="addMoreParticipant" class="button mtl_button">
                             <i class="glyphicon glyphicon-plus-sign" /><span>Add participant</span>
                         </a>
-                    </div>
+                    </div>-->
                     <!--<details class="tile is-vertical is-parent box participant-summary " v-for="(user, index) in model.participants" :data-vv-scope="index">-->
-                    <details class="tile is-vertical is-parent box participant-summary " v-for="(user, index) in model.participants">
-                        <summary class="is-flex">
-                            <div>User {{index}}</div><div class="mtl_button deleteButton" @click.prevent="removeParticipant(index)">Remove</div>
-                        </summary>
-                        <div class="tile is-parent">
-                            <div class="tile is-2">Email</div>
-                            <p class="tile control">
-                                <input name="email" v-model="user.email" v-validate="'required|email'"
-                                        :class="{'input': true, 'is-danger': errors.has('email') }" type="text">
-                                <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
-                            </p>
-                        </div>
-                        <div class="tile is-parent">
-                            <div class="tile is-2" for="firstName">First Name</div>
-                            <p class="tile control">
-                                <input name="firstname" v-model="user.firstName" v-validate="'required'"
-                                        :class="{'input': true, 'is-danger': errors.has('firstname') }" type="text">
-                                <span v-show="errors.has('firstname')" class="help is-danger">{{ errors.first('firstname') }}</span>
-                            </p>
-                        </div>
-                        <div class="tile is-parent">
-                            <div class="tile is-2" for="lastName">Last Name</div>
-                            <p class="tile control">
-                                <input name="lastname" v-model="user.lastName" v-validate="'required'"
-                                        :class="{'input': true, 'is-danger': errors.has('lastname') }" type="text">
-                                <span v-show="errors.has('lastname')" class="help is-danger">{{ errors.first('lastname') }}</span>
-                            </p>
-                        </div>
-                        <div class="tile is-parent">
-                            <div class="tile is-2" for="header">Contact number</div>
-                            <div class="tile control">
-                                <input name="phone" v-model="user.phone" v-validate="'required'" v-mask="'##########'"
-                                        :class="{'input': true, 'is-danger': errors.has('phone') }" type="text" placeholder="">
-                                <span v-show="errors.has('phone')" class="help is-danger">{{ errors.first('phone') }}</span>
-                            </div>
-                        </div>
-                        <div class="tile is-parent">
-                            <div class="tile is-2">Address</div>
-                            <div class="tile control">
-                                <input name="address" v-model="user.address" v-validate="'required'"
-                                        :class="{'input': true, 'is-danger': errors.has('address') }" type="text" placeholder="">
-                                <span v-show="errors.has('address')" class="help is-danger">{{ errors.first('address') }}</span>
-                            </div>
-                        </div>
-                        <div class="tile is-parent">
-                            <div class="tile is-2">Emergency contact</div>
-                            <div class="tile control">
-                                <input name="emergencyContact" v-model="user.emergencyContact" v-validate="'required'" v-mask="'##########'"
-                                        :class="{'input': true, 'is-danger': errors.has('emergencyContact') }" type="text" placeholder="">
-                                <span v-show="errors.has('emergencyContact')" class="help is-danger">{{ errors.first('emergencyContact') }}</span>
-                            </div>
-                        </div>
-                    </details>
+                    <div v-if="errorMsg" class="booking-error">
+                        <span>{{errorMsg}}</span>
+                    </div>
+                    <ul>
+                        <li class="tile" v-for="(user, index) in model.participants">
+                            <details class="tile is-vertical is-parent box participant-summary " >
+                                <summary class="is-flex">
+                                    <div>User {{index}}</div><div class="mtl_button deleteButton" @click.prevent="removeParticipant(index)">Remove</div>
+                                </summary>
+                                <div class="tile is-parent">
+                                    <div class="tile is-2">Email</div>
+                                    <p class="tile control">
+                                        <input name="email" v-model="user.email" v-validate="'required|email'"
+                                               :class="{'input': true, 'is-danger': errors.has('email') }" type="text">
+                                        <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
+                                    </p>
+                                </div>
+                                <div class="tile is-parent">
+                                    <div class="tile is-2" for="firstName">First Name</div>
+                                    <p class="tile control">
+                                        <input name="firstname" v-model="user.firstName" v-validate="'required'"
+                                               :class="{'input': true, 'is-danger': errors.has('firstname') }" type="text">
+                                        <span v-show="errors.has('firstname')" class="help is-danger">{{ errors.first('firstname') }}</span>
+                                    </p>
+                                </div>
+                                <div class="tile is-parent">
+                                    <div class="tile is-2" for="lastName">Last Name</div>
+                                    <p class="tile control">
+                                        <input name="lastname" v-model="user.lastName" v-validate="'required'"
+                                               :class="{'input': true, 'is-danger': errors.has('lastname') }" type="text">
+                                        <span v-show="errors.has('lastname')" class="help is-danger">{{ errors.first('lastname') }}</span>
+                                    </p>
+                                </div>
+                                <div class="tile is-parent">
+                                    <div class="tile is-2" for="header">Contact number</div>
+                                    <div class="tile control">
+                                        <input name="phone" v-model="user.phone" v-validate="'required'" v-mask="'##########'"
+                                               :class="{'input': true, 'is-danger': errors.has('phone') }" type="text" placeholder="">
+                                        <span v-show="errors.has('phone')" class="help is-danger">{{ errors.first('phone') }}</span>
+                                    </div>
+                                </div>
+                                <div class="tile is-parent">
+                                    <div class="tile is-2">Address</div>
+                                    <div class="tile control">
+                                        <input name="address" v-model="user.address" v-validate="'required'"
+                                               :class="{'input': true, 'is-danger': errors.has('address') }" type="text" placeholder="">
+                                        <span v-show="errors.has('address')" class="help is-danger">{{ errors.first('address') }}</span>
+                                    </div>
+                                </div>
+                                <div class="tile is-parent">
+                                    <div class="tile is-2">Emergency contact</div>
+                                    <div class="tile control">
+                                        <input name="emergencyContact" v-model="user.emergencyContact" v-validate="'required'" v-mask="'##########'"
+                                               :class="{'input': true, 'is-danger': errors.has('emergencyContact') }" type="text" placeholder="">
+                                        <span v-show="errors.has('emergencyContact')" class="help is-danger">{{ errors.first('emergencyContact') }}</span>
+                                    </div>
+                                </div>
+                            </details>
+                        </li>
+                        <li class="tile box">
+                            <a @click.prevent="addMoreParticipant" class="button mtl_grey_button">
+                                <i class="glyphicon glyphicon-plus-sign" /><span>Add participant</span>
+                            </a>
+                            <!--<usersearch v-show="isAdding" @onSelected="onUserSelect($event)"></usersearch>-->
+                        </li>
+                    </ul>
                 </tab-content>
                 <tab-content title="Review" :before-change="confirmBooking"
                              icon="glyphicon glyphicon-file">
@@ -162,21 +175,17 @@
         <div v-if="!isBooked" class="tile is-vertical is-parent" :class="{'is-sticky-box': isStickyBoxRequired}">
             <div class="field box">
                 <div class="box-header-strip"></div>
-                <div class="tile">
-                    <h2 class="tile is-narrow">{{ model.listing.header }}</h2>
+                <div class="columns">
+                    <h2>{{ model.listing.header }}</h2>
                 </div>
-                <div class="tile">
-                    <div class="tile is-2" for="firstName">Date</div>
-                    <p class="tile is-narrow">
-                        <label>{{ model.bookingDate }}</label>
-                    </p>
+                <div class="columns">
+                    <div class="column is-2" for="firstName">Date</div>
+                    <div class="column">{{ model.bookingDate }}</div>
                 </div>
-                <div class="tile">
-                    <div class="tile is-2" for="firstName">Time</div>
-                    <p class="tile is-narrow">
-                        <label>{{ model.bookingTime }}</label>
-                    </p>
-                </div>
+                <div class="columns">
+                    <div class="column is-2" for="firstName">Time</div>
+                    <div class="column">{{ model.bookingTime }}</div>
+                    </div>
                 <div class="tile">
                     {{ model.listing.description }}
                 </div>

@@ -18,17 +18,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import Vue from "vue";
-import { Component, Prop, Watch } from "vue-property-decorator";
-var ModalShellComponent = (function (_super) {
+import { Component, Prop } from "vue-property-decorator";
+var ModalShellComponent = /** @class */ (function (_super) {
     __extends(ModalShellComponent, _super);
     function ModalShellComponent() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.cssClass = null;
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    ModalShellComponent.prototype.onPropertyChanged = function (value, oldValue) {
-        this.cssClass = { 'is-active': value, 'is-deactive': !value };
-    };
+    Object.defineProperty(ModalShellComponent.prototype, "cssClass", {
+        //cssClass: Object = null;
+        get: function () {
+            return this.$store.state.dynamicModal && this.$store.state.dynamicModal.props && this.$store.state.dynamicModal.props.show ? 'is-active' : 'is-deactive';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    //@Watch('show')
+    //onPropertyChanged(value: string, oldValue: string) {
+    //    this.cssClass = { 'is-active': value, 'is-deactive': !value};
+    //}
     ModalShellComponent.prototype.close = function () {
         this.$emit('onClose');
     };
@@ -36,12 +43,6 @@ var ModalShellComponent = (function (_super) {
         Prop,
         __metadata("design:type", Boolean)
     ], ModalShellComponent.prototype, "show", void 0);
-    __decorate([
-        Watch('show'),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, String]),
-        __metadata("design:returntype", void 0)
-    ], ModalShellComponent.prototype, "onPropertyChanged", null);
     ModalShellComponent = __decorate([
         Component({
             name: 'modal-shell'

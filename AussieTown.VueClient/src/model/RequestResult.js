@@ -1,4 +1,4 @@
-var RequestResult = (function () {
+var RequestResult = /** @class */ (function () {
     function RequestResult() {
     }
     return RequestResult;

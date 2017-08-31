@@ -21,7 +21,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import ModalShellComponent from './modalshell.component.vue';
 import ScheduleComponent from '../shared/schedule.component.vue';
-var ScheduleModal = (function (_super) {
+var ScheduleModal = /** @class */ (function (_super) {
     __extends(ScheduleModal, _super);
     function ScheduleModal() {
         return _super !== null && _super.apply(this, arguments) || this;

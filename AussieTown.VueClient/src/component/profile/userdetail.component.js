@@ -25,7 +25,7 @@ import datepicker from '../shared/external/datepicker.vue';
 import { plainToClass } from "class-transformer";
 import ImageUploadComponent from '../shared/imageupload.component.vue';
 Vue.use(VeeValidate);
-var UserDetailComponent = (function (_super) {
+var UserDetailComponent = /** @class */ (function (_super) {
     __extends(UserDetailComponent, _super);
     function UserDetailComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

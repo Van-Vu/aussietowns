@@ -1,5 +1,5 @@
 import { ListingType } from '../model/enum';
-var Utils = (function () {
+var Utils = /** @class */ (function () {
     function Utils() {
     }
     Utils.formatDate = function (date) {
@@ -42,13 +42,23 @@ var Utils = (function () {
     };
     Utils.removeFromArray = function (array, item) {
         var _this = this;
-        return array.filter(function (target) { return !_this.valueCompare(item, target); });
+        return array.filter(function (x) { return !_this.valueCompare(x, item); });
+    };
+    Utils.spliceArray = function (array, item) {
+        var index = array.indexOf(item);
+        if (index >= 0) {
+            array.splice(index, 1);
+        }
+    };
+    Utils.stripHtml = function (text) {
+        var regex = /(<([^>]+)>)/ig, result = text.replace(regex, "");
+        return result;
     };
     Utils.isElementInViewport = function (el) {
         var rect = el.getBoundingClientRect();
         return (rect.top >= 0 &&
             rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
             rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */);
     };
     return Utils;

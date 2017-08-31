@@ -21,13 +21,14 @@ import Vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
 import datepicker from '../shared/external/datepicker.vue';
 import numberchooser from '../shared/numberchooser.component.vue';
-var AvailabilityComponent = (function (_super) {
+var AvailabilityComponent = /** @class */ (function (_super) {
     __extends(AvailabilityComponent, _super);
     function AvailabilityComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.bookingDate = '';
         _this.bookingTime = '';
         _this.disableDays = {
+            to: new Date(),
             days: [6, 0] // Disable Saturday's and Sunday's
         };
         _this.availableTimeslot = null;

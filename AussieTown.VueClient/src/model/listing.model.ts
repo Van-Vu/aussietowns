@@ -22,7 +22,6 @@ export default class ListingModel {
     public header: string;
     public description: string;
     public requirement: string;
-    public expectation: string;
     public minParticipant: number;
     public type: number;
 
@@ -33,5 +32,13 @@ export default class ListingModel {
         this.schedules = new Array<ScheduleModel>();
         this.imageList = new Array<ImageModel>();
         //this.schedules.push(new ScheduleModel(Utils.getDate(new Date()), { HH: '08', mm: '00' }, { HH: '08', mm: '00' }, Utils.getDate(new Date()), 1, ''));
+    }
+
+    get descriptionText(): string {
+        return Utils.stripHtml(this.description).replace(/\n/g, '<br/>');
+    }
+
+    set descriptionText(value: string) {
+        this.description = value;
     }
 }

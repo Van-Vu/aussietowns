@@ -20,7 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
 import { UserRole, UserAction } from '../model/enum';
-var ProfilePage = (function (_super) {
+var ProfilePage = /** @class */ (function (_super) {
     __extends(ProfilePage, _super);
     function ProfilePage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

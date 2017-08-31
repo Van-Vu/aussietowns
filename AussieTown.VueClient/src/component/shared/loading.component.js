@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import RingLoader from './external/ringloader.vue';
-var LoadingComponent = (function (_super) {
+var LoadingComponent = /** @class */ (function (_super) {
     __extends(LoadingComponent, _super);
     function LoadingComponent() {
         return _super !== null && _super.apply(this, arguments) || this;

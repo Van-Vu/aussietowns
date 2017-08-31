@@ -1,4 +1,4 @@
-var BookingModel = (function () {
+var BookingModel = /** @class */ (function () {
     function BookingModel(listing) {
         this.listing = listing;
         //this.participants = plainToClass(User, participants);

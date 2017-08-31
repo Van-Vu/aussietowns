@@ -20,7 +20,7 @@ Vue.use(VeeValidate);
 export default class ScheduleComponent extends Vue {
     @Prop schedule: any;
     isRepeated: boolean = true;
-    model: ScheduleModel = null;
+    //model: ScheduleModel = null;
 
     repeatPeriods = [
         { value: '1', display: 'Daily' },
@@ -29,13 +29,18 @@ export default class ScheduleComponent extends Vue {
     ];
 
     disableDays = {
+        to: new Date(),
         days: [6, 0] // Disable Saturday's and Sunday's
     };
 
-    @Watch('schedule')
-    onScheduleChanged(value: ScheduleModel, oldValue: ScheduleModel) {
-        this.model = value;
+    get model() {
+        return this.$store.state.dynamicModal.props.schedule;
     }
+
+    //@Watch('schedule')
+    //onScheduleChanged(value: ScheduleModel, oldValue: ScheduleModel) {
+    //    this.model = value;
+    //}
 
     @Watch('isRepeated')
     onRepeatedChanged(value: boolean, oldValue: boolean) {

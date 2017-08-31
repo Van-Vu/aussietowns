@@ -20,7 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import ModalShellComponent from './modalshell.component.vue';
-var MenuModal = (function (_super) {
+var MenuModal = /** @class */ (function (_super) {
     __extends(MenuModal, _super);
     function MenuModal() {
         return _super !== null && _super.apply(this, arguments) || this;

@@ -1,14 +1,14 @@
 ﻿<template>
     <div>
         <div v-show="!isForgotPassword" class="tile  is-vertical">
-            <div class="tile">
-                <fb-signin-button class="tile is-6 fb-signin-button box" :params="fbSignInParams"
+            <div class="columns is-parent">
+                <fb-signin-button class="column is-6 fb-signin-button box" :params="fbSignInParams"
                                   @success="onFbSignInSuccess"
                                   @error="onFbSignInError">
                     <img src="/static/images/facebook_logo.jpg"/>
                     <span>Facebook</span>
                 </fb-signin-button>
-                <g-signin-button class="tile is-6 g-signin-button box" :params="googleSignInParams"
+                <g-signin-button class="column is-6 g-signin-button box" :params="googleSignInParams"
                                  @success="onGgSignInSuccess"
                                  @error="onGgSignInError">
                     <img src="/static/images/google_logo.png"/>
@@ -39,6 +39,16 @@
                             <i class="glyphicon glyphicon-lock"></i>
                         </span>
                         <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
+                    </p>
+                </div>
+                <div class="field" v-if="!isLogin">
+                    <p class="control has-icon has-icon-right">
+                        <input name="confirmPassword" v-model="confirmPassword" v-validate="'required|confirmed:newPassword'"
+                               :class="{'input': true, 'is-danger': errors.has('confirmPassword') }" type="password" placeholder="Confirm new password">
+                        <span class="icon user">
+                            <i class="glyphicon glyphicon-lock"></i>
+                        </span>
+                        <span v-show="errors.has('confirmPassword')" class="help is-danger">{{ errors.first('confirmPassword') }}</span>
                     </p>
                 </div>
                 <div class="field">

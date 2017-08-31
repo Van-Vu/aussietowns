@@ -20,6 +20,7 @@ import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 import NotificationComponent from './component/shared/notification.component.vue';
 import LoadingComponent from './component/shared/loading.component.vue';
 import LoginModal from './component/modal/loginmodal.component.vue';
+import ScheduleModalComponent from './component/modal/schedulemodal.component.vue';
 import LogService from './service/log.service';
 import router from './router';
 import "reflect-metadata";
@@ -67,24 +68,36 @@ Vue.use(VueFormWizard);
 import VueTheMask from 'vue-the-mask';
 Vue.use(VueTheMask);
 import { Validator } from 'vee-validate';
-var App = (function (_super) {
+var App = /** @class */ (function (_super) {
     __extends(App, _super);
     function App() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(App.prototype, "currentPage", {
+        //currentView: string = 'loginmodal';
+        //dynamicProps: string = '';
         get: function () {
             return this.$store.state.currentPage;
         },
+        //get showLoginModal() {
+        //    return this.$store.state.showLoginModal;
+        //}
         set: function (value) {
             this.currentPage = value;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(App.prototype, "showLoginModal", {
+    Object.defineProperty(App.prototype, "showModal", {
         get: function () {
-            return this.$store.state.showLoginModal;
+            return this.$store.state.dynamicModal && this.$store.state.dynamicModal.props && this.$store.state.dynamicModal.props.show;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(App.prototype, "currentView", {
+        get: function () {
+            return this.$store.state.dynamicModal;
         },
         enumerable: true,
         configurable: true
@@ -133,6 +146,11 @@ var App = (function (_super) {
     App.prototype.onSuccessfulLogin = function () {
         this.hideLoginModal();
     };
+    App.prototype.onHideScheduleModal = function () {
+        this.$store.dispatch('HIDE_SCHEDULE_MODAL');
+    };
+    App.prototype.onSaveSchedule = function (event) {
+    };
     App = __decorate([
         Component({
             name: "App",
@@ -140,7 +158,8 @@ var App = (function (_super) {
                 "nav-menu": NavMenuComponent,
                 "notifications": NotificationComponent,
                 "loading": LoadingComponent,
-                'loginmodal': LoginModal
+                'loginmodal': LoginModal,
+                'schedulemodal': ScheduleModalComponent
             }
         })
     ], App);

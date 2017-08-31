@@ -14,7 +14,7 @@
                 </div>
             </swiper>
             <div class="removeImage" @click="onRemoveImage" v-if="isEditing && images.length > 0">
-                <i class="glyphicon glyphicon-minus" tooltip="Remove image"></i>
+                <i class="glyphicon glyphicon-minus-sign" tooltip="Remove image"></i>
             </div>
         </div>
         <div>

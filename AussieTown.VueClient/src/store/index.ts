@@ -7,6 +7,7 @@ import MessageService from "../service/message.service";
 import UploadService from "../service/fileupload.service";
 
 import ListingModel from '../model/listing.model';
+import BookingModel from '../model/booking.model';
 import UserModel from '../model/user.model';
 import RequestResult from '../model/RequestResult';
 import ConversationModel from '../model/conversation.model';
@@ -43,7 +44,9 @@ export default new Vuex.Store({
         booking: {},
         isLoading: '',
         featureListings: [],
-        showLoginModal: false
+        dynamicModal: {},
+        showLoginModal: false,
+        showScheduleModal: false
     },
     getters: {
         isLoggedIn: state => {
@@ -81,6 +84,12 @@ export default new Vuex.Store({
             return (new ListingService()).addListing(listing)
                 .then(response => response);
             //commit('UPDATE_LISTING', listing);
+        },
+        INSERT_LISTING_OPERATOR({ commit, state }, operator) {
+            commit('INSERT_OPERATOR', operator);
+        },
+        REMOVE_LISTING_OPERATOR({ commit, state }, operator) {
+            commit('DELETE_OPERATOR', operator);
         },
         FETCH_PROFILE_BY_ID({ dispatch, commit, state }, id) {
             return (new UserService()).getById(id).then(response => {
@@ -149,6 +158,12 @@ export default new Vuex.Store({
         UPDATE_BOOKING({ commit }, payload) {
             commit('UPDATE_BOOKING', payload);
         },
+        ADD_BOOKING_PARTICIPANT({ commit }, user) {
+            commit('ADD_BOOKING_PARTICIPANT', user);
+        },
+        REMOVE_BOOKING_PARTICIPANT({ commit }, index) {
+            commit('REMOVE_BOOKING_PARTICIPANT', index);
+        },
         ENABLE_LOADING({commit}) {
             commit('ISLOADING', true);    
         },
@@ -156,10 +171,16 @@ export default new Vuex.Store({
             commit('ISLOADING', false);
         },
         SHOW_LOGIN_MODAL({ commit }) {
-            commit('LOGIN_MODAL', true);
+            commit('TOGGLE_LOGIN_MODAL', true);
         },
         HIDE_LOGIN_MODAL({ commit }) {
-            commit('LOGIN_MODAL', false);
+            commit('TOGGLE_LOGIN_MODAL', false);
+        },
+        SHOW_SCHEDULE_MODAL({ commit }, payload) {
+            commit('TOGGLE_SCHEDULE_MODAL', {state: true, data: payload});
+        },
+        HIDE_SCHEDULE_MODAL({ commit }) {
+            commit('TOGGLE_SCHEDULE_MODAL', {state: false});
         },
         TEST({ commit, state }, payload) {
             (new UserService()).getMiniProfile(1).catch(error => commit('ADD_NOTIFICATION', error));
@@ -230,11 +251,58 @@ export default new Vuex.Store({
         UPDATE_BOOKING(state, payload) {
             Vue.set(state,'booking', payload);
         },
+        ADD_BOOKING_PARTICIPANT(state, user) {
+            //var participants = (state.booking as any).participants;
+            //participants.push(user);
+            //Vue.set(state.booking, 'participants', participants);
+            if (!(state.booking as any).participants) {
+                (state.booking as any).participants = user;
+            } else {
+                //(state.booking as any).participants.push(user);    
+                Vue.set((state.booking as any).participants, (state.booking as any).participants.length, user);
+            }
+
+            
+        },
+        REMOVE_BOOKING_PARTICIPANT(state, index) {
+            var participants = (state.booking as any).participants;
+            participants.splice(index, 1);
+            Vue.set(state.booking, 'participants', participants);
+        },
         ISLOADING(state, value) {
             Vue.set(state, 'isLoading', value);
         },
-        LOGIN_MODAL(state, value) {
-            Vue.set(state, 'showLoginModal', value);
+        TOGGLE_LOGIN_MODAL(state, value) {
+            if (value) {
+                state.dynamicModal = {
+                    name: 'loginmodal',
+                    props: {show: true},
+                    events: {onSuccessfulLogin: "onSuccessfulLogin", onClose: "hideLoginModal"}
+                }
+            } else {
+                state.dynamicModal = null;
+            }
+
+            //Vue.set(state, 'showLoginModal', value);
+        },
+        TOGGLE_SCHEDULE_MODAL(state, payload) {
+            if (payload.state) {
+                state.dynamicModal = {
+                    name: 'schedulemodal',
+                    props: { show: true, schedule: payload.data},
+                    events: { onSave:"onSaveSchedule", onClose: "onHideScheduleModal" }
+                }
+            } else {
+                state.dynamicModal = null;
+            }
+
+            //Vue.set(state, 'showScheduleModal', value);
+        },
+        INSERT_OPERATOR(state, value) {
+            (state.listing as any).tourOperators.push(value);
+        },
+        DELETE_OPERATOR(state, value) {
+            Vue.set(state.listing, 'tourOperators', Utils.removeFromArray((state.listing as any).tourOperators, value));
         }
     }
 })

@@ -24,7 +24,7 @@ import Swiper from './external/vue-swiper.vue';
 import RingLoader from './external/ringloader.vue';
 import { NotificationType } from '../../model/enum';
 import { GlobalConfig } from '../../GlobalConfig';
-var ImageUploadComponent = (function (_super) {
+var ImageUploadComponent = /** @class */ (function (_super) {
     __extends(ImageUploadComponent, _super);
     function ImageUploadComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

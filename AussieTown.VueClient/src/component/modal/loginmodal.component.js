@@ -21,7 +21,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import ModalShellComponent from './modalshell.component.vue';
 import LoginForm from '../form/loginform.component.vue';
-var LoginModal = (function (_super) {
+var LoginModal = /** @class */ (function (_super) {
     __extends(LoginModal, _super);
     function LoginModal() {
         return _super !== null && _super.apply(this, arguments) || this;

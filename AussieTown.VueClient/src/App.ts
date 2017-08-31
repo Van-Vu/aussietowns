@@ -3,7 +3,10 @@ import { Component, Watch } from "vue-property-decorator";
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 import NotificationComponent from './component/shared/notification.component.vue';
 import LoadingComponent from './component/shared/loading.component.vue';
+
 import LoginModal from './component/modal/loginmodal.component.vue';
+import ScheduleModalComponent from './component/modal/schedulemodal.component.vue';
+
 import LogService from './service/log.service';
 import router from './router'
 
@@ -89,23 +92,36 @@ import { Validator } from 'vee-validate';
         "nav-menu": NavMenuComponent,
         "notifications": NotificationComponent,
         "loading": LoadingComponent,
-        'loginmodal': LoginModal
+        'loginmodal': LoginModal,
+        'schedulemodal': ScheduleModalComponent
     }
 })
 
 
 export default class App extends Vue {
+    //currentView: string = 'loginmodal';
+    //dynamicProps: string = '';
+
     get currentPage() {
         return this.$store.state.currentPage;
     }
 
-    get showLoginModal() {
-        return this.$store.state.showLoginModal;
+    get showModal() {
+        return this.$store.state.dynamicModal && this.$store.state.dynamicModal.props && this.$store.state.dynamicModal.props.show;
     }
+
+    get currentView() {
+        return this.$store.state.dynamicModal;
+    }
+
+    //get showLoginModal() {
+    //    return this.$store.state.showLoginModal;
+    //}
 
     set currentPage(value: string) {
         this.currentPage = value;
     }
+
 
     created() {
         const dictionary = {
@@ -158,6 +174,14 @@ export default class App extends Vue {
 
     onSuccessfulLogin() {
         this.hideLoginModal();
+    }
+
+    onHideScheduleModal() {
+        this.$store.dispatch('HIDE_SCHEDULE_MODAL');
+    }
+
+    onSaveSchedule(event) {
+        
     }
 
 }

@@ -21,7 +21,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import SearchService from '../../../service/search.service';
 import AutoCompleteComponent from './autocomplete.vue';
-var LocationSearchComponent = (function (_super) {
+var LocationSearchComponent = /** @class */ (function (_super) {
     __extends(LocationSearchComponent, _super);
     function LocationSearchComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

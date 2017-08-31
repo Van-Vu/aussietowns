@@ -1,4 +1,4 @@
-var MessageModel = (function () {
+var MessageModel = /** @class */ (function () {
     function MessageModel() {
     }
     return MessageModel;

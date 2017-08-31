@@ -1,7 +1,7 @@
 //https://github.com/leonardovilarinho/vue-acl
 import store from '../store';
 import { UserRole, UserAction, NotificationType } from '../model/enum';
-var Auth = (function () {
+var Auth = /** @class */ (function () {
     function Auth() {
         this.role = 0;
         this.userId = 0;

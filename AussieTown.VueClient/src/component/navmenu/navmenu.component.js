@@ -23,7 +23,7 @@ import MenuModal from '../modal/menumodal.component.vue';
 import RegistrationModal from '../modal/registrationmodal.component.vue';
 import SearchBarComponent from '../shared/search/searchbar.component.vue';
 import { Utils } from '../utils';
-var NavMenuComponent = (function (_super) {
+var NavMenuComponent = /** @class */ (function (_super) {
     __extends(NavMenuComponent, _super);
     function NavMenuComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

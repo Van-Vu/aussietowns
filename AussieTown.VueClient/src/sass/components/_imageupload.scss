@@ -6,7 +6,6 @@
 
 .image-upload {
     position: relative;
-    /*min-width: 320px;*/
     width:100%;
     
     // maintain 16:9 ratio
@@ -31,9 +30,11 @@
         right: 3px;
         font-size: 2rem;
         height: 40px;
-        background-color: $c-brand-quaternary;
+        color: $c-screen-black;
+
         &:hover {
             cursor: pointer;
+            color: $c-brand-quaternary;
         }
     }
     /*& > i {

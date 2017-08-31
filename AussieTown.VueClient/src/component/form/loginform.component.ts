@@ -25,6 +25,7 @@ export default class LoginForm extends Vue {
     isForgotPassword: boolean = false;
     formSubmitted: boolean = false;
     model: LoginModel = new LoginModel();
+    confirmPassword: string = '';
     $cookie: any;
     $auth: any;
 

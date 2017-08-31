@@ -31,4 +31,15 @@ export default class UserModel {
     set birthdayText(value: string) {
         this.birthday = value;
     }
+
+    // Booking page needs to create empty object
+    constructor() {
+        this.id = 50;
+        this.firstName = '';
+        this.lastName = '';
+        this.email = '';
+        this.phone = '';
+        this.emergencyContact = '';
+        this.address = '';
+    }
 }

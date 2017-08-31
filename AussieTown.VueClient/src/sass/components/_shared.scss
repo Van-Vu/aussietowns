@@ -1,5 +1,5 @@
 ﻿.box-header-strip {
-    background-color: $c-brand-primary;
+    background-color: $c-lightgrey-light;
     width: calc(100% + 40px);
     height: 10px;
     position: relative;
@@ -53,4 +53,10 @@
 .loading-screen {
     background-color: $c-primary-modal-background;
     z-index: 100;
+}
+
+.columns {
+    .column.is-2, .column.is-3 {
+        font-weight: 700;
+    }
 }

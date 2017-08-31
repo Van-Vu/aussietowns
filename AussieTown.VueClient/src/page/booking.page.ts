@@ -36,7 +36,8 @@ export default class BookingPage extends Vue {
     isStickyBoxRequired: boolean = true;
     isBooked: boolean = false;
     isLoading = false;
-    errorMsg='';
+    errorMsg = '';
+    model: BookingModel = null;
     $mq: any;
 
     asyncData({ store, route }) {
@@ -47,15 +48,15 @@ export default class BookingPage extends Vue {
         //} else {
         //    route.next({ name : "home" });
         //}
-        store.state.booking.participants = plainToClass(UserModel, this.generateParticipants(store)); 
+        store.dispatch('ADD_BOOKING_PARTICIPANT', plainToClass(UserModel, this.generateParticipants(store))); 
     }
 
-    get model() {
-        return this.$store.state.booking;
-    }
+    //get model() {
+    //    return this.$store.state.booking;
+    //}
 
     created() {
-        
+        this.model = this.$store.state.booking;
     }
 
     mounted() {
@@ -94,7 +95,7 @@ export default class BookingPage extends Vue {
         return {
             listingId: this.model.listing.id,
             bookingDate: this.model.bookingDate,
-            time: this.model.time,
+            time: this.model.bookingTime,
             participants: this.model.participants
         };
     }
@@ -124,12 +125,18 @@ export default class BookingPage extends Vue {
     //}
 
     addMoreParticipant() {
-        this.$store.state.booking.participants.push(new UserModel());
+        //this.$store.dispatch('ADD_BOOKING_PARTICIPANT',new UserModel());
+
+        this.model.participants.push(new UserModel());
+        var model = Object.assign({}, this.model);
+
+        // Bodom hack: no way to push data to model.participants that trigger Vue state
+        Vue.set(this, 'model', model);
     }
 
     removeParticipant(index) {
         if (confirm('Are you sure?')) {
-            this.$store.state.booking.participants.splice(index, 1);    
+            this.$store.dispatch('REMOVE_BOOKING_PARTICIPANT', index);  
         }
     }
 

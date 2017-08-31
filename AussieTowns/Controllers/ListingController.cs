@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using AussieTowns.Common;
 using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
@@ -91,6 +92,9 @@ namespace AussieTowns.Controllers
                 //if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
                 if (listing == null) throw new ArgumentNullException(nameof(listing));
 
+
+                listing.Description = StringHelper.StripHtml(listing.Description);
+                listing.Header = StringHelper.StripHtml(listing.Header);
                 return await _listingService.UpdateListing(listing);
             }
             catch (Exception e)
@@ -109,9 +113,10 @@ namespace AussieTowns.Controllers
                 if (request == null || !request.Participants.Any()) throw new ArgumentNullException(nameof(request));
 
                 var jsonBookingRequest = JsonConvert.SerializeObject(request);
+                
                 // Bodom hack: deal with this later
-                //var result = await jsonBookingRequest.PushToSqsAsync(AwsSqsExtensions.GetClient(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
-                //    _appSettings.AwsS3Region), _appSettings.SqsUrl);
+                await ElasticEmailClient.Send("Booking confirm !", "bodom0911@gmail.com", "Van", "sender", "senderName",
+                    to: new List<string> { "cob911@gmail.com" }, bodyHtml: @"<b>This is confirmation email <i>italic</i></b>");
 
                 return await _listingService.Booking(request);
             }

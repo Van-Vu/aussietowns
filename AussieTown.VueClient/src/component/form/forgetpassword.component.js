@@ -23,7 +23,7 @@ import VeeValidate from 'vee-validate';
 import { verifyResetToken, resetPassword, encryptText } from '../../service/auth.service';
 import ResetPasswordModel from '../../model/resetpassword.model';
 Vue.use(VeeValidate);
-var ForgetPasswordForm = (function (_super) {
+var ForgetPasswordForm = /** @class */ (function (_super) {
     __extends(ForgetPasswordForm, _super);
     function ForgetPasswordForm() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

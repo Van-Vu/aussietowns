@@ -24,6 +24,11 @@
     @extend .mtl_button_base;
 }
 
+.mtl_grey_button {
+    @include button-bg($c-darkgrey-light);
+    width:100%;
+}
+
 .mtl-btn-large {
     height: 52px;
     font-size: 20px;
@@ -73,6 +78,10 @@ html,
 body,
 #app {
   height: 100%; /* needed for proper layout */
+
+  .showModal{
+      overflow-y: hidden;
+  }
 }
 
 #app {

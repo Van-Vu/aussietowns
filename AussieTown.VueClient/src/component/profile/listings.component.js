@@ -18,7 +18,7 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import CardSmallComponent from '../shared/cardsmall.component.vue';
 import { ListingType } from '../../model/enum';
-var ListingsComponent = (function (_super) {
+var ListingsComponent = /** @class */ (function (_super) {
     __extends(ListingsComponent, _super);
     function ListingsComponent() {
         return _super !== null && _super.apply(this, arguments) || this;

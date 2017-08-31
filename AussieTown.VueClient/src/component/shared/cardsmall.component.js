@@ -21,7 +21,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { Utils } from '../utils';
 import Swiper from './external/vue-swiper.vue';
-var CardSmallComponent = (function (_super) {
+var CardSmallComponent = /** @class */ (function (_super) {
     __extends(CardSmallComponent, _super);
     function CardSmallComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

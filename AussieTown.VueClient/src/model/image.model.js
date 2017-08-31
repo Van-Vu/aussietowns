@@ -1,4 +1,4 @@
-var ImageModel = (function () {
+var ImageModel = /** @class */ (function () {
     function ImageModel(url) {
         this.url = url;
     }

@@ -27,7 +27,7 @@ import { detectScreenSize } from '../service/screen.service';
 import UserSearchComponent from '../component/shared/search/usersearch.component.vue';
 import RingLoader from '../component/shared/external/ringloader.vue';
 import store from '../store';
-var BookingPage = (function (_super) {
+var BookingPage = /** @class */ (function (_super) {
     __extends(BookingPage, _super);
     function BookingPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -36,6 +36,7 @@ var BookingPage = (function (_super) {
         _this.isBooked = false;
         _this.isLoading = false;
         _this.errorMsg = '';
+        _this.model = null;
         return _this;
         //validateBeforeSubmit(e) {
         //    e.preventDefault();
@@ -55,16 +56,13 @@ var BookingPage = (function (_super) {
         //} else {
         //    route.next({ name : "home" });
         //}
-        store.state.booking.participants = plainToClass(UserModel, this.generateParticipants(store));
+        store.dispatch('ADD_BOOKING_PARTICIPANT', plainToClass(UserModel, this.generateParticipants(store)));
     };
-    Object.defineProperty(BookingPage.prototype, "model", {
-        get: function () {
-            return this.$store.state.booking;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    //get model() {
+    //    return this.$store.state.booking;
+    //}
     BookingPage.prototype.created = function () {
+        this.model = this.$store.state.booking;
     };
     BookingPage.prototype.mounted = function () {
         var screenSize = detectScreenSize(this.$mq);
@@ -97,7 +95,7 @@ var BookingPage = (function (_super) {
         return {
             listingId: this.model.listing.id,
             bookingDate: this.model.bookingDate,
-            time: this.model.time,
+            time: this.model.bookingTime,
             participants: this.model.participants
         };
     };
@@ -121,11 +119,15 @@ var BookingPage = (function (_super) {
     //    this.$router.push({ name: "booking" });
     //}
     BookingPage.prototype.addMoreParticipant = function () {
-        this.$store.state.booking.participants.push(new UserModel());
+        //this.$store.dispatch('ADD_BOOKING_PARTICIPANT',new UserModel());
+        this.model.participants.push(new UserModel());
+        var model = Object.assign({}, this.model);
+        // Bodom hack: no way to push data to model.participants that trigger Vue state
+        Vue.set(this, 'model', model);
     };
     BookingPage.prototype.removeParticipant = function (index) {
         if (confirm('Are you sure?')) {
-            this.$store.state.booking.participants.splice(index, 1);
+            this.$store.dispatch('REMOVE_BOOKING_PARTICIPANT', index);
         }
     };
     BookingPage.prototype.setLoading = function (value) {

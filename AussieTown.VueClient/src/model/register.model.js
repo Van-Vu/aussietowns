@@ -1,4 +1,4 @@
-var RegisterModel = (function () {
+var RegisterModel = /** @class */ (function () {
     function RegisterModel() {
     }
     return RegisterModel;

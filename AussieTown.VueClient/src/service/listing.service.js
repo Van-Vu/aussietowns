@@ -1,5 +1,5 @@
 import http from './http-base';
-var ListingService = (function () {
+var ListingService = /** @class */ (function () {
     function ListingService() {
         this.baseUrl = '/api/listing/';
         this.getListingByUserUrl = this.baseUrl + '?user=';
@@ -53,7 +53,7 @@ var ListingService = (function () {
         return '';
     };
     ListingService.prototype.handleError = function (error) {
-        console.error('An error occurred', error);
+        console.error('Bodom An error occurred', error);
         return Promise.reject(error.message || error);
     };
     return ListingService;

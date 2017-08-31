@@ -23,13 +23,14 @@ import { UserSource, UserRole } from '../../model/enum';
 import { fetchPublicKey, decryptTextFromServer, requestPasswordReset, encryptText } from '../../service/auth.service';
 import { NotificationType } from '../../model/enum';
 Vue.use(VeeValidate);
-var LoginForm = (function (_super) {
+var LoginForm = /** @class */ (function (_super) {
     __extends(LoginForm, _super);
     function LoginForm() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.isForgotPassword = false;
         _this.formSubmitted = false;
         _this.model = new LoginModel();
+        _this.confirmPassword = '';
         // Login or Signup
         _this.isLogin = true;
         _this.googleSignInParams = {

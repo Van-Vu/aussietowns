@@ -3444,8 +3444,9 @@ button.button, input[type="submit"].button {
 
 .modal-content, .modal-card {
   margin: 0 20px;
-  max-height: calc(100vh - 160px);
-  overflow: auto;
+  margin-top: 30px;
+  /*max-height: calc(100vh - 160px);*/
+  /*overflow: auto;*/
   position: relative;
   width: 100%;
 }
@@ -3453,7 +3454,7 @@ button.button, input[type="submit"].button {
 @media screen and (min-width: 769px), print {
   .modal-content, .modal-card {
     margin: 0 auto;
-    max-height: calc(100vh - 40px);
+    /*max-height: calc(100vh - 40px);*/
     width: 640px;
   }
 }
@@ -3464,13 +3465,13 @@ button.button, input[type="submit"].button {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
+  /*-webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
-  flex-direction: column;
-  max-height: calc(100vh - 40px);
+  flex-direction: column;*/
+  /*max-height: calc(100vh - 40px);*/
   //overflow: hidden;
-  margin-top: calc(-50vh);
+  /*margin-top: calc(-50vh);*/
 }
 
 .modal-card-head, .modal-card-foot {
@@ -3524,16 +3525,16 @@ button.button, input[type="submit"].button {
   flex-grow: 1;
   -ms-flex-negative: 1;
   flex-shrink: 1;
-  overflow: auto;
+  /*overflow: auto;*/
   padding: 20px;
 }
 
 .modal {
-  bottom: 0;
+  /*bottom: 0;*/
   left: 0;
-  position: absolute;
+  position: fixed;
   right: 0;
-  top: 0;
+  /*top: 0;*/
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
@@ -3541,10 +3542,12 @@ button.button, input[type="submit"].button {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  overflow: hidden;
-  position: fixed;
+  overflow-y: auto;
   z-index: 20;
   margin-top: calc(-50vh);
+
+  // enable this property will make the second scroll visible
+  /*height: 100%;*/
 
   &.is-active {
     display: -webkit-box;

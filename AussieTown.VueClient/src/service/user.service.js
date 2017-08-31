@@ -1,5 +1,5 @@
 import http from './http-base';
-var UserService = (function () {
+var UserService = /** @class */ (function () {
     function UserService() {
     }
     UserService.prototype.getAll = function () {

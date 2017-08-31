@@ -1,4 +1,4 @@
-var ResetPasswordModel = (function () {
+var ResetPasswordModel = /** @class */ (function () {
     function ResetPasswordModel() {
         this.isChangePassword = true;
     }

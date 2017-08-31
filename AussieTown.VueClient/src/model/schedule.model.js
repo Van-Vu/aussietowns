@@ -1,6 +1,6 @@
 import { RepeatedType, RepeatedDay } from './enum';
 import { Utils } from '../component/utils';
-var ScheduleModel = (function () {
+var ScheduleModel = /** @class */ (function () {
     function ScheduleModel(startDate, startTime, duration, endDate, repeatedType, repeatedDay) {
         this.repeatedDay = new Array();
         this.startDate = startDate;

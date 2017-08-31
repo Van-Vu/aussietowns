@@ -1,5 +1,5 @@
 import http from './http-base';
-var SearchService = (function () {
+var SearchService = /** @class */ (function () {
     function SearchService() {
         this.locationAutocompleteUrl = 'api/search/autocomplete/?search='; // URL to web API
         this.userAutocompleteUrl = 'api/user/autocomplete/?search='; // URL to web API

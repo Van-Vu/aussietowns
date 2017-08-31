@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import MiniProfileComponent from '../shared/miniprofile.component.vue';
-var MessageComponent = (function (_super) {
+var MessageComponent = /** @class */ (function (_super) {
     __extends(MessageComponent, _super);
     function MessageComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

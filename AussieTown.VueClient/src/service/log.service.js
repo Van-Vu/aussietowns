@@ -1,5 +1,5 @@
 import http from './http-base';
-var LogService = (function () {
+var LogService = /** @class */ (function () {
     function LogService() {
         this.baseUrl = '/api/log';
     }

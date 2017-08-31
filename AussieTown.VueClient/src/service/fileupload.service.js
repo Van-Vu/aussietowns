@@ -1,5 +1,5 @@
 import http from './http-base';
-var UploadService = (function () {
+var UploadService = /** @class */ (function () {
     function UploadService() {
         this.uploadListingUrl = "/api/photo/uploadListing/";
         this.uploadProfileUrl = "/api/photo/uploadProfile/";

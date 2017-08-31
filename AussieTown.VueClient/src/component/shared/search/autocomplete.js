@@ -22,7 +22,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { SelectedAutocompleteValue } from '../../../model/autocomplete.model';
-var AutoCompleteComponent = (function (_super) {
+var AutoCompleteComponent = /** @class */ (function (_super) {
     __extends(AutoCompleteComponent, _super);
     function AutoCompleteComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

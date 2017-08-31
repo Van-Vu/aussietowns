@@ -1,5 +1,5 @@
 import http from './http-base';
-var MessageService = (function () {
+var MessageService = /** @class */ (function () {
     function MessageService() {
         this.getConversationByUserIdUrl = 'api/message/user/';
         this.getMessagesByConversationIdUrl = 'api/message/conversation/';

@@ -22,7 +22,7 @@ import CardSmallComponent from '../component/shared/cardsmall.component.vue';
 import { Utils } from '../component/utils';
 import { ScreenSize } from '../model/enum';
 import { detectScreenSize } from '../service/screen.service';
-var HomePage = (function (_super) {
+var HomePage = /** @class */ (function (_super) {
     __extends(HomePage, _super);
     function HomePage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

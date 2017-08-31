@@ -1,7 +1,7 @@
 ﻿<template>
     <div :id="userId" class="miniprofile-wrapper">
-        <div class="overlay" @click="onRemoveUser()" v-if="!isRemovable">
-            <span class="glyphicon glyphicon-remove-sign"></span>
+        <div class="overlay" @click="onRemoveUser()" v-if="isRemovable">
+            <span class="glyphicon glyphicon-minus-sign"></span>
         </div>
         <router-link :to="{ name: 'profileHome', params: { seoString: profileLink, profileId: userId }}">
             <div class="photo_wrapper">

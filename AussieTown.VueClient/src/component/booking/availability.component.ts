@@ -18,6 +18,7 @@ export default class AvailabilityComponent extends Vue {
     bookingDate: string = '';
     bookingTime: string = '';
     disableDays = {
+        to: new Date(),
         days: [6, 0] // Disable Saturday's and Sunday's
     };
 

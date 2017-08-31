@@ -1,10 +1,10 @@
-var AutocompleteItem = (function () {
+var AutocompleteItem = /** @class */ (function () {
     function AutocompleteItem() {
     }
     return AutocompleteItem;
 }());
 export { AutocompleteItem };
-var SelectedAutocompleteValue = (function () {
+var SelectedAutocompleteValue = /** @class */ (function () {
     function SelectedAutocompleteValue() {
     }
     return SelectedAutocompleteValue;

@@ -22,7 +22,7 @@ import { Component, Prop } from "vue-property-decorator";
 import { AutocompleteItem } from '../../../model/autocomplete.model';
 import SearchService from '../../../service/search.service';
 import AutoCompleteComponent from './autocomplete.vue';
-var UserSearchComponent = (function (_super) {
+var UserSearchComponent = /** @class */ (function (_super) {
     __extends(UserSearchComponent, _super);
     function UserSearchComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

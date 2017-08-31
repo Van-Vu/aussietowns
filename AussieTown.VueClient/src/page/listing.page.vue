@@ -5,7 +5,7 @@
                     <div class="columns">
                         <div v-if="isEditing" class="column is-2" for="header">Header</div>
                         <div class="column is-10 control has-icon has-icon-right">
-                            <input name="header" v-if="isEditing" v-model="model.header" v-validate="'required'"
+                            <input name="header" v-if="isEditing" v-model="model.header" v-validate="'required|max: 100'"
                                    :class="{'input': true, 'is-danger': errors.has('header') }" type="text" placeholder="">
                             <span v-if="isEditing" class="icon">
                                 <i class="glyphicon glyphicon-lock"></i>
@@ -42,28 +42,20 @@
                     <div class="columns">
                         <div class="column is-2">Description</div>
                         <div class="column is-10 control has-icon has-icon-right">
-                            <textarea name="description" v-if="isEditing" v-model="model.description" v-validate="'required'"
+                            <textarea name="description" v-if="isEditing" v-model="model.description" v-validate="'required|max:3000'"
                                    :class="{'textarea': true, 'is-danger': errors.has('description') }" cols="40" rows="10" placeholder=""></textarea>
                             <span v-if="isEditing" class="icon user">
                                 <i class="glyphicon glyphicon-lock"></i>
                             </span>
                             <span v-show="errors.has('description')" class="help is-danger">{{ errors.first('description') }}</span>
-                            <label v-if="!isEditing">{{ model.description }}</label>
+                            <label v-if="!isEditing" v-html="model.descriptionText"></label>
                         </div>
                     </div>
                     <hr v-show="isOffer"/>
                     <div v-show="isOffer" class="columns">
-                        <div class="column is-2">What to expect</div>
-                        <div class="column is-10 control has-icon has-icon-right">
-                            <textarea name="expectation" v-if="isEditing" class="textarea" v-model="model.expectation" cols="40" rows="5"></textarea>
-                            <label v-if="!isEditing">{{ model.expectation }}</label>
-                        </div>
-                    </div>
-                    <hr />
-                    <div v-show="isOffer" class="columns">
                         <div class="column is-2">Requirement</div>
                         <div class="column is-10 control has-icon has-icon-right">
-                            <textarea name="requirement" v-if="isEditing" class="textarea" v-model="model.requirement" cols="40" rows="5"></textarea>
+                            <textarea name="requirement" v-if="isEditing" class="textarea" v-model="model.requirement" cols="40" rows="5"  v-validate="'max:3000'"></textarea>
                             <label v-if="!isEditing">{{ model.requirement }}</label>
                         </div>
                     </div>
@@ -80,7 +72,7 @@
                         <label class="label">Participants</label>
                         <div class="control">
                             <participant participantType="Participant" :participants="model.tourGuests" :isEditing="isEditing"
-                                         @userAdded="onUserAdded" @userRemoved="onUserRemoved"></participant>
+                                         :allowRemove="false" @userAdded="onUserAdded" @userRemoved="onUserRemoved"></participant>
                         </div>
                     </div>
                     <div class="container is-gapless is-flex is-sticky-bottom">
@@ -93,9 +85,8 @@
                 <div class="box cost">
                     <label v-if="isEditing" class="label" for="cost">Cost</label>
                     <div class="price" v-if="!isEditing">${{ model.cost }} AUD</div>
-                    <div class="control has-icon has-icon-right">
-                        <!--<money v-if="isEditing" v-model="model.cost" v-bind="money"></money>-->
-                        $<input name="cost" v-if="isEditing" v-model="model.cost" v-validate="'required|numeric'" v-mask="'###'" style="width:180px;"
+                    <div class="control has-icon has-icon-right" v-if="isEditing">
+                        $<input name="cost" v-model="model.cost" v-validate="'required|numeric'" v-mask="'###'" style="width:180px;"
                                :class="{'input': true, 'is-danger': errors.has('cost') }" type="text" placeholder="Cost per person">
                         <span v-if="isEditing" class="icon user">
                             <i class="glyphicon glyphicon-lock"></i>
@@ -152,7 +143,7 @@
                     <p>test 1</p>
                 </div>-->
             </div>
-            <schedulemodal :show="showScheduleModal" :schedule="editingSchedule" @onSave="onSaveSchedule" @onClose="showScheduleModal= !showScheduleModal"></schedulemodal>
+            <!--<schedulemodal :show="showScheduleModal" :schedule="editingSchedule" @onSave="onSaveSchedule" @onClose="onHideScheduleModal"></schedulemodal>-->
         </div>
 </template>
 

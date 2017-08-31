@@ -19,30 +19,38 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Watch, Prop } from "vue-property-decorator";
-import ScheduleModel from '../../model/schedule.model';
 import vuetimepicker from './external/vuetimepicker.vue';
 import datepicker from './external/datepicker.vue';
 import VeeValidate from 'vee-validate';
 Vue.use(VeeValidate);
-var ScheduleComponent = (function (_super) {
+var ScheduleComponent = /** @class */ (function (_super) {
     __extends(ScheduleComponent, _super);
     function ScheduleComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.isRepeated = true;
-        _this.model = null;
+        //model: ScheduleModel = null;
         _this.repeatPeriods = [
             { value: '1', display: 'Daily' },
             { value: '2', display: 'Weekly' },
             { value: '3', display: 'Monthly' }
         ];
         _this.disableDays = {
+            to: new Date(),
             days: [6, 0] // Disable Saturday's and Sunday's
         };
         return _this;
     }
-    ScheduleComponent.prototype.onScheduleChanged = function (value, oldValue) {
-        this.model = value;
-    };
+    Object.defineProperty(ScheduleComponent.prototype, "model", {
+        get: function () {
+            return this.$store.state.dynamicModal.props.schedule;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    //@Watch('schedule')
+    //onScheduleChanged(value: ScheduleModel, oldValue: ScheduleModel) {
+    //    this.model = value;
+    //}
     ScheduleComponent.prototype.onRepeatedChanged = function (value, oldValue) {
         console.log("isRepeated: " + value);
     };
@@ -58,12 +66,6 @@ var ScheduleComponent = (function (_super) {
         Prop,
         __metadata("design:type", Object)
     ], ScheduleComponent.prototype, "schedule", void 0);
-    __decorate([
-        Watch('schedule'),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [ScheduleModel, ScheduleModel]),
-        __metadata("design:returntype", void 0)
-    ], ScheduleComponent.prototype, "onScheduleChanged", null);
     __decorate([
         Watch('isRepeated'),
         __metadata("design:type", Function),

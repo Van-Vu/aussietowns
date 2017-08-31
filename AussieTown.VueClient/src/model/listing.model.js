@@ -9,8 +9,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import ScheduleModel from './schedule.model';
 import { AutocompleteItem } from './autocomplete.model';
+import { Utils } from '../component/utils';
 import { Type } from "class-transformer";
-var ListingModel = (function () {
+var ListingModel = /** @class */ (function () {
     function ListingModel() {
         this.tourOperators = new Array();
         this.tourGuests = new Array();
@@ -19,6 +20,16 @@ var ListingModel = (function () {
         this.imageList = new Array();
         //this.schedules.push(new ScheduleModel(Utils.getDate(new Date()), { HH: '08', mm: '00' }, { HH: '08', mm: '00' }, Utils.getDate(new Date()), 1, ''));
     }
+    Object.defineProperty(ListingModel.prototype, "descriptionText", {
+        get: function () {
+            return Utils.stripHtml(this.description).replace(/\n/g, '<br/>');
+        },
+        set: function (value) {
+            this.description = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     __decorate([
         Type(function () { return ScheduleModel; }),
         __metadata("design:type", Array)

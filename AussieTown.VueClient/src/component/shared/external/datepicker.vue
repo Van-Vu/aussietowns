@@ -102,12 +102,12 @@ export default {
     },
     props: {
         language: {default: 'en'},
-        min: {default: '1970-01-01'},
-        max: {default: '3016-01-01'},
-        showTextbox: {default: true},
-        inline: { type: Boolean, default: false },    
-        value: { type: [String, Array], default: '' },
-        disabled: { type: Object },
+    min: {default: '1970-01-01'},
+    max: {default: '3016-01-01'},
+    showTextbox: {default: true},
+    inline: { type: Boolean, default: false },    
+    value: { type: [String, Array], default: '' },
+    disabled: { type: Object, default: () => {return {to: new Date()};} },
         range: { type: Boolean, default: false }
     },
     methods: {
@@ -277,23 +277,26 @@ export default {
         isDisabledDate (date) {
             let disabled = false
             if (typeof this.disabled === 'undefined') {
-            return false
-            }
-                if (typeof this.disabled.dates !== 'undefined') {
+                return false
+                }
+            if (typeof this.disabled.dates !== 'undefined') {
                 this.disabled.dates.forEach((d) => {
                     if (date.toDateString() === d.toDateString()) {
-                    disabled = true
-                    return true
+                        disabled = true
+                        return true
+                    }
+                })
             }
-            })
-            }
-                if (typeof this.disabled.to !== 'undefined' && this.disabled.to && date < this.disabled.to) {
+
+            if (typeof this.disabled.to !== 'undefined' && this.disabled.to && date < this.disabled.to) {
                 disabled = true
             }
-                if (typeof this.disabled.from !== 'undefined' && this.disabled.from && date > this.disabled.from) {
+
+            if (typeof this.disabled.from !== 'undefined' && this.disabled.from && date > this.disabled.from) {
                 disabled = true
             }
-                if (typeof this.disabled.days !== 'undefined' && this.disabled.days.indexOf(date.getDay()) !== -1) {
+
+            if (typeof this.disabled.days !== 'undefined' && this.disabled.days.indexOf(date.getDay()) !== -1) {
                 disabled = true
             }
             return disabled
@@ -324,7 +327,7 @@ export default {
     },
     computed: {
         dateList () {
-            let dObj = new Date(this.tmpYear, this.tmpMonth + 1, 0)
+            let dObj = new Date(this.tmpYear, this.tmpMonth, 0)
             let currentMonthLength = new Date(this.tmpYear, this.tmpMonth + 1, 0).getDate()
             let dateList = Array.from({length: currentMonthLength}, (val, index) => {
                 dObj.setDate(dObj.getDate() + 1)

@@ -1,4 +1,4 @@
-var LoginModel = (function () {
+var LoginModel = /** @class */ (function () {
     function LoginModel() {
     }
     return LoginModel;

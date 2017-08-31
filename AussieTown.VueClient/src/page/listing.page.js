@@ -23,6 +23,7 @@ import VeeValidate from 'vee-validate';
 import ParticipantComponent from '../component/shared/participant.component.vue';
 import MiniProfile from '../model/miniprofile.model';
 import LocationSearchComponent from '../component/shared/search/locationsearch.component.vue';
+import { Utils } from '../component/utils';
 import { ListingType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
 import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
@@ -32,7 +33,7 @@ import { ScreenSize, NotificationType, UserRole, UserAction } from '../model/enu
 import { detectScreenSize } from '../service/screen.service';
 import AvailabilityComponent from '../component/booking/availability.component.vue';
 Vue.use(VeeValidate);
-var ListingPage = (function (_super) {
+var ListingPage = /** @class */ (function (_super) {
     __extends(ListingPage, _super);
     function ListingPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -40,8 +41,6 @@ var ListingPage = (function (_super) {
         _this.isOffer = false;
         _this.isEditing = false;
         _this.editingSchedule = null;
-        _this.showScheduleModal = false;
-        _this.showAvailability = false;
         _this.isStickyBoxRequired = true;
         _this.modelCache = null;
         return _this;
@@ -56,6 +55,13 @@ var ListingPage = (function (_super) {
         get: function () {
             this.isOffer = this.$store.state.listing.type == ListingType.Offer;
             return this.$store.state.listing;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ListingPage.prototype, "showScheduleModal", {
+        get: function () {
+            return this.$store.state.showScheduleModal;
         },
         enumerable: true,
         configurable: true
@@ -100,19 +106,27 @@ var ListingPage = (function (_super) {
             if (this.model.id > 0) {
                 return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model))
                     .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); })
-                    .catch(function (err) { });
+                    .catch(function (err) {
+                    _this.$store.dispatch("DISABLE_LOADING");
+                    _this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
+                    _this.onCancelEdit();
+                });
             }
             else {
                 return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model))
                     .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); })
-                    .catch(function (err) { });
+                    .catch(function (err) {
+                    _this.$store.dispatch("DISABLE_LOADING");
+                    _this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
+                    _this.onCancelEdit();
+                });
             }
         }
     };
     ListingPage.prototype.onEdit = function () {
         if (this.canEdit) {
             this.isEditing = true;
-            this.modelCache = Object.assign({}, this.model);
+            this.modelCache = JSON.parse(JSON.stringify(this.model));
         }
     };
     ListingPage.prototype.onCancelEdit = function () {
@@ -124,11 +138,10 @@ var ListingPage = (function (_super) {
         this.model.locationDetail = item;
     };
     ListingPage.prototype.onUserAdded = function (user) {
-        if (this.model.tourOperators == null)
-            this.model.tourOperators = new Array();
-        this.model.tourOperators.push(new MiniProfile(user.id, user.name, '', '', user.imageUrl, ''));
+        this.$store.dispatch("INSERT_LISTING_OPERATOR", new MiniProfile(user.id, user.name, '', '', user.imageUrl, ''));
     };
     ListingPage.prototype.onUserRemoved = function (user) {
+        this.$store.dispatch("REMOVE_LISTING_OPERATOR", user);
     };
     ListingPage.prototype.checkAvailability = function (schedule) {
         this.$router.push({ name: "booking" });
@@ -142,7 +155,10 @@ var ListingPage = (function (_super) {
     };
     ListingPage.prototype.onEditSchedule = function (scheduleObject) {
         this.editingSchedule = scheduleObject;
-        this.showScheduleModal = true;
+        this.$store.dispatch('SHOW_SCHEDULE_MODAL', scheduleObject);
+    };
+    ListingPage.prototype.onHideScheduleModal = function () {
+        this.$store.dispatch('HIDE_SCHEDULE_MODAL');
     };
     ListingPage.prototype.constructShedule = function (model) {
         var schedules = model.schedules;
@@ -192,9 +208,9 @@ var ListingPage = (function (_super) {
             locationId: model.locationDetail.id,
             cost: model.cost,
             currency: model.currency,
-            header: model.header,
-            description: model.description,
-            requirement: model.requirement,
+            header: Utils.stripHtml(model.header),
+            description: Utils.stripHtml(model.description),
+            requirement: Utils.stripHtml(model.requirement),
             minParticipant: model.minParticipant,
             schedules: this.constructShedule(model),
             tourGuests: this.constructParticipants(model.id, model.tourGuests),

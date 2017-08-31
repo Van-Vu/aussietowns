@@ -25,7 +25,7 @@ if (process.env.VUE_ENV === 'client') {
         }
     });
 }
-var SearchPage = (function (_super) {
+var SearchPage = /** @class */ (function (_super) {
     __extends(SearchPage, _super);
     function SearchPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

@@ -16,7 +16,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-var NotificationComponent = (function (_super) {
+var NotificationComponent = /** @class */ (function (_super) {
     __extends(NotificationComponent, _super);
     // https://forum-archive.vuejs.org/topic/2122/resusable-global-notification-popups-with-vue-the-store-pattern-foundation-and-animate-css/5
     function NotificationComponent() {

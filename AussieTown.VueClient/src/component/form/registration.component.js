@@ -20,7 +20,7 @@ import VeeValidate from 'vee-validate';
 import RegisterModel from '../../model/register.model';
 import UserService from '../../service/user.service';
 Vue.use(VeeValidate);
-var RegistrationForm = (function (_super) {
+var RegistrationForm = /** @class */ (function (_super) {
     __extends(RegistrationForm, _super);
     function RegistrationForm() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

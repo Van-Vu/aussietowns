@@ -23,7 +23,7 @@ import VeeValidate from 'vee-validate';
 import { changePassword, encryptText } from '../../service/auth.service';
 import ResetPasswordModel from '../../model/resetpassword.model';
 Vue.use(VeeValidate);
-var ChangePasswordComponent = (function (_super) {
+var ChangePasswordComponent = /** @class */ (function (_super) {
     __extends(ChangePasswordComponent, _super);
     function ChangePasswordComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

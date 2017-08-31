@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import ImageUploadComponent from '../shared/imageupload.component.vue';
-var UserImageComponent = (function (_super) {
+var UserImageComponent = /** @class */ (function (_super) {
     __extends(UserImageComponent, _super);
     function UserImageComponent() {
         return _super !== null && _super.apply(this, arguments) || this;

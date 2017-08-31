@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import LocationSearchComponent from './locationsearch.component.vue';
-var SearchBarComponent = (function (_super) {
+var SearchBarComponent = /** @class */ (function (_super) {
     __extends(SearchBarComponent, _super);
     function SearchBarComponent() {
         return _super !== null && _super.apply(this, arguments) || this;

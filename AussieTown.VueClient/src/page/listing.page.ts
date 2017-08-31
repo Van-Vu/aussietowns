@@ -40,8 +40,6 @@ export default class ListingPage extends Vue{
     isOffer: boolean = false;
     isEditing: boolean = false;
     editingSchedule: ScheduleModel = null;
-    showScheduleModal: boolean = false;
-    showAvailability: boolean = false;
     isStickyBoxRequired: boolean = true;
 
     $mq: any;
@@ -58,6 +56,10 @@ export default class ListingPage extends Vue{
     get model() {
         this.isOffer = this.$store.state.listing.type == ListingType.Offer;
         return this.$store.state.listing;
+    }
+
+    get showScheduleModal() {
+        return this.$store.state.showScheduleModal;
     }
 
     mounted() {
@@ -101,11 +103,19 @@ export default class ListingPage extends Vue{
             if (this.model.id > 0) {
                 return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model))
                     .then(() => this.$store.dispatch("DISABLE_LOADING"))
-                    .catch(err => { });
+                    .catch(err => {
+                        this.$store.dispatch("DISABLE_LOADING");
+                        this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
+                        this.onCancelEdit();
+                    });
             } else {
                 return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model))
                     .then(() => this.$store.dispatch("DISABLE_LOADING"))
-                    .catch(err => { });
+                    .catch(err => {
+                        this.$store.dispatch("DISABLE_LOADING");
+                        this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
+                        this.onCancelEdit();
+                    });
             }            
         }
     }
@@ -113,7 +123,7 @@ export default class ListingPage extends Vue{
     onEdit() {
         if (this.canEdit) {
             this.isEditing = true;
-            this.modelCache = Object.assign({}, this.model);            
+            this.modelCache = JSON.parse(JSON.stringify(this.model));
         }
     }
 
@@ -128,12 +138,11 @@ export default class ListingPage extends Vue{
     }
 
     onUserAdded(user: AutocompleteItem) {
-        if (this.model.tourOperators == null) this.model.tourOperators= new Array<MiniProfile>();
-        this.model.tourOperators.push(new MiniProfile(user.id, user.name, '', '', user.imageUrl, ''));
+        this.$store.dispatch("INSERT_LISTING_OPERATOR", new MiniProfile(user.id, user.name, '', '', user.imageUrl, ''));
     }
 
     onUserRemoved(user) {
-        
+        this.$store.dispatch("REMOVE_LISTING_OPERATOR", user);
     }
 
     checkAvailability(schedule) {
@@ -151,7 +160,11 @@ export default class ListingPage extends Vue{
 
     onEditSchedule(scheduleObject) {
         this.editingSchedule = scheduleObject;
-        this.showScheduleModal = true;
+        this.$store.dispatch('SHOW_SCHEDULE_MODAL', scheduleObject);
+    }
+
+    onHideScheduleModal() {
+        this.$store.dispatch('HIDE_SCHEDULE_MODAL');
     }
 
     constructShedule(model) {
@@ -209,9 +222,9 @@ export default class ListingPage extends Vue{
             locationId: model.locationDetail.id,
             cost: model.cost,
             currency: model.currency,
-            header: model.header,
-            description: model.description,
-            requirement: model.requirement,
+            header: Utils.stripHtml(model.header),
+            description: Utils.stripHtml(model.description),
+            requirement: Utils.stripHtml(model.requirement),
             minParticipant: model.minParticipant,
             schedules: this.constructShedule(model),
             tourGuests: this.constructParticipants(model.id, model.tourGuests),

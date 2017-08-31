@@ -7,13 +7,21 @@ import UserService from '../service/user.service';
 import { NotificationType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
 
+//import LoginModal from '../component/modal/loginmodal.component.vue';
+import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
+
+import LoginForm from '../component/form/loginform.component.vue';
+import ScheduleComponent from '../component/shared/schedule.component.vue';
+
 @Component({
     name: 'TestPage',
     components: {
         "searchbar": SearchBarComponent,
         "swiper": Swiper,
         "numberchooser": NumberChooser,
-        "datepicker": datepicker
+        "datepicker": datepicker,
+        "loginmodal": LoginForm,
+        "schedulemodal": ScheduleComponent
     }
 })
 
@@ -21,6 +29,15 @@ export default class TestPage extends Vue {
     showListingRequest: boolean = false;
     showListingOffer: boolean = false;
     numberChooser : number = 0;
+    currentView: string = 'loginmodal';
+
+    switchModal() {
+        if (this.currentView == 'loginmodal') {
+            this.currentView = 'schedulemodal';
+        } else {
+            this.currentView = 'loginmodal';
+        }
+    }
 
     disableDays = {
         days: [6, 0] // Disable Saturday's and Sunday's

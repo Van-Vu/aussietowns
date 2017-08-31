@@ -1,4 +1,4 @@
-var MiniProfile = (function () {
+var MiniProfile = /** @class */ (function () {
     function MiniProfile(id, fullname, email, profileurl, photourl, description) {
         this.id = id;
         this.fullname = fullname;

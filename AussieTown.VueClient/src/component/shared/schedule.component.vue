@@ -1,27 +1,29 @@
 ﻿<template>
     <form @submit.prevent="validateBeforeSubmit" v-if="model">
-        <div class="field">
-            <label class="label">Start date</label>
-            <p class="control has-icon has-icon-right">
-                <datepicker :disabled="disableDays" :range="false" v-model="model.startDate"></datepicker>
-            </p>
+        <div class="columns">
+            <div class="column is-2">Start date</div>
+            <div class="column is-6">
+                <!--<datepicker :disabled="disableDays" :range="false" v-model="model.startDate"></datepicker>-->
+            </div>
         </div>
-        <div class="field">
-            <label class="label" for="password">Start time</label>
-            <p class="control has-icon has-icon-right">
-                <vue-timepicker v-model="model.startTime" :minute-interval="15"></vue-timepicker>
-            </p>
+        <div class="columns">
+            <div class="column is-2">Start time</div>
+            <div class="column is-6">
+                <vue-timepicker v-model="model.startTime" :minute-interval="30"></vue-timepicker>
+            </div>
         </div>
-        <div class="field">
-            <label class="label" for="password">Duration</label>
-            <p class="control has-icon has-icon-right">
-                <vue-timepicker v-model="model.duration" :minute-interval="15"></vue-timepicker>
-            </p>
+        <div class="columns">
+            <div class="column is-2">Duration</div>
+            <div class="column is-6">
+                <vue-timepicker v-model="model.duration" :minute-interval="30"></vue-timepicker>
+            </div>
         </div>
-        <div class="field">
-            <input type="checkbox" id="checkbox" v-model="isRepeated">
-            <span style="font-weight: 700;" for="checkbox">Repeated</span>
-            <ul class="control has-icon has-icon-right" v-show="isRepeated">
+        <div class="columns">
+            <div class="column is-3">
+                <input type="checkbox" id="checkbox" v-model="isRepeated">
+                <span for="checkbox">Repeated</span>
+            </div>
+           <ul class="column" v-show="isRepeated">
                 <li class="li-horizontal" v-for="period of repeatPeriods">
                     <input type="radio" name="period" :value="period.value" v-model="model.repeatedType">
                     {{period.display}}
@@ -44,13 +46,15 @@
                 </li>
             </ul>
         </div>
-        <div class="field">
-            <label class="label">End date</label>
-            <p class="control has-icon has-icon-right">
+        <div class="columns">
+            <div class="column is-2">End date</div>
+            <div class="column is-6">
                 <datepicker v-model="model.endDate"></datepicker>
-            </p>
+            </div>
         </div>
-        <button type="submit" class="button mtl_button">Save</button>
+        <div class="columns">
+            <button type="submit" class="column is-one-quarter button mtl_button-no-round">Save</button>
+        </div>
     </form>
 </template>
 <script lang="ts">

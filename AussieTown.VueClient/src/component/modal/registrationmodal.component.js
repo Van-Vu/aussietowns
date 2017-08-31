@@ -21,7 +21,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import ModalShellComponent from './modalshell.component.vue';
 import RegistrationForm from '../form/registration.component.vue';
-var RegistrationModal = (function (_super) {
+var RegistrationModal = /** @class */ (function (_super) {
     __extends(RegistrationModal, _super);
     function RegistrationModal() {
         return _super !== null && _super.apply(this, arguments) || this;
