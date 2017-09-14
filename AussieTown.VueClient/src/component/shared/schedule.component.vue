@@ -3,7 +3,7 @@
         <div class="columns">
             <div class="column is-2">Start date</div>
             <div class="column is-6">
-                <!--<datepicker :disabled="disableDays" :range="false" v-model="model.startDate"></datepicker>-->
+                <datepicker :disabled="disableDays" :range="false" v-model="model.startDate"></datepicker>
             </div>
         </div>
         <div class="columns">

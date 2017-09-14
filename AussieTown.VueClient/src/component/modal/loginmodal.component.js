@@ -31,8 +31,8 @@ var LoginModal = /** @class */ (function (_super) {
     LoginModal.prototype.close = function () {
         this.$emit('onClose');
     };
-    LoginModal.prototype.onSuccessfulLogin = function (responseToken) {
-        this.$emit('onSuccessfulLogin', responseToken);
+    LoginModal.prototype.onClose = function () {
+        this.$emit('onClose');
     };
     __decorate([
         Prop,

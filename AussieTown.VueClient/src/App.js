@@ -15,7 +15,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+//import { Component, Watch } from "vue-property-decorator";
+import Component from 'vue-class-component';
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 import NotificationComponent from './component/shared/notification.component.vue';
 import LoadingComponent from './component/shared/loading.component.vue';
@@ -140,16 +141,11 @@ var App = /** @class */ (function (_super) {
             Vue.set(this.$store.state, 'currentPage', 'home');
         }
     };
-    App.prototype.hideLoginModal = function () {
-        this.$store.dispatch('HIDE_LOGIN_MODAL');
-    };
-    App.prototype.onSuccessfulLogin = function () {
-        this.hideLoginModal();
-    };
-    App.prototype.onHideScheduleModal = function () {
-        this.$store.dispatch('HIDE_SCHEDULE_MODAL');
-    };
     App.prototype.onSaveSchedule = function (event) {
+        console.log(event);
+    };
+    App.prototype.onCloseModal = function () {
+        this.$store.dispatch('HIDE_MODAL');
     };
     App = __decorate([
         Component({
@@ -160,6 +156,11 @@ var App = /** @class */ (function (_super) {
                 "loading": LoadingComponent,
                 'loginmodal': LoginModal,
                 'schedulemodal': ScheduleModalComponent
+            },
+            head: {
+                title: {
+                    inner: 'It will be a pleasure'
+                }
             }
         })
     ], App);

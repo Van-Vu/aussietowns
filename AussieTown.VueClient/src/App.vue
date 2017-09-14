@@ -7,7 +7,7 @@
             <!--<header-banner></header-banner>-->
             <!--<loginmodal :show="showLoginModal" @onSuccessfulLogin="onSuccessfulLogin" @onClose="hideLoginModal"></loginmodal>-->
             <!--@onClose="hideModal" @onSuccessfulLogin="onSuccessfulLogin" @onScheduleSave="onSaveSchedule"-->
-            <component v-if="currentView" v-bind:is="currentView.name" v-bind="currentView.props"></component>
+            <component v-if="currentView" v-bind:is="currentView.name" v-bind="currentView.props" @onClose="onCloseModal" @onSave="onSaveSchedule"></component>
 
         </header>
         <section class="hero-body">

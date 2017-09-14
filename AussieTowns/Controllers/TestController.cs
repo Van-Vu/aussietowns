@@ -6,8 +6,10 @@ using AussieTowns.Model;
 using AussieTowns.Services;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using Newtonsoft.Json;
 
@@ -19,11 +21,17 @@ namespace AussieTowns.Controllers
     {
         private readonly ILogger _logger;
         private readonly ISearchService _searchService;
+        private readonly IEmailService _emailService;
+        private readonly IHostingEnvironment _hostingEnv;
+        private readonly AppSettings _appSettings;
 
-        public TestController(ILogger<TestController> logger, ISearchService searchService)
+        public TestController(ILogger<TestController> logger, ISearchService searchService, IEmailService emailService, IHostingEnvironment hostingEnv, IOptions<AppSettings> appSettings)
         {
             _logger = logger;
             _searchService = searchService;
+            _emailService = emailService;
+            _hostingEnv = hostingEnv;
+            _appSettings = appSettings.Value;
         }
 
         [HttpGet("test")]
@@ -106,9 +114,43 @@ namespace AussieTowns.Controllers
             try
             {
                 var result = ElasticEmailClient.Send(subject, "test@test.com", "Van", "sender", "senderName",
-                    to: new List<string> { "cob911@gmail.com" }, bodyHtml: @"<b>This is bold and this is <i>italic</i></b>");
+                    to: "cob911@gmail.com", bodyHtml: @"<b>This is bold and this is <i>italic</i></b>");
 
                 var test = result.Result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        [HttpGet("welcome")]
+        public void TestWelcomeMail()
+        {
+            try
+            {
+                //var emailContent = System.IO.File.ReadAllText(_appSettings.WelcomeEmailTemplate);
+
+                //var emailContent = "Hello {firstname}";
+                _emailService.SendWelcomeEmail("cob911@gmail.com");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        [HttpGet("booking")]
+        public void TestBookingMail()
+        {
+            try
+            {
+                //var emailContent = System.IO.File.ReadAllText(_appSettings.WelcomeEmailTemplate);
+
+                var emailContent = "Hello {firstname}";
+                _emailService.SendBookingConfirmEmail(null, null, null);
             }
             catch (Exception e)
             {

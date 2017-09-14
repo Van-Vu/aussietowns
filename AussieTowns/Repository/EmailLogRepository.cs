@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
+using AussieTowns.Model;
+using Dapper;
+using Microsoft.AspNetCore.Server.Kestrel.Internal.Http;
+using Microsoft.Extensions.Logging;
+
+namespace AussieTowns.Repository
+{
+    public class EmailLogRepository: RepositoryBase, IEmailLogRepository
+    {
+        private readonly ILogger<EmailLogRepository> _logger;
+
+        public EmailLogRepository(string connString, ILogger<EmailLogRepository> logger) : base(connString)
+        {
+            _logger = logger;
+        }
+
+        public async Task<int> LogEmail(IList<EmailLog> emails)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+                using (var tran = dbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        var sql = "INSERT INTO EmailLog(listingId,fromAddress,toAddress,subject,content,transactionid,messageid,status,createddate) "
+                                  + "VALUES(@listingId,@fromAddress,@toAddress,@subject,@content,@transactionid,@messageid,@status,@createddate)";
+                        var retValue = await dbConnection.ExecuteAsync(sql, emails);
+
+                        tran.Commit();
+                        return retValue;
+                    }
+                    catch (Exception e)
+                    {
+                        tran.Rollback();
+                        _logger.LogCritical(e.Message, e);
+                        throw;
+                    }
+                }
+            }
+        }
+    }
+}

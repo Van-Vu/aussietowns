@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Common;
 using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
+using AussieTowns.ViewModel;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,15 +27,17 @@ namespace AussieTowns.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<ListingController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IEmailService _emailService;
         private readonly AppSettings _appSettings;
 
         public ListingController(IListingService listingService, IMapper mapper, IOptions<AppSettings> appSettings,
-            ILogger<ListingController> logger, IHttpContextAccessor httpContextAccessor)
+            ILogger<ListingController> logger, IHttpContextAccessor httpContextAccessor, IEmailService emailService)
         {
             _listingService = listingService;
             _mapper = mapper;
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _emailService = emailService;
             _appSettings = appSettings.Value;
         }
 
@@ -113,12 +117,33 @@ namespace AussieTowns.Controllers
                 if (request == null || !request.Participants.Any()) throw new ArgumentNullException(nameof(request));
 
                 var jsonBookingRequest = JsonConvert.SerializeObject(request);
-                
-                // Bodom hack: deal with this later
-                await ElasticEmailClient.Send("Booking confirm !", "bodom0911@gmail.com", "Van", "sender", "senderName",
-                    to: new List<string> { "cob911@gmail.com" }, bodyHtml: @"<b>This is confirmation email <i>italic</i></b>");
 
-                return await _listingService.Booking(request);
+                // Bodom hack: deal with this later
+                //await ElasticEmailClient.Send("Booking confirm !", "bodom0911@gmail.com", "Van", "sender", "senderName",
+                //    to: new List<string> { "cob911@gmail.com" }, bodyHtml: @"<b>This is confirmation email <i>italic</i></b>");
+
+                await _listingService.Booking(request);
+
+                var listingDetail = _listingService.GetListingViewById(request.ListingId).Result;
+
+                var bookingParticipants = request.Participants.Select(item => new BookingParticipant
+                {
+                    Fullname = $"{item.FirstName} {item.LastName}", DateOfBirth = item.Birthday.ToString(), Email = item.Email, Phone = item.Phone
+                }).ToList();
+
+                var bookingEmailViewModel = new BookingEmailViewModel
+                {
+                    ListingUrl = "google.com.au",
+                    ListingHeader = listingDetail.Header,
+                    ListingDescription = listingDetail.Description,
+                    BookingDate = request.BookingDate.ToString(CultureInfo.InvariantCulture),
+                    BookingTime = request.Time.ToString(),
+                    BookingParticipants = bookingParticipants
+                };
+
+                return await _emailService.SendBookingConfirmEmail(bookingEmailViewModel, listingDetail.OwnerEmail, listingDetail.OwnerEmail);
+
+                //return ;
             }
             catch (Exception e)
             {

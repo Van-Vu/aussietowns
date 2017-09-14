@@ -124,7 +124,7 @@ namespace AussieTowns
             var mySqlConnectionString = Configuration.GetConnectionString("DataAccessMySqlProvider");
 
             services.AddOptions();
-            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.Configure<AppSettings>(Configuration.GetSection("MtlSettings"));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -133,6 +133,7 @@ namespace AussieTowns
             services.AddTransient<IListingService, ListingService>();
             services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<IImageService, ImageService>();
+            services.AddTransient<IEmailService, EmailService>();
 
             // Bodom: resolve service in ConfigureServices
             var serviceProvider = services.BuildServiceProvider();
@@ -142,6 +143,7 @@ namespace AussieTowns
             services.AddTransient<IListingRepository, ListingRepository>(x => new ListingRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<ListingRepository>>()));
             services.AddTransient<IImageRepository, ImageRepository>(x => new ImageRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<ImageRepository>>()));
             services.AddTransient<IMessageRepository, MessageRepository>(x => new MessageRepository(mySqlConnectionString));
+            services.AddTransient<IEmailLogRepository, EmailLogRepository>(x => new EmailLogRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<EmailLogRepository>>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

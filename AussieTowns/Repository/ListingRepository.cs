@@ -91,6 +91,19 @@ namespace AussieTowns.Repository
             }
         }
 
+        public async Task<ListingView> GetListingViewById(int listingId)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "SELECT * FROM listingView WHERE id = @listingid";
+
+                dbConnection.Open();
+                var listingviews = await dbConnection.QueryAsync<ListingView>(sql, new { listingId });
+
+                return listingviews.FirstOrDefault();
+            }
+        }
+
         public async Task<IEnumerable<Listing>> GetListingByUserId(int userId)
         {
             using (IDbConnection dbConnection = Connection)

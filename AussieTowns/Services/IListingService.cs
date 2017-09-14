@@ -10,6 +10,7 @@ namespace AussieTowns.Services
     {
         Task<IEnumerable<Listing>> GetListingsByUserId(int userId);
         Task<IEnumerable<ListingView>> GetListingsBySuburb(int suburbId);
+        Task<ListingView> GetListingViewById(int listingId);
         Task<Listing> GetListingDetail(int id);
         Task<int> InsertListing(Listing listing);
         Task<int> UpdateListing(Listing listing);

@@ -1,7 +1,7 @@
 ﻿<template>
     <modalshell :show.sync="show" @onClose="close">
         <div slot="body">
-            <loginform @onSuccessfulLogin="onSuccessfulLogin"></loginform>
+            <loginform @onSuccessfulLogin="onClose"></loginform>
         </div>
     </modalshell>
 </template>

@@ -9,6 +9,7 @@ namespace AussieTowns.Repository
     public interface IListingRepository
     {
         Task<Listing> GetListingById(int listingId);
+        Task<ListingView> GetListingViewById(int listingId);
         Task<IEnumerable<Listing>> GetListingByUserId(int userId);
         Task<IEnumerable<ListingView>> GetListingsBySuburb(int suburbId);
         Task<int> InsertListing(Listing listing);

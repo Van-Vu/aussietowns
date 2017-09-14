@@ -6,8 +6,8 @@
                 <i class="glyphicon glyphicon-menu-hamburger"></i> Menu
                 </a>
             </div>
-            <div class="column is-half-mobile is-two-thirds-desktop">
-                <div class='nav-bar__logo '></div>
+            <div class="column is-half-mobile is-two-thirds-desktop" style="position: relative;">
+                <!--<div class='nav-bar__logo '></div>-->
                 <router-link :to="{name:'home'}" class="nav-bar__logo"></router-link>
                 <div class="second-search-bar is-hidden-mobile" v-show="isSticky">
                     <searchbar @onSelect="onSelect($event)" @onSearch="onSearch($event)"></searchbar>

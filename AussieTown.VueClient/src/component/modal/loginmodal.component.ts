@@ -21,7 +21,7 @@ export default class LoginModal  extends Vue{
         this.$emit('onClose');
     }
 
-    onSuccessfulLogin(responseToken) {
-        this.$emit('onSuccessfulLogin', responseToken);
+    onClose() {
+        this.$emit('onClose');
     }
 }

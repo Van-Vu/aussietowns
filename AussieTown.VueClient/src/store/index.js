@@ -185,19 +185,15 @@ export default new Vuex.Store({
         },
         SHOW_LOGIN_MODAL: function (_a) {
             var commit = _a.commit;
-            commit('TOGGLE_LOGIN_MODAL', true);
-        },
-        HIDE_LOGIN_MODAL: function (_a) {
-            var commit = _a.commit;
-            commit('TOGGLE_LOGIN_MODAL', false);
+            commit('SHOW_LOGIN_MODAL', true);
         },
         SHOW_SCHEDULE_MODAL: function (_a, payload) {
             var commit = _a.commit;
-            commit('TOGGLE_SCHEDULE_MODAL', { state: true, data: payload });
+            commit('SHOW_SCHEDULE_MODAL', { state: true, data: payload });
         },
-        HIDE_SCHEDULE_MODAL: function (_a) {
+        HIDE_MODAL: function (_a) {
             var commit = _a.commit;
-            commit('TOGGLE_SCHEDULE_MODAL', { state: false });
+            commit('HIDE_MODAL');
         },
         TEST: function (_a, payload) {
             var commit = _a.commit, state = _a.state;
@@ -290,31 +286,38 @@ export default new Vuex.Store({
         ISLOADING: function (state, value) {
             Vue.set(state, 'isLoading', value);
         },
-        TOGGLE_LOGIN_MODAL: function (state, value) {
+        SHOW_LOGIN_MODAL: function (state, value) {
             if (value) {
+                var onSuccessfulLogin = void 0;
+                var hideLoginModal = void 0;
+                var test = void 0;
                 state.dynamicModal = {
                     name: 'loginmodal',
                     props: { show: true },
-                    events: { onSuccessfulLogin: "onSuccessfulLogin", onClose: "hideLoginModal" }
+                    events: { 'value-updated': test }
                 };
-            }
-            else {
-                state.dynamicModal = null;
             }
             //Vue.set(state, 'showLoginModal', value);
         },
-        TOGGLE_SCHEDULE_MODAL: function (state, payload) {
+        SHOW_SCHEDULE_MODAL: function (state, payload) {
             if (payload.state) {
+                var onSaveSchedule = void 0;
+                var onHideScheduleModal = void 0;
                 state.dynamicModal = {
                     name: 'schedulemodal',
                     props: { show: true, schedule: payload.data },
-                    events: { onSave: "onSaveSchedule", onClose: "onHideScheduleModal" }
+                    events: { onSave: onSaveSchedule, onClose: onHideScheduleModal }
                 };
             }
-            else {
-                state.dynamicModal = null;
-            }
             //Vue.set(state, 'showScheduleModal', value);
+        },
+        HIDE_MODAL: function (state) {
+            if (state.dynamicModal && state.dynamicModal.props) {
+                state.dynamicModal.props.show = false;
+                state.dynamicModal.props.name = '';
+            }
+            // will lose the fly-out effect of run this statement
+            //setTimeout(() => { state.dynamicModal = null; }, 200);
         },
         INSERT_OPERATOR: function (state, value) {
             state.listing.tourOperators.push(value);

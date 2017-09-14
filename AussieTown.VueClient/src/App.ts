@@ -1,5 +1,8 @@
 import Vue from "vue";
-import { Component, Watch } from "vue-property-decorator";
+//import { Component, Watch } from "vue-property-decorator";
+
+import Component from 'vue-class-component';
+
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 import NotificationComponent from './component/shared/notification.component.vue';
 import LoadingComponent from './component/shared/loading.component.vue';
@@ -86,6 +89,14 @@ Vue.use(VueTheMask);
 
 import { Validator } from 'vee-validate';
 
+// augment options
+declare module 'vue/types/options' {
+    interface ComponentOptions<V extends Vue> {
+        head?: {};
+    }
+}
+
+
 @Component({
     name: "App",
     components: {
@@ -94,9 +105,13 @@ import { Validator } from 'vee-validate';
         "loading": LoadingComponent,
         'loginmodal': LoginModal,
         'schedulemodal': ScheduleModalComponent
+    },
+    head: {
+        title: {
+            inner: 'It will be a pleasure'
+        }
     }
 })
-
 
 export default class App extends Vue {
     //currentView: string = 'loginmodal';
@@ -168,20 +183,11 @@ export default class App extends Vue {
 
     }
 
-    hideLoginModal() {
-        this.$store.dispatch('HIDE_LOGIN_MODAL');
-    }
-
-    onSuccessfulLogin() {
-        this.hideLoginModal();
-    }
-
-    onHideScheduleModal() {
-        this.$store.dispatch('HIDE_SCHEDULE_MODAL');
-    }
-
     onSaveSchedule(event) {
-        
+        console.log(event);
     }
 
+    onCloseModal() {
+        this.$store.dispatch('HIDE_MODAL');        
+    }
 }

@@ -32,6 +32,11 @@ namespace AussieTowns.Services
             return await _listingRepository.GetListingsBySuburb(suburbId);
         }
 
+        public async Task<ListingView> GetListingViewById(int listingId)
+        {
+            return await _listingRepository.GetListingViewById(listingId);
+        }
+
         public async Task<int> InsertListing(Listing listing)
         {
             return await _listingRepository.InsertListing(listing);

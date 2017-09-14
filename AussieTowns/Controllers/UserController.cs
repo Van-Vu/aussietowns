@@ -28,13 +28,15 @@ namespace AussieTowns.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
         private readonly IHostingEnvironment _hostingEnv;
         private readonly IMapper _mapper;
         private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserService userService, IHostingEnvironment hostingEnv, IMapper mapper, ILogger<UserController> logger)
+        public UserController(IUserService userService, IEmailService emailService, IHostingEnvironment hostingEnv, IMapper mapper, ILogger<UserController> logger)
         {
             _userService = userService;
+            _emailService = emailService;
             _hostingEnv = hostingEnv;
             _mapper = mapper;
             _logger = logger;
@@ -58,8 +60,14 @@ namespace AussieTowns.Controllers
                     user.ExternalId = user.ExternalId.RsaDecrypt();
                 }
 
-                await _userService.Register(user);
-                return GenerateToken(user);
+                var userCount = await _userService.Register(user);
+                if (userCount == 1)
+                {
+                    await _emailService.SendWelcomeEmail(user.Email);
+                    return GenerateToken(user);
+                }
+
+                throw new ArgumentOutOfRangeException(nameof(user), "Can't register user");
             }
             catch (Exception e)
             {
