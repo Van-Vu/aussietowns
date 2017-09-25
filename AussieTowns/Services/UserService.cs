@@ -103,5 +103,10 @@ namespace AussieTowns.Services
         {
             return await _userRepository.ChangePassword(user, isChangePassword);
         }
+
+        public ICollection<User> SearchUsers(string term)
+        {
+            return _userRepository.GetAll().Where(x => x.FirstName.Contains(term) || x.LastName.Contains(term) || x.Email.Contains(term)).ToList();
+        }
     }
 }

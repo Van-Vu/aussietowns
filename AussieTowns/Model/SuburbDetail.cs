@@ -20,5 +20,7 @@ namespace AussieTowns.Model
         public string Region { get; set; }
         public ICollection<Listing> Listings { get; set; }
 
+        public ICollection<Listing> Listings { get; set; }
+
     }
 }
