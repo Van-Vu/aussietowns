@@ -92,7 +92,7 @@ import { Validator } from 'vee-validate';
 // augment options
 declare module 'vue/types/options' {
     interface ComponentOptions<V extends Vue> {
-        head?: {};
+        metaInfo?: {};
     }
 }
 
@@ -106,10 +106,11 @@ declare module 'vue/types/options' {
         'loginmodal': LoginModal,
         'schedulemodal': ScheduleModalComponent
     },
-    head: {
-        title: {
-            inner: 'It will be a pleasure'
-        }
+    metaInfo: {
+        // if no subcomponents specify a metaInfo.title, this title will be used
+        title: 'Default Title',
+        // all titles will be injected into this template
+        titleTemplate: '%s | My Awesome Webapp'
     }
 })
 
@@ -170,7 +171,7 @@ export default class App extends Vue {
 
     mounted() {
         // Bodom hack: hacky way to hide loading screen on server load
-        (this.$el.parentElement.childNodes[0] as any).style.display = "none";
+        (this.$el.parentElement.querySelector('.early-loading-wrapper') as any).style.display = "none";
 
         // Bodom hack: disable in case of jumping directly to a page
         this.$store.dispatch("DISABLE_LOADING");

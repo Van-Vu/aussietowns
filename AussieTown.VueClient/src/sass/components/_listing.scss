@@ -34,12 +34,13 @@
 }
 
 .card-full {
-    /*width: 100%;
-    @media all and (min-width: $is-desktop) {
-        width: 320px;
+    width: 100%;
+    background-color: $c-neutral-white;
+    @media all and (min-width: $is-tablet) {
+        width: 387px;
     }
 
-    @media all and (min-width: $is-tablet) {
+    /*@media all and (max-width: $is-tablet) {
         width: 320px;
     }*/
 }

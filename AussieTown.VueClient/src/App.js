@@ -132,7 +132,7 @@ var App = /** @class */ (function (_super) {
     };
     App.prototype.mounted = function () {
         // Bodom hack: hacky way to hide loading screen on server load
-        this.$el.parentElement.childNodes[0].style.display = "none";
+        this.$el.parentElement.querySelector('.early-loading-wrapper').style.display = "none";
         // Bodom hack: disable in case of jumping directly to a page
         this.$store.dispatch("DISABLE_LOADING");
         // Bodom hack: https://stackoverflow.com/questions/41185809/vue-js-v-bindclass-doesnt-update-even-though-model-does
@@ -157,10 +157,11 @@ var App = /** @class */ (function (_super) {
                 'loginmodal': LoginModal,
                 'schedulemodal': ScheduleModalComponent
             },
-            head: {
-                title: {
-                    inner: 'It will be a pleasure'
-                }
+            metaInfo: {
+                // if no subcomponents specify a metaInfo.title, this title will be used
+                title: 'Default Title',
+                // all titles will be injected into this template
+                titleTemplate: '%s | My Awesome Webapp'
             }
         })
     ], App);

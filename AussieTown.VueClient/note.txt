@@ -49,8 +49,13 @@ https://www.sparkpost.com/pricing/#addon-plans
 Unit test
 Booking process
 Fix v-lazy when no image
-Icons
 
+
+Icons
+Email template
+Listing card
+Profile layout like: http://groupselling.com/members/testdemopro/settings/
+Font
 
 Blog post:
 - Authentication

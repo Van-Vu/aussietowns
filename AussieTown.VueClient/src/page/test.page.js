@@ -23,6 +23,7 @@ import { NotificationType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
 import LoginForm from '../component/form/loginform.component.vue';
 import ScheduleComponent from '../component/shared/schedule.component.vue';
+import CardFullComponent from '../component/shared/listingcard.component.vue';
 var TestPage = /** @class */ (function (_super) {
     __extends(TestPage, _super);
     function TestPage() {
@@ -30,7 +31,8 @@ var TestPage = /** @class */ (function (_super) {
         _this.showListingRequest = false;
         _this.showListingOffer = false;
         _this.numberChooser = 0;
-        _this.currentView = 'loginmodal';
+        _this.currentView = 'listingcard';
+        _this.listings = [];
         _this.disableDays = {
             days: [6, 0] // Disable Saturday's and Sunday's
         };
@@ -39,11 +41,21 @@ var TestPage = /** @class */ (function (_super) {
     }
     TestPage.prototype.switchModal = function () {
         if (this.currentView == 'loginmodal') {
-            this.currentView = 'schedulemodal';
+            this.currentView = 'listingcard';
         }
         else {
             this.currentView = 'loginmodal';
         }
+    };
+    TestPage.prototype.asyncData = function (_a) {
+        var store = _a.store, route = _a.route;
+        return store.dispatch('FETCH_FEATURELISTINGS');
+    };
+    TestPage.prototype.created = function () {
+        this.listings = this.$store.state.featureListings;
+        //this.$store.dispatch('SEARCH_LISTINGS_BY_SUBURB', 129).then(() => {
+        //    this.listings = this.$store.state.searchListings;
+        //});
     };
     TestPage.prototype.checkLogginUser = function () {
         this.$store.dispatch('TEST');
@@ -60,7 +72,8 @@ var TestPage = /** @class */ (function (_super) {
                 "numberchooser": NumberChooser,
                 "datepicker": datepicker,
                 "loginmodal": LoginForm,
-                "schedulemodal": ScheduleComponent
+                "schedulemodal": ScheduleComponent,
+                "listingcard": CardFullComponent
             }
         })
     ], TestPage);

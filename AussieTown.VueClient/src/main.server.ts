@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import { app, router, store } from './root'
 
+const meta = (app as any).$meta() // here
 
 export default context => {
     if (context.cookies.mtl) {
@@ -11,7 +12,9 @@ export default context => {
 
   return new Promise((resolve, reject) => {
     // set server-side router's location
-    router.push(context.url)
+      router.push(context.url)
+
+      context.meta = meta // and here
 
     // wait until router has resolved possible async components and hooks
     router.onReady(() => {

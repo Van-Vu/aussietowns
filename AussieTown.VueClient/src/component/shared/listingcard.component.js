@@ -34,6 +34,8 @@ var CardFullComponent = /** @class */ (function (_super) {
         _this.time = '';
         _this.headerLink = '';
         _this.imageUrls = '';
+        _this.duration = '';
+        _this.description = '';
         return _this;
     }
     CardFullComponent.prototype.created = function () {
@@ -47,6 +49,8 @@ var CardFullComponent = /** @class */ (function (_super) {
         this.date = Utils.formatDate(startDatetime);
         this.time = Utils.getTime(startDatetime);
         this.headerLink = Utils.seorizeString(this.header);
+        this.duration = this.listingDetail.schedules[0].duration;
+        this.description = this.listingDetail.primaryOwner;
     };
     __decorate([
         Prop,

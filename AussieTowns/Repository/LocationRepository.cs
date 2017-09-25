@@ -43,9 +43,9 @@ namespace AussieTowns.Repository
             return null;
         }
 
-        public IQueryable<SuburbDetail> GetLocationsBySuburbName(string name)
-        {
-            return _context.SuburbDetails.Where(x => x.SuburbName.Contains(name));
-        }
+        //public IQueryable<SuburbDetail> GetLocationsBySuburbName(string name)
+        //{
+        //    return _context.SuburbDetails.Where(x => x.SuburbName.Contains(name));
+        //}
     }
 }

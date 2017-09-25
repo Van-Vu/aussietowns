@@ -12,6 +12,8 @@ import ScheduleModalComponent from '../component/modal/schedulemodal.component.v
 
 import LoginForm from '../component/form/loginform.component.vue';
 import ScheduleComponent from '../component/shared/schedule.component.vue';
+import CardFullComponent from '../component/shared/listingcard.component.vue';
+
 
 @Component({
     name: 'TestPage',
@@ -21,7 +23,8 @@ import ScheduleComponent from '../component/shared/schedule.component.vue';
         "numberchooser": NumberChooser,
         "datepicker": datepicker,
         "loginmodal": LoginForm,
-        "schedulemodal": ScheduleComponent
+        "schedulemodal": ScheduleComponent,
+        "listingcard": CardFullComponent
     }
 })
 
@@ -29,11 +32,12 @@ export default class TestPage extends Vue {
     showListingRequest: boolean = false;
     showListingOffer: boolean = false;
     numberChooser : number = 0;
-    currentView: string = 'loginmodal';
+    currentView: string = 'listingcard';
+    listings: any[] = [];
 
     switchModal() {
         if (this.currentView == 'loginmodal') {
-            this.currentView = 'schedulemodal';
+            this.currentView = 'listingcard';
         } else {
             this.currentView = 'loginmodal';
         }
@@ -45,6 +49,18 @@ export default class TestPage extends Vue {
 
     startDate = new Date();
 
+    asyncData({ store, route }) {
+        return store.dispatch('FETCH_FEATURELISTINGS');
+    }
+
+    created() {
+        this.listings = this.$store.state.featureListings;
+
+
+        //this.$store.dispatch('SEARCH_LISTINGS_BY_SUBURB', 129).then(() => {
+        //    this.listings = this.$store.state.searchListings;
+        //});
+    }
 
     checkLogginUser() {
         this.$store.dispatch('TEST');

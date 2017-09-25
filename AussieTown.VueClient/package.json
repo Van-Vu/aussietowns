@@ -61,6 +61,7 @@
     "vue-js-cookie": "^2.0.0",
     "vue-lazy-image": "^1.2.0",
     "vue-loader": "^12.2.2",
+    "vue-meta": "^1.2.0",
     "vue-property-decorator": "4.0.0",
     "vue-router": "^2.7.0",
     "vue-server-renderer": "^2.4.2",

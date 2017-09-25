@@ -1,10 +1,10 @@
 ﻿<template>
     <div class="page-content container tile is-vertical">
-        <button @click.prevent="switchModal">current {{currentView}}</button>
-
-        <component v-bind:is="currentView">
-            <!-- component changes when vm.currentView changes! -->
-        </component>
+        <ul>
+            <li v-for="listing in listings">
+                <listingcard :listingDetail="listing"></listingcard>
+            </li>
+        </ul>
      </div>
 </template>
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AussieTowns.Common;
 using AussieTowns.Extensions;
@@ -136,8 +137,8 @@ namespace AussieTowns.Controllers
                     ListingUrl = "google.com.au",
                     ListingHeader = listingDetail.Header,
                     ListingDescription = listingDetail.Description,
-                    BookingDate = request.BookingDate.ToString(CultureInfo.InvariantCulture),
-                    BookingTime = request.Time.ToString(),
+                    BookingDate = request.BookingDate.ToString("dddd dd-MMM-yyyy", CultureInfo.DefaultThreadCurrentUICulture),
+                    BookingTime = request.Time.ToString(@"hh\:mm", CultureInfo.DefaultThreadCurrentUICulture),
                     BookingParticipants = bookingParticipants
                 };
 
@@ -228,7 +229,7 @@ namespace AussieTowns.Controllers
 
                 var listingsView = await _listingService.GetListingsBySuburb(139);
 
-                var listingSummary = listingsView.Select(x => _mapper.Map<ListingView, ListingSummary>(x));
+                var listingSummary = listingsView.Where(x => x.Id == 19).Select(x => _mapper.Map<ListingView, ListingSummary>(x));
 
                 return listingSummary;
             }

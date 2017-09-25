@@ -46,7 +46,15 @@ import RegistrationForm from '../component/form/registration.component.vue';
 import ChangePasswordComponent from '../component/profile/changepassword.component.vue';
 import ForgetPasswordForm from '../component/form/forgetpassword.component.vue';
 import { UserRole } from '../model/enum';
+import Meta from 'vue-meta';
 Vue.use(Router);
+Vue.use(Meta);
+Vue.use(Meta, {
+    keyName: 'metaInfo',
+    attribute: 'data-vue-meta',
+    ssrAttribute: 'data-vue-meta-server-rendered',
+    tagIDKeyName: 'vmid' // the property name that vue-meta uses to determine whether to overwrite or append a tag
+});
 var router = new Router({
     mode: 'history',
     routes: [

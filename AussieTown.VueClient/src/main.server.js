@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import { app, router, store } from './root';
+var meta = app.$meta(); // here
 export default function (context) {
     if (context.cookies.mtl) {
         var mtl = JSON.parse(context.cookies.mtl);
@@ -10,6 +11,7 @@ export default function (context) {
     return new Promise(function (resolve, reject) {
         // set server-side router's location
         router.push(context.url);
+        context.meta = meta; // and here
         // wait until router has resolved possible async components and hooks
         router.onReady(function () {
             var matchedComponents = router.getMatchedComponents();

@@ -4,9 +4,10 @@
     <div class="date-picker" :class="{'is-inline': inline}">
         <div class="input-wrapper" v-show="showTextbox" @mouseenter="showCancel = true" @mouseleave="showCancel = false">
             <div class="input-date" @click="togglePanel" v-text="range ? display[0] + ' -- ' + display[1] : display"></div>
-            <transition name="fade">
+            <!--<transition name="fade">
                 <img class="cancel-btn" v-show="showCancel" @click="clear">
-            </transition>
+            </transition>-->
+            <i class="glyphicon glyphicon-calendar"></i>
         </div>
         <transition name="toggle">
             <div class="date-panel" v-show="panelState" :style="coordinates">

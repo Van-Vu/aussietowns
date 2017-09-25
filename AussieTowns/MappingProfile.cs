@@ -18,7 +18,7 @@ namespace AussieTowns
             CreateMap<User, MiniProfile>()
                 .ForMember(dest => dest.Fullname, opts => opts.MapFrom(src => $"{src.FirstName} {src.LastName}"))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => "/static/images/logo.png"))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => "/static/images/anonymous.png"))
                 .ForMember(dest => dest.ShortDescription, opts => opts.MapFrom(src => src.Description.PadLeft(30)));
 
             CreateMap<User, UserLoggedIn>()
@@ -31,7 +31,7 @@ namespace AussieTowns
             CreateMap<User, AutoCompleteItem>()
                 .ForMember(dest => dest.Name,
                     opts => opts.MapFrom(src => $"{src.FirstName} {src.LastName}"))
-                .ForMember(dest => dest.ImageUrl, opts => opts.MapFrom(src => "/static/images/logo.png"));
+                .ForMember(dest => dest.ImageUrl, opts => opts.MapFrom(src => "/static/images/anonymous.png"));
 
             CreateMap<Listing, ListingSummary>()
                 .ForMember(dest => dest.Location,
@@ -48,6 +48,10 @@ namespace AussieTowns
                     opts => opts.MapFrom(src => src.OwnerName))
                 .ForMember(dest => dest.MinParticipant,
                     opts => opts.MapFrom(src => src.MinParticipant))
+                .ForMember(dest => dest.Description,
+                    opts => opts.MapFrom(src => src.Description.Substring(0, Math.Min(src.Description.Length, 160))))
+                .ForMember(dest => dest.Header,
+                    opts => opts.MapFrom(src => src.Header.Substring(0, Math.Min(src.Header.Length, 55))))
                 .ForMember(dest => dest.Schedules,
                     opts => opts.MapFrom(src => JsonConvert.DeserializeObject<IEnumerable<Schedule>>(src.Schedules)));
 
@@ -100,7 +104,7 @@ namespace AussieTowns
                         Id = 0,
                         Email = tourGuest.Email,
                         Fullname = $"{tourGuest.FirstName} {tourGuest.LastName}",
-                        PhotoUrl = "/static/images/logo.png",
+                        PhotoUrl = "/static/images/anonymous.png",
                         ProfileUrl = "",
                         ShortDescription = "Unregistered User"
                     });

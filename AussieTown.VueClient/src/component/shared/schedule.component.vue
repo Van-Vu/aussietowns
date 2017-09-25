@@ -19,9 +19,9 @@
             </div>
         </div>
         <div class="columns">
-            <div class="column is-3">
+            <div class="column is-2">
                 <input type="checkbox" id="checkbox" v-model="isRepeated">
-                <span for="checkbox">Repeated</span>
+                <span for="checkbox">Repeat</span>
             </div>
            <ul class="column" v-show="isRepeated">
                 <li class="li-horizontal" v-for="period of repeatPeriods">
