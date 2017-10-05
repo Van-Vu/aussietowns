@@ -51,7 +51,7 @@ namespace AussieTowns
                 .ForMember(dest => dest.Description,
                     opts => opts.MapFrom(src => src.Description.Substring(0, Math.Min(src.Description.Length, 160))))
                 .ForMember(dest => dest.Header,
-                    opts => opts.MapFrom(src => src.Header.Substring(0, Math.Min(src.Header.Length, 55))))
+                    opts => opts.MapFrom(src => src.Header.Substring(0, Math.Min(src.Header.Length, 55)) + " ..."))
                 .ForMember(dest => dest.Schedules,
                     opts => opts.MapFrom(src => JsonConvert.DeserializeObject<IEnumerable<Schedule>>(src.Schedules)));
 

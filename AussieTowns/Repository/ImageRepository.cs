@@ -40,5 +40,17 @@ namespace AussieTowns.Repository
                 return ret;
             }
         }
+
+        public async Task<int> InsertHeroImage(int profileId, string url)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "UPDATE User SET heroImageUrl = @heroImageUrl, updatedDate = NOW()"
+                        + "WHERE id = @userId";
+                dbConnection.Open();
+                var ret = await dbConnection.ExecuteAsync(sql, new { userId = profileId, heroImageUrl = url});
+                return ret;
+            }
+        }
     }
 }

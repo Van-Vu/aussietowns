@@ -5,20 +5,16 @@ var Auth = /** @class */ (function () {
     function Auth() {
         this.role = 0;
         this.userId = 0;
-        //store.subscribe((mutation, state) => {
-        //    //if (filter(mutation)) {
-        //    //    setState(key, reducer(state, paths), storage);
-        //    //}
-        //})
     }
     Auth.prototype.initialize = function (router, permissions) {
         this.router = router;
         this.permissions = Array.isArray(permissions) ? permissions : [permissions];
     };
-    Auth.prototype.check = function (permission, userId, action) {
+    Auth.prototype.check = function (permission, userId, action, isPublic) {
         if (permission === void 0) { permission = UserRole.Anonymous; }
         if (userId === void 0) { userId = -1; }
         if (action === void 0) { action = UserAction.View; }
+        if (isPublic === void 0) { isPublic = true; }
         if (typeof permission != 'undefined') {
             //const permissions = (permission.indexOf('|') !== -1) ? permission.split('|') : [permission];
             //return permissions.find((permission) => {
@@ -32,7 +28,7 @@ var Auth = /** @class */ (function () {
             //}) !== undefined;
             console.log('from here');
             var loggedInUser = store.state.loggedInUser;
-            if (loggedInUser.id && loggedInUser.role) {
+            if (loggedInUser && loggedInUser.id && loggedInUser.role) {
                 // Author
                 if (userId == loggedInUser.id) {
                     return true;
@@ -41,7 +37,7 @@ var Auth = /** @class */ (function () {
                     return false;
             }
             else {
-                return action === UserAction.View;
+                return isPublic && action === UserAction.View;
             }
             return true;
         }
@@ -55,8 +51,8 @@ var Auth = /** @class */ (function () {
                 if (typeof to.meta.permission == 'undefined')
                     next();
                 else {
-                    if (!_this.check(to.meta.permission, to.params.profileId)) {
-                        if (_this.userId == UserRole.Anonymous) {
+                    if (!_this.check(to.meta.permission, to.params.profileId, UserAction.View, to.meta.isPublic)) {
+                        if (_this.role !== UserRole.Anonymous) {
                             //trigger Login
                             //store.dispatch('SHOW_LOGIN_MODAL')
                             store.dispatch('ADD_NOTIFICATION', { title: "Login Required", text: "Please Login or Register to explore more. It's Free !", type: NotificationType.Warning });
@@ -99,28 +95,5 @@ export default {
                 return acl.permissions;
         };
         Vue.prototype.$auth = acl;
-        // Bodom hack: use this in store UPDATE_CURRENT_USER
-        // Vue.$auth = acl;
     }
 };
-//export default Acl;
-////let acl = new Acl()
-////Acl.install = function (Vue, { router, init }) {
-////    acl.init(router, init)
-////    Vue.prototype.$can = function (permission) {
-////        return acl.check(permission)
-////    }
-////    Vue.prototype.$access = function (newAccess = null) {
-////        if (newAccess != null) {
-////            if (Array.isArray(newAccess))
-////                acl.permissions = newAccess
-////            else if (newAccess.indexOf('&') !== -1)
-////                acl.permissions = newAccess.split('&')
-////            else
-////                acl.permissions = [newAccess]
-////        }
-////        else
-////            return acl.permissions
-////    }
-////}
-////export default Acl 

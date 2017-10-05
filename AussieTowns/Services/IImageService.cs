@@ -9,5 +9,6 @@ namespace AussieTowns.Services
     {
         Task<int> InsertListingImage(int listingId, string url);
         Task<int> InsertProfileImage(int profileId, string url);
+        Task<int> InsertHeroImage(int profileId, string url);
     }
 }

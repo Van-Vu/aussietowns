@@ -8,7 +8,7 @@ export default class ScheduleModel {
     duration: Object;
     endDate: string;
     repeatedType: RepeatedType;
-    repeatedDay: RepeatedDay[] = new Array<RepeatedDay>();
+    repeatedDay: Array<number>;
 
     constructor(startDate, startTime, duration, endDate, repeatedType, repeatedDay) {
         this.startDate = startDate;
@@ -20,7 +20,7 @@ export default class ScheduleModel {
     }
 
     get repeatedText(): string {
-        let ret = Utils.formatDate(new Date(this.startDate));
+        let ret = '';
         
         switch (this.repeatedType) {
             case RepeatedType.Daily:
@@ -39,14 +39,27 @@ export default class ScheduleModel {
                 }
                 break;
             case RepeatedType.Monthly:
-                ret = `Monthly ${new Date(this.startDate).getDay()}`;
+                ret = `Monthly on ${new Date(this.startDate).getDay()}`;
                 break;
+            default:
+                ret = '';
         }
 
         return ret;
     }
 
     get durationText(): string {
-        return `${this.duration} hrs`;
+        return this.duration ? `${this.duration} hrs` : '';
+    }
+
+    get dateRange() {
+        return [this.startDate, this.endDate];
+    }
+
+    set dateRange(value: Array<string>) {
+        if (Array.isArray(value)) {
+            this.startDate = value[0];
+            this.endDate = value[1];
+        }
     }
 }

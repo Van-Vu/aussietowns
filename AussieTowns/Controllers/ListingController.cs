@@ -5,12 +5,14 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AussieTowns.Auth;
 using AussieTowns.Common;
 using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
 using AussieTowns.ViewModel;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -30,16 +32,22 @@ namespace AussieTowns.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmailService _emailService;
         private readonly AppSettings _appSettings;
+        private readonly IImageService _imageService;
+
+        readonly IAuthorizationService _authorizationService;
 
         public ListingController(IListingService listingService, IMapper mapper, IOptions<AppSettings> appSettings,
-            ILogger<ListingController> logger, IHttpContextAccessor httpContextAccessor, IEmailService emailService)
+            ILogger<ListingController> logger, IHttpContextAccessor httpContextAccessor, IEmailService emailService, IAuthorizationService authorizationService, IImageService imageService)
         {
             _listingService = listingService;
             _mapper = mapper;
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _emailService = emailService;
+            _authorizationService = authorizationService;
+            _imageService = imageService;
             _appSettings = appSettings.Value;
+
         }
 
         [HttpGet("{id}")]
@@ -79,6 +87,9 @@ namespace AussieTowns.Controllers
             {
                 if (listing == null) throw new ArgumentNullException(nameof(listing));
 
+                if (!await _authorizationService.AuthorizeAsync(User, listing, Operations.Create))
+                    throw new UnauthorizedAccessException();
+
                 var newId = await _listingService.InsertListing(listing);
                 return newId;
             }
@@ -97,6 +108,8 @@ namespace AussieTowns.Controllers
                 //if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
                 if (listing == null) throw new ArgumentNullException(nameof(listing));
 
+                if (!await _authorizationService.AuthorizeAsync(User, listing, Operations.Update))
+                    throw new UnauthorizedAccessException();
 
                 listing.Description = StringHelper.StripHtml(listing.Description);
                 listing.Header = StringHelper.StripHtml(listing.Header);
@@ -160,7 +173,54 @@ namespace AussieTowns.Controllers
             {
                 if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
 
+                if (!await _authorizationService.AuthorizeAsync(User, new Listing {Id = id}, Operations.Delete))
+                    throw new UnauthorizedAccessException();
+
                 return await _listingService.DeActivateListing(id);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                throw;
+            }
+        }
+
+        [HttpPost("{listingId}/addImage")]
+        public async Task<IEnumerable<Image>> AddImage(int listingId, ICollection<IFormFile> files)
+        {
+            try
+            {
+                //if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
+                var listing = await _listingService.GetListingDetail(listingId);
+
+                if (listing == null)
+                {
+                    _logger.LogInformation("Can't find listing with id: {id}", listingId);
+                    throw new ArgumentOutOfRangeException(nameof(listingId), "Can't find listing");
+                }
+
+                if (!await _authorizationService.AuthorizeAsync(User, listing, Operations.Update))
+                    throw new UnauthorizedAccessException();
+
+                var imageUrls = new List<Image>();
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        // Bodom hack: deal with this later
+                        var result = await AwsS3Extensions.SaveToS3Async(
+                            AwsS3Extensions.GetS3Client(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
+                                _appSettings.AwsS3Region),
+                            file.OpenReadStream(), "meetthelocal-development", $"images/listings/{listingId}/{file.FileName}");
+
+                        var imageUrl = $"https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/listings/{listingId}/{file.FileName}";
+                        await _imageService.InsertListingImage(listingId, imageUrl);
+
+                        imageUrls.Add(new Image { Url = imageUrl });
+                    }
+                }
+
+                return imageUrls;
             }
             catch (Exception e)
             {
@@ -175,6 +235,9 @@ namespace AussieTowns.Controllers
             try
             {
                 //if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
+
+                if (!await _authorizationService.AuthorizeAsync(User, new Listing {Id=listingId}, Operations.Update))
+                    throw new UnauthorizedAccessException();
 
                 var image = await _listingService.FetchImageByUrl(listingId, url);
 
@@ -221,15 +284,14 @@ namespace AussieTowns.Controllers
         }
 
         [HttpGet("feature")]
+        //[Authorize(Policy = "ListingPolicy")]
         public async Task<IEnumerable<ListingSummary>> GetFeatureListings(string adfadfasdf)
         {
             try
             {
-                var test = _httpContextAccessor.HttpContext.Request;
-
                 var listingsView = await _listingService.GetListingsBySuburb(139);
 
-                var listingSummary = listingsView.Where(x => x.Id == 19).Select(x => _mapper.Map<ListingView, ListingSummary>(x));
+                var listingSummary = listingsView.Take(3).Select(x => _mapper.Map<ListingView, ListingSummary>(x));
 
                 return listingSummary;
             }

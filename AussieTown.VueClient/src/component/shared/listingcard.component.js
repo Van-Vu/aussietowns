@@ -48,9 +48,9 @@ var CardFullComponent = /** @class */ (function (_super) {
         var startDatetime = new Date(this.listingDetail.schedules[0].startDate);
         this.date = Utils.formatDate(startDatetime);
         this.time = Utils.getTime(startDatetime);
-        this.headerLink = Utils.seorizeString(this.header);
+        this.headerLink = this.header ? Utils.seorizeString(this.header) : '';
         this.duration = this.listingDetail.schedules[0].duration;
-        this.description = this.listingDetail.primaryOwner;
+        this.description = this.listingDetail.description;
     };
     __decorate([
         Prop,

@@ -7,6 +7,7 @@ import ListingService from '../service/listing.service';
 import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
 import Swiper from '../component/shared/external/vue-swiper.vue';
 import CardSmallComponent from '../component/shared/cardsmall.component.vue'
+import CardFullComponent from '../component/shared/listingcard.component.vue';
 import { AutocompleteItem } from '../model/autocomplete.model';
 import { Utils } from '../component/utils';
 import * as Cookies from 'js-cookie';
@@ -18,7 +19,8 @@ import { detectScreenSize } from '../service/screen.service';
     components: {
         "searchbar": SearchBarComponent,
         "swiper": Swiper,
-        "cardsmall": CardSmallComponent
+        "cardsmall": CardSmallComponent,
+        "listingcard": CardFullComponent
     },
     beforeRouteEnter(to, from, next) {
         // called before the route that renders this component is confirmed.
@@ -82,9 +84,9 @@ export default class HomePage extends Vue{
 
     mounted() {
         //Bodom hack: fetch data offline Swiper need to wait for rendering first
-        setTimeout(() => {
-            (this.$children.find(x => x.$el.id === 'homepage-swipe') as any).refresh();    
-        }, 1000);
+        //setTimeout(() => {
+        //    (this.$children.find(x => x.$el.id === 'homepage-swipe') as any).refresh();    
+        //}, 1000);
 
 
         var screenSize = detectScreenSize(this.$mq);

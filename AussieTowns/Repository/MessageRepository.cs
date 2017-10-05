@@ -1,15 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Model;
 using Dapper;
+using Microsoft.Extensions.Logging;
 
 namespace AussieTowns.Repository
 {
     public class MessageRepository: RepositoryBase, IMessageRepository
     {
-        public MessageRepository(string connString):base(connString) {}
+        private readonly ILogger<MessageRepository> _logger;
+
+        public MessageRepository(string connString, ILogger<MessageRepository> logger):base(connString)
+        {
+            _logger = logger;
+        }
 
         public async Task<IEnumerable<Conversation>> GetAllConversationsByUserId(int userId)
         {
@@ -66,10 +73,35 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "INSERT INTO conversation_reply(conversationId, messageContent, userId, time)"
-                    + " VALUES(@conversationId, @messageContent, @userId, NOW())";
                 dbConnection.Open();
-                return await dbConnection.ExecuteAsync(sql,message);
+                using (var tran = dbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        var now = DateTime.Now;
+
+                        var updateTasks = new List<Task<int>>();
+
+                        var messageSql = "INSERT INTO conversation_reply(conversationId, messageContent, userId, time)"
+                            + " VALUES(@conversationId, @messageContent, @userId, @time)";
+                        updateTasks.Add(dbConnection.ExecuteAsync(messageSql, new {conversationId = message.ConversationId, messageContent = message.MessageContent, userId = message.UserId, time = now}));
+
+                        var conversationSql = "UPDATE conversation SET lastMessageTime=@lastMessageTime WHERE id=@conversationId";
+                        updateTasks.Add(dbConnection.ExecuteAsync(conversationSql, new {lastMessageTime = now, conversationId = message.ConversationId}));
+
+                        await Task.WhenAll(updateTasks);
+
+                        tran.Commit();
+                        return 1;
+                    }
+                    catch (Exception e)
+                    {
+                        tran.Rollback();
+                        _logger.LogCritical(e.Message, e);
+                        throw;
+                    }
+                }
+
             }
         }
     }

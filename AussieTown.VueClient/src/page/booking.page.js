@@ -139,14 +139,12 @@ var BookingPage = /** @class */ (function (_super) {
     BookingPage.prototype.validateParticipantInfo = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            setTimeout(function () {
-                _this.$validator.validateAll().then(function (result) {
-                    if (result) {
-                        resolve(true);
-                    }
-                    reject('Please fill in required information');
-                });
-            }, 1000);
+            _this.$validator.validateAll().then(function (result) {
+                if (result) {
+                    resolve(true);
+                }
+                reject('Please fill in required information');
+            });
             //this.$validator.validateAll().then(() => {
             //    // Data is valid, so we can submit the form.
             //    //document.querySelector('#myForm').submit();
@@ -177,11 +175,9 @@ var BookingPage = /** @class */ (function (_super) {
     BookingPage.prototype.validateBookingTime = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            setTimeout(function () {
-                if ((_this.model.bookingDate) && (_this.model.bookingTime))
-                    resolve(true);
-                reject('Please choose your suitable date and time');
-            }, 1000);
+            if ((_this.model.bookingDate) && (_this.model.bookingTime))
+                resolve(true);
+            reject('Please choose your suitable date and time');
         });
     };
     BookingPage = __decorate([

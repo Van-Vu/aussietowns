@@ -32,8 +32,6 @@ var NavMenuComponent = /** @class */ (function (_super) {
         _this.hideNavToggle = false;
         _this.isMenuOpen = false;
         _this.isSticky = false;
-        //profilePhoto = '';
-        //isLoggedIn = false;
         _this.searchSuburb = null;
         _this.showMenuModal = false;
         return _this;
@@ -55,6 +53,20 @@ var NavMenuComponent = /** @class */ (function (_super) {
     Object.defineProperty(NavMenuComponent.prototype, "profilePhoto", {
         get: function () {
             return this.$store.getters.profilePhoto;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(NavMenuComponent.prototype, "profileLink", {
+        get: function () {
+            return this.$store.getters.profileLink;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(NavMenuComponent.prototype, "userId", {
+        get: function () {
+            return this.$store.getters.userId;
         },
         enumerable: true,
         configurable: true
@@ -105,6 +117,11 @@ var NavMenuComponent = /** @class */ (function (_super) {
     };
     NavMenuComponent.prototype.onShowLoginModal = function () {
         this.$store.dispatch('SHOW_LOGIN_MODAL');
+    };
+    NavMenuComponent.prototype.onLogout = function () {
+        this.$store.dispatch('SET_CURRENT_USER', null);
+        this.$cookie.set('mtltk', null);
+        //alert('hey Logout');
     };
     __decorate([
         Watch('$route.params'),

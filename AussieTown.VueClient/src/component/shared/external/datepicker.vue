@@ -7,7 +7,7 @@
             <!--<transition name="fade">
                 <img class="cancel-btn" v-show="showCancel" @click="clear">
             </transition>-->
-            <i class="glyphicon glyphicon-calendar"></i>
+            <i class="icon icon-calendar"></i>
         </div>
         <transition name="toggle">
             <div class="date-panel" v-show="panelState" :style="coordinates">
@@ -103,12 +103,12 @@ export default {
     },
     props: {
         language: {default: 'en'},
-    min: {default: '1970-01-01'},
-    max: {default: '3016-01-01'},
-    showTextbox: {default: true},
-    inline: { type: Boolean, default: false },    
-    value: { type: [String, Array], default: '' },
-    disabled: { type: Object, default: () => {return {to: new Date()};} },
+        min: {default: '1970-01-01'},
+        max: {default: '3016-01-01'},
+        showTextbox: {default: true},
+        inline: { type: Boolean, default: false },    
+        value: { type: [String, Array], default: '' },
+        disabled: { type: Object, default: () => {return {to: new Date()};} },
         range: { type: Boolean, default: false }
     },
     methods: {

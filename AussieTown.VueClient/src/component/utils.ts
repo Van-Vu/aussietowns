@@ -16,10 +16,10 @@ export class Utils {
         return day + ' ' + monthNames[monthIndex] + ' ' + year;
     }
 
-    //public static getDate(datetime: Date) {
-    //    var date = new Date(datetime);
-    //    return date.getFullYear() + '/' + this.ensureTwoDigit((date.getMonth()) + 1) + '/' + this.ensureTwoDigit(date.getDate());
-    //}
+    public static getDate(datetime: Date) {
+        var date = new Date(datetime);
+        return date.getFullYear() + '/' + this.ensureTwoDigit((date.getMonth()) + 1) + '/' + this.ensureTwoDigit(date.getDate());
+    }
 
     public static  getTime(datetime: any) {
         var date = new Date(datetime);
@@ -62,7 +62,7 @@ export class Utils {
 
     public static stripHtml(text) {
         var regex = /(<([^>]+)>)/ig
-            , result = text.replace(regex, "");
+            , result = text ? text.replace(regex, "") : '';
 
         return result;
     }

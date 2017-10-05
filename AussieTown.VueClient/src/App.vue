@@ -1,6 +1,7 @@
 <template>
     <div id="app" :class="{showModal: showModal}">
         <notifications></notifications>
+        <vue-progress-bar></vue-progress-bar>
         <loading></loading>
         <header class="hero-head" :class="{'is-home': currentPage == 'home'}">
             <nav-menu></nav-menu>

@@ -17,14 +17,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import CardFullComponent from '../component/shared/listingcard.component.vue';
-if (process.env.VUE_ENV === 'client') {
-    var googleMaps = require('vue2-google-maps');
-    Vue.use(googleMaps, {
-        load: {
-            key: 'AIzaSyCaS0ArS9mkdiAFxHKIgpMwUMp1_XSdzTM'
-        }
-    });
-}
+//if (process.env.VUE_ENV === 'client') {
+//    const googleMaps = require('vue2-google-maps')
+//    Vue.use(googleMaps, {
+//        load: {
+//            key: 'AIzaSyCaS0ArS9mkdiAFxHKIgpMwUMp1_XSdzTM'
+//        }
+//    })
+//}
 var SearchPage = /** @class */ (function (_super) {
     __extends(SearchPage, _super);
     function SearchPage() {

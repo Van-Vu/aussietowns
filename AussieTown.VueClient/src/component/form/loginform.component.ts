@@ -1,5 +1,5 @@
 ﻿import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import UserService from '../../service/user.service';
 
 import VeeValidate from 'vee-validate';
@@ -40,13 +40,19 @@ export default class LoginForm extends Vue {
         return_scopes: true
     };
 
+    @Watch('isLogin')
+    onisLoginChanged(value: boolean, oldValue: boolean) {
+        (this.$validator as any).reset();
+    }
+
     validateBeforeSubmit(e) {
-        this.$validator.validateAll().then(() => {
-            // eslint-disable-next-line
-            if (this.isLogin) {
-                this.login(this.model);
-            } else {
-                this.signup(this.model);
+        this.$validator.validateAll().then((result) => {
+            if (result) {
+                if (this.isLogin) {
+                    this.login(this.model);
+                } else {
+                    this.signup(this.model);
+                }                
             }
         }).catch(() => {
             // eslint-disable-next-line
@@ -62,8 +68,7 @@ export default class LoginForm extends Vue {
         (new UserService()).login(model)
             .then(responseToken => {
                 this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-                //this.$auth.setUser(responseToken.loggedInUser);
-                this.setCookies(responseToken.accessToken);
+                this.setCookies(responseToken.accessToken, model.rememberme);
                 this.$emit('onSuccessfulLogin');
             })
             .catch(error => {
@@ -76,17 +81,20 @@ export default class LoginForm extends Vue {
             model.password = encryptText(model.password);    
         }
         model.role = UserRole.User;
+        model.images = [{ "url": model.photoUrl }];
 
         (new UserService()).signup(model)
         .then(responseToken => {
             this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-            this.setCookies(responseToken.accessToken);
+            this.setCookies(responseToken.accessToken, model.rememberme);
             this.$emit('onSuccessfulLogin');
         });
     }
 
-    setCookies(accessToken) {
-        this.$cookie.set('mtltk', accessToken);
+    setCookies(accessToken, rememberMe) {
+        if (rememberMe) {
+            this.$cookie.set('mtltk', accessToken);    
+        }
     }
 
     submitForm() {

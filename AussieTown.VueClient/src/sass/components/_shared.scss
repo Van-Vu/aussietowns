@@ -34,6 +34,10 @@
 
 .is-circle {
     border-radius: 50%;
+
+    &:hover {
+        box-shadow: 0 0 10px grey;
+    }
 }
 
 .page-content {

@@ -26,11 +26,6 @@ var LoginModal = /** @class */ (function (_super) {
     function LoginModal() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    LoginModal.prototype.created = function () {
-    };
-    LoginModal.prototype.close = function () {
-        this.$emit('onClose');
-    };
     LoginModal.prototype.onClose = function () {
         this.$emit('onClose');
     };

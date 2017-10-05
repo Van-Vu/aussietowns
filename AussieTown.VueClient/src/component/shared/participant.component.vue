@@ -5,7 +5,7 @@
         </li>
         <li v-if="isEditing && allowAdd" class="tile box">
             <a @click.prevent="toggleProfileSearch($event)" class="button mtl_grey_button">
-            <i class="glyphicon glyphicon-plus-sign"/><span>{{buttonText}}</span></a>
+            <i class="icon icon-plus-circle"/><span>{{buttonText}}</span></a>
             <usersearch v-show="isAdding" @onSelected="onUserSelect($event)"></usersearch>
         </li>
     </ul>

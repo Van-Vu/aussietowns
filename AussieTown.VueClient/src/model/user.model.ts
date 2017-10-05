@@ -20,6 +20,7 @@ export default class UserModel {
     public emergencyContact: string;
     public images: ImageModel[];
     public video: string;
+    public heroImageUrl: string;
     public role: UserRole;
     public operatorListings: ListingModel[];
     public guestListings: ListingModel[];

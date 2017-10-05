@@ -69,14 +69,27 @@ Vue.use(VueFormWizard);
 import VueTheMask from 'vue-the-mask';
 Vue.use(VueTheMask);
 import { Validator } from 'vee-validate';
+import VueProgressBar from 'vue-progressbar';
+var options = {
+    color: '#bffaf3',
+    failedColor: '#874b4b',
+    thickness: '50px',
+    transition: {
+        speed: '2s',
+        opacity: '0.6s',
+        termination: 300
+    },
+    autoRevert: true,
+    location: 'left',
+    inverse: false
+};
+Vue.use(VueProgressBar, options);
 var App = /** @class */ (function (_super) {
     __extends(App, _super);
     function App() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(App.prototype, "currentPage", {
-        //currentView: string = 'loginmodal';
-        //dynamicProps: string = '';
         get: function () {
             return this.$store.state.currentPage;
         },
@@ -104,6 +117,7 @@ var App = /** @class */ (function (_super) {
         configurable: true
     });
     App.prototype.created = function () {
+        var _this = this;
         var dictionary = {
             en: {
                 custom: {
@@ -129,6 +143,27 @@ var App = /** @class */ (function (_super) {
             }
         };
         Validator.updateDictionary(dictionary);
+        //  [App.vue specific] When App.vue is first loaded start the progress bar
+        this.$Progress.start();
+        //  hook the progress bar to start before we move router-view
+        this.$router.beforeEach(function (to, from, next) {
+            //  does the page we want to go to have a meta.progress object
+            if (to.meta.progress !== undefined) {
+                var meta = to.meta.progress;
+                // parse meta tags
+                _this.$Progress.parseMeta(meta);
+            }
+            //  start the progress bar
+            _this.$Progress.start();
+            window.scrollTo(0, 0);
+            //  continue to next page
+            next();
+        });
+        //  hook the progress bar to finish after we've finished moving router-view
+        this.$router.afterEach(function (to, from) {
+            //  finish the progress bar
+            _this.$Progress.finish();
+        });
     };
     App.prototype.mounted = function () {
         // Bodom hack: hacky way to hide loading screen on server load

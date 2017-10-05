@@ -1,8 +1,8 @@
 ﻿<template>
     <div class="tile number-chooser">
-        <div class="minus" @click="decrease"></div>
+        <div @click="decrease"><i class="icon icon-minus-circle plus"></i></div>
         <div class="number">{{display}}</div>
-        <div class="plus" @click="increase"></div>
+        <div @click="increase"><i class="icon icon-plus-circle minus"></i></div>
     </div>
 </template>
 
@@ -27,8 +27,10 @@ export default {
             this.$emit('input',this.display);
         },
         decrease () {
-            this.display -= 1;
-            this.$emit('input',this.display);
+            if (this.display > 0){
+                this.display -= 1;
+                this.$emit('input',this.display);
+            }
         }
     },
     mounted () {
@@ -51,29 +53,13 @@ export default {
     }
 }
 .plus, .minus {
-  width: 31px;
-  height: 31px;
-  border-radius: 50%;
-  border: 1px solid #B4B4B4;
+    font-size: 27px;
+    margin-top: 8px;
+
+    &:hover {
+        cursor: pointer;
+        color: #E74C3C;
+    }
 }
-.plus:before, .minus:before {
-  content: '';  
-  width: 25px;
-  height: 1px;
-  border-top: 1px solid #B4B4B4;
-  display: block;
-  position: absolute;
-  margin-top: 15px;
-  margin-left: 3px;
-}
-.plus:after {
-  content: '';  
-  width: 1px;
-  height: 25px;
-  border-right: 1px solid #B4B4B4;
-  display: block;
-  position: absolute;
-  margin-top: 3px;
-  margin-left: 14px;
-}
+
 </style>

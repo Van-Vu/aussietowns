@@ -1,7 +1,7 @@
 ﻿<template>
     <div>
         <div class="image-upload">
-            <swiper v-if="images" ref="swiper"
+            <swiper ref="swiper"
                     direction="horizontal"
                     :mousewheel-control="true"
                     :performance-mode="false"
@@ -9,12 +9,16 @@
                     :pagination-clickable="false"
                     @slide-change-end="onSlideChangeEnd"
                     :loop="false">
-                <div v-for="image in images">
+                <div v-if="images.length > 0" v-for="image in images">
                     <img v-lazy="image.url" />
                 </div>
+                <div v-if="images.length == 0">
+                    <img src="/static/images/no-image.jpg" />
+                </div>
             </swiper>
+            
             <div class="removeImage" @click="onRemoveImage" v-if="isEditing && images.length > 0">
-                <i class="glyphicon glyphicon-minus-sign" tooltip="Remove image"></i>
+                <i class="icon icon-minus-circle" tooltip="Remove image"></i>
             </div>
         </div>
         <div>

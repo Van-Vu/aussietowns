@@ -100,6 +100,7 @@ const router = new Router({
                     component: UserDetailComponent,
                     meta: {
                         permission: UserRole.User,
+                        isPublic: true,
                         fail: '/home'
                     }
                 },
@@ -111,6 +112,7 @@ const router = new Router({
                     component: UserImageComponent,
                     meta: {
                         permission: UserRole.Editor,
+                        isPublic: false,
                         fail: '/home'
                     }
                 },
@@ -123,6 +125,7 @@ const router = new Router({
                     component: MessageComponent,
                     meta: {
                         permission: UserRole.SuperAdmin,
+                        isPublic: false,
                         fail: '/home'
                     }
                 },
@@ -132,6 +135,7 @@ const router = new Router({
                     component: TripComponent,
                     meta: {
                         permission: UserRole.Admin,
+                        isPublic: false,
                         fail: '/home'
                     }
                 },
@@ -141,6 +145,7 @@ const router = new Router({
                     component: ChangePasswordComponent,
                     meta: {
                         permission: UserRole.SuperAdmin,
+                        isPublic: false,
                         fail: '/home'
                     }
                 },
@@ -150,6 +155,7 @@ const router = new Router({
                     component: ListingsComponent,
                     meta: {
                         permission: UserRole.SuperAdmin,
+                        isPublic: false,
                         fail: '/home'
                     }
                 }
@@ -251,6 +257,10 @@ const router = new Router({
                 permission: UserRole.Anonymous,
                 fail: '/home'
             }
+        },
+        {
+            path: "*",
+            redirect: { name: 'home' }
         }
   ]
 })

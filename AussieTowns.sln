@@ -9,6 +9,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AussieTown.VueClient", "Aus
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AussieTown.WebApi", "AussieTown.WebApi\AussieTown.WebApi.xproj", "{E34576B0-2B20-4DFD-BB26-D9F6B8CC360D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AussieTowns.Test", "AussieTowns.Test\AussieTowns.Test.csproj", "{DB039429-8022-4691-B765-3C607D4CEBC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E34576B0-2B20-4DFD-BB26-D9F6B8CC360D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E34576B0-2B20-4DFD-BB26-D9F6B8CC360D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E34576B0-2B20-4DFD-BB26-D9F6B8CC360D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB039429-8022-4691-B765-3C607D4CEBC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB039429-8022-4691-B765-3C607D4CEBC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB039429-8022-4691-B765-3C607D4CEBC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB039429-8022-4691-B765-3C607D4CEBC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

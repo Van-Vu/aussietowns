@@ -27,13 +27,6 @@
         .swiper-slide {
             > div {
                 width: 100%;
-                @media all and (min-width: $is-desktop) {
-                    width: 290px;
-                }
-
-                @media all and (min-width: $is-tablet) {
-                    width: 290px;
-                }
             }
         }
     }

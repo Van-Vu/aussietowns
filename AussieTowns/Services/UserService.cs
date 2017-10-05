@@ -56,9 +56,9 @@ namespace AussieTowns.Services
             return await _userRepository.Insert(user);  
         }
 
-        public async Task<int> Update(Profile profile)
+        public async Task<int> Update(User user)
         {
-            return await _userRepository.Update(profile);
+            return await _userRepository.Update(user);
         }
 
         public async Task<int> Deactivate(int id)

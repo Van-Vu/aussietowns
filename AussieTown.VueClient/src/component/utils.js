@@ -14,10 +14,10 @@ var Utils = /** @class */ (function () {
         var year = date.getFullYear();
         return day + ' ' + monthNames[monthIndex] + ' ' + year;
     };
-    //public static getDate(datetime: Date) {
-    //    var date = new Date(datetime);
-    //    return date.getFullYear() + '/' + this.ensureTwoDigit((date.getMonth()) + 1) + '/' + this.ensureTwoDigit(date.getDate());
-    //}
+    Utils.getDate = function (datetime) {
+        var date = new Date(datetime);
+        return date.getFullYear() + '/' + this.ensureTwoDigit((date.getMonth()) + 1) + '/' + this.ensureTwoDigit(date.getDate());
+    };
     Utils.getTime = function (datetime) {
         var date = new Date(datetime);
         return this.ensureTwoDigit(date.getHours()) + ':' + this.ensureTwoDigit(date.getMinutes());
@@ -51,7 +51,7 @@ var Utils = /** @class */ (function () {
         }
     };
     Utils.stripHtml = function (text) {
-        var regex = /(<([^>]+)>)/ig, result = text.replace(regex, "");
+        var regex = /(<([^>]+)>)/ig, result = text ? text.replace(regex, "") : '';
         return result;
     };
     Utils.isElementInViewport = function (el) {

@@ -47,6 +47,11 @@
                 top: 10px;
             }
         }
+
+        &_heroimage {
+            background-image: linear-gradient(-135deg,#70e1f5,#ffd194);
+            height: 320px;
+        }
     }
 
     .trip-content {

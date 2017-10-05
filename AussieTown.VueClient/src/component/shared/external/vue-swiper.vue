@@ -1,8 +1,8 @@
 <template>
     <div class="swipe-wrapper">
-        <div class="slide-button-prev is-hidden-mobile" v-show="currentPage > 1" @click.prevent="prev">
-            <i class="glyphicon glyphicon-chevron-left"></i>
-        </div>
+        <!--<div class="slide-button-prev is-hidden-mobile" v-show="currentPage > 1" @click.prevent="prev">
+            <i class="icon icon-left-open-big"></i>
+        </div>-->
         <div class="swiper"
              :class="[direction, {'dragging': dragging}]"
              @touchstart="_onTouchStart"
@@ -26,9 +26,9 @@
                       @click="paginationClickable && setPage(index+1)"></span>
             </div>
         </div>
-        <div class="slide-button-next is-hidden-mobile" v-show="isNextAvailable()" @click.prevent="next">
-            <i class="glyphicon glyphicon-chevron-right"></i>
-        </div>
+        <!--<div class="slide-button-next is-hidden-mobile" v-show="isNextAvailable()" @click.prevent="next">
+            <i class="icon icon-right-open-big"></i>
+        </div>-->
     </div>
 </template>
 <script>

@@ -23,6 +23,7 @@ namespace AussieTowns.Model
         public string Address { get; set; }
         public string EmergencyContact { get; set; }
         public string VideoUrl { get; set; }
+        public string HeroImageUrl { get; set; }
 
         public ICollection<ListingView> OperatorListings { get; set; }
         public ICollection<ListingView> GuestListings { get; set; }

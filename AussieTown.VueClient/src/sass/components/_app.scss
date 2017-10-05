@@ -39,37 +39,37 @@ ul {
 }
 
 .g-signin-button, .fb-signin-button {
-    position: relative;
-    border-radius: 5px;
-    font-weight: 600;
-    justify-content: center;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    border-radius: 2px;
+    padding: 16px 0;
     text-align: center;
-
-    &:before {
-        content: "";
-        left: 0;
-        width: 34px;
-        height: 100%;
-        @include absolutecenter("y");
-    }
-
-    &:active {
-      box-shadow: inset 0 0 0 32px rgba(0,0,0,0.1);
-    }
+    width: 47%;
+    font-weight: 600;
+    margin-bottom: 20px;
 
     &:hover, &:focus {
         cursor: pointer;
+        box-shadow: 0 0 1px 0 rgba(0,0,0,0.12), 0 0 8px 0 rgba(0,0,0,0.12);
+    }
+
+    @media all and (min-width: $is-tablet) {
+        margin-bottom: 0;
     }
 }
 
-/*.fb-signin-button {
-    &:before {
-      background: url('/static/images/facebook_logo.jpg') no-repeat;
-    }
+.fb-signin-button {
+    color: white;
+    background-color: #3D5A98;
+    background-image: url(/static/images/facebook_logo.png);
+    background-position: 10% 41%;
+    float: left;
 }
 
 .g-signin-button {
-    &:before {
-        background: url('/static/images/google_logo.png') 6px 7px no-repeat;
-    }
-}*/
+    color: rgb(117, 117, 117);
+    background-image: url(/static/images/google_logo.png);
+    background-position: 13% 50%;
+    
+    float: right;
+}

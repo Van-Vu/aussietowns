@@ -11,8 +11,9 @@ export default class ConversationModel {
     public messageContent: string;
 
     constructor() {
-        if (this.lastMessageTime) {
-            //this.lastMessageFormat = Utils.getDateTime(this.lastMessageTime);
-        }
+    }
+
+    get lastMessageFormat(): string {
+        return this.lastMessageTime ? Utils.getDateTime(this.lastMessageTime) : '';
     }
 }

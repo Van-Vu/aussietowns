@@ -14,18 +14,11 @@
         </section>
 
         <section class="page-content" :class="{'is-home': currentPage == 'home'}">
-            <swiper id="homepage-swipe" ref="swiper"
-                    :direction="swiperDirection"
-                    :mousewheel-control="true"
-                    :performance-mode="false"
-                    :pagination-visible="false"
-                    :pagination-clickable="true"
-                    :loop="false">
-                <div v-for="listing in featuredListings">
-                    <cardsmall :listingDetail="listing"></cardsmall>
-                </div>
-            </swiper>
-
+            <ul>
+                <li class="li-horizontal" v-for="listing in featuredListings">
+                    <listingcard :listingDetail="listing"></listingcard>
+                </li>
+            </ul>
 
             <h1>Hello, world!</h1>
             <p>Welcome to your new single-page application, built with:</p>

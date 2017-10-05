@@ -1,4 +1,10 @@
-﻿.listing-main-content {
+﻿.listing-headertext {
+    font-weight: 600;
+    color: rgb(83, 83, 83);
+    font-size: 22px;
+}
+
+.listing-main-content {
     hr {
         width: 83.33333%;
         margin-left: 16.66667%;
@@ -13,11 +19,9 @@
         font-weight:500;
     }
 
-    .icon {
-        .glyphicon {
-            right: 10px;
-            top: 10px;
-        }
+    .control .icon {
+        right: 10px !important;
+        top: 10px;
     }
 }
 
@@ -31,18 +35,6 @@
         font-weight: bold;
         text-align: center;
     }
-}
-
-.card-full {
-    width: 100%;
-    background-color: $c-neutral-white;
-    @media all and (min-width: $is-tablet) {
-        width: 387px;
-    }
-
-    /*@media all and (max-width: $is-tablet) {
-        width: 320px;
-    }*/
 }
 
 .listing-swiper {

@@ -2,14 +2,14 @@
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import CardFullComponent from '../component/shared/listingcard.component.vue';
 
-if (process.env.VUE_ENV === 'client') {
-    const googleMaps = require('vue2-google-maps')
-    Vue.use(googleMaps, {
-        load: {
-            key: 'AIzaSyCaS0ArS9mkdiAFxHKIgpMwUMp1_XSdzTM'
-        }
-    })
-}
+//if (process.env.VUE_ENV === 'client') {
+//    const googleMaps = require('vue2-google-maps')
+//    Vue.use(googleMaps, {
+//        load: {
+//            key: 'AIzaSyCaS0ArS9mkdiAFxHKIgpMwUMp1_XSdzTM'
+//        }
+//    })
+//}
 
 @Component({
     name: "SearchPage",

@@ -155,7 +155,7 @@ namespace AussieTowns.Repository
                             }
                             var scheduleSql =
                                 "INSERT INTO Schedule(startdate, duration, enddate, repeatedtype, repeatedDay, listingid) "
-                                + " VALUES(@startDate, @duration, @endDate, @repeatedType, @repeatedDay, @listingId)";
+                                + " VALUES(@startDate, @duration, @endDate, @repeatedType, @RepeatedDayText, @listingId)";
                             insertTasks.Add(dbConnection.ExecuteAsync(scheduleSql, listing.Schedules));
                         }
 
@@ -165,8 +165,8 @@ namespace AussieTowns.Repository
                             {
                                 tourOperator.ListingId = listingId;
                             }
-                            var operatorSql = "INSERT INTO TourOperator(userid, listingid, isowner) "
-                                + " VALUES(@userId, @listingId, @isOwner)";
+                            var operatorSql = "INSERT INTO TourOperator(userid, listingid, isPrimary) "
+                                + " VALUES(@userId, @listingId, @isPrimary)";
                             insertTasks.Add(dbConnection.ExecuteAsync(operatorSql, listing.TourOperators));
                         }
 
@@ -176,8 +176,8 @@ namespace AussieTowns.Repository
                             {
                                 tourGuest.ListingId = listingId;
                             }
-                            var guestSql = "INSERT INTO TourGuest(userid, listingid, isowner) "
-                                + "VALUES(@userId, @listingId, @isOwner)";
+                            var guestSql = "INSERT INTO TourGuest(userid, listingid, isPrimary) "
+                                + "VALUES(@userId, @listingId, @isPrimary)";
 
                             insertTasks.Add(dbConnection.ExecuteAsync(guestSql, listing.TourGuests));
                         }

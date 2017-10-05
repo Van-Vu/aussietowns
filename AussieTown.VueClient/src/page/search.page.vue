@@ -20,7 +20,8 @@
                 </ul>
             </div>
         </section>
-        <section class="map">
+        <!--Bodom hack: get rid of GMap-->
+        <!--<section class="map">
             <gmap-map id="gmap" :center="center"
                       :zoom="7">
                 <gmap-marker :key="index"
@@ -30,10 +31,9 @@
                              :draggable="true"
                              @click="center=m.position"></gmap-marker>
             </gmap-map>
-        </section>
-        <!--<article class="itinerary">
-            <itinerary></itinerary>
-        </article>-->
+        </section>-->
+
+
         <!--<listingrequestmodal :show="showListingRequest" @onClose="showListingRequest = !showListingRequest"></listingrequestmodal>
         <listingoffermodal :show="showListingOffer" @onClose="showListingOffer = !showListingOffer"></listingoffermodal>-->
     </div>

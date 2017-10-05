@@ -6,6 +6,8 @@ import MessageService from "../service/message.service";
 import UploadService from "../service/fileupload.service";
 import ListingModel from '../model/listing.model';
 import UserModel from '../model/user.model';
+import ConversationModel from '../model/conversation.model';
+import { ListingType } from '../model/enum';
 import { Utils } from '../component/utils';
 import { plainToClass } from "class-transformer";
 import createPersistedState from 'vuex-persistedstate';
@@ -40,10 +42,28 @@ export default new Vuex.Store({
     },
     getters: {
         isLoggedIn: function (state) {
-            return typeof state.loggedInUser.email != 'undefined' && state.loggedInUser.email !== '';
+            if (state.loggedInUser) {
+                return typeof state.loggedInUser.email != 'undefined' && state.loggedInUser.email !== '';
+            }
+            return false;
         },
         profilePhoto: function (state) {
-            return state.loggedInUser.photoUrl;
+            if (state.loggedInUser) {
+                return state.loggedInUser.photoUrl;
+            }
+            return null;
+        },
+        profileLink: function (state) {
+            if (state.loggedInUser) {
+                return Utils.seorizeString(state.loggedInUser.firstName + " " + state.loggedInUser.lastName);
+            }
+            return null;
+        },
+        userId: function (state) {
+            if (state.loggedInUser) {
+                return state.loggedInUser.id;
+            }
+            return null;
         }
     },
     actions: {
@@ -61,6 +81,12 @@ export default new Vuex.Store({
                 .then(function (response) {
                 commit('UPDATE_LISTING', response);
             });
+        },
+        CREATE_LISTING: function (_a, listingType) {
+            var commit = _a.commit, state = _a.state;
+            var newListing = new ListingModel();
+            newListing.type = listingType.toUpperCase() === ListingType[ListingType.Offer].toUpperCase() ? 0 : 1;
+            return commit('UPDATE_LISTING', newListing);
         },
         FETCH_FEATURELISTINGS: function (_a) {
             var commit = _a.commit;
@@ -153,8 +179,13 @@ export default new Vuex.Store({
         },
         UPLOAD_PROFILE_IMAGES: function (_a, payload) {
             var commit = _a.commit;
-            return (new UploadService()).uploadProfile(payload.data, payload.actionId)
+            return (new UploadService()).uploadProfileImage(payload.data, payload.actionId)
                 .then(function (response) { return commit('ADD_PROFILE_IMAGES', response); });
+        },
+        UPLOAD_PROFILE_HEROIMAGE: function (_a, payload) {
+            var commit = _a.commit;
+            return (new UploadService()).uploadProfileHeroImage(payload.data, payload.actionId)
+                .then(function (response) { return commit('UPDATE_PROFILE_HEROIMAGE', response); });
         },
         REMOVE_IMAGE: function (_a, payload) {
             var commit = _a.commit;
@@ -218,7 +249,10 @@ export default new Vuex.Store({
             state.searchListings = listings;
         },
         UPDATE_CONVERSATIONS: function (state, conversations) {
-            state.conversations = conversations;
+            if (conversations) {
+                var conversationArr = plainToClass(ConversationModel, conversations);
+                state.conversations = conversationArr;
+            }
         },
         UPDATE_CONVERSATION_MESSAGES: function (state, messages) {
             //if (state.conversationsContent == null) {
@@ -258,6 +292,9 @@ export default new Vuex.Store({
             else {
                 Vue.set(state.profile, 'images', profileImages);
             }
+        },
+        UPDATE_PROFILE_HEROIMAGE: function (state, heroImage) {
+            Vue.set(state.profile, 'heroImage', heroImage);
         },
         REMOVE_PROFILE_IMAGE: function (state, imageUrl) {
             var image = state.profile.images.find(function (x) { return x.url === imageUrl; });

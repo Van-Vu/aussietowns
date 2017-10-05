@@ -10,6 +10,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using AussieTowns.Auth;
 using AussieTowns.Common;
+using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
 using AutoMapper;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -32,14 +34,20 @@ namespace AussieTowns.Controllers
         private readonly IHostingEnvironment _hostingEnv;
         private readonly IMapper _mapper;
         private readonly ILogger<UserController> _logger;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly AppSettings _appSettings;
+        private readonly IImageService _imageService;
 
-        public UserController(IUserService userService, IEmailService emailService, IHostingEnvironment hostingEnv, IMapper mapper, ILogger<UserController> logger)
+        public UserController(IUserService userService, IEmailService emailService, IHostingEnvironment hostingEnv, IMapper mapper, ILogger<UserController> logger, IAuthorizationService authorizationService, IOptions<AppSettings> appSettings, IImageService imageService)
         {
             _userService = userService;
             _emailService = emailService;
             _hostingEnv = hostingEnv;
             _mapper = mapper;
             _logger = logger;
+            _authorizationService = authorizationService;
+            _imageService = imageService;
+            _appSettings = appSettings.Value;
         }
 
         [HttpPost("register")]
@@ -60,8 +68,8 @@ namespace AussieTowns.Controllers
                     user.ExternalId = user.ExternalId.RsaDecrypt();
                 }
 
-                var userCount = await _userService.Register(user);
-                if (userCount == 1)
+                var userId = await _userService.Register(user);
+                if (userId > 1)
                 {
                     await _emailService.SendWelcomeEmail(user.Email);
                     return GenerateToken(user);
@@ -81,7 +89,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(user?.Email) || string.IsNullOrEmpty(user.Password))
+                if (user.Source == UserSource.Native && (string.IsNullOrEmpty(user?.Email) || string.IsNullOrEmpty(user.Password)))
                     throw new ArgumentNullException(nameof(user));
 
                 var existingUser = (await _userService.SearchUser(user.Email)).FirstOrDefault();
@@ -124,6 +132,81 @@ namespace AussieTowns.Controllers
             }
         }
 
+        [HttpPost("{id}/addImage")]
+        public async Task<IEnumerable<Image>> UploadProfileImage(int id, IList<IFormFile> files)
+        {
+            try
+            {
+                //if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
+                if (!await _authorizationService.AuthorizeAsync(User, new User { Id = id }, Operations.Update))
+                    throw new UnauthorizedAccessException();
+
+                var imageUrls = new List<Image>();
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        // Bodom hack: deal with this later
+                        var result = await AwsS3Extensions.SaveToS3Async(
+                            AwsS3Extensions.GetS3Client(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
+                                _appSettings.AwsS3Region),
+                            file.OpenReadStream(), "meetthelocal-development", $"images/profiles/{id}/{file.FileName}");
+
+                        var imageUrl = $"https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/profiles/{id}/{file.FileName}";
+                        await _imageService.InsertProfileImage(id, imageUrl);
+
+                        imageUrls.Add(new Image { Url = imageUrl });
+                    }
+                }
+
+                return imageUrls;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                throw;
+            }
+        }
+
+        [HttpPost("{id}/addHeroImage")]
+        public async Task<string> UploadHeroImage(int id, IList<IFormFile> files)
+        {
+            try
+            {
+                //if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
+                if (!await _authorizationService.AuthorizeAsync(User, new User { Id = id }, Operations.Update))
+                    throw new UnauthorizedAccessException();
+
+                foreach (var file in files)
+                {
+                    if (file.Length <= 0) throw new ArgumentNullException(nameof(files));
+
+                    // Bodom hack: deal with this later
+                    var result = await AwsS3Extensions.SaveToS3Async(
+                        AwsS3Extensions.GetS3Client(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
+                            _appSettings.AwsS3Region),
+                        file.OpenReadStream(), "meetthelocal-development", $"images/profiles/{id}/{file.FileName}");
+
+                    var imageUrl = $"https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/profiles/{id}/{file.FileName}";
+                    var uploadResult = await _imageService.InsertHeroImage(id, imageUrl);
+
+                    if (uploadResult == 1)
+                    {
+                        return imageUrl;
+                    }
+
+                    throw new ArgumentNullException(nameof(files));
+                }
+
+                throw new ArgumentNullException(nameof(files));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                throw;
+            }
+        }
+
         [HttpGet("{userId}")]
         public async Task<UserResponse> GetUserInfo(int userId)
         {
@@ -153,7 +236,7 @@ namespace AussieTowns.Controllers
         }
 
         [HttpGet("summary/{id}")]
-        [Authorize(Policy = "AtLeastEditor")]
+        //[Authorize(Policy = "AtLeastEditor")]
         public async Task<MiniProfile> GetUserMiniProfile(int id)
         {
             try
@@ -197,11 +280,14 @@ namespace AussieTowns.Controllers
 
         [HttpPut("{id}")]
         //[Authorize("Bearer")]
-        public async Task<int> Update(int id,[FromBody] Model.Profile profile)
+        public async Task<int> Update(int id,[FromBody] User user)
         {
             try
             {
-                return await _userService.Update(profile);
+                if (!await _authorizationService.AuthorizeAsync(User, user, Operations.Update))
+                    throw new UnauthorizedAccessException();
+
+                return await _userService.Update(user);
             }
             catch (Exception e)
             {

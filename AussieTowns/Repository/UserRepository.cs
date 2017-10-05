@@ -77,26 +77,50 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "INSERT INTO User(Firstname, Lastname, email, salt, password, gender,birthday, phone, language, currency, locationId, description, address, emergencycontact, photourl, videourl,source, externalid, createdDate,updatedDate,isActive,role) "
-                        + "VALUES (@firstname, @lastname, @email, @salt, @password, @gender, @birthday, @phone, @language, @currency, @locationId, @description, @address, @emergencycontact, @photourl, @videourl, @source, @externalid, @createdDate,@updatedDate,@isActive,@role)";
                 dbConnection.Open();
-                user.CreatedDate = DateTime.Now;
-                user.UpdatedDate = DateTime.Now;
-                user.IsActive = true;
-                var ret = await dbConnection.ExecuteAsync(sql,user);
-                return ret;
+                using (var tran = dbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        var userSql = "INSERT INTO User(Firstname, Lastname, email, salt, password, gender,birthday, phone, language, currency, locationId, description, address, emergencycontact, videourl,source, externalid, createdDate,updatedDate,isActive,role) "
+                                + "VALUES (@firstname, @lastname, @email, @salt, @password, @gender, @birthday, @phone, @language, @currency, @locationId, @description, @address, @emergencycontact, @videourl, @source, @externalid, @createdDate,@updatedDate,@isActive,@role)";
+                        user.CreatedDate = DateTime.Now;
+                        user.UpdatedDate = DateTime.Now;
+                        user.IsActive = true;
+                        await dbConnection.ExecuteAsync(userSql, user);
+
+                        var userId = Convert.ToInt16(await dbConnection.ExecuteScalarAsync("SELECT LAST_INSERT_ID()"));
+
+                        var image = user.Images.FirstOrDefault();
+                        if (image != null)
+                        {
+                            var imageSql = "INSERT INTO Image(userId, url, createdDate, isActive, listingId) "
+                                    + "VALUES (@userId, @url, @createdDate, @isActive,0)";
+                            await dbConnection.ExecuteAsync(imageSql, new { userId, url = image.Url, createdDate = DateTime.Now, isActive = true });
+                        }
+
+                        tran.Commit();
+                        return userId;
+                    }
+                    catch (Exception e)
+                    {
+                        tran.Rollback();
+                        _logger.LogCritical(e.Message, e);
+                        throw;
+                    }
+                }
             }
         }
 
-        public async Task<int> Update(Profile profile)
+        public async Task<int> Update(User user)
         {
             using (IDbConnection dbConnection = Connection)
             {
                 var sql = "UPDATE User SET firstname = @firstname, lastname = @lastname, email = @email, gender= @gender, birthday= @birthday, phone = @phone, language= @language, currency = @currency, "
                     + "locationId = @locationId, description = @description, address= @address, emergencycontact= @emergencycontact, updatedDate=@updatedDate WHERE id = @Id";
                 dbConnection.Open();
-                profile.UpdatedDate = DateTime.Now;
-                return await dbConnection.ExecuteAsync(sql, profile);
+                user.UpdatedDate = DateTime.Now;
+                return await dbConnection.ExecuteAsync(sql, user);
             }
         }
 

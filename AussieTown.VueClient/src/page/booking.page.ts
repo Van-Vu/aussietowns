@@ -150,14 +150,12 @@ export default class BookingPage extends Vue {
 
     validateParticipantInfo() {
         return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                this.$validator.validateAll().then(result => {
-                    if (result) {
-                        resolve(true);
-                    }
-                    reject('Please fill in required information');
-                });
-            },1000);
+            this.$validator.validateAll().then(result => {
+                if (result) {
+                    resolve(true);
+                }
+                reject('Please fill in required information');
+            });
 
 
             //this.$validator.validateAll().then(() => {
@@ -194,13 +192,8 @@ export default class BookingPage extends Vue {
 
     validateBookingTime() {
         return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if ((this.model.bookingDate) && (this.model.bookingTime)) resolve(true);
-                reject('Please choose your suitable date and time');
-            }, 1000);
-
-
-
+            if ((this.model.bookingDate) && (this.model.bookingTime)) resolve(true);
+            reject('Please choose your suitable date and time');
         });
     }
     //validateBeforeSubmit(e) {

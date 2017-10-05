@@ -40,6 +40,7 @@ export default class UserDetailComponent extends Vue {
     created() {
         if (this.model) {
             if (this.model.images.length === 0) this.model.images.push(new ImageModel("http://via.placeholder.com/240x240"));
+            //if (!this.model.heroImageUrl) this.model.heroImageUrl = "http://via.placeholder.com/1280x320";
         }
     }
 

@@ -89,6 +89,24 @@ Vue.use(VueTheMask);
 
 import { Validator } from 'vee-validate';
 
+import VueProgressBar from 'vue-progressbar';
+
+const options = {
+    color: '#bffaf3',
+    failedColor: '#874b4b',
+    thickness: '50px',
+    transition: {
+        speed: '2s',
+        opacity: '0.6s',
+        termination: 300
+    },
+    autoRevert: true,
+    location: 'left',
+    inverse: false
+};
+
+Vue.use(VueProgressBar, options);
+
 // augment options
 declare module 'vue/types/options' {
     interface ComponentOptions<V extends Vue> {
@@ -117,6 +135,7 @@ declare module 'vue/types/options' {
 export default class App extends Vue {
     //currentView: string = 'loginmodal';
     //dynamicProps: string = '';
+    $Progress: any;
 
     get currentPage() {
         return this.$store.state.currentPage;
@@ -166,6 +185,29 @@ export default class App extends Vue {
         };
 
         Validator.updateDictionary(dictionary);
+
+        //  [App.vue specific] When App.vue is first loaded start the progress bar
+        this.$Progress.start();
+        //  hook the progress bar to start before we move router-view
+        this.$router.beforeEach((to, from, next) => {
+            //  does the page we want to go to have a meta.progress object
+            if (to.meta.progress !== undefined) {
+                let meta = to.meta.progress
+                // parse meta tags
+                this.$Progress.parseMeta(meta);
+            }
+            //  start the progress bar
+            this.$Progress.start();
+
+            window.scrollTo(0, 0);
+            //  continue to next page
+            next();
+        })
+        //  hook the progress bar to finish after we've finished moving router-view
+        this.$router.afterEach((to, from) => {
+            //  finish the progress bar
+            this.$Progress.finish();
+        })
 
     }
 

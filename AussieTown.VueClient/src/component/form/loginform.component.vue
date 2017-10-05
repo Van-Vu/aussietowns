@@ -5,14 +5,12 @@
                 <fb-signin-button class="column is-6 fb-signin-button box" :params="fbSignInParams"
                                   @success="onFbSignInSuccess"
                                   @error="onFbSignInError">
-                    <img src="/static/images/facebook_logo.jpg"/>
-                    <span>Facebook</span>
+                    <span>FACEBOOK</span>
                 </fb-signin-button>
                 <g-signin-button class="column is-6 g-signin-button box" :params="googleSignInParams"
                                  @success="onGgSignInSuccess"
                                  @error="onGgSignInError">
-                    <img src="/static/images/google_logo.png"/>
-                    <span>Google</span>
+                    <span>GOOGLE</span>
                 </g-signin-button>
             </div>
             <div style="margin: 30px 0;text-align:center;">
@@ -26,7 +24,7 @@
                         <input name="email" v-model="model.email" v-validate="'required|email'"
                                :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="Enter your email">
                         <span class="icon">
-                            <i class="glyphicon glyphicon-envelope"></i>
+                            <i class="icon icon-envelope-o"></i>
                         </span>
                         <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
                     </p>
@@ -36,7 +34,7 @@
                         <input name="password" v-model="model.password" v-validate="'required'"
                                :class="{'input': true, 'is-danger': errors.has('password') }" type="password" placeholder="●●●●●●●">
                         <span class="icon user">
-                            <i class="glyphicon glyphicon-lock"></i>
+                            <i class="icon icon-lock"></i>
                         </span>
                         <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
                     </p>
@@ -46,13 +44,13 @@
                         <input name="confirmPassword" v-model="confirmPassword" v-validate="'required|confirmed:newPassword'"
                                :class="{'input': true, 'is-danger': errors.has('confirmPassword') }" type="password" placeholder="Confirm new password">
                         <span class="icon user">
-                            <i class="glyphicon glyphicon-lock"></i>
+                            <i class="icon icon-lock"></i>
                         </span>
                         <span v-show="errors.has('confirmPassword')" class="help is-danger">{{ errors.first('confirmPassword') }}</span>
                     </p>
                 </div>
-                <div class="field">
-                    <button type="submit" class="button">Submit</button>
+                <div class="field has-text-centered">
+                    <button type="submit" class="button is-full button mtl_button-no-round mtl-btn-large">{{ isLogin ? 'Submit' : 'Register' }}</button>
                 </div>
                 <div class="field">
                     <input class="is-pulled-left checkbox" type="checkbox" id="rememberme" value="1" v-model="model.rememberme">
@@ -74,20 +72,19 @@
             </div>
         </div>
         <div v-show="isForgotPassword">
-            <span>Reset Password</span>
-            <span>Enter your Fiverr profile email & we'll send you a password reset link.</span>
+            <span>Enter your email & we'll send you a password reset link.</span>
             <div class="field">
                 <p class="control has-icon has-icon-right">
                     <input name="email" v-model="model.email" v-validate="'required|email'"
                            :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="Enter your email">
                     <span class="icon">
-                        <i class="glyphicon glyphicon-envelope"></i>
+                        <i class="icon icon-envelope-o"></i>
                     </span>
                     <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
                 </p>
             </div>
-            <div class="field">
-                <button type="submit" class="button" @click.prevent="onResetPassword">Submit</button>
+            <div class="field has-text-centered">
+                <button type="submit" class="button is-full mtl_button-no-round mtl-btn-large" @click.prevent="onResetPassword">Submit</button>
             </div>
             <hr />
             <div class="field">

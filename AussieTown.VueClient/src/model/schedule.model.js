@@ -1,8 +1,6 @@
 import { RepeatedType, RepeatedDay } from './enum';
-import { Utils } from '../component/utils';
 var ScheduleModel = /** @class */ (function () {
     function ScheduleModel(startDate, startTime, duration, endDate, repeatedType, repeatedDay) {
-        this.repeatedDay = new Array();
         this.startDate = startDate;
         this.startTime = startTime;
         this.duration = duration;
@@ -12,7 +10,7 @@ var ScheduleModel = /** @class */ (function () {
     }
     Object.defineProperty(ScheduleModel.prototype, "repeatedText", {
         get: function () {
-            var ret = Utils.formatDate(new Date(this.startDate));
+            var ret = '';
             switch (this.repeatedType) {
                 case RepeatedType.Daily:
                     ret = 'Everyday';
@@ -30,8 +28,10 @@ var ScheduleModel = /** @class */ (function () {
                     }
                     break;
                 case RepeatedType.Monthly:
-                    ret = "Monthly " + new Date(this.startDate).getDay();
+                    ret = "Monthly on " + new Date(this.startDate).getDay();
                     break;
+                default:
+                    ret = '';
             }
             return ret;
         },
@@ -40,7 +40,20 @@ var ScheduleModel = /** @class */ (function () {
     });
     Object.defineProperty(ScheduleModel.prototype, "durationText", {
         get: function () {
-            return this.duration + " hrs";
+            return this.duration ? this.duration + " hrs" : '';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ScheduleModel.prototype, "dateRange", {
+        get: function () {
+            return [this.startDate, this.endDate];
+        },
+        set: function (value) {
+            if (Array.isArray(value)) {
+                this.startDate = value[0];
+                this.endDate = value[1];
+            }
         },
         enumerable: true,
         configurable: true

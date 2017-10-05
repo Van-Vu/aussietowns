@@ -24,6 +24,7 @@ namespace AussieTowns.Model
         public string EmergencyContact { get; set; }
         public ICollection<Image> Images { get; set; }
         public string VideoUrl { get; set; }
+        public string HeroImageUrl { get; set; }
 
         public ICollection<ListingSummary> OperatorListings { get; set; }
         public ICollection<ListingSummary> GuestListings { get; set; }

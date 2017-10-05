@@ -21,6 +21,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import ParticipantComponent from '../component/shared/participant.component.vue';
+import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
 import LocationSearchComponent from '../component/shared/search/locationsearch.component.vue';
 import { Utils } from '../component/utils';
@@ -50,11 +51,19 @@ var ListingPage = /** @class */ (function (_super) {
         if (route.params.listingId) {
             return store.dispatch('FETCH_LISTING_BY_ID', route.params.listingId);
         }
+        else {
+            return store.dispatch('CREATE_LISTING', route.params.listingType);
+        }
     };
     Object.defineProperty(ListingPage.prototype, "model", {
         get: function () {
-            this.isOffer = this.$store.state.listing.type == ListingType.Offer;
-            return this.$store.state.listing;
+            if (this.$store.state.listing instanceof ListingModel) {
+                this.isOffer = this.$store.state.listing.type == ListingType.Offer;
+                return this.$store.state.listing;
+            }
+            //Bodom: comeback
+            this.isOffer = this.listingType.toUpperCase() === ListingType[ListingType.Offer].toUpperCase();
+            return new ListingModel();
         },
         enumerable: true,
         configurable: true
@@ -79,12 +88,21 @@ var ListingPage = /** @class */ (function (_super) {
                 this.isStickyBoxRequired = false;
                 break;
         }
+        if (!this.$route.params.listingId) {
+            this.isEditing = true;
+        }
     };
     Object.defineProperty(ListingPage.prototype, "canEdit", {
         get: function () {
-            var primaryUser = this.model.tourOperators.filter(function (x) { return x.isPrimary === true; });
-            if (primaryUser.length > 0) {
-                return this.$auth.check(UserRole.Editor, primaryUser[0].id, UserAction.Edit);
+            // Create new listing
+            if (!this.$route.params.listingId && !this.model.id && this.$store.state.loggedInUser) {
+                return true;
+            }
+            if (this.model.tourOperators) {
+                var primaryUser = this.model.tourOperators.filter(function (x) { return x.isPrimary === true; });
+                if (primaryUser.length > 0) {
+                    return this.$auth.check(UserRole.Editor, primaryUser[0].id, UserAction.Edit);
+                }
             }
             return false;
         },
@@ -102,25 +120,35 @@ var ListingPage = /** @class */ (function (_super) {
         var _this = this;
         this.isEditing = false;
         if (this.canEdit) {
-            this.$store.dispatch("ENABLE_LOADING");
-            if (this.model.id > 0) {
-                return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model))
-                    .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); })
-                    .catch(function (err) {
-                    _this.$store.dispatch("DISABLE_LOADING");
-                    _this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
-                    _this.onCancelEdit();
-                });
-            }
-            else {
-                return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model))
-                    .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); })
-                    .catch(function (err) {
-                    _this.$store.dispatch("DISABLE_LOADING");
-                    _this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
-                    _this.onCancelEdit();
-                });
-            }
+            this.$validator.validateAll().then(function () {
+                _this.$store.dispatch("ENABLE_LOADING");
+                if (_this.model.id > 0) {
+                    return _this.$store.dispatch('UPDATE_LISTING', _this.contructBeforeSubmit(_this.model))
+                        .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); })
+                        .catch(function (err) {
+                        _this.$store.dispatch("DISABLE_LOADING");
+                        _this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
+                        _this.onCancelEdit();
+                    });
+                }
+                else {
+                    return _this.$store.dispatch('INSERT_LISTING', _this.contructBeforeSubmit(_this.model))
+                        .then(function (listingId) {
+                        _this.$store.dispatch("DISABLE_LOADING");
+                        _this.$router.push({
+                            name: 'listingDetail',
+                            params: { seoString: Utils.seorizeString(_this.model.header), listingId: listingId }
+                        });
+                    })
+                        .catch(function (err) {
+                        _this.$store.dispatch("DISABLE_LOADING");
+                        _this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
+                        _this.onCancelEdit();
+                    });
+                }
+            }).catch(function () {
+                alert('Correct them errors!');
+            });
         }
     };
     ListingPage.prototype.onEdit = function () {
@@ -165,14 +193,20 @@ var ListingPage = /** @class */ (function (_super) {
         var scheduleArr = [];
         for (var i = 0; i < schedules.length; i++) {
             var schedule = schedules[i];
+            if (Array.isArray(schedule.dateRange)) {
+                schedule.startDate = schedule.dateRange[0];
+                schedule.endDate = schedule.dateRange[1];
+                schedule.repeatedDay = [];
+                schedule.duration = "00:00";
+            }
             scheduleArr.push({
                 id: schedule.id != null ? schedule.id : 0,
-                startDate: schedule.startDate + 'T' + schedule.startTime,
+                startDate: Utils.getDate(new Date(schedule.startDate)) + 'T' + schedule.startTime,
                 duration: schedule.duration,
                 repeatedType: schedule.repeatedType,
                 repeatedDay: schedule.repeatedDay,
                 listingId: model.id,
-                endDate: schedule.endDate
+                endDate: Utils.getDate(new Date(schedule.endDate))
             });
         }
         return scheduleArr;
@@ -184,7 +218,7 @@ var ListingPage = /** @class */ (function (_super) {
             participantArr.push({
                 listingId: listingId,
                 userId: operator.id,
-                isOwner: (i === 0)
+                isPrimary: (i === 0)
             });
         }
         return participantArr;
@@ -192,15 +226,15 @@ var ListingPage = /** @class */ (function (_super) {
     ListingPage.prototype.contructBeforeSubmit = function (model) {
         // Bodom: final format
         //{
-        //    "cost":"50",
-        //    "description":"adsfas",
-        //    "header":"asdfasd",
-        //    "locationId":139,
-        //    "minParticipant":"4",
-        //    "requirement":"asd asdf adfa",
-        //    "schedules":[{ "etartDate": "2017/04/13T11:00", "duration": "2:00", "repeatedType": "0", "endDate": "2017/04/13T11:00", "listingId": "0" }],
-        //    "type":"0",
-        //    "tourOperators":[{ "listingId": "0", "userId": "1", "isOwner": true }]
+        //  "cost":"50",
+        //  "description":"adsfas",
+        //  "header":"asdfasd",
+        //  "locationId":139,
+        //  "minParticipant":"4",
+        //  "requirement":"asd asdf adfa",
+        //  "schedules":[{"startDate": "2017/04/13T11:00", "duration": "2:00", "repeatedType": "0", "repeatedDay": [], "endDate": "2017/04/13T11:00", "listingId": "0"}],  
+        //  "type":"0",
+        //  "tourOperators":[{"listingId": "0", "userId": "1", "isOwner": true}]
         //}
         return {
             id: model.id,

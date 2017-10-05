@@ -97,7 +97,7 @@ body, button, input, select, textarea {
 code, pre {
   -moz-osx-font-smoothing: auto;
   -webkit-font-smoothing: auto;
-  font-family: 'Karla', sans-serif;
+  font-family: 'Helvetica', sans-serif;
 }
 
 body {
@@ -115,6 +115,10 @@ a {
   transition: none 86ms ease-out;
   &:hover {
     color: #FF533D;
+  }
+
+  label {
+      cursor: pointer;
   }
 }
 

@@ -19,6 +19,7 @@ import { Component } from "vue-property-decorator";
 import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
 import Swiper from '../component/shared/external/vue-swiper.vue';
 import CardSmallComponent from '../component/shared/cardsmall.component.vue';
+import CardFullComponent from '../component/shared/listingcard.component.vue';
 import { Utils } from '../component/utils';
 import { ScreenSize } from '../model/enum';
 import { detectScreenSize } from '../service/screen.service';
@@ -75,11 +76,10 @@ var HomePage = /** @class */ (function (_super) {
         this.$store.dispatch('SET_CURRENT_PAGE', 'home');
     };
     HomePage.prototype.mounted = function () {
-        var _this = this;
         //Bodom hack: fetch data offline Swiper need to wait for rendering first
-        setTimeout(function () {
-            _this.$children.find(function (x) { return x.$el.id === 'homepage-swipe'; }).refresh();
-        }, 1000);
+        //setTimeout(() => {
+        //    (this.$children.find(x => x.$el.id === 'homepage-swipe') as any).refresh();    
+        //}, 1000);
         var screenSize = detectScreenSize(this.$mq);
         switch (screenSize) {
             case ScreenSize.Desktop:
@@ -105,7 +105,8 @@ var HomePage = /** @class */ (function (_super) {
             components: {
                 "searchbar": SearchBarComponent,
                 "swiper": Swiper,
-                "cardsmall": CardSmallComponent
+                "cardsmall": CardSmallComponent,
+                "listingcard": CardFullComponent
             },
             beforeRouteEnter: function (to, from, next) {
                 // called before the route that renders this component is confirmed.

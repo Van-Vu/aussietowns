@@ -28,6 +28,7 @@ var ScheduleComponent = /** @class */ (function (_super) {
     function ScheduleComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.isRepeated = true;
+        _this.repeatedDay = [];
         //model: ScheduleModel = null;
         _this.repeatPeriods = [
             { value: '1', display: 'Daily' },
@@ -57,6 +58,7 @@ var ScheduleComponent = /** @class */ (function (_super) {
     ScheduleComponent.prototype.validateBeforeSubmit = function () {
         var _this = this;
         this.$validator.validateAll().then(function () {
+            _this.model.repeatedDay = _this.repeatedDay;
             _this.$emit('onSave', _this.model);
         }).catch(function () {
             alert('Correct them errors!');

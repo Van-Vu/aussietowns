@@ -50,12 +50,20 @@ export default class ListingPage extends Vue{
     asyncData({ store, route }) {
         if (route.params.listingId) {
             return store.dispatch('FETCH_LISTING_BY_ID', route.params.listingId);
+        } else {
+            return store.dispatch('CREATE_LISTING', route.params.listingType);
         }
     }
 
     get model() {
-        this.isOffer = this.$store.state.listing.type == ListingType.Offer;
-        return this.$store.state.listing;
+        if (this.$store.state.listing instanceof ListingModel) {
+            this.isOffer = this.$store.state.listing.type == ListingType.Offer;
+            return this.$store.state.listing;
+        }
+
+        //Bodom: comeback
+        this.isOffer = this.listingType.toUpperCase() === ListingType[ListingType.Offer].toUpperCase();
+        return new ListingModel();
     }
 
     get showScheduleModal() {
@@ -77,12 +85,23 @@ export default class ListingPage extends Vue{
                 this.isStickyBoxRequired = false;
                 break;
         }        
+
+        if (!(this.$route.params as any).listingId) {
+            this.isEditing = true;
+        }
     }
 
     get canEdit() {
-        var primaryUser = this.model.tourOperators.filter(x => x.isPrimary === true);
-        if (primaryUser.length > 0) {
-            return this.$auth.check(UserRole.Editor, primaryUser[0].id, UserAction.Edit);    
+        // Create new listing
+        if (!(this.$route.params as any).listingId && !this.model.id && this.$store.state.loggedInUser) {
+            return true;
+        }
+
+        if (this.model.tourOperators) {
+            var primaryUser = this.model.tourOperators.filter(x => x.isPrimary === true);
+            if (primaryUser.length > 0) {
+                return this.$auth.check(UserRole.Editor, primaryUser[0].id, UserAction.Edit);
+            }            
         }
 
         return false;
@@ -99,24 +118,34 @@ export default class ListingPage extends Vue{
     onInsertorUpdate() {
         this.isEditing = false;
         if (this.canEdit) {
-            this.$store.dispatch("ENABLE_LOADING");
-            if (this.model.id > 0) {
-                return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model))
-                    .then(() => this.$store.dispatch("DISABLE_LOADING"))
-                    .catch(err => {
-                        this.$store.dispatch("DISABLE_LOADING");
-                        this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
-                        this.onCancelEdit();
-                    });
-            } else {
-                return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model))
-                    .then(() => this.$store.dispatch("DISABLE_LOADING"))
-                    .catch(err => {
-                        this.$store.dispatch("DISABLE_LOADING");
-                        this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
-                        this.onCancelEdit();
-                    });
-            }            
+            this.$validator.validateAll().then(() => {
+                this.$store.dispatch("ENABLE_LOADING");
+                if (this.model.id > 0) {
+                    return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model))
+                        .then(() => this.$store.dispatch("DISABLE_LOADING"))
+                        .catch(err => {
+                            this.$store.dispatch("DISABLE_LOADING");
+                            this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
+                            this.onCancelEdit();
+                        });
+                } else {
+                    return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model))
+                        .then(listingId => {
+                            this.$store.dispatch("DISABLE_LOADING");
+                            this.$router.push({
+                                name: 'listingDetail',
+                                params: { seoString: Utils.seorizeString(this.model.header), listingId: listingId }
+                            });
+                        })
+                        .catch(err => {
+                            this.$store.dispatch("DISABLE_LOADING");
+                            this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
+                            this.onCancelEdit();
+                        });
+                }            
+            }).catch(() => {
+                alert('Correct them errors!');
+            });
         }
     }
 
@@ -173,14 +202,22 @@ export default class ListingPage extends Vue{
         var scheduleArr = [];
         for (var i = 0; i < schedules.length; i++) {
             var schedule = schedules[i];
+
+            if (Array.isArray(schedule.dateRange)) {
+                schedule.startDate = schedule.dateRange[0];
+                schedule.endDate = schedule.dateRange[1];
+                schedule.repeatedDay = [];
+                schedule.duration = "00:00";
+            }
+
             scheduleArr.push({
                 id: schedule.id != null ? schedule.id : 0,
-                startDate: schedule.startDate + 'T' + schedule.startTime,
+                startDate: Utils.getDate(new Date(schedule.startDate)) + 'T' + schedule.startTime,
                 duration: schedule.duration,
                 repeatedType: schedule.repeatedType,
                 repeatedDay: schedule.repeatedDay,
                 listingId: model.id,
-                endDate: schedule.endDate
+                endDate: Utils.getDate(new Date(schedule.endDate))
             });
         }
 
@@ -194,7 +231,7 @@ export default class ListingPage extends Vue{
             participantArr.push({
                 listingId: listingId,
                 userId: operator.id,
-                isOwner: (i === 0)
+                isPrimary: (i === 0)
             });
         }
 
@@ -204,15 +241,15 @@ export default class ListingPage extends Vue{
     contructBeforeSubmit(model: ListingModel) {
         // Bodom: final format
         //{
-        //    "cost":"50",
-        //    "description":"adsfas",
-        //    "header":"asdfasd",
-        //    "locationId":139,
-        //    "minParticipant":"4",
-        //    "requirement":"asd asdf adfa",
-        //    "schedules":[{ "etartDate": "2017/04/13T11:00", "duration": "2:00", "repeatedType": "0", "endDate": "2017/04/13T11:00", "listingId": "0" }],
-        //    "type":"0",
-        //    "tourOperators":[{ "listingId": "0", "userId": "1", "isOwner": true }]
+        //  "cost":"50",
+        //  "description":"adsfas",
+        //  "header":"asdfasd",
+        //  "locationId":139,
+        //  "minParticipant":"4",
+        //  "requirement":"asd asdf adfa",
+        //  "schedules":[{"startDate": "2017/04/13T11:00", "duration": "2:00", "repeatedType": "0", "repeatedDay": [], "endDate": "2017/04/13T11:00", "listingId": "0"}],  
+        //  "type":"0",
+        //  "tourOperators":[{"listingId": "0", "userId": "1", "isOwner": true}]
         //}
 
 

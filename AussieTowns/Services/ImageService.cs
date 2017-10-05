@@ -23,5 +23,10 @@ namespace AussieTowns.Services
         {
             return await _imageRepository.InsertProfileImage(profileId, url);
         }
+
+        public async Task<int> InsertHeroImage(int profileId, string url)
+        {
+            return await _imageRepository.InsertHeroImage(profileId, url);
+        }
     }
 }

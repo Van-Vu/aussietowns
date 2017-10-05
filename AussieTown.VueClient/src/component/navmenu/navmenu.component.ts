@@ -21,8 +21,8 @@ export default class NavMenuComponent extends Vue {
     isMenuOpen = false;
     isSticky = false;
     process: any;
-    //profilePhoto = '';
-    //isLoggedIn = false;
+    $cookie: any;
+
     searchSuburb: AutocompleteItem = null;
 
     showMenuModal: boolean = false;
@@ -37,6 +37,14 @@ export default class NavMenuComponent extends Vue {
 
     get profilePhoto() {
         return this.$store.getters.profilePhoto;
+    }
+
+    get profileLink() {
+        return this.$store.getters.profileLink;
+    }
+
+    get userId() {
+        return this.$store.getters.userId;
     }
 
     created() {
@@ -92,5 +100,11 @@ export default class NavMenuComponent extends Vue {
 
     onShowLoginModal() {
         this.$store.dispatch('SHOW_LOGIN_MODAL');
+    }
+
+    onLogout() {
+        this.$store.dispatch('SET_CURRENT_USER', null);
+        this.$cookie.set('mtltk',null);
+        //alert('hey Logout');
     }
 }

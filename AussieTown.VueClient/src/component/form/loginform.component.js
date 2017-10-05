@@ -14,8 +14,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Watch } from "vue-property-decorator";
 import UserService from '../../service/user.service';
 import VeeValidate from 'vee-validate';
 import LoginModel from '../../model/login.model';
@@ -42,15 +45,19 @@ var LoginForm = /** @class */ (function (_super) {
         };
         return _this;
     }
+    LoginForm.prototype.onisLoginChanged = function (value, oldValue) {
+        this.$validator.reset();
+    };
     LoginForm.prototype.validateBeforeSubmit = function (e) {
         var _this = this;
-        this.$validator.validateAll().then(function () {
-            // eslint-disable-next-line
-            if (_this.isLogin) {
-                _this.login(_this.model);
-            }
-            else {
-                _this.signup(_this.model);
+        this.$validator.validateAll().then(function (result) {
+            if (result) {
+                if (_this.isLogin) {
+                    _this.login(_this.model);
+                }
+                else {
+                    _this.signup(_this.model);
+                }
             }
         }).catch(function () {
             // eslint-disable-next-line
@@ -65,8 +72,7 @@ var LoginForm = /** @class */ (function (_super) {
         (new UserService()).login(model)
             .then(function (responseToken) {
             _this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-            //this.$auth.setUser(responseToken.loggedInUser);
-            _this.setCookies(responseToken.accessToken);
+            _this.setCookies(responseToken.accessToken, model.rememberme);
             _this.$emit('onSuccessfulLogin');
         })
             .catch(function (error) {
@@ -79,15 +85,18 @@ var LoginForm = /** @class */ (function (_super) {
             model.password = encryptText(model.password);
         }
         model.role = UserRole.User;
+        model.images = [{ "url": model.photoUrl }];
         (new UserService()).signup(model)
             .then(function (responseToken) {
             _this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-            _this.setCookies(responseToken.accessToken);
+            _this.setCookies(responseToken.accessToken, model.rememberme);
             _this.$emit('onSuccessfulLogin');
         });
     };
-    LoginForm.prototype.setCookies = function (accessToken) {
-        this.$cookie.set('mtltk', accessToken);
+    LoginForm.prototype.setCookies = function (accessToken, rememberMe) {
+        if (rememberMe) {
+            this.$cookie.set('mtltk', accessToken);
+        }
     };
     LoginForm.prototype.submitForm = function () {
         this.formSubmitted = true;
@@ -172,6 +181,12 @@ var LoginForm = /** @class */ (function (_super) {
             decryptTextFromServer(encryptedText).then(function (x) { return console.log(x); });
         });
     };
+    __decorate([
+        Watch('isLogin'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Boolean, Boolean]),
+        __metadata("design:returntype", void 0)
+    ], LoginForm.prototype, "onisLoginChanged", null);
     LoginForm = __decorate([
         Component({
             name: "Loginform"

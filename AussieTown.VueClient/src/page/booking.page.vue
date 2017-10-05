@@ -28,7 +28,7 @@
                     </div>
                 </template>
                 <tab-content title="Schedule" :before-change="validateBookingTime"
-                             icon="glyphicon glyphicon-time">
+                             icon="icon icon-clock">
                     <div v-if="errorMsg" class="booking-error">
                         <span>{{errorMsg}}</span>
                     </div>
@@ -36,10 +36,10 @@
                     </availability>
                 </tab-content>
                 <tab-content title="Participants" :before-change="validateParticipantInfo"
-                             icon="glyphicon glyphicon-user">
+                             icon="icon icon-user">
                     <!--<div>
                         <a @click.prevent="addMoreParticipant" class="button mtl_button">
-                            <i class="glyphicon glyphicon-plus-sign" /><span>Add participant</span>
+                            <i class="icon icon-plus-circle" /><span>Add participant</span>
                         </a>
                     </div>-->
                     <!--<details class="tile is-vertical is-parent box participant-summary " v-for="(user, index) in model.participants" :data-vv-scope="index">-->
@@ -104,14 +104,14 @@
                         </li>
                         <li class="tile box">
                             <a @click.prevent="addMoreParticipant" class="button mtl_grey_button">
-                                <i class="glyphicon glyphicon-plus-sign" /><span>Add participant</span>
+                                <i class="icon icon-plus-circle" /><span>Add participant</span>
                             </a>
                             <!--<usersearch v-show="isAdding" @onSelected="onUserSelect($event)"></usersearch>-->
                         </li>
                     </ul>
                 </tab-content>
                 <tab-content title="Review" :before-change="confirmBooking"
-                             icon="glyphicon glyphicon-file">
+                             icon="icon icon-file-o">
                     <ul>
                     <li class="tile is-vertical is-parent box participant-summary " v-for="(user, index) in model.participants">
                         <div class="tile is-parent">
@@ -168,16 +168,19 @@
                     </div>
                 </template>
                 <tab-content title="Finish"
-                             icon="glyphicon glyphicon-check">
+                             icon="icon icon-checkbox-checked">
                 </tab-content>
             </form-wizard>
         </div>
         <div v-if="!isBooked" class="tile is-vertical is-parent" :class="{'is-sticky-box': isStickyBoxRequired}">
             <div class="field box">
                 <div class="box-header-strip"></div>
-                <div class="columns">
-                    <h2>{{ model.listing.header }}</h2>
-                </div>
+                <router-link :to="{ name: 'listingDetail', params: { seoString: model.listing.headerLink, listingId: model.listing.id }}">
+                    <h2 class="listing-headertext">{{ model.listing.header }}</h2>
+                </router-link>
+                <a class="columns listing-headertext" >
+                    
+                </a>
                 <div class="columns">
                     <div class="column is-2" for="firstName">Date</div>
                     <div class="column">{{ model.bookingDate }}</div>

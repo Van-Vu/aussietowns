@@ -31,14 +31,27 @@ export default class ListingModel {
         this.locationDetail = new AutocompleteItem();
         this.schedules = new Array<ScheduleModel>();
         this.imageList = new Array<ImageModel>();
-        //this.schedules.push(new ScheduleModel(Utils.getDate(new Date()), { HH: '08', mm: '00' }, { HH: '08', mm: '00' }, Utils.getDate(new Date()), 1, ''));
+        //this.schedules.push(new ScheduleModel(new Date().toJSON().slice(0, 10).replace(/-/g, '/'), '00:00', '00:00', new Date().toJSON().slice(0, 10).replace(/-/g, '/'),'',[]));
+        this.schedules.push(new ScheduleModel('', '00:00', '00:00', '', '', []));
+    }
+
+    get headerLink(): string {
+        return this.header ? Utils.seorizeString(this.header) : '';
     }
 
     get descriptionText(): string {
-        return Utils.stripHtml(this.description).replace(/\n/g, '<br/>');
+        return this.description ? Utils.stripHtml(this.description).replace(/\n/g, '<br/>') : '';
     }
 
     set descriptionText(value: string) {
         this.description = value;
+    }
+
+    get requirementText(): string {
+        return this.requirement ? Utils.stripHtml(this.requirement).replace(/\n/g, '<br/>') : '';
+    }
+
+    set requirementText(value: string) {
+        this.requirement = value;
     }
 }

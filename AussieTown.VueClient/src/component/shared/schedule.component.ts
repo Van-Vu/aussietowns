@@ -20,6 +20,8 @@ Vue.use(VeeValidate);
 export default class ScheduleComponent extends Vue {
     @Prop schedule: any;
     isRepeated: boolean = true;
+    repeatedDay: Array<number> = [];
+
     //model: ScheduleModel = null;
 
     repeatPeriods = [
@@ -49,6 +51,7 @@ export default class ScheduleComponent extends Vue {
 
     validateBeforeSubmit() {
         this.$validator.validateAll().then(() => {
+            this.model.repeatedDay = this.repeatedDay;
             this.$emit('onSave', this.model);
         }).catch(() => {
             alert('Correct them errors!');

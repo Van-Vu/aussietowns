@@ -43,19 +43,25 @@ DONE Refactor isSticky & showSecondSearchBar
 
 PROGRESS Page layout
 
-Progress bar
 Performance / Load test
 https://www.sparkpost.com/pricing/#addon-plans
 Unit test
-Booking process
-Fix v-lazy when no image
-
-
-Icons
+DONE Booking process
+DONE Fix v-lazy when no image
+NO NEED Progress bar
+DONE Icons
 Email template
-Listing card
+DONE Listing card
 Profile layout like: http://groupselling.com/members/testdemopro/settings/
-Font
+DONE Font
+DONE Create new listing
+Server Authorization
+DONE Route with random text
+DONE Google & Facebook button
+
+Font: Monsterratt (alternative of ProximaNova)
+
+BUG: protect profile route
 
 Blog post:
 - Authentication
