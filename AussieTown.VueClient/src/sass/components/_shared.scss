@@ -13,7 +13,7 @@
     bottom: 0px;
     left: 0px;
     right: 0px;
-    z-index: 0;
+    z-index: 10;
     >button{
         height: 2.25rem;
     }
@@ -40,6 +40,18 @@
     }
 }
 
+.icon-btn {
+    background-color: $c-neutral-white;
+    color: $c-screen-black;
+    font-size: 1.5em;
+    width: 3.2rem;
+    height: 3.2rem;
+    line-height: 3.2rem;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0.1rem rgba(0,0,0,.06), 0 0.2rem 0.3rem rgba(0,0,0,.06);
+    transition: box-shadow .2s ease-out,color .2s ease-out;
+}
+
 .page-content {
     width: 100%;
     top: $size-header-height;
@@ -63,4 +75,16 @@
     .column.is-2, .column.is-3 {
         font-weight: 700;
     }
+}
+
+.tile.is-3, .tile.is-2 {
+    font-weight: 700;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+input[type="checkbox"] {
+    border-color: #b8b8bd;
+    border-width: .2rem;
+    border-radius: .3rem;
 }

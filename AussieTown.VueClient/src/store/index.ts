@@ -5,6 +5,7 @@ import ListingService from "../service/listing.service";
 import UserService from "../service/user.service";
 import MessageService from "../service/message.service";
 import UploadService from "../service/fileupload.service";
+import LogService from "../service/log.service";
 
 import ListingModel from '../model/listing.model';
 import BookingModel from '../model/booking.model';
@@ -208,6 +209,9 @@ export default new Vuex.Store({
         HIDE_MODAL({ commit }) {
             commit('HIDE_MODAL');
         },
+        LOG_ERROR({ commit }, err) {
+            return (new LogService()).logError(err.message, err.stack);
+        },
         TEST({ commit, state }, payload) {
             (new UserService()).getMiniProfile(1).catch(error => commit('ADD_NOTIFICATION', error));
         }
@@ -273,7 +277,7 @@ export default new Vuex.Store({
             }
         },
         UPDATE_PROFILE_HEROIMAGE(state, heroImage) {
-            Vue.set(state.profile, 'heroImage', heroImage);
+            Vue.set(state.profile, 'heroImageUrl', heroImage);
         },
         REMOVE_PROFILE_IMAGE(state, imageUrl) {
             let image = (state.profile as any).images.find(x => x.url === imageUrl);

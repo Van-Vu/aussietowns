@@ -1,4 +1,4 @@
-﻿<template>
+﻿i<template>
         <div class="page-content container tile" :class="{editing:isEditing}">
             <div class="listing-main-content tile is-8 is-vertical box">
                     <div class="box-header-strip"></div>
@@ -12,7 +12,7 @@
                             <label v-if="!isEditing" class="listing-headertext">{{ model.header }}</label>
                         </div>
                     </div>
-                    <div v-if="isOffer" class="field" style="text-align:center;">
+                    <div v-if="isOffer && model.id" class="field" style="text-align:center;">
                         <label v-if="isEditing" class="label" for="header">Images</label>
                         <imageupload id="imageupload" :isEditing="isEditing" :uploadType="0" :images="model.imageList" @uploadImageCompleted="onUploadImageCompleted"></imageupload>
                     </div>

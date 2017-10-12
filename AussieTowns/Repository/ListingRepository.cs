@@ -76,15 +76,16 @@ namespace AussieTowns.Repository
                 
                 var schedules = await dbConnection.QueryAsync<int, DateTime, TimeSpan, DateTime, RepeatedType?, string, int, Schedule>(scheduleSql,
                     (id, startDate, duration, endDate, repeatedType, repeatedDay, listingid) => new Schedule
-                    {
-                        Id= id,
-                        StartDate = startDate,
-                        Duration = duration,
-                        EndDate = endDate,
-                        RepeatedType = repeatedType,
-                        RepeatedDay = repeatedDay?.ToString().Split(',').ToList(),
-                        ListingId = listingid
-                    }, new {listingId}, splitOn: "*");
+                        {
+                            Id = id,
+                            StartDate = startDate,
+                            Duration = duration,
+                            EndDate = endDate,
+                            RepeatedType = repeatedType,
+                            RepeatedDay = repeatedDay?.ToString().Split(',').ToList(),
+                            ListingId = listingid
+                        }
+                    , new {listingId}, splitOn: "*");
 
                 listing.Schedules = schedules.ToList();
                 return listing;

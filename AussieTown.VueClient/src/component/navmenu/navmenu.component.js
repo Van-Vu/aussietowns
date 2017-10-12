@@ -19,7 +19,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
-import MenuModal from '../modal/menumodal.component.vue';
 import RegistrationModal from '../modal/registrationmodal.component.vue';
 import SearchBarComponent from '../shared/search/searchbar.component.vue';
 import { Utils } from '../utils';
@@ -134,7 +133,6 @@ var NavMenuComponent = /** @class */ (function (_super) {
             name: 'nav-menu',
             components: {
                 'registrationmodal': RegistrationModal,
-                'menumodal': MenuModal,
                 "searchbar": SearchBarComponent
             }
         })

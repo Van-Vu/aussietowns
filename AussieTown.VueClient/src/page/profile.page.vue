@@ -1,30 +1,35 @@
 ﻿<template>
-    <div class="page-content container tile is-vertical profile-content is-profile">
+    <div class="page-content container tile is-vertical profile-content">
         <div v-if="canEdit" class="tabs is-toggle is-fullwidth is-medium">
             <ul>
                 <li>
                     <router-link :to="{ name: 'profileHome' }">
-                        <label class="tab-text">Profile</label>
+                        <i class="icon icon-clipboard"></i>
+                        <label class="tab-text is-hidden-mobile">Profile</label>
                     </router-link>
                 </li>
                 <li>
                     <router-link :to="{ name: 'changePassword' }">
-                        <label class="tab-text">Change password</label>
+                        <i class="icon icon-lock"></i>
+                        <label class="tab-text is-hidden-mobile">Change password</label>
                     </router-link>
                 </li>
                 <li>
                     <router-link :to="{ name: 'profileListings' }">
-                        <label class="tab-text">Your Listings</label>
+                        <i class="icon icon-list-alt"></i>
+                        <label class="tab-text is-hidden-mobile">Your Listings</label>
                     </router-link>
                 </li>
                 <li>
                     <router-link :to="{ name: 'profileTrips' }">
-                        <label class="tab-text">Your Trips</label>
+                        <i class="icon icon-suitcase"></i>
+                        <label class="tab-text is-hidden-mobile">Your Trips</label>
                     </router-link>
                 </li>
                 <li>
                     <router-link :to="{ name: 'profileMessages' }">
-                        <label class="tab-text">Inbox</label>
+                        <i class="icon icon-envelope-o"></i>
+                        <label class="tab-text is-hidden-mobile">Inbox</label>
                     </router-link>
                 </li>
 

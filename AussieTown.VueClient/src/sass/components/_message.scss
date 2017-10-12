@@ -1,9 +1,22 @@
-﻿.conversation, .miniprofile-wrapper {
+﻿.conversation {
     margin-bottom: 10px;
-    margin-top: 10px;
     
     .userinfo-wrapper {
         display:flex;
+        margin-bottom:5px;
+        margin-top: 5px;
+        width: 100%;
+
+        &:hover {
+            cursor: pointer;
+            background-color: rgb(207, 213, 219);
+
+            img {
+                -moz-transform: scale(1.1);
+                -webkit-transform: scale(1.1);
+                transform: scale(1.1);
+            }
+        }
     }
 
 
@@ -24,15 +37,31 @@
         flex: 1;
     }
 
-    div:hover {
-        cursor: pointer;
-        background-color: rgb(207, 213, 219);
+    &.tile.is-3 {
+        font-weight: 500;
+    }
+}
 
-        img {
-            -moz-transform: scale(1.1);
-            -webkit-transform: scale(1.1);
-            transform: scale(1.1);
-        }
+.messageContent {
+    padding: 5px 30px 80px 30px;
+     
+    overflow-x:hidden;
+    overflow-y:auto;
+
+    @media all and (min-width: $is-tablet) {
+        padding: 5px 0 5px 30px;
+    }
+
+    button {
+        margin: 0;
+    }
+}
+
+.sendButton {
+    @media all and (max-width: $is-mobile) {
+        position: absolute;
+        right: 0;
+        bottom: 0;
     }
 }
 
@@ -80,7 +109,6 @@
     @include talk-bubble-base;
     background-color: $c-neutral-white;
 }
-
 
 /* talk bubble contents */
 .talktext{

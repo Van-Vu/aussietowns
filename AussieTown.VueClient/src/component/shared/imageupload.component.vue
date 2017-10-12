@@ -10,10 +10,10 @@
                     @slide-change-end="onSlideChangeEnd"
                     :loop="false">
                 <div v-if="images.length > 0" v-for="image in images">
-                    <img v-lazy="image.url" />
+                    <img :src="image.url" :alt="image.url"/>
                 </div>
                 <div v-if="images.length == 0">
-                    <img src="/static/images/no-image.jpg" />
+                    <img src="/static/images/no-image.jpg" alt="noImage"/>
                 </div>
             </swiper>
             

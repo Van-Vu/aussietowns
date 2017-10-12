@@ -45,6 +45,20 @@ http.interceptors.response.use(function (response) {
     // Do something with response error
     if (error.response)
         return Promise.reject(error.response);
+    //this.$store.dispatch("DISABLE_LOADING");
+    //switch (error.status) {
+    //    case 400:
+    //        this.$store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
+    //        break;
+    //    case 403:
+    //        this.$store.dispatch('SHOW_LOGIN_MODAL');
+    //        this.$store.dispatch('ADD_NOTIFICATION', { title: "Login required", text: "Please login or register to proceed", type: NotificationType.Warning });
+    //        break;
+    //    case 500:
+    //        this.$store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
+    //        break;
+    //}
+    //this.$store.dispatch('LOG_ERROR', { message: `Listing page: ${error.data}`, stack: error.config.data });
     return Promise.reject(error);
 });
 export default http;

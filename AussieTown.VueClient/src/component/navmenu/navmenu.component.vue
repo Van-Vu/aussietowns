@@ -1,11 +1,6 @@
 ﻿<template>
     <div class="nav-bar container" :class="{'is-sticky': isSticky}">
         <div class="columns is-gapless is-mobile">
-            <!--<div class="column is-one-quarter-mobile is-hidden-tablet">
-                <a class="button is-pulled-left mtl_button" @click="showMenuModal = !showMenuModal">
-                <i class="icon icon-bars"></i> Menu
-                </a>
-            </div>-->
             <div class="column is-two-thirds-desktop" style="position: relative;">
                 <!--<div class='nav-bar__logo '></div>-->
                 <router-link :to="{name:'home'}" class="nav-bar__logo"></router-link>
@@ -26,7 +21,7 @@
                         <a v-show="!isLoggedIn" class="button is-pulled-right mtl_button" @click.prevent="onShowLoginModal">Join</a>
                         <a v-show="isLoggedIn" class="is-pulled-right" style="margin: 0 15px;" @click="showMenuModal = !showMenuModal">
                             <figure class="image is-32x32">
-                                <img class="is-circle" :src="profilePhoto" />
+                                <img class="is-circle" alt="Profile Photo" :src="profilePhoto" />
                             </figure>
                         </a>
                         <ul v-if="isLoggedIn" v-show="showMenuModal" id="popupUserMenu">
@@ -68,8 +63,6 @@
         <div class="is-hidden-tablet" v-show="isSticky">
             <searchbar @onSelect="onSelect($event)" @onSearch="onSearch($event)"></searchbar>
         </div>
-        <!--<loginmodal :show="showLoginModal" @onSuccessfulLogin="onSuccessfulLogin" @onClose="showLoginModal = !showLoginModal"></loginmodal>-->
-        <menumodal :show="showMenuModal" @onClose="showMenuModal = !showMenuModal"></menumodal>
     </div>
 
 </template>

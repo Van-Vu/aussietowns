@@ -21,7 +21,6 @@ export default context => {
         const matchedComponents = router.getMatchedComponents()
 
         console.log(`hit the server ${context.url}`);
-
       // no matched routes, reject with 404
       if (!matchedComponents.length) {
         reject({ code: 404 })
@@ -48,12 +47,13 @@ export default context => {
             // is used for the renderer, the state will automatically be
             // serialized and injected into the HTML as window.__INITIAL_STATE__.
             context.state = store.state
-            resolve(app)
+            //resolve(app)
             }).catch(reject)
+        //}).catch(reject);
 
         // the Promise should resolve to the app instance so it can be rendered
-        // resolve(app)
-        }, reject)
+        resolve(app)
+    },reject)
   })
 
 }

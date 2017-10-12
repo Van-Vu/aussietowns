@@ -5,10 +5,12 @@
                 <!--<img v-if="screenSize == 0" src="/static/images/homepage_desktop.jpg" />
                 <img v-if="screenSize == 1" src="/static/images/homepage_tablet.jpg" />
                 <img v-if="screenSize == 2" src="/static/images/homepage_mobile.jpg" />-->
-                <img :src="backgroundImage" />
+                <img :src="backgroundImage" alt="Background Image"/>
             </div>
+            <article id="typingwrapper">
+                <h1 id="homepagetyping">Have a blast with real locals.</h1>
+            </article>
             <article id="searchBarHomepage">
-                <h1>Hello world!</h1>
                 <searchbar @onSelect="onSelect($event)" @onSearch="onSearch($event)" ></searchbar>
             </article>
         </section>

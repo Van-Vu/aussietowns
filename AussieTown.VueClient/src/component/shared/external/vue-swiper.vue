@@ -5,9 +5,9 @@
         </div>-->
         <div class="swiper"
              :class="[direction, {'dragging': dragging}]"
-             @touchstart="_onTouchStart"
+             @touchstart.prevent="_onTouchStart"
              @mousedown="_onTouchStart"
-             @wheel="_onWheel">
+             @wheel.prevent="_onWheel">
             <div class="swiper-slide"
                  ref="wrap"
                  :style="{
@@ -16,7 +16,7 @@
              }"
                  @transitionend="_onTransitionEnd">
                 <slot></slot>
-                <div id="EndOfSlide" style="width: 1px; height: 1px;"></div>
+                <div name="EndOfSlide" style="width: 1px; height: 1px;"></div>
             </div>
             <div class="swiper-pagination"
                  v-show="paginationVisible">
@@ -173,7 +173,7 @@
                 this.dragging = true;
                 this.transitionDuration = 0;
 
-                document.addEventListener('touchmove', this._onTouchMove, false);
+                document.addEventListener('touchmove', this._onTouchMove, {passive: true});
                 document.addEventListener('touchend', this._onTouchEnd, false);
                 document.addEventListener('mousemove', this._onTouchMove, false);
                 document.addEventListener('mouseup', this._onTouchEnd, false);
@@ -202,7 +202,7 @@
                     this._revert();
                 }
 
-                document.removeEventListener('touchmove', this._onTouchMove);
+                document.removeEventListener('touchmove', this._onTouchMove, {passive: true});
                 document.removeEventListener('touchend', this._onTouchEnd);
                 document.removeEventListener('mousemove', this._onTouchMove);
                 document.removeEventListener('mouseup', this._onTouchEnd);

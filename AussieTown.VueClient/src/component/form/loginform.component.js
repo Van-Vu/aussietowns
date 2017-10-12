@@ -72,7 +72,7 @@ var LoginForm = /** @class */ (function (_super) {
         (new UserService()).login(model)
             .then(function (responseToken) {
             _this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-            _this.setCookies(responseToken.accessToken, model.rememberme);
+            _this.setCookies(responseToken.accessToken);
             _this.$emit('onSuccessfulLogin');
         })
             .catch(function (error) {
@@ -89,14 +89,12 @@ var LoginForm = /** @class */ (function (_super) {
         (new UserService()).signup(model)
             .then(function (responseToken) {
             _this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-            _this.setCookies(responseToken.accessToken, model.rememberme);
+            _this.setCookies(responseToken.accessToken);
             _this.$emit('onSuccessfulLogin');
         });
     };
-    LoginForm.prototype.setCookies = function (accessToken, rememberMe) {
-        if (rememberMe) {
-            this.$cookie.set('mtltk', accessToken);
-        }
+    LoginForm.prototype.setCookies = function (accessToken) {
+        this.$cookie.set('mtltk', accessToken);
     };
     LoginForm.prototype.submitForm = function () {
         this.formSubmitted = true;

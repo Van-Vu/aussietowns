@@ -35,5 +35,19 @@
     .text_wrapper {
         display: inline-block; 
         vertical-align: top;
+         
+        span {
+            max-width: 265px;
+            overflow: hidden;
+            display: block;
+
+            @media all and (min-width: $is-tablet) {
+                max-width: 350px;
+            }
+
+            @media all and (min-width: $is-desktop) {
+                max-width: 700px;
+            }
+        }
     }
 }

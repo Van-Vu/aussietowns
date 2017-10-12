@@ -1,8 +1,7 @@
 ﻿<template>
     <modalshell :show.sync="show" @onClose="onClose">
-        <div slot="body">
-            <loginform @onSuccessfulLogin="onClose"></loginform>
-        </div>
+        <h1 slot="header">Login</h1>
+        <loginform @onSuccessfulLogin="onClose" slot="body"></loginform>
     </modalshell>
 </template>
 

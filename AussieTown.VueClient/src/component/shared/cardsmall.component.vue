@@ -6,7 +6,7 @@
                 <!--<div class="listing-cost">A${{cost }}</div>-->
             </div>
             <div class="listing-image">
-                <img v-lazy="imageUrl" />
+                <img v-lazy="imageUrl" :alt="imageUrl"/>
             </div>
             <div class="listing-content">
                 <div class="listing-location">In: {{location}}</div>

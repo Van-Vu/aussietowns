@@ -2,7 +2,7 @@
     <article class="card-full">
         <router-link :to="{ name: 'listingDetail', params: { seoString: headerLink, listingId: id }}">
             <div class="listing-swiper">
-                <swiper id="homepage-swipe" ref="swiper"
+                <swiper ref="swiper"
                         direction="horizontal"
                         :mousewheel-control="true"
                         :performance-mode="false"
@@ -10,7 +10,7 @@
                         :pagination-clickable="true"
                         :loop="false">
                     <div v-for="url in imageUrls">
-                        <img v-lazy="url" />
+                        <img v-lazy="url" :alt="url"/>
                     </div>
                     
                 </swiper>

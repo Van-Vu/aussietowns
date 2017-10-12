@@ -25,9 +25,10 @@
     width: 100%;
     display: inline-block;
     background-color: $c-neutral-white;
-    margin: 10px;
+    
     @media all and (min-width: $is-tablet) {
         width: 365px;
+        margin: 10px;
     }
 
     .listing-swiper .swiper-slide div img {

@@ -175,7 +175,14 @@ var App = /** @class */ (function (_super) {
             Vue.delete(this.$store.state, 'currentPage');
             Vue.set(this.$store.state, 'currentPage', 'home');
         }
+        //window.addEventListener('beforeunload', this.leaving);
     };
+    //leaving() {
+    //    if (!this.$store.state.rememberMe) {
+    //        this.$store.dispatch('SET_CURRENT_USER', null);
+    //        this.$cookie.set('mtltk', null);
+    //    }
+    //}
     App.prototype.onSaveSchedule = function (event) {
         console.log(event);
     };
@@ -196,7 +203,13 @@ var App = /** @class */ (function (_super) {
                 // if no subcomponents specify a metaInfo.title, this title will be used
                 title: 'Default Title',
                 // all titles will be injected into this template
-                titleTemplate: '%s | My Awesome Webapp'
+                titleTemplate: '%s | My Awesome Webapp',
+                meta: [
+                    { charset: 'utf-8' },
+                    { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },
+                    { name: 'theme-color', content: '#99CD4E' },
+                    { name: 'mobile-web-app-capable', content: 'yes' }
+                ]
             }
         })
     ], App);

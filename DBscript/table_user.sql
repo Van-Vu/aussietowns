@@ -18,7 +18,7 @@ CREATE TABLE user (
   description varchar(1000) collate utf8_unicode_ci default NULL,
   address varchar(1000) collate utf8_unicode_ci default NULL,
   emergencycontact varchar(20) collate utf8_unicode_ci default NULL,
-  photoUrl varchar(1000) collate utf8_unicode_ci default NULL,
+  heroImageUrl varchar(1000) collate utf8_unicode_ci default NULL,
   videoUrl varchar(1000) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

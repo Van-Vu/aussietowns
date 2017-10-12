@@ -104,7 +104,7 @@
                         </li>
                         <li class="tile box">
                             <a @click.prevent="addMoreParticipant" class="button mtl_grey_button">
-                                <i class="icon icon-plus-circle" /><span>Add participant</span>
+                                <i class="icon icon-user-add" /><span>Add participant</span>
                             </a>
                             <!--<usersearch v-show="isAdding" @onSelected="onUserSelect($event)"></usersearch>-->
                         </li>
@@ -172,7 +172,7 @@
                 </tab-content>
             </form-wizard>
         </div>
-        <div v-if="!isBooked" class="tile is-vertical is-parent" :class="{'is-sticky-box': isStickyBoxRequired}">
+        <div v-if="!isBooked" class="tile is-vertical" :class="{'is-sticky-box': isStickyBoxRequired}">
             <div class="field box">
                 <div class="box-header-strip"></div>
                 <router-link :to="{ name: 'listingDetail', params: { seoString: model.listing.headerLink, listingId: model.listing.id }}">

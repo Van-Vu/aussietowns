@@ -8,6 +8,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+var SWPrecachePlugin = require('sw-precache-webpack-plugin')
 
 var isProd = process.env.NODE_ENV === 'production'
 
@@ -103,6 +104,14 @@ if (isProd) {
         warnings: false
       },
       sourceMap: true
+    }),
+    // auto generate service worker
+    new SWPrecachePlugin({
+        cacheId: 'vue-hn',
+        filename: 'service-worker.js',
+        minify: true,
+        dontCacheBustUrlsMatching: /./,
+        staticFileGlobsIgnorePatterns: [/\.map$/, /\.json$/]
     })
   )
 }

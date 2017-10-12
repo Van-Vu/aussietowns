@@ -1,34 +1,36 @@
 ﻿<template>
-    <form @submit.prevent="validateBeforeSubmit" v-if="model">
-        <div class="columns">
-            <div class="column is-2">Start date</div>
-            <div class="column is-6">
+    <form class="tile is-vertical" @submit.prevent="validateBeforeSubmit" v-if="model">
+        <div class="tile is-parent">
+            <div class="tile is-3">Start date</div>
+            <div class="tile is-9">
                 <datepicker :disabled="disableDays" :range="false" v-model="model.startDate"></datepicker>
             </div>
         </div>
-        <div class="columns">
-            <div class="column is-2">Start time</div>
-            <div class="column is-6">
+        <div class="tile is-parent">
+            <div class="tile is-3">Start time</div>
+            <div class="tile is-9">
                 <vue-timepicker v-model="model.startTime" :minute-interval="30"></vue-timepicker>
             </div>
         </div>
-        <div class="columns">
-            <div class="column is-2">Duration (hours)</div>
-            <div class="column is-6">
+        <div class="tile is-parent">
+            <div class="tile is-3">Duration (hrs)</div>
+            <div class="tile is-9">
                 <vue-timepicker v-model="model.duration" :minute-interval="30"></vue-timepicker>
             </div>
         </div>
-        <div class="columns">
-            <div class="column is-2">
-                <input type="checkbox" id="checkbox" v-model="isRepeated">
-                <span for="checkbox">Repeat</span>
+        <div class="tile is-parent">
+            <div class="tile is-3">
+                <input type="checkbox" id="repeated" v-model="isRepeated">
+                <label for="repeated">Repeat</label>
             </div>
-           <ul class="column" v-show="isRepeated">
-                <li class="li-horizontal" v-for="period of repeatPeriods">
-                    <input type="radio" name="period" :value="period.value" v-model="model.repeatedType">
-                    {{period.display}}
-                </li>
-                <li class="box" v-if="model.repeatedType == 2">
+            <div class="tile is-vertical is-9">
+                <ul>
+                    <li class="li-horizontal" v-for="period of repeatPeriods" style="margin-right:15px;">
+                        <input type="radio" :id="period.display" :value="period.value" v-model="model.repeatedType" :disabled="!isRepeated">
+                        <label :for="period.display">{{period.display}}</label>
+                    </li>
+                </ul>
+                <div class="" v-if="model.repeatedType == 2 && isRepeated">
                     <input type="checkbox" id="monday" value="1" v-model="repeatedDay">
                     <label for="monday">Mon</label>
                     <input type="checkbox" id="tuesday" value="2" v-model="repeatedDay">
@@ -43,17 +45,18 @@
                     <label for="saturday">Sat</label>
                     <input type="checkbox" id="sunday" value="64" v-model="repeatedDay">
                     <label for="sunday">Sun</label>
-                </li>
-            </ul>
+                </div>
+
+            </div>
         </div>
-        <div class="columns">
-            <div class="column is-2">End date</div>
-            <div class="column is-6">
+        <div class="tile is-parent">
+            <div class="tile is-3">End date</div>
+            <div class="tile is-9">
                 <datepicker v-model="model.endDate"></datepicker>
             </div>
         </div>
-        <div class="columns">
-            <button type="submit" class="column is-one-quarter button mtl_button-no-round">Save</button>
+        <div class="tile is-parent has-text-centered">
+            <button type="submit" class="is-one-quarter button mtl_button-no-round">Save</button>
         </div>
     </form>
 </template>

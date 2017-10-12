@@ -102,14 +102,16 @@ app.get('*', (req, res) => {
         <body ${bodyAttrs.text()}>
     `)
   })
-
+    .on('end', () => console.log(`whole request: ${Date.now() - s}ms`))
+    .on('error', () => errorHandler)
+    .pipe(res)
   //renderStream.on('data', (chunk) => {
   //    res.write(chunk)
   //})
-  renderStream.on('end', () => console.log(`whole request: ${Date.now() - s}ms`))
-  renderStream.on('error', () => errorHandler)
+  //renderStream.on('end', () => console.log(`whole request: ${Date.now() - s}ms`))
+  //renderStream.on('error', () => errorHandler)
 
-  renderStream.pipe(res)
+  //renderStream.pipe(res)
   //renderer.renderToStream(context)
   //  .on('error', errorHandler)
   //  .on('end', () => console.log(`whole request: ${Date.now() - s}ms`))

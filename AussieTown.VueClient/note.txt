@@ -61,7 +61,19 @@ DONE Google & Facebook button
 
 Font: Monsterratt (alternative of ProximaNova)
 
-BUG: protect profile route
+DONE bug: protect profile route
+DONE bug: in a listing --> click "create experience"
+DONE modal layout
+
+DONE bug: mobile broken layout
+DONE Run Audit
+Upload listing & profile image
+
+DONE bug: check availability when not Login
+
+image guide: https://images.guide/
+	https://cloudinary.com/pricing
+	https://imageoptim.com/mac
 
 Blog post:
 - Authentication

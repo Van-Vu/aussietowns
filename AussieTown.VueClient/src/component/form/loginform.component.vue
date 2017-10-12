@@ -52,11 +52,11 @@
                 <div class="field has-text-centered">
                     <button type="submit" class="button is-full button mtl_button-no-round mtl-btn-large">{{ isLogin ? 'Submit' : 'Register' }}</button>
                 </div>
-                <div class="field">
+                <!--<div class="field">
                     <input class="is-pulled-left checkbox" type="checkbox" id="rememberme" value="1" v-model="model.rememberme">
                     <label for="rememberme">Remember me</label>
                     <a class="is-pulled-right" @click="isForgotPassword = true">Forgot password</a>
-                </div>
+                </div>-->
                 <hr />
 
                 <div v-if="isLogin">

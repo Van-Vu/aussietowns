@@ -84,6 +84,32 @@ export default class UserDetailComponent extends Vue {
         }
     }
 
+    onReplaceHeroImage() {
+        document.getElementById("fileUpload").click();
+    }
+
+    onUploadHeroImage(fileList) {
+        if (!fileList.length) return;
+
+        const formData = new FormData();
+        Array.from(Array(fileList.length).keys())
+            .map(x => {
+                formData.append('files', fileList[x], fileList[x].name);
+            });
+
+        this.$store.dispatch('UPLOAD_PROFILE_HEROIMAGE',
+            {
+                data: formData,
+                actionId: this.$store.state.profile.id
+            }).then(response => {
+                this.$emit('uploadImageCompleted');
+            })
+            .catch(error => {
+                this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", text: error.message ? error.message : "Error uploading. We're on it !", type: NotificationType.Error });
+            });
+        (document.getElementById('fileUpload') as any).value = null;
+    }
+
 onUpdate(){}
 capture(){}
 }

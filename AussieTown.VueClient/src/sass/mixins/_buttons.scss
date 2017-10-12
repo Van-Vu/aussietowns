@@ -4,7 +4,7 @@
     text-align: center;
      
     &:hover {
-        background-color: transparent;
+        background-color: $c-neutral-white;
         color: $c-brand-primary;
         box-shadow: 0 0 0 1px $c-brand-primary, 0 0 0 1px $c-brand-primary;
         //background-color:darken($bg,8%);

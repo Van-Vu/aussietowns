@@ -69,3 +69,66 @@
 .content p, h1 {
     text-align: center;
 }
+
+#test {
+    width: 270px;
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    border-right: .15em solid orange; /* The typwriter cursor */
+    white-space: nowrap; /* Keeps the content on a single line */
+    margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+    letter-spacing: .15em; /* Adjust as needed */
+    color: white;
+    font-family: 'Sriracha', cursive;
+    font-size: 48px;
+    animation: typing 4s steps(60, end),
+            blink-caret .75s step-end infinite;
+}
+
+#typingwrapper {
+    z-index:15;
+    @include absolutecenter;
+  display: flex;
+  justify-content: center;
+}
+
+#homepagetyping {
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    border-right: 0 solid $c-brand-primary; /* The typwriter cursor */
+    white-space: nowrap; /* Keeps the content on a single line */
+    margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+    letter-spacing: .15em; /* Adjust as needed */
+    color: white;
+    font-size: 18px;
+    font-family: 'Nothing You Could Do', cursive;
+    font-weight: 700;
+
+    @media all and (min-width: $is-tablet) {
+        font-size: 30px;
+        -webkit-animation: typing 5s steps(29, end);
+        animation: typing 5s steps(29, end);
+    }
+
+    @media all and (min-width: $is-desktop) {
+        font-size: 56px;
+    }
+}
+
+/* The typing effect */
+@-webkit-keyframes typing {
+    0% { width: 0 }
+  100% { width: 100% }
+}
+@keyframes typing {
+    0% { width: 0 }
+  100% { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@-webkit-keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: $c-brand-primary; }
+}
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: $c-brand-primary; }
+}

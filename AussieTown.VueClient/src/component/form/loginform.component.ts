@@ -68,7 +68,7 @@ export default class LoginForm extends Vue {
         (new UserService()).login(model)
             .then(responseToken => {
                 this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-                this.setCookies(responseToken.accessToken, model.rememberme);
+                this.setCookies(responseToken.accessToken);
                 this.$emit('onSuccessfulLogin');
             })
             .catch(error => {
@@ -86,15 +86,13 @@ export default class LoginForm extends Vue {
         (new UserService()).signup(model)
         .then(responseToken => {
             this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-            this.setCookies(responseToken.accessToken, model.rememberme);
+            this.setCookies(responseToken.accessToken);
             this.$emit('onSuccessfulLogin');
         });
     }
 
-    setCookies(accessToken, rememberMe) {
-        if (rememberMe) {
-            this.$cookie.set('mtltk', accessToken);    
-        }
+    setCookies(accessToken) {
+        this.$cookie.set('mtltk', accessToken);    
     }
 
     submitForm() {

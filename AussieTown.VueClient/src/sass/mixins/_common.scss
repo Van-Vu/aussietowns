@@ -55,6 +55,10 @@
   animation-name: fade-out-right;
 }
 
+@-webkit-keyframes spinAround { 0% { -webkit-transform: rotate(0deg);transform: rotate(0deg); } 100% { -webkit-transform: rotate(359deg);transform: rotate(359deg);  }}
+@-moz-keyframes    spinAround { 0% { -webkit-transform: rotate(0deg);transform: rotate(0deg); } 100% { -webkit-transform: rotate(359deg);transform: rotate(359deg);  }}
+@keyframes         spinAround { 0% {-webkit-transform: rotate(0deg);transform: rotate(0deg);  } 100% { -webkit-transform: rotate(359deg);transform: rotate(359deg);  }}
+
 // Usage: specify your boundry with a max width value
 @mixin truncate($truncation-boundary) {
     max-width: $truncation-boundary;

@@ -4,6 +4,7 @@ import ListingService from "../service/listing.service";
 import UserService from "../service/user.service";
 import MessageService from "../service/message.service";
 import UploadService from "../service/fileupload.service";
+import LogService from "../service/log.service";
 import ListingModel from '../model/listing.model';
 import UserModel from '../model/user.model';
 import ConversationModel from '../model/conversation.model';
@@ -226,6 +227,10 @@ export default new Vuex.Store({
             var commit = _a.commit;
             commit('HIDE_MODAL');
         },
+        LOG_ERROR: function (_a, err) {
+            var commit = _a.commit;
+            return (new LogService()).logError(err.message, err.stack);
+        },
         TEST: function (_a, payload) {
             var commit = _a.commit, state = _a.state;
             (new UserService()).getMiniProfile(1).catch(function (error) { return commit('ADD_NOTIFICATION', error); });
@@ -294,7 +299,7 @@ export default new Vuex.Store({
             }
         },
         UPDATE_PROFILE_HEROIMAGE: function (state, heroImage) {
-            Vue.set(state.profile, 'heroImage', heroImage);
+            Vue.set(state.profile, 'heroImageUrl', heroImage);
         },
         REMOVE_PROFILE_IMAGE: function (state, imageUrl) {
             var image = state.profile.images.find(function (x) { return x.url === imageUrl; });

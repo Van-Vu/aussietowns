@@ -18,7 +18,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import ParticipantComponent from '../component/shared/participant.component.vue';
 import ListingModel from '../model/listing.model';
@@ -55,6 +55,16 @@ var ListingPage = /** @class */ (function (_super) {
             return store.dispatch('CREATE_LISTING', route.params.listingType);
         }
     };
+    ListingPage.prototype.onRouteParamChanged = function (value, oldValue) {
+        if (value.listingId) {
+            this.isEditing = false;
+            return this.$store.dispatch('FETCH_LISTING_BY_ID', value.listingId);
+        }
+        else {
+            this.isEditing = true;
+            return this.$store.dispatch('CREATE_LISTING', value.listingType);
+        }
+    };
     Object.defineProperty(ListingPage.prototype, "model", {
         get: function () {
             if (this.$store.state.listing instanceof ListingModel) {
@@ -71,6 +81,13 @@ var ListingPage = /** @class */ (function (_super) {
     Object.defineProperty(ListingPage.prototype, "showScheduleModal", {
         get: function () {
             return this.$store.state.showScheduleModal;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ListingPage.prototype, "isLoggedIn", {
+        get: function () {
+            return this.$store.getters.isLoggedIn;
         },
         enumerable: true,
         configurable: true
@@ -118,16 +135,17 @@ var ListingPage = /** @class */ (function (_super) {
     };
     ListingPage.prototype.onInsertorUpdate = function () {
         var _this = this;
-        this.isEditing = false;
         if (this.canEdit) {
             this.$validator.validateAll().then(function () {
                 _this.$store.dispatch("ENABLE_LOADING");
                 if (_this.model.id > 0) {
                     return _this.$store.dispatch('UPDATE_LISTING', _this.contructBeforeSubmit(_this.model))
-                        .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); })
-                        .catch(function (err) {
+                        .then(function () {
                         _this.$store.dispatch("DISABLE_LOADING");
-                        _this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
+                        _this.$store.dispatch('ADD_NOTIFICATION', { title: "Update success", type: NotificationType.Success });
+                    })
+                        .catch(function (err) {
+                        _this.handleError(err);
                         _this.onCancelEdit();
                     });
                 }
@@ -139,12 +157,9 @@ var ListingPage = /** @class */ (function (_super) {
                             name: 'listingDetail',
                             params: { seoString: Utils.seorizeString(_this.model.header), listingId: listingId }
                         });
+                        _this.$store.dispatch('ADD_NOTIFICATION', { title: "Insert success. Please upload listing images", type: NotificationType.Success });
                     })
-                        .catch(function (err) {
-                        _this.$store.dispatch("DISABLE_LOADING");
-                        _this.$store.dispatch('ADD_NOTIFICATION', { title: "Cannot update this listing. We are on it !", type: NotificationType.Error });
-                        _this.onCancelEdit();
-                    });
+                        .catch(function (err) { return _this.handleError(err); });
                 }
             }).catch(function () {
                 alert('Correct them errors!');
@@ -172,11 +187,12 @@ var ListingPage = /** @class */ (function (_super) {
         this.$store.dispatch("REMOVE_LISTING_OPERATOR", user);
     };
     ListingPage.prototype.checkAvailability = function (schedule) {
-        this.$router.push({ name: "booking" });
-        //var bookingDayPanel = this.$children.find(x => x.$el.id === "availDay");
-        //if (bookingDayPanel) {
-        //    (bookingDayPanel as any).togglePanel();
-        //}
+        if (this.isLoggedIn) {
+            this.$router.push({ name: "booking" });
+        }
+        else {
+            this.handleError({ status: 403 });
+        }
     };
     ListingPage.prototype.onSaveSchedule = function (scheduleObject) {
         console.log(scheduleObject);
@@ -206,7 +222,7 @@ var ListingPage = /** @class */ (function (_super) {
                 repeatedType: schedule.repeatedType,
                 repeatedDay: schedule.repeatedDay,
                 listingId: model.id,
-                endDate: Utils.getDate(new Date(schedule.endDate))
+                endDate: schedule.endDate ? Utils.getDate(new Date(schedule.endDate)) : ''
             });
         }
         return scheduleArr;
@@ -251,10 +267,30 @@ var ListingPage = /** @class */ (function (_super) {
             tourOperators: this.constructParticipants(model.id, model.tourOperators)
         };
     };
+    ListingPage.prototype.handleError = function (error) {
+        this.$store.dispatch("DISABLE_LOADING");
+        if (error.status === 403) {
+            this.$store.dispatch('SHOW_LOGIN_MODAL');
+            this.$store.dispatch('ADD_NOTIFICATION', { title: "Login required", text: "Please login or register to proceed", type: NotificationType.Warning });
+        }
+        if (error.status === 500 || error.status === 400) {
+            var title = this.isEditing
+                ? "Cannot insert this listing. We are on it !"
+                : "Cannot update this listing. We are on it !";
+            this.$store.dispatch('ADD_NOTIFICATION', { title: title, type: NotificationType.Error });
+        }
+        this.$store.dispatch('LOG_ERROR', { message: "Listing page: " + error.data, stack: error.config.data });
+    };
     __decorate([
         Prop,
         __metadata("design:type", String)
     ], ListingPage.prototype, "listingType", void 0);
+    __decorate([
+        Watch('$route.params'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], ListingPage.prototype, "onRouteParamChanged", null);
     ListingPage = __decorate([
         Component({
             name: 'ListingPage',

@@ -1,46 +1,6 @@
 ﻿<!DOCTYPE html>
-<html data-vue-meta-server-rendered>
+<html lang="en" data-vue-meta-server-rendered>
   <head>
-
-      <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.1/css/bulma.min.css" type="text/css"/>-->    
-      <meta name="mobile-web-app-capable" content="yes">
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-      <meta name="theme-color" content="#99CD4E">
-      
-      <script type="text/javascript" charset="UTF-8" src="/static/script/jsencrypt.min.js" async></script>
-      <script type="text/javascript" charset="UTF-8" src="https://apis.google.com/js/api:client.js" async></script>
-      <!--<link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">-->
-      <!--<% for (var chunk of webpack.chunks) {
-      for (var file of chunk.files) {
-      if (file.match(/\.(js|css)$/)) { %>
-      <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>" as="<%= file.match(/\.css$/)?'style':'script' %>"><% }}} %>-->
-
-      <script>
-          window.fbAsyncInit = function() {
-              FB.init({
-                  appId      : '258898767921654',
-                  cookie     : true,
-                  xfbml      : true,
-                  version    : 'v2.8'
-              });
-              FB.AppEvents.logPageView();
-          };
-
-          (function(d, s, id){
-              var js, fjs = d.getElementsByTagName(s)[0];
-              if (d.getElementById(id)) {return;}
-              js = d.createElement(s); js.id = id;
-              js.src = "//connect.facebook.net/en_US/sdk.js";
-              fjs.parentNode.insertBefore(js, fjs);
-          }(document, 'script', 'facebook-jssdk'));
-
-
-
-          //FB.getLoginStatus(function (response) {
-          //    statusChangeCallback(response);
-          //});
-      </script>
-     
       <style type="text/css">
         .early-loading-wrapper {
             z-index: 1000;
@@ -137,10 +97,11 @@
       </style>
   </head>
 <body>
+    <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
 <div class="early-loading-wrapper v-spinner">
     <div style="text-align: center;" class="absolute-center">
         <span style="font-weight: 700;">Your next adventure is </span>
-        <span style="font-weight: 900;">coming ... </span>        
+        <span style="font-weight: 900;">coming ... </span>
     </div>
 
     <div class="early-loading v-ring v-ring1">
@@ -152,5 +113,52 @@
 </div>
 
 <!--vue-ssr-outlet-->
+
+<script type="text/javascript" charset="UTF-8" src="/static/script/jsencrypt.min.js" async></script>
+<script type="text/javascript" charset="UTF-8" src="https://apis.google.com/js/api:client.js" async></script>
+
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId: '258898767921654',
+            cookie: true,
+            xfbml: true,
+            version: 'v2.8'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    //FB.getLoginStatus(function (response) {
+    //    statusChangeCallback(response);
+    //});
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
+            console.log('ServiceWorker registration successful!');
+        }).catch(function (err) {
+            console.log('ServiceWorker registration failed: ', err);
+        });
+    }
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+    WebFont.load({
+        google: {
+            families: ['Nothing You Could Do']
+        }
+    });
+</script>
 </body>
 </html>

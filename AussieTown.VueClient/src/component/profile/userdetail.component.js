@@ -91,6 +91,29 @@ var UserDetailComponent = /** @class */ (function (_super) {
             this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
         }
     };
+    UserDetailComponent.prototype.onReplaceHeroImage = function () {
+        document.getElementById("fileUpload").click();
+    };
+    UserDetailComponent.prototype.onUploadHeroImage = function (fileList) {
+        var _this = this;
+        if (!fileList.length)
+            return;
+        var formData = new FormData();
+        Array.from(Array(fileList.length).keys())
+            .map(function (x) {
+            formData.append('files', fileList[x], fileList[x].name);
+        });
+        this.$store.dispatch('UPLOAD_PROFILE_HEROIMAGE', {
+            data: formData,
+            actionId: this.$store.state.profile.id
+        }).then(function (response) {
+            _this.$emit('uploadImageCompleted');
+        })
+            .catch(function (error) {
+            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", text: error.message ? error.message : "Error uploading. We're on it !", type: NotificationType.Error });
+        });
+        document.getElementById('fileUpload').value = null;
+    };
     UserDetailComponent.prototype.onUpdate = function () { };
     UserDetailComponent.prototype.capture = function () { };
     UserDetailComponent = __decorate([
