@@ -26,6 +26,7 @@ export default class LoginForm extends Vue {
     formSubmitted: boolean = false;
     model: LoginModel = new LoginModel();
     confirmPassword: string = '';
+    rawPassword: string = '';
     $cookie: any;
     $auth: any;
 
@@ -47,7 +48,11 @@ export default class LoginForm extends Vue {
 
     validateBeforeSubmit(e) {
         this.$validator.validateAll().then((result) => {
+            (this.$validator as any).reset();
             if (result) {
+                if (this.rawPassword) {
+                    this.model.password = encryptText(this.rawPassword);
+                }
                 if (this.isLogin) {
                     this.login(this.model);
                 } else {
@@ -61,34 +66,26 @@ export default class LoginForm extends Vue {
     }
 
     login(model) {
-        if (model.password) {
-            model.password = encryptText(model.password);
-        }
-
         (new UserService()).login(model)
-            .then(responseToken => {
-                this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-                this.setCookies(responseToken.accessToken);
-                this.$emit('onSuccessfulLogin');
-            })
+            .then(responseToken => this.handleLoginToken(responseToken))
             .catch(error => {
-                this.$store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: error.message ? error.message : error, type: NotificationType.Error });
+                this.$store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: error.message ? error.message : error.data, type: NotificationType.Error });
             });
     }
 
     signup(model) {
-        if (model.password) {
-            model.password = encryptText(model.password);    
-        }
         model.role = UserRole.User;
         model.images = [{ "url": model.photoUrl }];
 
         (new UserService()).signup(model)
-        .then(responseToken => {
-            this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-            this.setCookies(responseToken.accessToken);
-            this.$emit('onSuccessfulLogin');
-        });
+        .then(responseToken => this.handleLoginToken(responseToken));
+    }
+
+    handleLoginToken(token) {
+        this.$store.dispatch('SET_CURRENT_USER', token.loggedInUser);
+        this.setCookies(token.accessToken);
+        this.$emit('onSuccessfulLogin');
+        this.rawPassword = '';        
     }
 
     setCookies(accessToken) {

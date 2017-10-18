@@ -72,6 +72,7 @@ namespace AussieTowns.Controllers
                 if (userId > 1)
                 {
                     await _emailService.SendWelcomeEmail(user.Email);
+                    user.Id = userId;
                     return GenerateToken(user);
                 }
 
@@ -133,7 +134,7 @@ namespace AussieTowns.Controllers
         }
 
         [HttpPost("{id}/addImage")]
-        public async Task<IEnumerable<Image>> UploadProfileImage(int id, IList<IFormFile> files)
+        public async Task<string> UploadProfileImage(int id, IList<IFormFile> files)
         {
             try
             {
@@ -141,7 +142,6 @@ namespace AussieTowns.Controllers
                 if (!await _authorizationService.AuthorizeAsync(User, new User { Id = id }, Operations.Update))
                     throw new UnauthorizedAccessException();
 
-                var imageUrls = new List<Image>();
                 foreach (var file in files)
                 {
                     if (file.Length > 0)
@@ -153,13 +153,18 @@ namespace AussieTowns.Controllers
                             file.OpenReadStream(), "meetthelocal-development", $"images/profiles/{id}/{file.FileName}");
 
                         var imageUrl = $"https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/profiles/{id}/{file.FileName}";
-                        await _imageService.InsertProfileImage(id, imageUrl);
+                        var uploadResult = await _imageService.InsertProfileImage(id, imageUrl);
 
-                        imageUrls.Add(new Image { Url = imageUrl });
+                        if (uploadResult >= 1)
+                        {
+                            return imageUrl;
+                        }
+
+                        throw new ArgumentNullException(nameof(files));
                     }
                 }
 
-                return imageUrls;
+                throw new ArgumentNullException(nameof(files));
             }
             catch (Exception e)
             {

@@ -2,15 +2,22 @@
     <div class="tile is-vertical ">
         <header class="userdetail_heroimage">
             <!--<imageupload id="imageupload" :isEditing="isEditing" :uploadType="1" :images="model.images" class="is-profile" @uploadImageCompleted="onUploadImageCompleted"></imageupload>-->
-            <img v-if="model.heroImageUrl" :src="model.heroImageUrl" alt="HeroImage"/>
+            <figure class="image is-16by9">
+                <img v-if="model.heroImageUrl" :src="model.heroImageUrl" alt="HeroImage" />
+            </figure>
             <input id="fileUpload" type="file" style="display:none;" @change="onUploadHeroImage($event.target.files); fileCount = $event.target.files.length" accept="image/*">
             <i class="icon icon-pencil icon-btn" @click.prevent="onReplaceHeroImage"></i>
         </header>
         <section class="tile is-parent">
-            <div class="tile is-3 is-vertical">
+            <div class="tile is-3 is-vertical userdetail_profileimage">
                 <!--<img src="http://via.placeholder.com/240x240" />
         <button class="button mtl_button-no-round" v-if="isEditing && canEdit" @click="onEdit">Change profile picture</button>-->
-                <imageupload id="imageupload" :isEditing="isEditing" :uploadType="1" :images="model.images" class="is-profile" @uploadImageCompleted="onUploadImageCompleted"></imageupload>
+                <!--<imageupload id="imageupload" :isEditing="isEditing" :uploadType="1" :images="model.images" class="is-profile" @uploadImageCompleted="onUploadImageCompleted"></imageupload>-->
+                <figure class="image is-square">
+                    <img v-if="model.images && model.images.length > 0" class="profile-image" :src="model.images[0].url" alt="profile image" />
+                </figure>
+                <input id="profileImageUpload" type="file" style="display:none;" @change="onUploadProfileImage($event.target.files); fileCount = $event.target.files.length" accept="image/*">
+                <i class="icon icon-pencil icon-btn" @click.prevent="onReplaceProfileImage"></i>
             </div>
             <div class="userdetail container tile is-vertical is-parent" :class="{editing:isEditing}">
                 <div class="columns">

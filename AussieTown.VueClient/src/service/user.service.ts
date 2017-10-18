@@ -14,14 +14,12 @@ export default class UserService {
         return http.post('api/user/register', user).then(response => {
             let result = response;
             return result;
-        })
-            .catch(this.handleError);
+        });
     }
 
     login(user) {
         return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId })
-            .then(response => response)
-        .catch(this.handleError);
+            .then(response => response);
     }
 
     getMiniProfile(id: number) {
@@ -34,20 +32,17 @@ export default class UserService {
 
     getUserInfo(id: number) {
         return http.get('api/user/' + id)
-            .then(response => response.data)
-            .catch(this.handleError);
+            .then(response => response.data);
     }
 
     update(user: any) {
         return http.put('api/user/' + user.id, user)
-            .then(response => response)
-            .catch(this.handleError);
+            .then(response => response);
     }
 
     getToursByUserId(id: number) {
         return http.get('api/user/tour/' + id)
-            .then(response => response.data)
-            .catch(this.handleError);
+            .then(response => response.data);
     }
 
     delete(_id: string) {
@@ -67,9 +62,5 @@ export default class UserService {
 
         //return new RequestOptions({ headers: headers });
         return '';
-    }
-
-    private handleError(error: any): Promise<any> {
-        return Promise.reject(error.data || error);
     }
 }

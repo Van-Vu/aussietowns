@@ -27,7 +27,6 @@ import LocationSearchComponent from '../component/shared/search/locationsearch.c
 import { Utils } from '../component/utils';
 import { ListingType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
-import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
 import ImageUploadComponent from '../component/shared/imageupload.component.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
 import { ScreenSize, NotificationType, UserRole, UserAction } from '../model/enum';
@@ -72,7 +71,7 @@ var ListingPage = /** @class */ (function (_super) {
                 return this.$store.state.listing;
             }
             //Bodom: comeback
-            this.isOffer = this.listingType.toUpperCase() === ListingType[ListingType.Offer].toUpperCase();
+            //this.isOffer = this.listingType.toUpperCase() === ListingType[ListingType.Offer].toUpperCase();
             return new ListingModel();
         },
         enumerable: true,
@@ -136,30 +135,35 @@ var ListingPage = /** @class */ (function (_super) {
     ListingPage.prototype.onInsertorUpdate = function () {
         var _this = this;
         if (this.canEdit) {
-            this.$validator.validateAll().then(function () {
-                _this.$store.dispatch("ENABLE_LOADING");
-                if (_this.model.id > 0) {
-                    return _this.$store.dispatch('UPDATE_LISTING', _this.contructBeforeSubmit(_this.model))
-                        .then(function () {
-                        _this.$store.dispatch("DISABLE_LOADING");
-                        _this.$store.dispatch('ADD_NOTIFICATION', { title: "Update success", type: NotificationType.Success });
-                    })
-                        .catch(function (err) {
-                        _this.handleError(err);
-                        _this.onCancelEdit();
-                    });
-                }
-                else {
-                    return _this.$store.dispatch('INSERT_LISTING', _this.contructBeforeSubmit(_this.model))
-                        .then(function (listingId) {
-                        _this.$store.dispatch("DISABLE_LOADING");
-                        _this.$router.push({
-                            name: 'listingDetail',
-                            params: { seoString: Utils.seorizeString(_this.model.header), listingId: listingId }
+            this.$validator.validateAll().then(function (result) {
+                if (result) {
+                    _this.$store.dispatch("ENABLE_LOADING");
+                    if (_this.model.id > 0) {
+                        return _this.$store.dispatch('UPDATE_LISTING', _this.contructBeforeSubmit(_this.model))
+                            .then(function () {
+                            _this.$store.dispatch("DISABLE_LOADING");
+                            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Update success", type: NotificationType.Success });
+                            _this.isEditing = false;
+                        })
+                            .catch(function (err) {
+                            _this.onCancelEdit();
                         });
-                        _this.$store.dispatch('ADD_NOTIFICATION', { title: "Insert success. Please upload listing images", type: NotificationType.Success });
-                    })
-                        .catch(function (err) { return _this.handleError(err); });
+                    }
+                    else {
+                        return _this.$store.dispatch('INSERT_LISTING', _this.contructBeforeSubmit(_this.model))
+                            .then(function (listingId) {
+                            _this.$store.dispatch("DISABLE_LOADING");
+                            _this.$router.push({
+                                name: 'listingDetail',
+                                params: { seoString: Utils.seorizeString(_this.model.header), listingId: listingId }
+                            });
+                            _this.$store.dispatch('ADD_NOTIFICATION', {
+                                title: "Insert success. Please upload listing images",
+                                type: NotificationType.Success
+                            });
+                        })
+                            .catch(function (err) { return _this.onCancelEdit(); });
+                    }
                 }
             }).catch(function () {
                 alert('Correct them errors!');
@@ -191,7 +195,7 @@ var ListingPage = /** @class */ (function (_super) {
             this.$router.push({ name: "booking" });
         }
         else {
-            this.handleError({ status: 403 });
+            Utils.handleError(this.$store, { status: 403 });
         }
     };
     ListingPage.prototype.onSaveSchedule = function (scheduleObject) {
@@ -267,20 +271,6 @@ var ListingPage = /** @class */ (function (_super) {
             tourOperators: this.constructParticipants(model.id, model.tourOperators)
         };
     };
-    ListingPage.prototype.handleError = function (error) {
-        this.$store.dispatch("DISABLE_LOADING");
-        if (error.status === 403) {
-            this.$store.dispatch('SHOW_LOGIN_MODAL');
-            this.$store.dispatch('ADD_NOTIFICATION', { title: "Login required", text: "Please login or register to proceed", type: NotificationType.Warning });
-        }
-        if (error.status === 500 || error.status === 400) {
-            var title = this.isEditing
-                ? "Cannot insert this listing. We are on it !"
-                : "Cannot update this listing. We are on it !";
-            this.$store.dispatch('ADD_NOTIFICATION', { title: title, type: NotificationType.Error });
-        }
-        this.$store.dispatch('LOG_ERROR', { message: "Listing page: " + error.data, stack: error.config.data });
-    };
     __decorate([
         Prop,
         __metadata("design:type", String)
@@ -298,7 +288,6 @@ var ListingPage = /** @class */ (function (_super) {
                 "locationsearch": LocationSearchComponent,
                 "participant": ParticipantComponent,
                 "datepicker": datepicker,
-                "schedulemodal": ScheduleModalComponent,
                 "imageupload": ImageUploadComponent,
                 "numberchooser": NumberChooser,
                 "availabilityCheck": AvailabilityComponent

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import Vue from "vue";
+import store from '../store';
+import { Utils } from '../component/utils';
 Vue.prototype.$http = axios;
 //export const http = axios.create({
 //    baseURL: `http://10.0.0.98/meetthelocal/`
@@ -8,7 +10,7 @@ Vue.prototype.$http = axios;
 //    baseURL: `http://localhost/meetthelocal/`
 //})
 var http = axios.create({
-    baseURL: "http://localhost:3514/",
+    baseURL: "http://localhost:8888/",
 });
 http.defaults.withCredentials = true;
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';
@@ -42,23 +44,13 @@ http.interceptors.response.use(function (response) {
     //    window.location.href = '/';
     //    return;
     //}
+    var response = error.response;
+    if (response) {
+        Utils.handleError(store, response);
+    }
     // Do something with response error
     if (error.response)
         return Promise.reject(error.response);
-    //this.$store.dispatch("DISABLE_LOADING");
-    //switch (error.status) {
-    //    case 400:
-    //        this.$store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
-    //        break;
-    //    case 403:
-    //        this.$store.dispatch('SHOW_LOGIN_MODAL');
-    //        this.$store.dispatch('ADD_NOTIFICATION', { title: "Login required", text: "Please login or register to proceed", type: NotificationType.Warning });
-    //        break;
-    //    case 500:
-    //        this.$store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
-    //        break;
-    //}
-    //this.$store.dispatch('LOG_ERROR', { message: `Listing page: ${error.data}`, stack: error.config.data });
     return Promise.reject(error);
 });
 export default http;

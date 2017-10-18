@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using AussieTowns.Common;
 using AussieTowns.Model;
 using Dapper;
 using Microsoft.Extensions.Logging;
@@ -35,8 +36,8 @@ namespace AussieTowns.Repository
             {
                 var sql = "SELECT * FROM User WHERE id=@id;"
                           + "SELECT sd.* FROM SuburbDetail sd INNER JOIN User u ON sd.id = u.locationId WHERE u.id = @id;"
-                          + "SELECT * FROM ListingView l INNER JOIN tourguest g ON l.id = g.ListingId WHERE g.existingUserId = @id;"
-                          + "SELECT * FROM ListingView l INNER JOIN touroperator o ON l.id = o.ListingId WHERE o.UserId = @id;"
+                          + "SELECT l.* FROM ListingView l INNER JOIN tourguest g ON l.id = g.ListingId WHERE g.existingUserId = @id;"
+                          + "SELECT l.* FROM ListingView l INNER JOIN touroperator o ON l.id = o.ListingId WHERE o.UserId = @id;"
                           + "SELECT * FROM Image i WHERE UserID = @id AND IsActive = true ORDER BY sortorder, createddate;";
 
                 dbConnection.Open();
@@ -92,7 +93,7 @@ namespace AussieTowns.Repository
                         var userId = Convert.ToInt16(await dbConnection.ExecuteScalarAsync("SELECT LAST_INSERT_ID()"));
 
                         var image = user.Images.FirstOrDefault();
-                        if (image != null)
+                        if (image != null && user.Source != UserSource.Native)
                         {
                             var imageSql = "INSERT INTO Image(userId, url, createdDate, isActive, listingId) "
                                     + "VALUES (@userId, @url, @createdDate, @isActive,0)";

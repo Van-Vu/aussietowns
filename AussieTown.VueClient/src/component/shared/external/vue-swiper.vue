@@ -1,8 +1,8 @@
 <template>
     <div class="swipe-wrapper">
-        <!--<div class="slide-button-prev is-hidden-mobile" v-show="currentPage > 1" @click.prevent="prev">
+        <div class="slide-button-prev is-hidden-mobile" v-if="showNavButton" v-show="currentPage > 1" @click.prevent="prev">
             <i class="icon icon-left-open-big"></i>
-        </div>-->
+        </div>
         <div class="swiper"
              :class="[direction, {'dragging': dragging}]"
              @touchstart.prevent="_onTouchStart"
@@ -26,9 +26,9 @@
                       @click="paginationClickable && setPage(index+1)"></span>
             </div>
         </div>
-        <!--<div class="slide-button-next is-hidden-mobile" v-show="isNextAvailable()" @click.prevent="next">
+        <div class="slide-button-next is-hidden-mobile" v-if="showNavButton" v-show="isNextAvailable()" @click.prevent="next">
             <i class="icon icon-right-open-big"></i>
-        </div>-->
+        </div>
     </div>
 </template>
 <script>
@@ -70,6 +70,10 @@
             slideWidth: {
                 type: Number,
                 default: 300
+            },
+            showNavButton: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
@@ -186,9 +190,9 @@
                     this.$emit('slider-move', this._getTranslate());
                 }
 
-                if (this.isVertical() || this.isHorizontal() && Math.abs(this.delta) > 0) {
-                    e.preventDefault();
-                }
+                //if (this.isVertical() || this.isHorizontal() && Math.abs(this.delta) > 0) {
+                //    e.preventDefault();
+                //}
             },
             _onTouchEnd(e) {
                 this.dragging = false;

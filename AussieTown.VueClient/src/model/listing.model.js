@@ -19,7 +19,7 @@ var ListingModel = /** @class */ (function () {
         this.schedules = new Array();
         this.imageList = new Array();
         //this.schedules.push(new ScheduleModel(new Date().toJSON().slice(0, 10).replace(/-/g, '/'), '00:00', '00:00', new Date().toJSON().slice(0, 10).replace(/-/g, '/'),'',[]));
-        this.schedules.push(new ScheduleModel('', '00:00', '00:00', '', '', []));
+        this.schedules.push(new ScheduleModel(new Date().toJSON().slice(0, 10).replace(/-/g, '/'), '00:00', '00:00', '', '', []));
     }
     Object.defineProperty(ListingModel.prototype, "headerLink", {
         get: function () {

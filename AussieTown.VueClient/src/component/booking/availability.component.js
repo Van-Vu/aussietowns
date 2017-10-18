@@ -18,7 +18,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import Vue from "vue";
-import { Component, Watch } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import datepicker from '../shared/external/datepicker.vue';
 import numberchooser from '../shared/numberchooser.component.vue';
 var AvailabilityComponent = /** @class */ (function (_super) {
@@ -46,6 +46,14 @@ var AvailabilityComponent = /** @class */ (function (_super) {
         this.availableTimeslot = timeslots;
         this.$emit('bookingDateChanged', value);
     };
+    __decorate([
+        Prop,
+        __metadata("design:type", String)
+    ], AvailabilityComponent.prototype, "date", void 0);
+    __decorate([
+        Prop,
+        __metadata("design:type", String)
+    ], AvailabilityComponent.prototype, "time", void 0);
     __decorate([
         Watch('bookingTime'),
         __metadata("design:type", Function),

@@ -3,8 +3,8 @@
         <div class="columns">
             <div class="column is-4">Choose your suitable day</div>
             <div class="column">
-                <datepicker id="availDay" :disabled="disableDays" :range="false" :inline="true"
-                            :showTextbox="true" :value="bookingDate" @input="onBookingDateChanged"></datepicker>
+                <datepicker id="availDay" :disabled="disableDays" :range="false"
+                            :value="bookingDate" @input="onBookingDateChanged"></datepicker>
             </div>
 
         </div>

@@ -55,11 +55,14 @@ export default class NavMenuComponent extends Vue {
         if (this.$store.state.currentPage != 'home') {
             this.isSticky = true;
         }
+
+        window.addEventListener('click', this.closeUserMenu);
     }
 
     destroyed() {
         if (process.env.VUE_ENV === 'client') {
             window.removeEventListener('scroll', this.handleScroll);
+            window.removeEventListener('click', this.closeUserMenu);
         }
     }
 
@@ -103,6 +106,12 @@ export default class NavMenuComponent extends Vue {
     onLogout() {
         this.$store.dispatch('SET_CURRENT_USER', null);
         this.$cookie.set('mtltk',null);
-        //alert('hey Logout');
+        this.$router.push("home");
+    }
+
+    closeUserMenu(e) {
+        if ((!this.$el.contains(e.target)) && (e.target.id != 'popupUserMenu')) {
+            this.showMenuModal = false;
+        }
     }
 }

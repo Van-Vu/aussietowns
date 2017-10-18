@@ -1,4 +1,4 @@
-import { ListingType } from '../model/enum';
+import { ListingType, NotificationType } from '../model/enum';
 var Utils = /** @class */ (function () {
     function Utils() {
     }
@@ -60,6 +60,28 @@ var Utils = /** @class */ (function () {
             rect.left >= 0 &&
             rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
             rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */);
+    };
+    Utils.handleError = function (store, error) {
+        store.dispatch("DISABLE_LOADING");
+        switch (error.status) {
+            case 400:
+                store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
+                break;
+            case 403:
+                store.dispatch('SHOW_LOGIN_MODAL');
+                store.dispatch('ADD_NOTIFICATION', { title: "Login required", text: "Please login or register to proceed", type: NotificationType.Warning });
+                break;
+            case 500:
+                store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
+                break;
+        }
+        store.dispatch('LOG_ERROR', { message: "" + error.data, stack: error.config.data });
+    };
+    Utils.getProfileImage = function (url) {
+        return url ? url : '/static/images/anonymous.png';
+    };
+    Utils.getProfileFullName = function (user) {
+        return (user.firstName && user.lastName) ? user.firstName + " " + user.lastName : user.email;
     };
     return Utils;
 }());

@@ -172,7 +172,7 @@
                 </tab-content>
             </form-wizard>
         </div>
-        <div v-if="!isBooked" class="tile is-vertical" :class="{'is-sticky-box': isStickyBoxRequired}">
+        <div class="tile is-vertical" :class="{'is-sticky-box': isStickyBoxRequired}">
             <div class="field box">
                 <div class="box-header-strip"></div>
                 <router-link :to="{ name: 'listingDetail', params: { seoString: model.listing.headerLink, listingId: model.listing.id }}">

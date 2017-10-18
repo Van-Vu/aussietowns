@@ -6,15 +6,17 @@ import UserService from "../service/user.service";
 import MessageService from "../service/message.service";
 import UploadService from "../service/fileupload.service";
 import LogService from "../service/log.service";
+import BookingService from "../service/booking.service";
 
 import ListingModel from '../model/listing.model';
+import MiniProfile from '../model/miniprofile.model';
 import BookingModel from '../model/booking.model';
 import UserModel from '../model/user.model';
 import RequestResult from '../model/RequestResult';
 import ConversationModel from '../model/conversation.model';
 import MessageModel from '../model/message.model';
 
-import { ListingType } from '../model/enum';
+import { ListingType, NotificationType } from '../model/enum';
 
 import { Utils } from '../component/utils';
 import { plainToClass } from "class-transformer";
@@ -60,13 +62,13 @@ export default new Vuex.Store({
         },
         profilePhoto: state => {
             if (state.loggedInUser) {
-                return (state.loggedInUser as any).photoUrl;    
+                return Utils.getProfileImage((state.loggedInUser as any).photoUrl);    
             }
-            return null;
+            return '';
         },
         profileLink: state => {
             if (state.loggedInUser) {
-                return Utils.seorizeString(`${(state.loggedInUser as any).firstName} ${(state.loggedInUser as any).lastName}`) ;
+                return Utils.seorizeString(Utils.getProfileFullName(state.loggedInUser)) ;
             }
             return null;
         },
@@ -84,7 +86,7 @@ export default new Vuex.Store({
         SET_CURRENT_PAGE({ commit }, page) {
             commit('UPDATE_PAGE', page);    
         },
-        FETCH_LISTING_BY_ID({ commit, state }, id) {
+        FETCH_LISTING_BY_ID({ dispatch, commit, state }, id) {
             return (new ListingService()).getListingById(id)
                 .then(response => {
                     commit('UPDATE_LISTING', response);
@@ -92,7 +94,12 @@ export default new Vuex.Store({
         },
         CREATE_LISTING({ commit, state }, listingType) {
             let newListing = new ListingModel();
-            newListing.type = listingType.toUpperCase() === ListingType[ListingType.Offer].toUpperCase() ? 0 : 1;
+            let user = state.loggedInUser as any;
+            
+            newListing.tourOperators.push(new MiniProfile(user.id, Utils.getProfileFullName(user), user.email, '', Utils.getProfileImage(user.photoUrl), ''));
+            if (listingType) {
+                newListing.type = listingType.toUpperCase() === ListingType[ListingType.Offer].toUpperCase() ? 0 : 1;
+            }
             return commit('UPDATE_LISTING', newListing);
         },
         FETCH_FEATURELISTINGS({ commit }) {
@@ -171,9 +178,9 @@ export default new Vuex.Store({
                     return (response as any).length;
                 });
         },
-        UPLOAD_PROFILE_IMAGES({ commit }, payload) {
+        UPLOAD_PROFILE_IMAGE({ commit }, payload) {
             return (new UploadService()).uploadProfileImage(payload.data, payload.actionId)
-                .then(response => commit('ADD_PROFILE_IMAGES', response));
+                .then(response => commit('UPDATE_PROFILE_IMAGE', response));
         },
         UPLOAD_PROFILE_HEROIMAGE({ commit }, payload) {
             return (new UploadService()).uploadProfileHeroImage(payload.data, payload.actionId)
@@ -211,6 +218,32 @@ export default new Vuex.Store({
         },
         LOG_ERROR({ commit }, err) {
             return (new LogService()).logError(err.message, err.stack);
+        },
+        HANDLE_ERROR({ dispatch, commit }, error) {
+            console.log('bodom handle error in store');
+            console.log(error);
+
+            dispatch("DISABLE_LOADING");
+
+            switch (error.status) {
+                case 400:
+                    dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
+                    break;
+                case 403:
+                    dispatch('SHOW_LOGIN_MODAL');
+                    dispatch('ADD_NOTIFICATION', { title: "Login required", text: "Please login or register to proceed", type: NotificationType.Warning });
+                    break;
+                case 500:
+                    dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
+                    break;
+            }
+
+            dispatch('LOG_ERROR', { message: `${error.data}`, stack: error.config.data });
+        },
+        FETCH_BOOKING_DETAIL({ commit }, bookingId) {
+            return (new BookingService()).getBookingById(bookingId).then(response => {
+                commit('UPDATE_BOOKING', response);
+            });
         },
         TEST({ commit, state }, payload) {
             (new UserService()).getMiniProfile(1).catch(error => commit('ADD_NOTIFICATION', error));
@@ -269,12 +302,14 @@ export default new Vuex.Store({
             let image = (state.listing as any).imageList.find(x => x.url === imageUrl);
             Vue.set(state.listing, 'imageList', Utils.removeFromArray((state.listing as any).imageList, image));
         },
-        ADD_PROFILE_IMAGES(state, profileImages) {
-            if ((state.profile as any).images) {
-                profileImages.map(x => (state.profile as any).images.push(x));
-            } else {
-                Vue.set(state.profile, 'images', profileImages);
-            }
+        UPDATE_PROFILE_IMAGE(state, profileImage) {
+            //if ((state.profile as any).images) {
+            //    profileImages.map(x => (state.profile as any).images.push(x));
+            //} else {
+            //    Vue.set(state.profile, 'images', profileImages);
+            //}
+
+            Vue.set(state.profile, 'images', [{url:profileImage}]);
         },
         UPDATE_PROFILE_HEROIMAGE(state, heroImage) {
             Vue.set(state.profile, 'heroImageUrl', heroImage);
@@ -284,6 +319,9 @@ export default new Vuex.Store({
             Vue.set(state.profile, 'images', Utils.removeFromArray((state.profile as any).images, image));
         },
         UPDATE_BOOKING(state, payload) {
+            //import { plainToClass } from "class-transformer";
+            let listingObject = plainToClass(ListingModel, payload.listing);
+            payload.listing = listingObject;
             Vue.set(state,'booking', payload);
         },
         ADD_BOOKING_PARTICIPANT(state, user) {

@@ -79,10 +79,12 @@ var NavMenuComponent = /** @class */ (function (_super) {
         if (this.$store.state.currentPage != 'home') {
             this.isSticky = true;
         }
+        window.addEventListener('click', this.closeUserMenu);
     };
     NavMenuComponent.prototype.destroyed = function () {
         if (process.env.VUE_ENV === 'client') {
             window.removeEventListener('scroll', this.handleScroll);
+            window.removeEventListener('click', this.closeUserMenu);
         }
     };
     NavMenuComponent.prototype.handleScroll = function (event) {
@@ -120,7 +122,12 @@ var NavMenuComponent = /** @class */ (function (_super) {
     NavMenuComponent.prototype.onLogout = function () {
         this.$store.dispatch('SET_CURRENT_USER', null);
         this.$cookie.set('mtltk', null);
-        //alert('hey Logout');
+        this.$router.push("home");
+    };
+    NavMenuComponent.prototype.closeUserMenu = function (e) {
+        if ((!this.$el.contains(e.target)) && (e.target.id != 'popupUserMenu')) {
+            this.showMenuModal = false;
+        }
     };
     __decorate([
         Watch('$route.params'),

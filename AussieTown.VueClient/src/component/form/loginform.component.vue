@@ -31,7 +31,7 @@
                 </div>
                 <div class="field">
                     <p class="control has-icon has-icon-right">
-                        <input name="password" v-model="model.password" v-validate="'required'"
+                        <input name="password" v-model="rawPassword" v-validate="'required'"
                                :class="{'input': true, 'is-danger': errors.has('password') }" type="password" placeholder="●●●●●●●">
                         <span class="icon user">
                             <i class="icon icon-lock"></i>
@@ -41,8 +41,8 @@
                 </div>
                 <div class="field" v-if="!isLogin">
                     <p class="control has-icon has-icon-right">
-                        <input name="confirmPassword" v-model="confirmPassword" v-validate="'required|confirmed:newPassword'"
-                               :class="{'input': true, 'is-danger': errors.has('confirmPassword') }" type="password" placeholder="Confirm new password">
+                        <input name="confirmPassword" v-model="confirmPassword" v-validate="'required|confirmed:password'"
+                               :class="{'input': true, 'is-danger': errors.has('confirmPassword') }" type="password" placeholder="Confirm password">
                         <span class="icon user">
                             <i class="icon icon-lock"></i>
                         </span>

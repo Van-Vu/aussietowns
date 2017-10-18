@@ -22,7 +22,6 @@ import { Component, Prop } from "vue-property-decorator";
 import UploadImage from './external/vueuploadimage.vue';
 import Swiper from './external/vue-swiper.vue';
 import RingLoader from './external/ringloader.vue';
-import { NotificationType } from '../../model/enum';
 import { GlobalConfig } from '../../GlobalConfig';
 var ImageUploadComponent = /** @class */ (function (_super) {
     __extends(ImageUploadComponent, _super);
@@ -54,7 +53,6 @@ var ImageUploadComponent = /** @class */ (function (_super) {
             _this.isUploading = false;
         })
             .catch(function (error) {
-            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", text: error.message ? error.message : "Error uploading. We're on it !", type: NotificationType.Error });
             _this.isUploading = false;
         });
         ;
@@ -81,7 +79,6 @@ var ImageUploadComponent = /** @class */ (function (_super) {
             _this.isUploading = false;
         })
             .catch(function (error) {
-            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", text: error.message ? error.message : "Error uploading. We're on it !", type: NotificationType.Error });
             _this.isUploading = false;
         });
     };

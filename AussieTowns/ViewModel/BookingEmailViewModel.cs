@@ -4,6 +4,7 @@ namespace AussieTowns.ViewModel
 {
     public class BookingEmailViewModel
     {
+        public int ListingId { get; set; }
         public string EmailHeader { get; set; }
         public string ListingUrl { get; set; }
         public string ListingHeader { get; set; }

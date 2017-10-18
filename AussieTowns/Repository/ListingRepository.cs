@@ -74,7 +74,7 @@ namespace AussieTowns.Repository
                 //https://stackoverflow.com/questions/34929231/map-a-column-with-string-representing-a-list-to-a-list-object-using-dapper
                 var scheduleSql = "SELECT s.id, s.startDate, s.duration, s.enddate, s.repeatedtype, s.repeatedday, s.listingid FROM Schedule s INNER JOIN Listing l ON s.listingid = l.id WHERE ListingId = @listingid;";
                 
-                var schedules = await dbConnection.QueryAsync<int, DateTime, TimeSpan, DateTime, RepeatedType?, string, int, Schedule>(scheduleSql,
+                var schedules = await dbConnection.QueryAsync<int, DateTime, TimeSpan, DateTime?, RepeatedType?, string, int, Schedule>(scheduleSql,
                     (id, startDate, duration, endDate, repeatedType, repeatedDay, listingid) => new Schedule
                         {
                             Id = id,
@@ -303,17 +303,43 @@ namespace AussieTowns.Repository
             }
         }
 
-        public async Task<int> AddTourGuest(IList<Booking> bookings)
+        public async Task<int> AddTourGuest(Booking booking, IList<TourGuest> tourGuests)
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "INSERT INTO TourGuest(listingId, existingUserId, isPrimary, firstName, lastName, email, phone, address, emergencyContact) "
-                        + "VALUES(@listingId, @existingUserId, @isPrimary, @firstName, @lastName, @email, @phone, @address, @emergencyContact)";
                 dbConnection.Open();
-                var ret = await dbConnection.ExecuteAsync(sql, bookings );
-                return ret;
-            }
+                using (var tran = dbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        var tourGuestSql = "INSERT INTO TourGuest(listingId, existingUserId, isPrimary, firstName, lastName, email, phone, address, emergencyContact) "
+                                  + "VALUES(@listingId, @existingUserId, @isPrimary, @firstName, @lastName, @email, @phone, @address, @emergencyContact)";
+                        await dbConnection.ExecuteAsync(tourGuestSql, tourGuests);
 
+                        var idsSql = "SELECT id FROM TourGuest WHERE id >= LAST_INSERT_ID()";
+
+                        var newIds = await dbConnection.QueryAsync<int>(idsSql);
+
+                        var bookings = newIds.Select(id => new Booking
+                        {
+                            ListingId = booking.ListingId, BookingDate = booking.BookingDate, StartTime = booking.StartTime, GuestId = id
+                        }).ToList();
+
+                        var bookingSql = "INSERT INTO booking(listingId, bookingDate, startTime, isConfirmed, tourGuestId, createdDate, updatedDate) "
+                                         + "VALUES(@listingId, @bookingDate, @startTime, 0, @guestId, NOW(), NOW())";
+                        var bookingRet = await dbConnection.ExecuteAsync(bookingSql, bookings);
+
+                        tran.Commit();
+                        return bookingRet;
+                    }
+                    catch (Exception e)
+                    {
+                        tran.Rollback();
+                        _logger.LogCritical(e.Message, e);
+                        throw;
+                    }
+                }
+            }
         }
     }
 }

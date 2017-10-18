@@ -46,12 +46,13 @@ var RegistrationForm = /** @class */ (function (_super) {
     };
     RegistrationForm.prototype.onRegister = function () {
         var _this = this;
-        this.$validator.validateAll().then(function () {
-            // eslint-disable-next-line
-            (new UserService()).signup(_this.model)
-                .then(function (response) {
-                _this.$emit('onSuccessfulLogin', response);
-            });
+        this.$validator.validateAll().then(function (result) {
+            if (result) {
+                (new UserService()).signup(_this.model)
+                    .then(function (response) {
+                    _this.$emit('onSuccessfulLogin', response);
+                });
+            }
         }).catch(function () {
             // eslint-disable-next-line
             alert('Correct them errors!');

@@ -2,11 +2,8 @@
 
 <template>
     <div class="date-picker" :class="{'is-inline': inline}">
-        <div class="input-wrapper" v-show="showTextbox" @mouseenter="showCancel = true" @mouseleave="showCancel = false">
-            <div class="input-date" @click="togglePanel" v-text="range ? display[0] + ' -- ' + display[1] : display"></div>
-            <!--<transition name="fade">
-                <img class="cancel-btn" v-show="showCancel" @click="clear">
-            </transition>-->
+        <div class="input-wrapper" @mouseenter="showCancel = true" @mouseleave="showCancel = false">
+            <div class="input-date" @click="togglePanel">{{range ? display[0] + ' -- ' + display[1] : display}}</div>
             <i class="icon icon-calendar"></i>
         </div>
         <transition name="toggle">
@@ -105,7 +102,6 @@ export default {
         language: {default: 'en'},
         min: {default: '1970-01-01'},
         max: {default: '3016-01-01'},
-        showTextbox: {default: true},
         inline: { type: Boolean, default: false },    
         value: { type: [String, Array], default: '' },
         disabled: { type: Object, default: () => {return {to: new Date()};} },

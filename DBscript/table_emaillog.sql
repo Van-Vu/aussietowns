@@ -9,13 +9,10 @@ CREATE TABLE emaillog (
   fromAddress varchar(128) NOT NULL,
   toAddress varchar(128) NOT NULL,
   subject varchar(200) NOT NULL,
-  content varchar(1000) NOT NULL,
+  content TEXT NOT NULL,
   transactionId varchar(36),
   messageId varchar(36),
   status bit DEFAULT 0,
   createdDate DATETIME,
-  PRIMARY KEY (id),
-  FOREIGN KEY (listingId)
-     REFERENCES listing(id)
-     ON DELETE CASCADE
+  PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

@@ -4,6 +4,7 @@
 .swiper {
   position: relative;
   overflow: hidden;
+  touch-action: pan-y pinch-zoom;
 
   .swiper-slide {
     display: flex;
@@ -21,6 +22,11 @@
       justify-content: center;
       align-self: center;
     }
+  }
+
+  .noimage {
+    background-image: linear-gradient(-135deg, #70e1f5, #ffd194);
+    height: 100%;
   }
 
   &.horizontal .swiper-slide {
@@ -81,11 +87,10 @@
     cursor: pointer;
     border-radius: 50%;
     background-color: transparent;
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     z-index:1;
-    background-color: $c-neutral-white;
-    box-shadow: 0px 1px 6px #666;
+    /*box-shadow: 0px 1px 6px #666;*/
 
     &:hover {
         box-shadow: 0px 1px 6px $c-brand-primary;
@@ -93,17 +98,25 @@
     }
 
     & .icon {
-        margin-left: 7px;
-        margin-top: 6px;
+        margin-top: 13px;
+        font-size: 30px;
     }
 }
 
 .slide-button-prev{
     @extend .slide-button;
     left: -18px;
+
+    & .icon {
+        margin-left: 0;
+    }
 }
     
 .slide-button-next{
     @extend .slide-button;
     right: -18px;
+
+    & .icon {
+        margin-left: 5px;
+    }
 }

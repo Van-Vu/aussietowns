@@ -3,7 +3,9 @@
         <div class="tile is-parent">
             <div class="tile is-3">Start date</div>
             <div class="tile is-9">
-                <datepicker :disabled="disableDays" :range="false" v-model="model.startDate"></datepicker>
+                <datepicker :disabled="disableDays" :range="false" v-model="model.startDate" v-validate="'required'"
+                    :class="{'is-danger': errors.has('startDate') }"></datepicker>
+                <span v-show="errors.has('startDate')" class="help is-danger">{{ errors.first('startDate') }}</span>
             </div>
         </div>
         <div class="tile is-parent">

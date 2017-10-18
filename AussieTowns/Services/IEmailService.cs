@@ -11,6 +11,6 @@ namespace AussieTowns.Services
     {
         Task<int> SendBookingConfirmEmail(BookingEmailViewModel emailViewModel, string hostEmail, string hostName);
 
-        Task<EmailSend> SendWelcomeEmail(string receivers);
+        Task<int> SendWelcomeEmail(string receivers);
     }
 }

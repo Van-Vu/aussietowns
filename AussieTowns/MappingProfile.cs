@@ -105,8 +105,8 @@ namespace AussieTowns
                         Email = tourGuest.Email,
                         Fullname = $"{tourGuest.FirstName} {tourGuest.LastName}",
                         PhotoUrl = "/static/images/anonymous.png",
-                        ProfileUrl = "",
-                        ShortDescription = "Unregistered User"
+                        ProfileUrl = null,
+                        ShortDescription = null
                     });
                 }
             }

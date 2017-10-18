@@ -147,7 +147,8 @@ namespace AussieTowns.Controllers
 
                 var bookingEmailViewModel = new BookingEmailViewModel
                 {
-                    ListingUrl = "google.com.au",
+                    ListingId = listingDetail.Id,
+                    ListingUrl = StringHelper.SeorizeListingName(listingDetail.Header,listingDetail.Id),
                     ListingHeader = listingDetail.Header,
                     ListingDescription = listingDetail.Description,
                     BookingDate = request.BookingDate.ToString("dddd dd-MMM-yyyy", CultureInfo.DefaultThreadCurrentUICulture),
@@ -235,8 +236,16 @@ namespace AussieTowns.Controllers
             try
             {
                 //if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
+                var listing = await _listingService.GetListingDetail(listingId);
 
-                if (!await _authorizationService.AuthorizeAsync(User, new Listing {Id=listingId}, Operations.Update))
+                if (listing == null)
+                {
+                    _logger.LogInformation("Can't find listing with id: {id}", listingId);
+                    throw new ArgumentOutOfRangeException(nameof(listingId), "Can't find listing");
+                }
+
+
+                if (!await _authorizationService.AuthorizeAsync(User, listing, Operations.Update))
                     throw new UnauthorizedAccessException();
 
                 var image = await _listingService.FetchImageByUrl(listingId, url);

@@ -10,7 +10,7 @@
             </div>
             <div class="listing-content">
                 <div class="listing-location">In: {{location}}</div>
-                <div class="listing-date">Time: {{date}} - {{time}}</div>
+                <div class="listing-date">{{date}} - {{time}}</div>
                 <div class="listing-host">Host by: {{hostName }}</div>
                 <!--<div class="listing-review">review star here</div>-->
             </div>

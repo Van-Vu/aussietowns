@@ -15,6 +15,8 @@ import numberchooser from '../shared/numberchooser.component.vue';
 })
 
 export default class AvailabilityComponent extends Vue {
+    @Prop date: string;
+    @Prop time: string;
     bookingDate: string = '';
     bookingTime: string = '';
     disableDays = {

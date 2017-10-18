@@ -19,7 +19,6 @@ import { Component } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import LocationSearchComponent from "../shared/search/locationsearch.component.vue";
 import UserModel from '../../model/user.model';
-import ImageModel from '../../model/image.model';
 import { UserRole, UserAction, NotificationType } from '../../model/enum';
 import datepicker from '../shared/external/datepicker.vue';
 import { plainToClass } from "class-transformer";
@@ -48,8 +47,7 @@ var UserDetailComponent = /** @class */ (function (_super) {
     };
     UserDetailComponent.prototype.created = function () {
         if (this.model) {
-            if (this.model.images.length === 0)
-                this.model.images.push(new ImageModel("http://via.placeholder.com/240x240"));
+            //if (this.model.images.length === 0) this.model.images.push(new ImageModel("http://via.placeholder.com/240x240"));
             //if (!this.model.heroImageUrl) this.model.heroImageUrl = "http://via.placeholder.com/1280x320";
         }
     };
@@ -108,11 +106,28 @@ var UserDetailComponent = /** @class */ (function (_super) {
             actionId: this.$store.state.profile.id
         }).then(function (response) {
             _this.$emit('uploadImageCompleted');
-        })
-            .catch(function (error) {
-            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", text: error.message ? error.message : "Error uploading. We're on it !", type: NotificationType.Error });
         });
         document.getElementById('fileUpload').value = null;
+    };
+    UserDetailComponent.prototype.onReplaceProfileImage = function () {
+        document.getElementById("profileImageUpload").click();
+    };
+    UserDetailComponent.prototype.onUploadProfileImage = function (fileList) {
+        var _this = this;
+        if (!fileList.length)
+            return;
+        var formData = new FormData();
+        Array.from(Array(fileList.length).keys())
+            .map(function (x) {
+            formData.append('files', fileList[x], fileList[x].name);
+        });
+        this.$store.dispatch('UPLOAD_PROFILE_IMAGE', {
+            data: formData,
+            actionId: this.$store.state.profile.id
+        }).then(function (response) {
+            _this.$emit('uploadImageCompleted');
+        });
+        document.getElementById('profileImageUpload').value = null;
     };
     UserDetailComponent.prototype.onUpdate = function () { };
     UserDetailComponent.prototype.capture = function () { };

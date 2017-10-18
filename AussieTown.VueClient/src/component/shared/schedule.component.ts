@@ -5,7 +5,6 @@ import ScheduleModel from '../../model/schedule.model';
 import vuetimepicker from './external/vuetimepicker.vue';
 import datepicker from './external/datepicker.vue';
 import { Utils } from '../utils';
-
 import VeeValidate from 'vee-validate';
 Vue.use(VeeValidate);
 
@@ -50,9 +49,11 @@ export default class ScheduleComponent extends Vue {
     }
 
     validateBeforeSubmit() {
-        this.$validator.validateAll().then(() => {
-            this.model.repeatedDay = this.repeatedDay;
-            this.$emit('onSave', this.model);
+        this.$validator.validateAll().then((result) => {
+            if (result) {
+                this.model.repeatedDay = this.repeatedDay;
+                this.$emit('onSave', this.model);                
+            }
         }).catch(() => {
             alert('Correct them errors!');
         });

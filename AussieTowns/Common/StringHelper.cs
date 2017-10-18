@@ -27,5 +27,10 @@ namespace AussieTowns.Common
 
             return html;
         }
+
+        public static string SeorizeListingName(string header, int id)
+        {
+            return $"{string.Join("-", header.Split(' '))}-{id}";
+        }
     }
 }

@@ -69,11 +69,9 @@ namespace AussieTowns.Services
 
         public async Task<int> Booking(BookingRequest bookingRequest)
         {
-            var bookings = bookingRequest.Participants.Select(participant => new Booking
+            var tourGuests = bookingRequest.Participants.Select(participant => new TourGuest()
             {
                 ListingId = bookingRequest.ListingId,
-                BookingDate = bookingRequest.BookingDate,
-                Time = bookingRequest.Time,
                 ExistingUserId = participant.Id,
                 FirstName = participant.FirstName,
                 LastName = participant.LastName,
@@ -82,9 +80,18 @@ namespace AussieTowns.Services
                 Address = participant.Address,
                 EmergencyContact = participant.EmergencyContact
             }).ToList();
+            var firstOrDefault = tourGuests.FirstOrDefault();
+            if (firstOrDefault != null) firstOrDefault.IsPrimary = true;
 
-            bookings.FirstOrDefault().IsPrimary = true;
-            return await _listingRepository.AddTourGuest(bookings);
+            var booking = new Booking
+            {
+                ListingId = bookingRequest.ListingId,
+                BookingDate = bookingRequest.BookingDate,
+                StartTime = bookingRequest.Time,
+            };
+
+            
+            return await _listingRepository.AddTourGuest(booking, tourGuests);
         }
     }
 }

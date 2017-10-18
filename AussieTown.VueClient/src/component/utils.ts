@@ -1,4 +1,4 @@
-﻿import { ListingType } from '../model/enum';
+﻿import { ListingType, NotificationType } from '../model/enum';
 
 export class Utils {
     public static formatDate(date: Date) {
@@ -76,5 +76,32 @@ export class Utils {
             rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
             rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
         );
+    }
+
+    public static handleError(store, error: any) {
+        store.dispatch("DISABLE_LOADING");
+
+        switch (error.status) {
+            case 400:
+                store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
+                break;
+            case 403:
+                store.dispatch('SHOW_LOGIN_MODAL');
+                store.dispatch('ADD_NOTIFICATION', { title: "Login required", text: "Please login or register to proceed", type: NotificationType.Warning });
+                break;
+            case 500:
+                store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
+                break;
+        }
+
+        store.dispatch('LOG_ERROR', { message: `${error.data}`, stack: error.config.data });
+    }
+
+    public static getProfileImage(url) {
+        return url ? url : '/static/images/anonymous.png';    
+    }
+
+    public static getProfileFullName(user) {
+        return (user.firstName && user.lastName) ? `${user.firstName} ${user.lastName}` : user.email;
     }
 }

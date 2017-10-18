@@ -10,7 +10,6 @@ import { Utils } from '../component/utils';
 import { ListingType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
 import ScheduleModel from '../model/schedule.model';
-import ScheduleModalComponent from '../component/modal/schedulemodal.component.vue';
 import ImageUploadComponent from '../component/shared/imageupload.component.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
 import { ScreenSize, NotificationType, UserRole, UserAction } from '../model/enum';
@@ -25,7 +24,6 @@ Vue.use(VeeValidate);
         "locationsearch": LocationSearchComponent,
         "participant": ParticipantComponent,
         "datepicker": datepicker,
-        "schedulemodal": ScheduleModalComponent,
         "imageupload": ImageUploadComponent,
         "numberchooser": NumberChooser,
         "availabilityCheck": AvailabilityComponent
@@ -73,7 +71,7 @@ export default class ListingPage extends Vue{
         }
 
         //Bodom: comeback
-        this.isOffer = this.listingType.toUpperCase() === ListingType[ListingType.Offer].toUpperCase();
+        //this.isOffer = this.listingType.toUpperCase() === ListingType[ListingType.Offer].toUpperCase();
         return new ListingModel();
     }
 
@@ -132,31 +130,38 @@ export default class ListingPage extends Vue{
 
     onInsertorUpdate() {
         if (this.canEdit) {
-            this.$validator.validateAll().then(() => {
-                this.$store.dispatch("ENABLE_LOADING");
-                if (this.model.id > 0) {
-                    return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model))
-                        .then(() => {
-                            this.$store.dispatch("DISABLE_LOADING");
-                            this.$store.dispatch('ADD_NOTIFICATION', { title: "Update success", type: NotificationType.Success});
-                        })
-                        .catch(err => {
-                            this.handleError(err);
-                            this.onCancelEdit();
-                        });
-                } else {
-                    return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model))
-                        .then(listingId => {
-                            this.$store.dispatch("DISABLE_LOADING");
-                            this.$router.push({
-                                name: 'listingDetail',
-                                params: { seoString: Utils.seorizeString(this.model.header), listingId: listingId }
+            this.$validator.validateAll().then((result) => {
+                if (result) {
+                    this.$store.dispatch("ENABLE_LOADING");
+                    if (this.model.id > 0) {
+                        return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model))
+                            .then(() => {
+                                this.$store.dispatch("DISABLE_LOADING");
+                                this.$store.dispatch('ADD_NOTIFICATION',
+                                    { title: "Update success", type: NotificationType.Success });
+                                this.isEditing = false;
+                            })
+                            .catch(err => {
+                                this.onCancelEdit();
                             });
+                    } else {
+                        return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model))
+                            .then(listingId => {
+                                this.$store.dispatch("DISABLE_LOADING");
+                                this.$router.push({
+                                    name: 'listingDetail',
+                                    params: { seoString: Utils.seorizeString(this.model.header), listingId: listingId }
+                                });
 
-                            this.$store.dispatch('ADD_NOTIFICATION', { title: "Insert success. Please upload listing images", type: NotificationType.Success });
-                        })
-                        .catch(err => this.handleError(err));
-                }            
+                                this.$store.dispatch('ADD_NOTIFICATION',
+                                {
+                                    title: "Insert success. Please upload listing images",
+                                    type: NotificationType.Success
+                                });
+                            })
+                            .catch(err => this.onCancelEdit());
+                    }
+                }
             }).catch(() => {
                 alert('Correct them errors!');
             });
@@ -192,7 +197,7 @@ export default class ListingPage extends Vue{
         if (this.isLoggedIn) {
             this.$router.push({ name: "booking" });
         } else {
-            this.handleError({status: 403});
+            Utils.handleError(this.$store, {status: 403});
         }
     }
 
@@ -280,23 +285,5 @@ export default class ListingPage extends Vue{
             tourGuests: this.constructParticipants(model.id, model.tourGuests),
             tourOperators: this.constructParticipants(model.id, model.tourOperators)
         }
-    }
-
-    handleError(error: any) {
-        this.$store.dispatch("DISABLE_LOADING");
-
-        if (error.status === 403) {
-            this.$store.dispatch('SHOW_LOGIN_MODAL');
-            this.$store.dispatch('ADD_NOTIFICATION', { title: "Login required", text: "Please login or register to proceed", type: NotificationType.Warning });            
-        }
-
-        if (error.status === 500 || error.status === 400) {
-            let title = this.isEditing
-                ? "Cannot insert this listing. We are on it !"
-                : "Cannot update this listing. We are on it !";
-            this.$store.dispatch('ADD_NOTIFICATION', { title: title, type: NotificationType.Error });
-        }
-
-        this.$store.dispatch('LOG_ERROR', { message: `Listing page: ${error.data}`, stack: error.config.data });
     }
 }

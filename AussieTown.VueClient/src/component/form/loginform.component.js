@@ -34,6 +34,7 @@ var LoginForm = /** @class */ (function (_super) {
         _this.formSubmitted = false;
         _this.model = new LoginModel();
         _this.confirmPassword = '';
+        _this.rawPassword = '';
         // Login or Signup
         _this.isLogin = true;
         _this.googleSignInParams = {
@@ -51,7 +52,11 @@ var LoginForm = /** @class */ (function (_super) {
     LoginForm.prototype.validateBeforeSubmit = function (e) {
         var _this = this;
         this.$validator.validateAll().then(function (result) {
+            _this.$validator.reset();
             if (result) {
+                if (_this.rawPassword) {
+                    _this.model.password = encryptText(_this.rawPassword);
+                }
                 if (_this.isLogin) {
                     _this.login(_this.model);
                 }
@@ -66,32 +71,24 @@ var LoginForm = /** @class */ (function (_super) {
     };
     LoginForm.prototype.login = function (model) {
         var _this = this;
-        if (model.password) {
-            model.password = encryptText(model.password);
-        }
         (new UserService()).login(model)
-            .then(function (responseToken) {
-            _this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-            _this.setCookies(responseToken.accessToken);
-            _this.$emit('onSuccessfulLogin');
-        })
+            .then(function (responseToken) { return _this.handleLoginToken(responseToken); })
             .catch(function (error) {
-            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: error.message ? error.message : error, type: NotificationType.Error });
+            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: error.message ? error.message : error.data, type: NotificationType.Error });
         });
     };
     LoginForm.prototype.signup = function (model) {
         var _this = this;
-        if (model.password) {
-            model.password = encryptText(model.password);
-        }
         model.role = UserRole.User;
         model.images = [{ "url": model.photoUrl }];
         (new UserService()).signup(model)
-            .then(function (responseToken) {
-            _this.$store.dispatch('SET_CURRENT_USER', responseToken.loggedInUser);
-            _this.setCookies(responseToken.accessToken);
-            _this.$emit('onSuccessfulLogin');
-        });
+            .then(function (responseToken) { return _this.handleLoginToken(responseToken); });
+    };
+    LoginForm.prototype.handleLoginToken = function (token) {
+        this.$store.dispatch('SET_CURRENT_USER', token.loggedInUser);
+        this.setCookies(token.accessToken);
+        this.$emit('onSuccessfulLogin');
+        this.rawPassword = '';
     };
     LoginForm.prototype.setCookies = function (accessToken) {
         this.$cookie.set('mtltk', accessToken);

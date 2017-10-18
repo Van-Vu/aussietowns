@@ -11,11 +11,8 @@
 
             <div class="column is-one-quarter-mobile is-one-third-desktop">
                 <ul  class="is-pulled-right">
-                    <!--<li class="li-horizontal nav-link"><router-link :to="{ name: 'home' }">Home</router-link></li>-->
                     <li class="li-horizontal nav-link  is-hidden-mobile" v-if="isLoggedIn"><router-link :to="{ name: 'newListing', params: { listingType: 'offer' }}">Create Experience</router-link></li>
-                    <!--<li class="li-horizontal nav-link"><router-link :to="{ name: 'newListing', params: { listingType: 'request' }}">Find</router-link></li>-->
                     <li class="li-horizontal nav-link  is-hidden-mobile"><router-link :to="{ name: 'help' }">How it works</router-link></li>
-                    <!--<li class="li-horizontal"><router-link :to="{ name: 'termsandconditions' }">Terms and Conditions</router-link></li>-->
                     <li class="li-horizontal nav-link  is-hidden-mobile"><router-link :to="{ name: 'about'}">About</router-link></li>
                     <li class="li-horizontal">
                         <a v-show="!isLoggedIn" class="button is-pulled-right mtl_button" @click.prevent="onShowLoginModal">Join</a>
@@ -25,6 +22,9 @@
                             </figure>
                         </a>
                         <ul v-if="isLoggedIn" v-show="showMenuModal" id="popupUserMenu">
+                            <li class="is-hidden-desktop"><router-link :to="{ name: 'newListing', params: { listingType: 'offer' }}">Create Experience</router-link></li>
+                            <li class="is-hidden-desktop"><router-link :to="{ name: 'help' }">How it works</router-link></li>
+                            <li class="is-hidden-desktop"><router-link :to="{ name: 'about'}">About</router-link><hr /></li>
                             <li>
                                 <router-link :to="{ name: 'profileHome', params: { seoString: profileLink, profileId: userId } }">
                                     <label class="tab-text">Profile</label>

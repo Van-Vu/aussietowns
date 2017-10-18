@@ -39,7 +39,7 @@ export default class UserDetailComponent extends Vue {
 
     created() {
         if (this.model) {
-            if (this.model.images.length === 0) this.model.images.push(new ImageModel("http://via.placeholder.com/240x240"));
+            //if (this.model.images.length === 0) this.model.images.push(new ImageModel("http://via.placeholder.com/240x240"));
             //if (!this.model.heroImageUrl) this.model.heroImageUrl = "http://via.placeholder.com/1280x320";
         }
     }
@@ -103,13 +103,32 @@ export default class UserDetailComponent extends Vue {
                 actionId: this.$store.state.profile.id
             }).then(response => {
                 this.$emit('uploadImageCompleted');
-            })
-            .catch(error => {
-                this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", text: error.message ? error.message : "Error uploading. We're on it !", type: NotificationType.Error });
             });
         (document.getElementById('fileUpload') as any).value = null;
     }
 
+    onReplaceProfileImage() {
+        document.getElementById("profileImageUpload").click();
+    }
+
+    onUploadProfileImage(fileList) {
+        if (!fileList.length) return;
+
+        const formData = new FormData();
+        Array.from(Array(fileList.length).keys())
+            .map(x => {
+                formData.append('files', fileList[x], fileList[x].name);
+            });
+
+        this.$store.dispatch('UPLOAD_PROFILE_IMAGE',
+            {
+                data: formData,
+                actionId: this.$store.state.profile.id
+            }).then(response => {
+                this.$emit('uploadImageCompleted');
+            });
+        (document.getElementById('profileImageUpload') as any).value = null;
+    }
 onUpdate(){}
 capture(){}
 }

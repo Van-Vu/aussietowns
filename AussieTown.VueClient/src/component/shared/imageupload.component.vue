@@ -3,6 +3,7 @@
         <div class="image-upload">
             <swiper ref="swiper"
                     direction="horizontal"
+                    :showNavButton="true"
                     :mousewheel-control="true"
                     :performance-mode="false"
                     :pagination-visible="false"
@@ -12,8 +13,7 @@
                 <div v-if="images.length > 0" v-for="image in images">
                     <img :src="image.url" :alt="image.url"/>
                 </div>
-                <div v-if="images.length == 0">
-                    <img src="/static/images/no-image.jpg" alt="noImage"/>
+                <div class="noimage" v-if="images.length == 0">
                 </div>
             </swiper>
             

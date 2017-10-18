@@ -42,12 +42,13 @@ export default class RegistrationForm extends Vue {
     }
 
     onRegister() {
-        this.$validator.validateAll().then(() => {
-            // eslint-disable-next-line
-            (new UserService()).signup(this.model)
-                .then(response => {
-                    this.$emit('onSuccessfulLogin', response);
-                });
+        this.$validator.validateAll().then((result) => {
+            if (result) {
+                (new UserService()).signup(this.model)
+                    .then(response => {
+                        this.$emit('onSuccessfulLogin', response);
+                    });
+            }
         }).catch(() => {
             // eslint-disable-next-line
             alert('Correct them errors!');

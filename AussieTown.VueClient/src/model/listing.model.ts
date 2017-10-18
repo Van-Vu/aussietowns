@@ -32,7 +32,7 @@ export default class ListingModel {
         this.schedules = new Array<ScheduleModel>();
         this.imageList = new Array<ImageModel>();
         //this.schedules.push(new ScheduleModel(new Date().toJSON().slice(0, 10).replace(/-/g, '/'), '00:00', '00:00', new Date().toJSON().slice(0, 10).replace(/-/g, '/'),'',[]));
-        this.schedules.push(new ScheduleModel('', '00:00', '00:00', '', '', []));
+        this.schedules.push(new ScheduleModel(new Date().toJSON().slice(0, 10).replace(/-/g, '/'), '00:00', '00:00', '', '', []));
     }
 
     get headerLink(): string {

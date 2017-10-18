@@ -47,7 +47,6 @@ export default class ImageUploadComponent extends Vue {
                 this.isUploading = false;
             })
             .catch(error => {
-                this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", text: error.message ? error.message : "Error uploading. We're on it !", type: NotificationType.Error });
                 this.isUploading = false;
             });;
     }
@@ -75,7 +74,6 @@ export default class ImageUploadComponent extends Vue {
             this.isUploading = false;
         })
         .catch(error => {
-            this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", text: error.message ? error.message : "Error uploading. We're on it !", type: NotificationType.Error });
             this.isUploading = false;
         });
     }

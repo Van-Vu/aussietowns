@@ -57,9 +57,11 @@ var ScheduleComponent = /** @class */ (function (_super) {
     };
     ScheduleComponent.prototype.validateBeforeSubmit = function () {
         var _this = this;
-        this.$validator.validateAll().then(function () {
-            _this.model.repeatedDay = _this.repeatedDay;
-            _this.$emit('onSave', _this.model);
+        this.$validator.validateAll().then(function (result) {
+            if (result) {
+                _this.model.repeatedDay = _this.repeatedDay;
+                _this.$emit('onSave', _this.model);
+            }
         }).catch(function () {
             alert('Correct them errors!');
         });

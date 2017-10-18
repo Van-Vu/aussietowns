@@ -7,6 +7,7 @@ namespace AussieTowns
 {
     public class AppSettings
     {
+        public string Environment { get; set; }
         public string AwsS3Region { get; set; }
         public string AwsS3AccessKey { get; set; }
         public string AwsS3SecretKey { get; set; }

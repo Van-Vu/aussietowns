@@ -33,7 +33,8 @@ namespace AussieTowns.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "INSERT INTO Image(userId, url, createdDate, isActive, listingId) "
+                var sql = "UPDATE Image SET isActive = false WHERE userId = @profileId AND isActive = true; "
+                        + "INSERT INTO Image(userId, url, createdDate, isActive, listingId) "
                         + "VALUES (@profileId, @url, @createdDate, @isActive,0)";
                 dbConnection.Open();
                 var ret = await dbConnection.ExecuteAsync(sql, new {profileId, url, createdDate = DateTime.Now, isActive = true });
