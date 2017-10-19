@@ -122,51 +122,6 @@ namespace AussieTowns.Controllers
             }
         }
 
-        [HttpPost("{id}/book")]
-        public async Task<int> Book(int id, [FromBody] BookingRequest request)
-        {
-            try
-            {
-                //if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
-                if (request == null || !request.Participants.Any()) throw new ArgumentNullException(nameof(request));
-
-                var jsonBookingRequest = JsonConvert.SerializeObject(request);
-
-                // Bodom hack: deal with this later
-                //await ElasticEmailClient.Send("Booking confirm !", "bodom0911@gmail.com", "Van", "sender", "senderName",
-                //    to: new List<string> { "cob911@gmail.com" }, bodyHtml: @"<b>This is confirmation email <i>italic</i></b>");
-
-                await _listingService.Booking(request);
-
-                var listingDetail = _listingService.GetListingViewById(request.ListingId).Result;
-
-                var bookingParticipants = request.Participants.Select(item => new BookingParticipant
-                {
-                    Fullname = $"{item.FirstName} {item.LastName}", DateOfBirth = item.Birthday.ToString(), Email = item.Email, Phone = item.Phone
-                }).ToList();
-
-                var bookingEmailViewModel = new BookingEmailViewModel
-                {
-                    ListingId = listingDetail.Id,
-                    ListingUrl = StringHelper.SeorizeListingName(listingDetail.Header,listingDetail.Id),
-                    ListingHeader = listingDetail.Header,
-                    ListingDescription = listingDetail.Description,
-                    BookingDate = request.BookingDate.ToString("dddd dd-MMM-yyyy", CultureInfo.DefaultThreadCurrentUICulture),
-                    BookingTime = request.Time.ToString(@"hh\:mm", CultureInfo.DefaultThreadCurrentUICulture),
-                    BookingParticipants = bookingParticipants
-                };
-
-                return await _emailService.SendBookingConfirmEmail(bookingEmailViewModel, listingDetail.OwnerEmail, listingDetail.OwnerEmail);
-
-                //return ;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message, e);
-                throw;
-            }
-        }
-
         [HttpDelete("{id}")]
         public async Task<int> DeleteListing(int id)
         {

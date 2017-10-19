@@ -69,9 +69,7 @@ namespace AussieTowns
                 .ForMember(dest => dest.Schedules,
                     opts => opts.MapFrom(src => src.Schedules.Select(x => Mapper.Map<Schedule, ScheduleResponse>(x))))
                 .ForMember(dest => dest.TourOperators,
-                    opts => opts.ResolveUsing<TourOperatorResolver>())
-                .ForMember(dest => dest.TourGuests,
-                    opts => opts.ResolveUsing<TourGuestResolver>());
+                    opts => opts.ResolveUsing<TourOperatorResolver>());
             //opts.MapFrom(src =>  src.TourGuests.Select(x => Mapper.Map<User, MiniProfile>(x.User))));
 
             CreateMap<User, UserResponse>()
@@ -95,7 +93,7 @@ namespace AussieTowns
             {
                 if (tourGuest.ExistingUserId > 0)
                 {
-                    profiles.Add(Mapper.Map<User, MiniProfile>(tourGuest.User));
+                    if (tourGuest.User != null) profiles.Add(Mapper.Map<User, MiniProfile>(tourGuest.User));
                 }
                 else
                 {

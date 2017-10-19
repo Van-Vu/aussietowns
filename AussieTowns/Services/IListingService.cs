@@ -15,8 +15,6 @@ namespace AussieTowns.Services
         Task<int> InsertListing(Listing listing);
         Task<int> UpdateListing(Listing listing);
         Task<int> DeActivateListing(int id);
-
-        Task<int> Booking(BookingRequest bookingRequest);
         Task<Image> FetchImageByUrl(int listingId, string url);
         Task<IEnumerable<int>> MapListingHeaderToId(string header);
         Task<int> DeleteImage(int imageId);

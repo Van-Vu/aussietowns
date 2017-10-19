@@ -3,7 +3,7 @@ import { Component, Prop, Watch } from "vue-property-decorator";
 import BookingModel from '../model/booking.model';
 import ListingModel from '../model/listing.model';
 import UserModel from '../model/user.model';
-import ListingService from '../service/listing.service';
+import BookingService from '../service/booking.service';
 import { plainToClass, classToPlain } from "class-transformer";
 import AvailabilityComponent from '../component/booking/availability.component.vue';
 import { ScreenSize, NotificationType } from '../model/enum';
@@ -54,8 +54,6 @@ export default class BookingDetailPage extends Vue {
     }
 
     created() {
-        console.log('bodom created');
-        console.log(this.model);        
     }
 
     mounted() {
@@ -75,19 +73,18 @@ export default class BookingDetailPage extends Vue {
         }
     }
 
-    confirmBooking() {
-        return new Promise((resolve, reject) => {
-            (new ListingService()).bookAListing(this.constructBookingRequest())
-                .then(() => {
-                    this.isBooked = true;
-                    resolve(true);
-                })
-                .catch(() => reject('Please fill in participant information'));
+    onModify() {
+        (new BookingService()).modifyBooking(this.model.id, this.constructBookingRequest())
+            .then(() => {
+                this.isBooked = true;
+            });
+    }
 
-            //if ((this.model.bookingDate) && (this.model.bookingTime)) resolve(true);
-
-        });
-        //alert('Form Submitted!');
+    onWithdraw() {
+        (new BookingService()).withdrawBooking(this.model.id, this.model.participants.map((element) => element.name).join(","))
+            .then(() => {
+                this.isBooked = true;
+            });        
     }
 
     constructBookingRequest() {
@@ -111,17 +108,12 @@ export default class BookingDetailPage extends Vue {
     }
 
     onBookingDateChanged(value) {
-        this.$store.state.booking.bookingDate = value;
+        this.model.bookingDate = value;
     }
 
     onBookingTimeChanged(value) {
-        this.$store.state.booking.bookingTime = value;
+        this.model.bookingTime = value;
     }
-
-    //onProceed() {
-    //    this.$store.dispatch('UPDATE_BOOKING', { participants: this.bookingNumber, date: this.bookingDate, time: '09:00' });
-    //    this.$router.push({ name: "booking" });
-    //}
 
     addMoreParticipant() {
         //this.$store.dispatch('ADD_BOOKING_PARTICIPANT',new UserModel());

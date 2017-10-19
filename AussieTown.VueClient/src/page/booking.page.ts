@@ -3,7 +3,7 @@ import { Component, Prop, Watch } from "vue-property-decorator";
 import BookingModel from '../model/booking.model';
 import ListingModel from '../model/listing.model';
 import UserModel from '../model/user.model';
-import ListingService from '../service/listing.service';
+import BookingService from '../service/booking.service';
 import { plainToClass, classToPlain } from "class-transformer";
 import AvailabilityComponent from '../component/booking/availability.component.vue';
 import { ScreenSize, NotificationType } from '../model/enum';
@@ -78,7 +78,7 @@ export default class BookingPage extends Vue {
 
     confirmBooking() {
         return new Promise((resolve, reject) => {
-            (new ListingService()).bookAListing(this.constructBookingRequest())
+            (new BookingService()).confirmBooking(this.constructBookingRequest())
                 .then(() => {
                     this.isBooked = true;
                     resolve(true);
@@ -112,11 +112,11 @@ export default class BookingPage extends Vue {
     }
 
     onBookingDateChanged(value) {
-        this.$store.state.booking.bookingDate = value;
+        this.model.bookingDate = value;
     }
 
     onBookingTimeChanged(value) {
-        this.$store.state.booking.bookingTime = value;
+        this.model.bookingTime = value;
     }
 
     //onProceed() {

@@ -3,8 +3,20 @@
 export default class BookingService {
     private baseUrl = '/api/booking/';
 
-    getBookingById(_id: number) {
-        return http.get(this.baseUrl + _id)
+    getBookingById(bookingId: number) {
+        return http.get(this.baseUrl + bookingId)
             .then(response => response);
+    }
+
+    confirmBooking(bookingRequest) {
+        return http.post(this.baseUrl, bookingRequest);
+    }
+
+    modifyBooking(bookingId, bookingRequest) {
+        return http.post(`${this.baseUrl}${bookingId}/update`, bookingRequest);
+    }
+
+    withdrawBooking(bookingId, tourGuestIds) {
+        return http.post(`${this.baseUrl}${bookingId}/withdraw`, tourGuestIds);
     }
 }

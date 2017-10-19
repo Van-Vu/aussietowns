@@ -19,7 +19,7 @@ import { Component } from "vue-property-decorator";
 import BookingModel from '../model/booking.model';
 import ListingModel from '../model/listing.model';
 import UserModel from '../model/user.model';
-import ListingService from '../service/listing.service';
+import BookingService from '../service/booking.service';
 import { plainToClass, classToPlain } from "class-transformer";
 import AvailabilityComponent from '../component/booking/availability.component.vue';
 import { ScreenSize } from '../model/enum';
@@ -81,7 +81,7 @@ var BookingPage = /** @class */ (function (_super) {
     BookingPage.prototype.confirmBooking = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            (new ListingService()).bookAListing(_this.constructBookingRequest())
+            (new BookingService()).confirmBooking(_this.constructBookingRequest())
                 .then(function () {
                 _this.isBooked = true;
                 resolve(true);
@@ -109,10 +109,10 @@ var BookingPage = /** @class */ (function (_super) {
         return users;
     };
     BookingPage.prototype.onBookingDateChanged = function (value) {
-        this.$store.state.booking.bookingDate = value;
+        this.model.bookingDate = value;
     };
     BookingPage.prototype.onBookingTimeChanged = function (value) {
-        this.$store.state.booking.bookingTime = value;
+        this.model.bookingTime = value;
     };
     //onProceed() {
     //    this.$store.dispatch('UPDATE_BOOKING', { participants: this.bookingNumber, date: this.bookingDate, time: '09:00' });

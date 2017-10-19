@@ -57,6 +57,9 @@ http.interceptors.response.use(response => {
     //    return;
     //}
     var response = error.response;
+
+    console.log('Bodom handleError');
+
     if (response) {
         Utils.handleError(store, response);
     }

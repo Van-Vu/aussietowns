@@ -66,32 +66,5 @@ namespace AussieTowns.Services
         {
             return await _listingRepository.DeleteImage(imageId);
         }
-
-        public async Task<int> Booking(BookingRequest bookingRequest)
-        {
-            var tourGuests = bookingRequest.Participants.Select(participant => new TourGuest()
-            {
-                ListingId = bookingRequest.ListingId,
-                ExistingUserId = participant.Id,
-                FirstName = participant.FirstName,
-                LastName = participant.LastName,
-                Email = participant.Email,
-                Phone = participant.Phone,
-                Address = participant.Address,
-                EmergencyContact = participant.EmergencyContact
-            }).ToList();
-            var firstOrDefault = tourGuests.FirstOrDefault();
-            if (firstOrDefault != null) firstOrDefault.IsPrimary = true;
-
-            var booking = new Booking
-            {
-                ListingId = bookingRequest.ListingId,
-                BookingDate = bookingRequest.BookingDate,
-                StartTime = bookingRequest.Time,
-            };
-
-            
-            return await _listingRepository.AddTourGuest(booking, tourGuests);
-        }
     }
 }

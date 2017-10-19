@@ -47,10 +47,6 @@ export default class ListingService {
         return http.post(`${this.baseUrl}${listingId}/deleteImage`,`url=${url}`);
     }
 
-    bookAListing(bookingRequest) {
-        return http.post(`${this.baseUrl}${bookingRequest.listingId}/book`, bookingRequest);
-    }
-
     private jwt() {
         // create authorization header with jwt token
         var headers = new Headers();

@@ -13,7 +13,7 @@ namespace AussieTowns.Model
         public DateTime BookingDate { get; set; }
         public TimeSpan StartTime { get; set; }
 
-        public Listing Listing { get; set; }
-        public IList<TourGuest> TourGuests { get; set; }
+        public ListingResponse Listing { get; set; }
+        public IList<TourGuest> Participants { get; set; }
     }
 }

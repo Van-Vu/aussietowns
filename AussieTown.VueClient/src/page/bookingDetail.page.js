@@ -20,7 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import UserModel from '../model/user.model';
-import ListingService from '../service/listing.service';
+import BookingService from '../service/booking.service';
 import { plainToClass, classToPlain } from "class-transformer";
 import AvailabilityComponent from '../component/booking/availability.component.vue';
 import { ScreenSize } from '../model/enum';
@@ -53,8 +53,6 @@ var BookingDetailPage = /** @class */ (function (_super) {
         configurable: true
     });
     BookingDetailPage.prototype.created = function () {
-        console.log('bodom created');
-        console.log(this.model);
     };
     BookingDetailPage.prototype.mounted = function () {
         var screenSize = detectScreenSize(this.$mq);
@@ -70,18 +68,19 @@ var BookingDetailPage = /** @class */ (function (_super) {
                 break;
         }
     };
-    BookingDetailPage.prototype.confirmBooking = function () {
+    BookingDetailPage.prototype.onModify = function () {
         var _this = this;
-        return new Promise(function (resolve, reject) {
-            (new ListingService()).bookAListing(_this.constructBookingRequest())
-                .then(function () {
-                _this.isBooked = true;
-                resolve(true);
-            })
-                .catch(function () { return reject('Please fill in participant information'); });
-            //if ((this.model.bookingDate) && (this.model.bookingTime)) resolve(true);
+        (new BookingService()).modifyBooking(this.model.id, this.constructBookingRequest())
+            .then(function () {
+            _this.isBooked = true;
         });
-        //alert('Form Submitted!');
+    };
+    BookingDetailPage.prototype.onWithdraw = function () {
+        var _this = this;
+        (new BookingService()).withdrawBooking(this.model.id, this.model.participants.map(function (element) { return element.name; }).join(","))
+            .then(function () {
+            _this.isBooked = true;
+        });
     };
     BookingDetailPage.prototype.constructBookingRequest = function () {
         return {
@@ -101,15 +100,11 @@ var BookingDetailPage = /** @class */ (function (_super) {
         return users;
     };
     BookingDetailPage.prototype.onBookingDateChanged = function (value) {
-        this.$store.state.booking.bookingDate = value;
+        this.model.bookingDate = value;
     };
     BookingDetailPage.prototype.onBookingTimeChanged = function (value) {
-        this.$store.state.booking.bookingTime = value;
+        this.model.bookingTime = value;
     };
-    //onProceed() {
-    //    this.$store.dispatch('UPDATE_BOOKING', { participants: this.bookingNumber, date: this.bookingDate, time: '09:00' });
-    //    this.$router.push({ name: "booking" });
-    //}
     BookingDetailPage.prototype.addMoreParticipant = function () {
         //this.$store.dispatch('ADD_BOOKING_PARTICIPANT',new UserModel());
         this.model.participants.push(new UserModel());

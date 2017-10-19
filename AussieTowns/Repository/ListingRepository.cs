@@ -26,8 +26,7 @@ namespace AussieTowns.Repository
                 var sql = "SELECT * FROM listing WHERE id = @listingid; "
                           + "SELECT sd.* FROM SuburbDetail sd INNER JOIN Listing l ON sd.id = l.locationId WHERE l.id = @listingid;"
                           + "SELECT * FROM Image i WHERE ListingId = @listingId AND IsActive = true ORDER BY sortorder, createddate;"
-                          + "SELECT * FROM TourOperator o INNER JOIN User u ON o.userid = u.id WHERE ListingId = @listingid;"
-                          + "SELECT * FROM TourGuest g LEFT OUTER JOIN User u ON u.id = g.existingUserId WHERE ListingId = @listingId";
+                          + "SELECT * FROM TourOperator o INNER JOIN User u ON o.userid = u.id WHERE ListingId = @listingid;";
 
                 dbConnection.Open();
                 Listing listing;
@@ -52,12 +51,12 @@ namespace AussieTowns.Repository
 
                         return tourOperator;
                     })?.ToList();
-                    var guests = multipleResults.Read<TourGuest,User,TourGuest>((tourguest, user) =>
-                    {
-                        if (user != null) tourguest.User = user;
+                    //var guests = multipleResults.Read<TourGuest,User,TourGuest>((tourguest, user) =>
+                    //{
+                    //    if (user != null) tourguest.User = user;
 
-                        return tourguest;
-                    })?.ToList();
+                    //    return tourguest;
+                    //})?.ToList();
 
                     listing.ImageList = listing.ImageList ?? new List<Image>();
                     listing.ImageList.AddRange(images);
@@ -65,8 +64,8 @@ namespace AussieTowns.Repository
                     listing.TourOperators = listing.TourOperators ?? new List<TourOperator>();
                     listing.TourOperators.AddRange(operators);
 
-                    listing.TourGuests = listing.TourGuests?? new List<TourGuest>();
-                    listing.TourGuests.AddRange(guests);
+                    //listing.TourGuests = listing.TourGuests?? new List<TourGuest>();
+                    //listing.TourGuests.AddRange(guests);
 
                     listing.Location = location;
                 }
@@ -137,8 +136,7 @@ namespace AussieTowns.Repository
                     try
                     {
                         var sql = "INSERT INTO Listing(type,locationid,cost,currency, header, description, requirement, minparticipant,createdDate,updatedDate,isactive) "
-                                + "VALUES(@type, @locationid, @cost, @currency, @header, @description, @requirement, @minparticipant,@createdDate,@updatedDate,@isactive);"
-                                + "SELECT LAST_INSERT_ID()";
+                                + "VALUES(@type, @locationid, @cost, @currency, @header, @description, @requirement, @minparticipant,@createdDate,@updatedDate,@isactive);";
                         listing.CreatedDate = DateTime.Now;
                         listing.UpdatedDate = DateTime.Now;
                         listing.IsActive = true;
@@ -169,18 +167,6 @@ namespace AussieTowns.Repository
                             var operatorSql = "INSERT INTO TourOperator(userid, listingid, isPrimary) "
                                 + " VALUES(@userId, @listingId, @isPrimary)";
                             insertTasks.Add(dbConnection.ExecuteAsync(operatorSql, listing.TourOperators));
-                        }
-
-                        if (listing.TourGuests != null && listing.TourGuests.Any())
-                        {
-                            foreach (var tourGuest in listing.TourGuests)
-                            {
-                                tourGuest.ListingId = listingId;
-                            }
-                            var guestSql = "INSERT INTO TourGuest(userid, listingid, isPrimary) "
-                                + "VALUES(@userId, @listingId, @isPrimary)";
-
-                            insertTasks.Add(dbConnection.ExecuteAsync(guestSql, listing.TourGuests));
                         }
 
                         await Task.WhenAll(insertTasks);
@@ -300,45 +286,6 @@ namespace AussieTowns.Repository
             {
                 var deleteSql = "DELETE FROM Image WHERE imageId = @imageId";
                 return await dbConnection.ExecuteAsync(deleteSql, new {imageId});
-            }
-        }
-
-        public async Task<int> AddTourGuest(Booking booking, IList<TourGuest> tourGuests)
-        {
-            using (IDbConnection dbConnection = Connection)
-            {
-                dbConnection.Open();
-                using (var tran = dbConnection.BeginTransaction())
-                {
-                    try
-                    {
-                        var tourGuestSql = "INSERT INTO TourGuest(listingId, existingUserId, isPrimary, firstName, lastName, email, phone, address, emergencyContact) "
-                                  + "VALUES(@listingId, @existingUserId, @isPrimary, @firstName, @lastName, @email, @phone, @address, @emergencyContact)";
-                        await dbConnection.ExecuteAsync(tourGuestSql, tourGuests);
-
-                        var idsSql = "SELECT id FROM TourGuest WHERE id >= LAST_INSERT_ID()";
-
-                        var newIds = await dbConnection.QueryAsync<int>(idsSql);
-
-                        var bookings = newIds.Select(id => new Booking
-                        {
-                            ListingId = booking.ListingId, BookingDate = booking.BookingDate, StartTime = booking.StartTime, GuestId = id
-                        }).ToList();
-
-                        var bookingSql = "INSERT INTO booking(listingId, bookingDate, startTime, isConfirmed, tourGuestId, createdDate, updatedDate) "
-                                         + "VALUES(@listingId, @bookingDate, @startTime, 0, @guestId, NOW(), NOW())";
-                        var bookingRet = await dbConnection.ExecuteAsync(bookingSql, bookings);
-
-                        tran.Commit();
-                        return bookingRet;
-                    }
-                    catch (Exception e)
-                    {
-                        tran.Rollback();
-                        _logger.LogCritical(e.Message, e);
-                        throw;
-                    }
-                }
             }
         }
     }
