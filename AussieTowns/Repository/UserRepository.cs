@@ -36,7 +36,7 @@ namespace AussieTowns.Repository
             {
                 var sql = "SELECT * FROM User WHERE id=@id;"
                           + "SELECT sd.* FROM SuburbDetail sd INNER JOIN User u ON sd.id = u.locationId WHERE u.id = @id;"
-                          + "SELECT l.* FROM ListingView l INNER JOIN tourguest g ON l.id = g.ListingId WHERE g.existingUserId = @id;"
+                          + "SELECT l.* FROM ListingView l INNER JOIN booking b ON b.listingId=l.id INNER JOIN tourguest g ON b.id = g.bookingId WHERE g.existingUserId = @id;"
                           + "SELECT l.* FROM ListingView l INNER JOIN touroperator o ON l.id = o.ListingId WHERE o.UserId = @id;"
                           + "SELECT * FROM Image i WHERE UserID = @id AND IsActive = true ORDER BY sortorder, createddate;";
 

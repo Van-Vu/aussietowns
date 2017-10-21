@@ -108,6 +108,7 @@ const options = {
 Vue.use(VueProgressBar, options);
 
 // augment options
+// another option: https://github.com/declandewet/vue-meta/issues/88
 declare module 'vue/types/options' {
     interface ComponentOptions<V extends Vue> {
         metaInfo?: {};

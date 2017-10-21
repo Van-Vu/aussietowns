@@ -43,7 +43,6 @@ export default function (context) {
                 context.state = store.state;
                 resolve(app);
             }).catch(reject);
-            //}).catch(reject);
             // the Promise should resolve to the app instance so it can be rendered
             //resolve(app)
         }, reject);

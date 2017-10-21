@@ -99,18 +99,21 @@ namespace AussieTowns.Repository
                     {
                         var updateTasks = new List<Task<int>>();
 
-                        var bookingSql = "UPDATE Booking SET updatedDate=NOW() WHERE id=@bookingId AND ;";
-                        updateTasks.Add(dbConnection.ExecuteAsync(bookingSql));
+                        var bookingSql = "UPDATE Booking SET updatedDate=NOW() WHERE id=@bookingId;";
+                        updateTasks.Add(dbConnection.ExecuteAsync(bookingSql, new {bookingId}));
 
                         var oldGuests = guests.Where(x => x.Id > 0);
                         var updateSql =
-                            "UPDATE Tourguest SET IsPrimary=@IsPrimary, FirstName=@firstName, LaseName=@lastName, Email=@Email, Phone=@phone, Address=@address, EmergencyContact=@emergencyContact, updatedDate=NOW() WHERE Id=@id;";
+                            "UPDATE Tourguest SET IsPrimary=@IsPrimary, FirstName=@firstName, LastName=@lastName, Email=@Email, Phone=@phone, Address=@address, EmergencyContact=@emergencyContact, updatedDate=NOW() WHERE Id=@id;";
                         updateTasks.Add(dbConnection.ExecuteAsync(updateSql, oldGuests));
 
                         var newGuests = guests.Where(p => oldGuests.All(p2 => p2.Id != p.Id));
-                        var insertSql = "INSERT INTO TourGuest(bookingId, existingUserId, isPrimary, firstName, lastName, email, phone, address, emergencyContact) "
-                                  + "VALUES(@bookingId, @existingUserId, @isPrimary, @firstName, @lastName, @email, @phone, @address, @emergencyContact);";
-                        updateTasks.Add(dbConnection.ExecuteAsync(insertSql, newGuests));
+                        if (newGuests.Any())
+                        {
+                            var insertSql = "INSERT INTO TourGuest(bookingId, existingUserId, isPrimary, firstName, lastName, email, phone, address, emergencyContact) "
+                                      + "VALUES(@bookingId, @existingUserId, @isPrimary, @firstName, @lastName, @email, @phone, @address, @emergencyContact);";
+                            updateTasks.Add(dbConnection.ExecuteAsync(insertSql, newGuests));
+                        }
 
                         await Task.WhenAll(updateTasks);
 

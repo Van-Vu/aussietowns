@@ -82,58 +82,16 @@ app.get('*', (req, res) => {
   
   const context = { url: req.url, cookies: req.cookies }
 
-  const renderStream = renderer.renderToStream(context)
-
-  renderStream.once('data', () => {
-      const {
-          title, htmlAttrs, bodyAttrs, link, style, script, noscript, meta 
-      } = context.meta.inject()
-      res.write(`
-      <!doctype html>
-      <html data-vue-meta-server-rendered ${htmlAttrs.text()}>
-        <head>
-          ${meta.text()}
-          ${title.text()}
-          ${link.text()}
-          ${style.text()}
-          ${script.text()}
-          ${noscript.text()}
-        </head>
-        <body ${bodyAttrs.text()}>
-    `)
-  })
+    renderer.renderToStream(context)
+    .on('error', errorHandler)
     .on('end', () => console.log(`whole request: ${Date.now() - s}ms`))
-    .on('error', () => errorHandler)
     .pipe(res)
-  //renderStream.on('data', (chunk) => {
-  //    res.write(chunk)
-  //})
-  //renderStream.on('end', () => console.log(`whole request: ${Date.now() - s}ms`))
-  //renderStream.on('error', () => errorHandler)
-
-  //renderStream.pipe(res)
-  //renderer.renderToStream(context)
-  //  .on('error', errorHandler)
-  //  .on('end', () => console.log(`whole request: ${Date.now() - s}ms`))
-  //    .pipe(res)
-
-
-  //const context = {
-  //    title: 'Vue HN 2.0', // default title
-  //    url: req.url
-  //}
-  //renderer.renderToString(context, (err, html) => {
-  //    if (err) {
-  //        console.log(`hi there: ${err}`)
-  //    }
-  //    res.end(html)
-  //    if (!isProd) {
-  //        console.log(`whole request: ${Date.now() - s}ms`)
-  //    }
-  //})
 })
 
 const port = process.env.PORT || 3000
-app.listen(port, () => {
+app.listen(port, (err) => {
+    if (err) {
+        throw err;
+    }
   console.log(`server started at http://localhost:${port}`)
 })
