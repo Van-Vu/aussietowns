@@ -12,6 +12,11 @@ export default class ListingService {
             .then(response => response);
     }
 
+    getListingWithBookingDetailById(id: number) {
+        return http.get(this.baseUrl + id + "/booking")
+            .then(response => response);
+    }
+
     addListing(listing) {
         return http.post(this.baseUrl, listing)
             .then(response => response)

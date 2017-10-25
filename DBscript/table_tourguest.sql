@@ -14,8 +14,6 @@ CREATE TABLE tourguest (
   phone varchar(20) DEFAULT NULL,
   address varchar(300) DEFAULT NULL,
   emergencycontact varchar(20) DEFAULT NULL,
-  isConfirmed bit(1) NOT NULL DEFAULT 0,
-  isWithdrawn bit(1) NOT NULL DEFAULT 0,
   createdDate datetime NOT NULL,
   updatedDate datetime NOT NULL,
   PRIMARY KEY  (id),

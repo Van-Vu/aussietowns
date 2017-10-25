@@ -22,6 +22,16 @@ https://developers.google.com/web/progressive-web-apps/
 
 https://css-tricks.com/float-labels-css/
 
+Deployment:
+http://docs.servicestack.net/deploy-netcore-docker-aws-ecs
+http://jaliyaudagedara.blogspot.com.au/2017/05/running-aspnet-core-mvc-application.html
+http://jaliyaudagedara.blogspot.com.au/2017/06/creating-docker-container-running.html
+
+Spin up AWS instance
+Create Docker image
+Setup Application (template, nginx, install node)
+Deploy image to AWS
+Redeploy
 
 Task:
 image & video
@@ -70,6 +80,9 @@ DONE Run Audit
 Upload listing & profile image
 
 DONE bug: check availability when not Login
+
+Refactor booking, bookingdetail, bookingManage page
+
 
 image guide: https://images.guide/
 	https://cloudinary.com/pricing

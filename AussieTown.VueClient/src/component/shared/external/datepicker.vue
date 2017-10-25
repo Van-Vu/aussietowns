@@ -104,13 +104,14 @@ export default {
         max: {default: '3016-01-01'},
         inline: { type: Boolean, default: false },    
         value: { type: [String, Array], default: '' },
+        availableDays: { type: [String, Array], default: '' },
         disabled: { type: Object, default: () => {return {to: new Date()};} },
         range: { type: Boolean, default: false }
-    },
-    methods: {
-        togglePanel () {
-            this.panelState = !this.panelState
-            this.rangeStart = false
+        },
+        methods: {
+            togglePanel () {
+                this.panelState = !this.panelState
+                this.rangeStart = false
         },
         isSelected (type, item) {
             switch (type){
@@ -129,34 +130,34 @@ export default {
                     item.nextMonth && month++
                     return (new Date(this.tmpYear, month, item.value).getTime() >= new Date(this.tmpStartYear, this.tmpStartMonth, this.tmpStartDate).getTime() 
                         && new Date(this.tmpYear, month, item.value).getTime() <= new Date(this.tmpEndYear, this.tmpEndMonth, this.tmpEndDate).getTime())
-            }
-        },
+    }
+    },
         chType (type) {
             this.panelType = type
-        },
+    },
         chYearRange (next) {
             if(next){
                 this.yearList = this.yearList.map((i) => i + 12)
-            }else{
+    }else{
                 this.yearList = this.yearList.map((i) => i - 12)
-            }
-        },
+    }
+    },
         prevMonthPreview () {
             this.tmpMonth = this.tmpMonth === 0 ? 0 : this.tmpMonth - 1
-        },
+    },
         nextMonthPreview () {
             this.tmpMonth = this.tmpMonth === 11 ? 11 : this.tmpMonth + 1
-        },
+    },
         selectYear (year) {
             if(this.validateYear(year)) return
             this.tmpYear = year
             this.panelType = 'month'
-        },
+    },
         selectMonth (month) {
             if(this.validateMonth(month)) return
             this.tmpMonth = month
             this.panelType = 'date'
-        },
+    },
         selectDate (date) {
             if (date.isDisabled) return
 
@@ -171,7 +172,7 @@ export default {
                         this.month = this.tmpMonth - 1
                         this.tmpMonth -= 1
                     }
-                }else if(date.nextMonth){
+                    }else if(date.nextMonth){
                     if(this.tmpMonth === 11){
                         this.year += 1
                         this.tmpYear += 1
@@ -180,7 +181,7 @@ export default {
                         this.month = this.tmpMonth + 1
                         this.tmpMonth += 1
                     }
-                }
+                    }
                 if(!this.range){
 
                     this.year = this.tmpYear
@@ -188,7 +189,7 @@ export default {
                     this.date = date.value
                     //let value = `${this.tmpYear}/${('0' + (this.month + 1)).slice(-2)}/${('0' + this.date).slice(-2)}`
 
-                    let value = Utils.formatDate(new Date(this.tmpYear,this.month + 1,this.date));
+                    let value = Utils.formatDate(new Date(this.tmpYear,this.month,this.date));
                     this.$emit('input', value)
                     this.display = value
                     if (!this.inline) this.panelState = false
@@ -222,7 +223,7 @@ export default {
                         this.tmpStartYear = tmpY
                         this.tmpStartMonth = tmpM
                         this.tmpStartDate = tmpD
-                    }
+                }
                     let RangeStart = `${this.tmpStartYear}/${('0' + (this.tmpStartMonth + 1)).slice(-2)}/${('0' + this.tmpStartDate).slice(-2)}`
                     let RangeEnd = `${this.tmpEndYear}/${('0' + (this.tmpEndMonth + 1)).slice(-2)}/${('0' + this.tmpEndDate).slice(-2)}`
                     let value = [RangeStart, RangeEnd]
@@ -232,8 +233,8 @@ export default {
                     this.rangeStart = false
                     if (!this.inline) this.panelState = false
                 }
-            }, 0)
-        },
+                }, 0)
+                },
         validateYear (year) {
             return (year > this.maxYear || year < this.minYear) ? true : false
         },
@@ -249,7 +250,7 @@ export default {
             if(date.previousMonth){
                 mon -= 1
             }else if(date.nextMonth){
-                mon += 1
+                        mon += 1
             }
             if(new Date(this.tmpYear, mon, date.value).getTime() >= new Date(this.minYear, this.minMonth - 1, this.minDate).getTime()
                 && new Date(this.tmpYear, mon, date.value).getTime() <= new Date(this.maxYear, this.maxMonth - 1, this.maxDate).getTime()){
@@ -267,11 +268,17 @@ export default {
             this.$emit('input', this.range ? ['', ''] : '')
         },
         /**
-            * Whether a day is disabled
-            * @param {Date}
-            * @return {Boolean}
-            */
+        * Whether a day is disabled
+        * @param {Date}
+        * @return {Boolean}
+        */
         isDisabledDate (date) {
+            if (this.availableDays !== '') {
+                // bodom: array of Date compare
+                // https://stackoverflow.com/questions/27450867/how-to-correctly-use-javascript-indexof-in-a-date-array
+                return this.availableDays.map(Number).indexOf(+date) < 0
+            }
+
             let disabled = false
             if (typeof this.disabled === 'undefined') {
                 return false
@@ -296,6 +303,7 @@ export default {
             if (typeof this.disabled.days !== 'undefined' && this.disabled.days.indexOf(date.getDay()) !== -1) {
                 disabled = true
             }
+
             return disabled
         }
     },

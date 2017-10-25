@@ -25,7 +25,6 @@ var AvailabilityComponent = /** @class */ (function (_super) {
     __extends(AvailabilityComponent, _super);
     function AvailabilityComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.bookingDate = '';
         _this.bookingTime = '';
         _this.disableDays = {
             to: new Date(),
@@ -44,16 +43,17 @@ var AvailabilityComponent = /** @class */ (function (_super) {
         var timeslots = new Array();
         timeslots.push(currentListing.schedules[0].startTime);
         this.availableTimeslot = timeslots;
+        this.bookingTime = '';
         this.$emit('bookingDateChanged', value);
     };
     __decorate([
         Prop,
         __metadata("design:type", String)
-    ], AvailabilityComponent.prototype, "date", void 0);
+    ], AvailabilityComponent.prototype, "bookingDate", void 0);
     __decorate([
         Prop,
-        __metadata("design:type", String)
-    ], AvailabilityComponent.prototype, "time", void 0);
+        __metadata("design:type", Array)
+    ], AvailabilityComponent.prototype, "availableDays", void 0);
     __decorate([
         Watch('bookingTime'),
         __metadata("design:type", Function),

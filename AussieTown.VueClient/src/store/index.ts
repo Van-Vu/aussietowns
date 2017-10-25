@@ -245,6 +245,16 @@ export default new Vuex.Store({
                 commit('UPDATE_BOOKING', response);
             });
         },
+        FETCH_LISTING_WITH_BOOKING_DETAIL({ commit }, listingId) {
+            return (new ListingService()).getListingWithBookingDetailById(listingId).then(response => {
+                commit('UPDATE_BOOKING', response);
+            });
+        },
+        FETCH_ALL_BOOKING_BY_DATE({ commit }, payload) {
+            return (new BookingService()).getAllBookingsByDate(payload).then(response => {
+                commit('UPDATE_BOOKING_GROUPS_DETAIL', response);
+            });
+        },
         TEST({ commit, state }, payload) {
             (new UserService()).getMiniProfile(1).catch(error => commit('ADD_NOTIFICATION', error));
         }
@@ -319,10 +329,12 @@ export default new Vuex.Store({
             Vue.set(state.profile, 'images', Utils.removeFromArray((state.profile as any).images, image));
         },
         UPDATE_BOOKING(state, payload) {
-            //import { plainToClass } from "class-transformer";
             let listingObject = plainToClass(ListingModel, payload.listing);
             payload.listing = listingObject;
             Vue.set(state,'booking', payload);
+        },
+        UPDATE_BOOKING_GROUPS_DETAIL(state, payload) {
+            Vue.set(state.booking, 'bookingGroups', payload);
         },
         ADD_BOOKING_PARTICIPANT(state, user) {
             //var participants = (state.booking as any).participants;
@@ -334,8 +346,6 @@ export default new Vuex.Store({
                 //(state.booking as any).participants.push(user);    
                 Vue.set((state.booking as any).participants, (state.booking as any).participants.length, user);
             }
-
-            
         },
         REMOVE_BOOKING_PARTICIPANT(state, index) {
             var participants = (state.booking as any).participants;

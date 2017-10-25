@@ -29,6 +29,15 @@ namespace AussieTowns.Services
             return booking;
         }
 
+        public async Task<IEnumerable<BookingResponse>> GetAllBookingsByDate(int listingId, DateTime bookingDate, TimeSpan startTime)
+        {
+            return await _bookingRepository.GetAllBookingsByDate(listingId, bookingDate, startTime);
+        }
+
+        public async Task<IEnumerable<BookingSlot>> GetBookingSlotsByListingId(int listingId)
+        {
+            return await _bookingRepository.GetBookingSlotsByListingId(listingId);
+        }
         public async Task<int> ConfirmBooking(BookingRequest bookingRequest)
         {
             var tourGuests = bookingRequest.Participants.Select(participant => new TourGuest()
@@ -60,9 +69,9 @@ namespace AussieTowns.Services
             return await _bookingRepository.UpdateBooking(bookingId, bookingRequest.Participants);
         }
 
-        public async Task<int> WithdrawBooking(int bookingId, string[] tourGuestIds)
+        public async Task<int> WithdrawBooking(int bookingId)
         {
-            return await _bookingRepository.WithdrawBooking(bookingId, tourGuestIds);
+            return await _bookingRepository.WithdrawBooking(bookingId);
         }
     }
 }

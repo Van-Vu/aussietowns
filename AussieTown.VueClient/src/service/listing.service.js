@@ -10,6 +10,10 @@ var ListingService = /** @class */ (function () {
         return http.get(this.baseUrl + _id)
             .then(function (response) { return response; });
     };
+    ListingService.prototype.getListingWithBookingDetailById = function (id) {
+        return http.get(this.baseUrl + id + "/booking")
+            .then(function (response) { return response; });
+    };
     ListingService.prototype.addListing = function (listing) {
         return http.post(this.baseUrl, listing)
             .then(function (response) { return response; })

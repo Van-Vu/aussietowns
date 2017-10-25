@@ -35,6 +35,7 @@ import TestPage from '../page/test.page.vue';
 import HelpPage from '../page/static/help.page.vue';
 import BookingPage from '../page/booking.page.vue';
 import BookingDetailPage from '../page/bookingdetail.page.vue';
+import BookingManagePage from '../page/bookingmanage.page.vue';
 import AboutPage from '../page/static/about.page.vue';
 import TermsAndConditionsPage from '../page/static/termsandconditions.page.vue';
 import MessageComponent from '../component/profile/message.component.vue';
@@ -174,6 +175,17 @@ var router = new Router({
             path: "/booking/:seoString-:bookingId(\\d+)",
             name: "bookingDetail",
             component: BookingDetailPage,
+            props: true,
+            meta: {
+                permission: UserRole.User,
+                fail: '/home',
+                isPublic: false
+            }
+        },
+        {
+            path: "/booking/manage/:seoString-:listingId(\\d+)",
+            name: "bookingManage",
+            component: BookingManagePage,
             props: true,
             meta: {
                 permission: UserRole.User,

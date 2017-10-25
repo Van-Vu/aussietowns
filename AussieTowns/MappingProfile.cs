@@ -70,7 +70,6 @@ namespace AussieTowns
                     opts => opts.MapFrom(src => src.Schedules.Select(x => Mapper.Map<Schedule, ScheduleResponse>(x))))
                 .ForMember(dest => dest.TourOperators,
                     opts => opts.ResolveUsing<TourOperatorResolver>());
-            //opts.MapFrom(src =>  src.TourGuests.Select(x => Mapper.Map<User, MiniProfile>(x.User))));
 
             CreateMap<User, UserResponse>()
                 .ForMember(dest => dest.LocationDetail,
@@ -80,6 +79,12 @@ namespace AussieTowns
                 .ForMember(dest => dest.GuestListings,
                     opts => opts.MapFrom(src => src.GuestListings.Select( Mapper.Map<ListingView, ListingSummary>)))
                 .ForMember(dest => dest.Images, opts => opts.MapFrom(src => src.Images));
+
+            CreateMap<BookingSlot, BookingSlotResponse>()
+                .ForMember(dest => dest.BookingDate,
+                    opts => opts.MapFrom(src => src.BookingDate.Date.ToString("yyyy/MM/dd")))
+                .ForMember(dest => dest.StartTime,
+                    opts => opts.MapFrom(src => src.StartTime.ToString(@"hh\:mm")));
         }
     }
 

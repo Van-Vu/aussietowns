@@ -44,6 +44,20 @@ namespace AussieTowns.Controllers
             }
         }
 
+        [HttpPost("listing/{listingId}")]
+        public async Task<IEnumerable<BookingResponse>> GetAllBookingsByDate(int listingId, [FromBody] BookingRequest bookingRequest)
+        {
+            try
+            {
+                return await _bookingService.GetAllBookingsByDate(listingId, bookingRequest.BookingDate, bookingRequest.Time);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                throw;
+            }
+        }
+
         [HttpPost]
         public async Task<int> ConfirmBooking([FromBody] BookingRequest request)
         {
@@ -54,7 +68,7 @@ namespace AussieTowns.Controllers
 
                 //var jsonBookingRequest = JsonConvert.SerializeObject(request);
 
-                await _bookingService.ConfirmBooking(request);
+                var bookingId = await _bookingService.ConfirmBooking(request);
 
                 var listingDetail = _listingService.GetListingViewById(request.ListingId).Result;
 
@@ -66,10 +80,16 @@ namespace AussieTowns.Controllers
                     Phone = item.Phone
                 }).ToList();
 
+                var listingUrl = $"{Request.Headers["Access-Control-Allow-Origin"]}/listing/{StringHelper.SeorizeListingName(listingDetail.Header, listingDetail.Id)}";
+                var bookingUrl = $"{Request.Headers["Access-Control-Allow-Origin"]}/booking/{string.Join("-", listingDetail.Header.Split(' '))}-{bookingId}";
+                var manageBookingUrl = $"{Request.Headers["Access-Control-Allow-Origin"]}/booking/manage/{StringHelper.SeorizeListingName(listingDetail.Header, listingDetail.Id)}"; ;
+
                 var bookingEmailViewModel = new BookingEmailViewModel
                 {
                     ListingId = listingDetail.Id,
-                    ListingUrl = StringHelper.SeorizeListingName(listingDetail.Header, listingDetail.Id),
+                    ListingUrl = listingUrl,
+                    BookingUrl = bookingUrl,
+                    ManageBookingUrl = manageBookingUrl,
                     ListingHeader = listingDetail.Header,
                     ListingDescription = listingDetail.Description,
                     BookingDate = request.BookingDate.ToString("dddd dd-MMM-yyyy", CultureInfo.DefaultThreadCurrentUICulture),
@@ -131,11 +151,11 @@ namespace AussieTowns.Controllers
         }
 
         [HttpPost("{bookingId}/withdraw")]
-        public async Task<int> WithdrawBooking(int bookingId, string tourGuestIds)
+        public async Task<int> WithdrawBooking(int bookingId)
         {
             try
             {
-                await _bookingService.WithdrawBooking(bookingId, tourGuestIds.Split(','));
+                await _bookingService.WithdrawBooking(bookingId);
                 return 1;
             }
             catch (Exception e)

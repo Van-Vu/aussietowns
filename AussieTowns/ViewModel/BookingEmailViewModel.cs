@@ -12,6 +12,9 @@ namespace AussieTowns.ViewModel
         public string BookingDate { get; set; }
         public string BookingTime { get; set; }
 
+        public string BookingUrl { get; set; }
+        public string ManageBookingUrl { get; set; }
+        public bool IsHost { get; set; }
         public List<BookingParticipant> BookingParticipants { get; set; }
     }
 

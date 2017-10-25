@@ -7,6 +7,10 @@ var BookingService = /** @class */ (function () {
         return http.get(this.baseUrl + bookingId)
             .then(function (response) { return response; });
     };
+    BookingService.prototype.getAllBookingsByDate = function (bookingRequest) {
+        return http.post(this.baseUrl + "listing/" + bookingRequest.listingId, bookingRequest)
+            .then(function (response) { return response; });
+    };
     BookingService.prototype.confirmBooking = function (bookingRequest) {
         return http.post(this.baseUrl, bookingRequest);
     };

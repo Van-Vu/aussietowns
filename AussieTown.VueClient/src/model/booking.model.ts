@@ -4,6 +4,7 @@ import { plainToClass } from "class-transformer";
 
 export default class BookingModel {
     public participants: User[];
+    public bookingGroups: any;
     public listing: ListingModel;
     public bookingDate: any;
     public bookingTime: any;

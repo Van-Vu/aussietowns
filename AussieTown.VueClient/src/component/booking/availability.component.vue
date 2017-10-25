@@ -4,6 +4,7 @@
             <div class="column is-4">Choose your suitable day</div>
             <div class="column">
                 <datepicker id="availDay" :disabled="disableDays" :range="false"
+                            :availableDays="availableDays"
                             :value="bookingDate" @input="onBookingDateChanged"></datepicker>
             </div>
 

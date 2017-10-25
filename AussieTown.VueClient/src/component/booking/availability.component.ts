@@ -15,9 +15,11 @@ import numberchooser from '../shared/numberchooser.component.vue';
 })
 
 export default class AvailabilityComponent extends Vue {
-    @Prop date: string;
-    @Prop time: string;
-    bookingDate: string = '';
+    //@Prop date: string;
+    //@Prop time: string;
+    @Prop bookingDate: string;
+    @Prop availableDays: Array<Date>;
+
     bookingTime: string = '';
     disableDays = {
         to: new Date(),
@@ -40,7 +42,7 @@ export default class AvailabilityComponent extends Vue {
         timeslots.push(currentListing.schedules[0].startTime);
 
         this.availableTimeslot = timeslots;
-
+        this.bookingTime = '';
         this.$emit('bookingDateChanged', value);
     }
 }

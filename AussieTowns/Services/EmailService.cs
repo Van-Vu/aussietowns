@@ -35,6 +35,7 @@ namespace AussieTowns.Services
             var emailContentForGuests = engine.Parse(_appSettings.BookingGuestsEmailTemplate, emailViewModel);
 
             emailViewModel.EmailHeader = $"Hi, you have a new booking";
+            emailViewModel.IsHost = true;
             var emailContentForHost = engine.Parse(_appSettings.BookingGuestsEmailTemplate, emailViewModel);
 
             var emailLogs = new List<EmailLog>();

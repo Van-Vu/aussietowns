@@ -8,6 +8,11 @@ export default class BookingService {
             .then(response => response);
     }
 
+    getAllBookingsByDate(bookingRequest) {
+        return http.post(`${this.baseUrl}listing/${bookingRequest.listingId}`, bookingRequest)
+            .then(response => response);
+    }
+
     confirmBooking(bookingRequest) {
         return http.post(this.baseUrl, bookingRequest);
     }

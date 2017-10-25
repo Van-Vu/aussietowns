@@ -1,4 +1,5 @@
-﻿@model AussieTowns.ViewModel.BookingEmailViewModel
+﻿@using Microsoft.CodeAnalysis.CSharp.Syntax
+@model AussieTowns.ViewModel.BookingEmailViewModel
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -13,7 +14,7 @@
             border-collapse: collapse;
         }
 
-        button {
+        .editTrip {
             background-color: #99CD4E;
             color: #ffffff;
             text-align: center;
@@ -22,10 +23,10 @@
             border: 0;
             font-size: 24px;
             padding: 15px 45px;
-            margin: 30px 5px;
+            text-decoration: none;
         }
 
-        button:hover {
+        .editTrip:hover {
             background-color: transparent;
             color: #99CD4E;
             box-shadow: 0 0 0 1px #99CD4E, 0 0 0 1px #99CD4E;
@@ -53,11 +54,20 @@
                         </tr>
                         <tr>
                             <td style="padding: 10px 20px 20px 20px; line-height: 24px;">
-                                <div style="font-size:32px; font-weight:700; text-align: center; margin-bottom: 30px;">
-                                    <strong>Your request was sent</strong>
+                                <div style="font-size: 32px; font-weight: 700; text-align: center; margin-bottom: 30px;">
+                                    @{
+                                        if (Model.IsHost)
+                                        {
+                                            <strong>You have a new booking</strong>
+                                        }
+                                        else
+                                        {
+                                            <strong>Your request was sent</strong>
+                                        }
+                                    }
                                 </div>
                                 <div>
-                                    <a href="@Model.ListingUrl" style="text-decoration: none;
+                                    <a href="@Model.ListingUrl" target="_blank" style="text-decoration: none;
 									text-decoration-color: rgb(33, 153, 232);
 									text-decoration-line: none;
 									text-decoration-style: solid;">
@@ -88,33 +98,57 @@
                                 <div>
                                     <table style="width: 100%; border:0; margin-top:40px; margin-bottom: 40px; margin-left: auto; margin-right: auto;">
                                         <tbody>
+                                        <tr>
+                                            <td>Full name</td>
+                                            <td>Date of Birth</td>
+                                            <td>Email</td>
+                                            <td>Phone</td>
+                                        </tr>
+                                        @foreach (var item in Model.BookingParticipants)
+                                        {
                                             <tr>
-                                                <td>Full name</td>
-                                                <td>Date of Birth</td>
-                                                <td>Email</td>
-                                                <td>Phone</td>
+                                                <td class="bordertop">@item.Fullname</td>
+                                                <td class="bordertop">@item.DateOfBirth</td>
+                                                <td class="bordertop">@item.Email</td>
+                                                <td class="bordertop">@item.Phone</td>
                                             </tr>
-                                            @foreach (var item in Model.BookingParticipants)
-                                            {
-                                                <tr>
-                                                    <td class="bordertop">@item.Fullname</td>
-                                                    <td class="bordertop">@item.DateOfBirth</td>
-                                                    <td class="bordertop">@item.Email</td>
-                                                    <td class="bordertop">@item.Phone</td>
-                                                </tr>
-                                            }
+                                        }
                                         </tbody>
                                     </table>
                                 </div>
-                                <div>
-                                    <span><strong>What happen next:</strong></span>
-                                    <span>Your host will contact you within 48 hours to arrange payment</span>
-                                </div>
-                                <div>
-                                    <span><strong>In a meantime</strong>, you can modify or withdraw your trip here</span>
-                                </div>
-                                <div style="text-align: center;">
-                                    <button>View your trip</button>
+                                @{
+                                    if (Model.IsHost)
+                                    {
+                                        <div>
+                                            <span><strong>What happen next:</strong></span>
+                                            <span>Please contact your guest within 48 hours to arrange payment</span>
+                                        </div>
+                                        <div>
+                                            <span><strong>When you're happy</strong>, you can confirm their booking here</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div>
+                                            <span><strong>What happen next:</strong></span>
+                                            <span>Your host will contact you within 48 hours to arrange payment</span>
+                                        </div>
+                                        <div>
+                                            <span><strong>In a meantime</strong>, you can modify your trip here</span>
+                                        </div>
+                                    }
+                                }
+                                <div style="text-align: center; margin-top: 30px;">
+                                    @{
+                                        if (Model.IsHost)
+                                        {
+                                            <a class="editTrip" href="@Model.ManageBookingUrl" target="_blank">Manage your booking</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="editTrip" href="@Model.BookingUrl" target="_blank">View your trip</a>
+                                        }
+                                    }
                                 </div>
                             </td>
                         </tr>

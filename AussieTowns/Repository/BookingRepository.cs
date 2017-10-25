@@ -76,7 +76,7 @@ namespace AussieTowns.Repository
                         await dbConnection.ExecuteAsync(tourGuestSql, tourGuests);
 
                         tran.Commit();
-                        return bookingRet;
+                        return bookingId;
                     }
                     catch (Exception e)
                     {
@@ -131,13 +131,58 @@ namespace AussieTowns.Repository
             }
         }
 
-        public async Task<int> WithdrawBooking(int bookingId, string[] tourGuestIds)
+        public async Task<int> WithdrawBooking(int bookingId)
+        {
+            // Booking Status:
+            // 0: pending
+            // 1: confirm
+            // 2: withdraw
+
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "UPDATE booking SET status=2 WHERE id=@bookingId";
+                dbConnection.Open();
+                return await dbConnection.ExecuteAsync(sql, new { bookingId });
+            }
+        }
+
+        public async Task<IEnumerable<BookingSlot>> GetBookingSlotsByListingId(int listingId)
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "UPDATE TourGuest SET isWithdrawn=1 WHERE is=@id";
+                var sql = "SELECT * FROM Booking WHERE listingid=@listingId;";
                 dbConnection.Open();
-                return await dbConnection.ExecuteAsync(sql, tourGuestIds);
+                return await dbConnection.QueryAsync<BookingSlot>(sql,new {listingId});
+            }
+        }
+
+        public async Task<IEnumerable<BookingResponse>> GetAllBookingsByDate(int listingId, DateTime bookingDate, TimeSpan startTime)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var bookingDictionary = new Dictionary<int, BookingResponse>();
+
+                var sql = "SELECT * FROM Booking b INNER JOIN Tourguest t ON t.bookingId = b.id "
+                    + "WHERE b.listingid=@listingId AND b.bookingDate=@bookingDate AND b.starttime=@starttime;";
+                dbConnection.Open();
+                return (await dbConnection.QueryAsync<BookingResponse, TourGuest, BookingResponse>(sql,
+                    (booking, tourGuests) =>
+                    {
+                        BookingResponse bookingResponse;
+
+                        if (!bookingDictionary.TryGetValue(booking.Id, out bookingResponse))
+                        {
+                            bookingResponse = booking;
+                            bookingResponse.Participants = new List<TourGuest>();
+                            bookingDictionary.Add(bookingResponse.Id, bookingResponse);
+                        }
+
+                        bookingResponse.Participants.Add(tourGuests);
+                        return bookingResponse;
+                    },
+                    new {listingId, bookingDate, startTime}))
+                    .Distinct()
+                    .ToList();
             }
         }
     }
