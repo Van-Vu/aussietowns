@@ -2,3 +2,8 @@ AussieTown.Test/obj/
 .vs/
 temp/
 AussieTowns/logs/
+FunWithLocal.WebApi/bin/
+FunWithLocal.WebApi/obj/
+FunWithLocal.WebApi/Properties/
+logs/
+ReleaseCandidate/

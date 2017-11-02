@@ -1,0 +1,111 @@
+﻿<form [formGroup]="model">
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="text" class="form-control" id="email"
+                placeholder="Your email address"
+                [textMask]="{mask: myEmailMask, guide: false, keepCharPositions: true}"
+                formControlName="email">
+
+        <div *ngIf="formErrors.email" class="alert alert-danger">
+            {{ formErrors.email }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="text" class="form-control" id="password"
+               placeholder="Your password"
+               formControlName="password">
+
+        <div class="alert alert-danger" *ngIf="model.get('password').hasError('required') && model.get('password').touched">
+            Password is required
+        </div>
+        <div class="alert alert-danger" *ngIf="model.get('password').hasError('minlength') && model.get('password').touched">
+            Minimum of 7 characters
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" class="form-control" id="firstName"
+               placeholder="Your first name"
+               formControlName="firstName">
+        <div class="alert alert-danger" *ngIf="model.get('firstName').hasError('required') && model.get('firstName').touched">
+            Name is required
+        </div>
+        <div class="alert alert-danger" *ngIf="model.get('firstName').hasError('minlength') && model.get('firstName').touched">
+            Minimum of 2 characters
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" class="form-control" id="lastName"
+               placeholder="Your last name"
+               formControlName="lastName">
+        <div class="alert alert-danger" *ngIf="model.get('lastName').hasError('required') && model.get('lastName').touched">
+            Name is required
+        </div>
+        <div class="alert alert-danger" *ngIf="model.get('lastName').hasError('minlength') && model.get('lastName').touched">
+            Minimum of 2 characters
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="location">Origin location</label>
+        <kpx-autocomplete [min-chars]="2" formControlName="locationId" [search-data]="searchLocations" (onSearch)="onLocationSearch($event)"></kpx-autocomplete>
+    </div>
+    <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="text" class="form-control" id="phoneNumber"
+               placeholder="Your phone number"
+               [textMask]="{mask: phoneNumberMask}"
+               formControlName="phone">
+    </div>
+    <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender" class="form-control" formControlName="gender">
+            <option value="" selected="selected">Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="birthday">Birthday</label>
+        <input type="text" class="form-control" id="birthday"
+               placeholder="mm/dd/yyyy"
+               [textMask]="{mask: dateMask, guide: false, keepCharPositions: false, pipe: autoCorrectedDatePipe}"
+               formControlName="birthday">
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea type="text" class="form-control" id="description"
+               placeholder="Short description about yourself"
+               formControlName="description" cols="40" rows="5"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" class="form-control" id="address"
+               placeholder="Your current address"
+               formControlName="address">
+    </div>
+    <div class="form-group">
+        <label for="emergencyContact">Emergency contact</label>
+        <input type="text" class="form-control" id="emergencyContact"
+               placeholder="Your emergency contact"
+               formControlName="emergencyContact">
+    </div>
+    <div class="form-group">
+        <label for="photo">Photo</label>
+    </div>
+    <div class="form-group">
+        <label for="video">Video</label>
+        <h2>webcam:</h2>
+        <!-- Define <video> object to hold webcam image -->
+        <video [src]="videosrc" style="width: 480px; height: 480px;"></video>
+
+        <p>See app/webcam/webcam.html for HTML, see app/webcam/webcam.css for CSS. </p>
+        <p>Automatic streaming is enabled. </p>
+
+        <canvas></canvas>
+        <label role="button" (click)="capture()">Capture</label>
+    </div>
+    <button class="btn btn-success" [disabled]="model.invalid" (click)="onUpdate()">Update</button>
+</form>

@@ -1,0 +1,46 @@
+﻿
+$c-darkgrey-darkest: #2C3941 !default; // darkest grey
+$c-darkgrey-lessdark: #4A565E !default; // less dark grey
+$c-darkgrey-dark: #6B747A !default; // dark grey
+$c-darkgrey-light: #B6BABC !default; // light dark grey
+$c-darkgrey-lightest: #EAEBEB !default; // lightest dark grey
+
+$c-lightgrey-darkest: #768A99 !default; // darkest light grey
+$c-lightgrey-dark: #9EACB6 !default; // dark light grey
+$c-lightgrey-light: #CFD5DB !default; // light grey
+$c-lightgrey-lightest: #F8F9FA !default; // lightest light grey
+
+$c-brand-orange: #ff5328  !default; // CRE orange
+$c-brand-orange-darker: darken($c-brand-orange, 10%) !default; // CRE orange - darker
+
+$c-screen-black: #1b1b1b !default; // Black
+$c-neutral-black: #000000 !default; // Black
+$c-neutral-white: #ffffff !default; // White
+
+$c-secondary-one: #0D458D !default; // dark blue
+$c-secondary-two: #0045AD !default; // aqua
+$c-secondary-three: #776BAE !default; // purple
+$c-secondary-four: #5FB459 !default; // green
+$c-secondary-five: #5FC5F0 !default; // sky blue
+$c-secondary-six: #F6B330 !default; // yellow
+$c-secondary-seven: #E73B26 !default; // red
+
+$c-effect-focus: #b4defa !default; // blue
+
+$c-neutral1: #556674 !default;
+$c-neutral2: #a2adc1 !default;
+$c-neutral3: #0B2047 !default; // Very deep blue
+$c-neutral4: #3c475b !default; // Dark gray
+$c-neutral5: #F2F5F7 !default; // Light gray
+$c-neutral6: #1E293D !default; // Almost black
+$c-neutral7: #515b6d !default; // Dark gray
+$c-neutral8: #26323a !default; // Dark Gray
+
+$c-border: #D9DEE4 !default;
+$c-border2: #A9AFBA !default;
+$c-border3: #E6E9ED !default;
+
+// errors
+$error-text: $c-secondary-seven;
+$error-border: #E2968E;
+$error-background-colour: #F5E2E2;

@@ -1,0 +1,28 @@
+﻿<div [hidden]="submitted">
+    <form (ngSubmit)="onLogin(model)" [formGroup]="model">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" class="form-control" id="email"
+                    placeholder="Your email address"
+                    formControlName="email">
+
+            <div *ngIf="formErrors.email" class="alert alert-danger">
+                {{ formErrors.Email }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="text" class="form-control" id="password"
+                    placeholder="Your password"
+                    formControlName="password">
+
+            <div class="alert alert-danger" *ngIf="model.get('password').hasError('required') && model.get('password').touched">
+                Password is required
+            </div>
+            <div class="alert alert-danger" *ngIf="model.get('password').hasError('minlength') && model.get('password').touched">
+                Minimum of 7 characters
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success" [disabled]="model.invalid">Submit</button>
+    </form>
+</div>

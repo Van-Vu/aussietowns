@@ -1,0 +1,88 @@
+<div id="header">
+    <div class='nav-bar' [ngClass]="{ 'is-sticky': isSticky }">
+        <a [routerLink]="['/home']" title="Meet the Local" [hidden]="!hideNavToggle">
+            <div class='nav-bar__logo glyphicon glyphicon-home'></div>
+        </a>
+
+        <a href="#" (click)="onNavToggle()" title="Meet the Local" [hidden]="hideNavToggle">
+            <div class='nav-bar__logo glyphicon glyphicon-home'></div>
+            <div class="nav-bar__toggle">
+                <i class="glyphicon glyphicon-chevron-down"></i>
+            </div>
+        </a>
+
+        <div class='nav-bar__menu' [ngClass]="{'is-open': isMenuOpen, 'is-close': !isMenuOpen}">
+            <ul>
+                <!--<li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/counter']">
+                        <span class='glyphicon glyphicon-education'></span> Counter
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/fetch-data']">
+                        <span class='glyphicon glyphicon-th-list'></span> Fetch data
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/map']">
+                        <span class='glyphicon glyphicon-th-list'></span> Map
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/tourdetail', 6]">
+                        <span class='glyphicon glyphicon-th-list'></span> Tour Detail
+                    </a>
+                </li>
+
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/tourrequest', 1]">
+                        <span class='glyphicon glyphicon-th-list'></span> Tour Request
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/test']" (click)="onTest()">
+                        <span class='glyphicon glyphicon-th-list'></span> Test
+                    </a>
+                </li>-->
+                <li [routerLinkActive]="['link-active']" class="nav-bar__menu-item">
+                    <a class="nav-bar__menu-item-link" [routerLink]="['/tourdetail', 6]">
+                        <span class='glyphicon glyphicon-th-list'></span> Tour Detail
+                    </a>
+                </li>
+                <li *ngIf="!isLoggedin" class="nav-bar__menu-item" [routerLinkActive]="['link-active']">
+                    <a class="nav-bar__menu-item-link" (click)="loginModal.show()">
+                        <span class='glyphicon glyphicon-th-list'></span> Log in
+                    </a>
+                </li>
+                <li *ngIf="!isLoggedin" class="nav-bar__menu-item" [routerLinkActive]="['link-active']">
+                    <a class="nav-bar__menu-item-link" (click)="registerModal.show()">
+                        <span class='glyphicon glyphicon-th-list'></span> Sign up
+                    </a>
+                </li>
+
+                <li *ngIf="isLoggedin" class="nav-bar__menu-item" [routerLinkActive]="['link-active']">
+                    <a class="nav-bar__menu-item-link" [routerLink]="['/profile',id]">
+                        <span class='glyphicon glyphicon-th-list'></span> Hi {{name}}
+                    </a>
+                </li>
+
+                <li *ngIf="isLoggedin" class="nav-bar__menu-item" [routerLinkActive]="['link-active']">
+                    <a class="nav-bar__menu-item-link" [routerLink]="['/logout']" (click)="onLogout()">
+                        <span class='glyphicon glyphicon-th-list'></span> Log out
+                    </a>
+                </li>
+            </ul>
+            <!--<a href="#" class="nav-bar__toggle" title="Navigation Menu" aria-hidden="true">
+                <i class="fa fa-bars"></i>
+            </a>-->
+        </div>
+
+    </div>
+    <registrationmodal></registrationmodal>
+    <loginmodal (isLoggedIn)="handleLoggedIn($event)"></loginmodal>
+</div>
+
+
+
+
+

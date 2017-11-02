@@ -1,0 +1,16 @@
+﻿<ul class="tour-paticipant">
+    <li class="li-horizontal" *ngFor="let user of users ">
+        <miniprofile [data]="user" (removeUser)="onUserRemove($event)" ></miniprofile>
+    </li>
+    <li class="li-horizontal">
+        <button (click)="toggleProfileSearch($event)" class="addParticipant">
+            <span class="glyphicon glyphicon-plus-sign"></span> {{buttonText}}
+        </button>
+        <kpx-autocomplete [min-chars]="2"
+                          [search-data]="searchUsers" (onSearch)="onUserSearch($event)"
+                          (onSelect)="onUserSelected($event)" [clear-after-selection]="needCleanup"
+                          [hidden]="!isAdding"></kpx-autocomplete>
+    </li>
+</ul>
+
+<!--<profilesearch (addedUser)="handleUserAdded($event)" [hidden]="!isAdding"></profilesearch>-->

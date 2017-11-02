@@ -1,0 +1,10 @@
+﻿<div>
+    <input id="picker1" type="radio" name="timepicker"  (click)="changeValue(false)" checked>
+    <input class="form-control" type="text" [value]="textValue" placeholder="hh:mm" (keyup)="onKey($event)" [disabled]="textDisable">
+</div>
+<div>
+    <input id="picker2" type="radio" name="timepicker" (click)="changeValue(true)">
+    <p for="picker2" class="tab-text">Full day</p>
+</div>
+
+

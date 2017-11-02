@@ -1,0 +1,16 @@
+﻿.addParticipant {
+    display: inline-block;
+    text-align: center;
+    border-radius: 10px;
+    color: #999999;
+    background: #eeeeee;
+    font-size: 1.142857142857143em;
+    font-size: 1.25rem;
+    line-height: 1.05em;
+}
+
+.addParticipant span {
+    margin-top: 10%;
+    display: block;
+    color: #999999;
+}

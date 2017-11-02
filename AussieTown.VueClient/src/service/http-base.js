@@ -9,11 +9,14 @@ Vue.prototype.$http = axios;
 //export const http = axios.create({
 //    baseURL: `http://localhost/meetthelocal/`
 //})
-var http = axios.create({
-    baseURL: "http://localhost:8888/",
+//const http = axios.create({
+//    baseURL: `http://localhost:7048/`,
+//})
+export var http = axios.create({
+    baseURL: "https://api.funwithlocal.com/"
 });
 http.defaults.withCredentials = true;
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'https://www.funwithlocal.com';
 //axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
 //axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Authorization';
 //axios.defaults.headers.common['Access-Control-Request-Method'] = "GET, POST, PUT, DELETE, OPTIONS";

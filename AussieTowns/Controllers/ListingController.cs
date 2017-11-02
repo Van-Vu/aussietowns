@@ -117,7 +117,7 @@ namespace AussieTowns.Controllers
             {
                 if (listing == null) throw new ArgumentNullException(nameof(listing));
 
-                if (!await _authorizationService.AuthorizeAsync(User, listing, Operations.Create))
+                if (!(await _authorizationService.AuthorizeAsync(User, listing, Operations.Create)).Succeeded)
                     throw new UnauthorizedAccessException();
 
                 var newId = await _listingService.InsertListing(listing);
@@ -138,7 +138,7 @@ namespace AussieTowns.Controllers
                 //if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
                 if (listing == null) throw new ArgumentNullException(nameof(listing));
 
-                if (!await _authorizationService.AuthorizeAsync(User, listing, Operations.Update))
+                if (!(await _authorizationService.AuthorizeAsync(User, listing, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
                 listing.Description = StringHelper.StripHtml(listing.Description);
@@ -159,7 +159,7 @@ namespace AussieTowns.Controllers
             {
                 if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
 
-                if (!await _authorizationService.AuthorizeAsync(User, new Listing {Id = id}, Operations.Delete))
+                if (!(await _authorizationService.AuthorizeAsync(User, new Listing { Id = id }, Operations.Delete)).Succeeded)
                     throw new UnauthorizedAccessException();
 
                 return await _listingService.DeActivateListing(id);
@@ -185,7 +185,7 @@ namespace AussieTowns.Controllers
                     throw new ArgumentOutOfRangeException(nameof(listingId), "Can't find listing");
                 }
 
-                if (!await _authorizationService.AuthorizeAsync(User, listing, Operations.Update))
+                if (!(await _authorizationService.AuthorizeAsync(User, listing, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
                 var imageUrls = new List<Image>();
@@ -230,7 +230,7 @@ namespace AussieTowns.Controllers
                 }
 
 
-                if (!await _authorizationService.AuthorizeAsync(User, listing, Operations.Update))
+                if (!(await _authorizationService.AuthorizeAsync(User, listing, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
                 var image = await _listingService.FetchImageByUrl(listingId, url);

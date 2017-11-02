@@ -1,0 +1,1 @@
+server=localhost;userid=fwluser;password=Vg3qu_15;database=funwithlocal;Convert Zero Datetime=True;Persist Security Info=True;

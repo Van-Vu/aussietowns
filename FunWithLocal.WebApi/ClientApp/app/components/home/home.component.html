@@ -1,0 +1,121 @@
+<section class="header-main">
+    <div class="background"></div>
+    <div class="content">
+        <h1>Hello world !</h1>
+        <p>bodom</p>
+        <article>
+            <form (ngSubmit)="onSearch(model)" [formGroup]="model" class="searchbar">
+                <kpx-autocomplete id="thebox"
+                                  [min-chars]="2"
+                                  formControlName="location" [search-data]="searchLocations" (onSearch)="onLocationSearch($event)">
+                </kpx-autocomplete>
+                <input type="submit" class="searchBtn" value="Submit"/>
+            </form>
+        </article>
+        <div>this is something else</div>
+    </div>
+</section>
+
+<section class="popularRequest">
+
+        <!--<div class="swiper-button-prev" style="position: relative; top: 350px; left: 10%;"></div>
+        <swiper [config]="requestConfig" [initialize]="initializeRequestSlide" style="width: 70%; margin-left: auto; margin-right: auto;">
+            <div class="swiper-wrapper" style="width: 100%;">
+                <div class="swiper-slide" *ngFor="let slide of requestSlides">
+                    <img [src]="slide.imgSrc" />
+                    <div>{{slide.text}}</div>
+                </div>
+            </div>
+        </swiper>
+        <div class="swiper-button-next" style="position: relative; top: 350px;right: 10%;"></div>-->
+    <article class="request-slides" style="width:70%">
+        <slider [slides]="requestSlides" [config]="requestConfig" [initialize]="initializeRequestSlide"></slider>
+    </article>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h1>Hello, world!</h1>
+<p>Welcome to your new single-page application, built with:</p>
+<ul>
+    <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
+    <li><a href='https://angular.io/'>Angular 2</a> and <a href='http://www.typescriptlang.org/'>TypeScript</a> for client-side code</li>
+    <li><a href='https://webpack.github.io/'>Webpack</a> for building and bundling client-side resources</li>
+    <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
+</ul>
+<p>To help you get started, we've also set up:</p>
+<ul>
+    <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
+    <li><strong>Server-side prerendering</strong>. For faster initial loading and improved SEO, your Angular 2 app is prerendered on the server. The resulting HTML is then transferred to the browser where a client-side copy of the app takes over.</li>
+    <li><strong>Webpack dev middleware</strong>. In development mode, there's no need to run the <code>webpack</code> build tool. Your client-side resources are dynamically built on demand. Updates are available as soon as you modify any file.</li>
+    <li><strong>Hot module replacement</strong>. In development mode, you don't even need to reload the page after making most changes. Within seconds of saving changes to files, your Angular 2 app will be rebuilt and a new instance injected is into the page.</li>
+    <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and the <code>webpack</code> build tool produces minified static CSS and JavaScript files.</li>
+    <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
+    <li><strong>Server-side prerendering</strong>. For faster initial loading and improved SEO, your Angular 2 app is prerendered on the server. The resulting HTML is then transferred to the browser where a client-side copy of the app takes over.</li>
+    <li><strong>Webpack dev middleware</strong>. In development mode, there's no need to run the <code>webpack</code> build tool. Your client-side resources are dynamically built on demand. Updates are available as soon as you modify any file.</li>
+    <li><strong>Hot module replacement</strong>. In development mode, you don't even need to reload the page after making most changes. Within seconds of saving changes to files, your Angular 2 app will be rebuilt and a new instance injected is into the page.</li>
+    <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and the <code>webpack</code> build tool produces minified static CSS and JavaScript files.</li>
+    <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
+    <li><strong>Server-side prerendering</strong>. For faster initial loading and improved SEO, your Angular 2 app is prerendered on the server. The resulting HTML is then transferred to the browser where a client-side copy of the app takes over.</li>
+    <li><strong>Webpack dev middleware</strong>. In development mode, there's no need to run the <code>webpack</code> build tool. Your client-side resources are dynamically built on demand. Updates are available as soon as you modify any file.</li>
+    <li><strong>Hot module replacement</strong>. In development mode, you don't even need to reload the page after making most changes. Within seconds of saving changes to files, your Angular 2 app will be rebuilt and a new instance injected is into the page.</li>
+    <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and the <code>webpack</code> build tool produces minified static CSS and JavaScript files.</li>
+    <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
+    <li><strong>Server-side prerendering</strong>. For faster initial loading and improved SEO, your Angular 2 app is prerendered on the server. The resulting HTML is then transferred to the browser where a client-side copy of the app takes over.</li>
+    <li><strong>Webpack dev middleware</strong>. In development mode, there's no need to run the <code>webpack</code> build tool. Your client-side resources are dynamically built on demand. Updates are available as soon as you modify any file.</li>
+    <li><strong>Hot module replacement</strong>. In development mode, you don't even need to reload the page after making most changes. Within seconds of saving changes to files, your Angular 2 app will be rebuilt and a new instance injected is into the page.</li>
+    <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and the <code>webpack</code> build tool produces minified static CSS and JavaScript files.</li>
+</ul>
+
+<!--<div ng2FileDrop
+     [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+     (fileOver)="fileOverBase($event)"
+     [uploader]="uploader"
+     class="well my-drop-zone">
+    Base drop zone
+</div>-->
+
+
+<!--<div class="row">
+    <div  class="col-md-12">
+        <carousel [slides]="slides" [interval]="NextPhotoInterval" [noWrap]="noLoopSlides" >
+        </carousel>
+    </div>
+    <div class="col-md-12">
+        <button type="button" class="btn btn-info"
+                (click)="removeLastSlide()">
+            Remove Last Slide
+        </button>
+    </div>
+</div>-->
+
+
+
+
+
+
+    <input id="user_profile_pic" #fileInput type="file" style="display: none;" accept="image/jpeg, image/png" />
+    <label class="btn btn-block btn-large" for="user_profile_pic2" role="button">Upload a file from your computer</label>
+
+    <button (click)="addFile()">Add</button>
+
+
+
+    <img [src]="src" [hidden]="!src"><br>
+    <input id="user_profile_pic2" type="file" image-upload style="display: none;"
+           (imageSelected)="selected($event)"
+           [resizeOptions]="resizeOptions">
+
+
+

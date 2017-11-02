@@ -1,0 +1,48 @@
+"use strict";
+// source: http://www.ravinderpayal.com/Simple-and-Light-Weight-Image-or-Content-Slider-for-Angular2/
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var SliderComponent = /** @class */ (function () {
+    function SliderComponent() {
+    }
+    SliderComponent.prototype.onPrev = function (event) {
+        this.swiper.Swiper.onClickPrev(event);
+    };
+    SliderComponent.prototype.onNext = function () {
+        this.swiper.Swiper.onClickNext(event);
+    };
+    __decorate([
+        core_1.Input('config'),
+        __metadata("design:type", Object)
+    ], SliderComponent.prototype, "config", void 0);
+    __decorate([
+        core_1.Input('slides'),
+        __metadata("design:type", Object)
+    ], SliderComponent.prototype, "slides", void 0);
+    __decorate([
+        core_1.Input('initialize'),
+        __metadata("design:type", Boolean)
+    ], SliderComponent.prototype, "initializeSwiper", void 0);
+    __decorate([
+        core_1.ViewChild("swiper"),
+        __metadata("design:type", Object)
+    ], SliderComponent.prototype, "swiper", void 0);
+    SliderComponent = __decorate([
+        core_1.Component({
+            selector: 'slider',
+            template: require('./slider.component.html')
+        })
+    ], SliderComponent);
+    return SliderComponent;
+}());
+exports.SliderComponent = SliderComponent;
+//# sourceMappingURL=slider.component.js.map

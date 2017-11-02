@@ -1,0 +1,26 @@
+﻿timepicker{
+    position: relative;
+    width: 80%;
+    display: inline-block;
+
+    input[type=radio]{
+        display: inline-block;
+        margin: 11px 0 11px 0;
+    }
+
+    input[type=text] {
+        width: 85%;
+        display: inline-block;
+        left:22px;
+        position: absolute;
+    }
+
+    p {
+        width: 100px;
+        display: inline-block;
+        text-align: left;
+        font-weight: 500;
+        padding: 10px 0 10px 0;
+        color: #6B747A;
+    }
+}

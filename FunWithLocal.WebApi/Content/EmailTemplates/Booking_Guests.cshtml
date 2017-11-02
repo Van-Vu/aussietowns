@@ -1,0 +1,173 @@
+﻿@using Microsoft.CodeAnalysis.CSharp.Syntax
+@model AussieTowns.ViewModel.BookingEmailViewModel
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        .bordertop {
+            border-top: 1pt solid rgb(72, 72, 72);
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        .editTrip {
+            background-color: #99CD4E;
+            color: #ffffff;
+            text-align: center;
+            border-radius: 35px 35px;
+            box-shadow: none;
+            border: 0;
+            font-size: 24px;
+            padding: 15px 45px;
+            text-decoration: none;
+        }
+
+        .editTrip:hover {
+            background-color: transparent;
+            color: #99CD4E;
+            box-shadow: 0 0 0 1px #99CD4E, 0 0 0 1px #99CD4E;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .htmlText {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <table style="background-color: #f8f8f8; border: 0; padding: 0; height: 100%; width: 100%;">
+        <tr>
+            <td style="padding: 15px; text-align: center; vertical-align: top; border:1px solid #e8e8e8;font-family: 'Helvetica', sans-serif; color: #000000;">
+                <table style="background-color:#ffffff; max-width: 600px; padding:0; border: 0; text-align: left; margin-left:auto; margin-right: auto;">
+                    <tbody>
+                        <tr>
+                            <td style="padding:5px;">
+                                <a href="http://google.com.au" target="_blank">
+                                    <img style="display: block; border: 0;" width="60" height="60" src="https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/www/logo.png" alt="Meet the Local" title="Meet the Local" />
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 20px 20px 20px; line-height: 24px;">
+                                <div style="font-size: 32px; font-weight: 700; text-align: center; margin-bottom: 30px;">
+                                    @{
+                                        if (Model.IsHost)
+                                        {
+                                            <strong>You have a new booking</strong>
+                                        }
+                                        else
+                                        {
+                                            <strong>Your request was sent</strong>
+                                        }
+                                    }
+                                </div>
+                                <div>
+                                    <a href="@Model.ListingUrl" target="_blank" style="text-decoration: none;
+									text-decoration-color: rgb(33, 153, 232);
+									text-decoration-line: none;
+									text-decoration-style: solid;">
+                                        <img style="width:100%;margin-right:auto;margin-left:auto;" src="https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/listings/19/homepage_mobile.jpg" />
+                                        <p style="color: rgb(72, 72, 72);">@Model.ListingHeader</p>
+                                    </a>
+                                </div>
+                                <hr />
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>Date:</td>
+                                            <td><span style="font-size: 18px;margin-left:10px;">@Model.BookingDate</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Start:</td>
+                                            <td><span style="font-size: 20px;margin-left:10px;">@Model.BookingTime</span></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <hr />
+                                <div>
+                                    <div class="htmlText">@Model.ListingDescription</div>
+                                </div>
+                                <div style="text-align: center;margin-top:30px">
+                                    <strong>Contact details:</strong>
+                                </div>
+                                <div>
+                                    <table style="width: 100%; border:0; margin-top:40px; margin-bottom: 40px; margin-left: auto; margin-right: auto;">
+                                        <tbody>
+                                        <tr>
+                                            <td>Full name</td>
+                                            <td>Date of Birth</td>
+                                            <td>Email</td>
+                                            <td>Phone</td>
+                                        </tr>
+                                        @foreach (var item in Model.BookingParticipants)
+                                        {
+                                            <tr>
+                                                <td class="bordertop">@item.Fullname</td>
+                                                <td class="bordertop">@item.DateOfBirth</td>
+                                                <td class="bordertop">@item.Email</td>
+                                                <td class="bordertop">@item.Phone</td>
+                                            </tr>
+                                        }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @{
+                                    if (Model.IsHost)
+                                    {
+                                        <div>
+                                            <span><strong>What happen next:</strong></span>
+                                            <span>Please contact your guest within 48 hours to arrange payment</span>
+                                        </div>
+                                        <div>
+                                            <span><strong>When you're happy</strong>, you can confirm their booking here</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div>
+                                            <span><strong>What happen next:</strong></span>
+                                            <span>Your host will contact you within 48 hours to arrange payment</span>
+                                        </div>
+                                        <div>
+                                            <span><strong>In a meantime</strong>, you can modify your trip here</span>
+                                        </div>
+                                    }
+                                }
+                                <div style="text-align: center; margin-top: 30px;">
+                                    @{
+                                        if (Model.IsHost)
+                                        {
+                                            <a class="editTrip" href="@Model.ManageBookingUrl" target="_blank">Manage your booking</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="editTrip" href="@Model.BookingUrl" target="_blank">View your trip</a>
+                                        }
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img style="display: block;" width="600" height="235" alt="footer" title="footer" src="https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/www/footer_green.png" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="top">
+                {accountaddress},
+                <a href="{unsubscribe}">Unsubscribe</a>.
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+

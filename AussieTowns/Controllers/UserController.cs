@@ -139,7 +139,7 @@ namespace AussieTowns.Controllers
             try
             {
                 //if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
-                if (!await _authorizationService.AuthorizeAsync(User, new User { Id = id }, Operations.Update))
+                if (!(await _authorizationService.AuthorizeAsync(User, new User { Id = id }, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
                 foreach (var file in files)
@@ -179,7 +179,7 @@ namespace AussieTowns.Controllers
             try
             {
                 //if (listingId < 100000 || listingId > 1000000) throw new ValidationException(nameof(listingId));
-                if (!await _authorizationService.AuthorizeAsync(User, new User { Id = id }, Operations.Update))
+                if (!(await _authorizationService.AuthorizeAsync(User, new User { Id = id }, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
                 foreach (var file in files)
@@ -289,7 +289,7 @@ namespace AussieTowns.Controllers
         {
             try
             {
-                if (!await _authorizationService.AuthorizeAsync(User, user, Operations.Update))
+                if (!(await _authorizationService.AuthorizeAsync(User, user, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
                 return await _userService.Update(user);

@@ -1,0 +1,11 @@
+﻿<div id="search-component">
+    <h4>Hero Search</h4>
+    <input #searchBox id="search-box" (keyup)="search(searchBox.value)" />
+    <div>
+        <div *ngFor="let profile of miniProfile | async"
+              (click)="gotoDetail(profile)" class="search-result">
+            <input type="button" value="Add" (click)="onAdd(profile)"/>
+            {{profile.Fullname}} ({{profile.Email}})
+        </div>
+    </div>
+</div>

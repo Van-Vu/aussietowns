@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Amazon.Runtime.Internal;
 using Amazon.Runtime.Internal.Util;
 using AussieTowns.Auth;
@@ -9,9 +10,11 @@ using AussieTowns.Model;
 using AussieTowns.Repository;
 using AussieTowns.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -77,6 +80,27 @@ namespace AussieTowns
                     .AllowCredentials());
             });
 
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                // The signing key must match!
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = TokenAuthOption.Key,
+
+                // Validate the JWT Issuer (iss) claim
+                ValidateIssuer = true,
+                ValidIssuer = TokenAuthOption.Issuer,
+
+                // Validate the JWT Audience (aud) claim
+                ValidateAudience = true,
+                ValidAudience = TokenAuthOption.Audience,
+
+                // Validate the token expiry
+                ValidateLifetime = true,
+
+                // If you want to allow a certain amount of clock drift, set that here:
+                ClockSkew = TimeSpan.Zero
+            };
+
             // Add framework services with JSON loop ignore: http://stackoverflow.com/a/38382021/1284688
             services.AddMvc()
                 .AddJsonOptions(
@@ -84,6 +108,60 @@ namespace AussieTowns
                 );
 
             services.AddAutoMapper();
+
+            // Bodom: resolve service in ConfigureServices
+            var serviceProvider = services.BuildServiceProvider();
+
+            var serialiser = serviceProvider.GetService<IDataSerializer<AuthenticationTicket>>();
+            // this is one way to get a data protector instance
+            var dataProtector = serviceProvider.GetDataProtector(new string[] { "fwl-Auth" });
+
+            services.AddAuthentication("mtltk")
+                    .AddCookie("mtltk", options =>
+                    {
+                        options.Cookie = new CookieBuilder
+                        {
+                            //Domain = "",
+                            HttpOnly = true,
+                            Name = "mtltk",
+                            Path = "/",
+                            SameSite = SameSiteMode.Lax,
+                            SecurePolicy = CookieSecurePolicy.SameAsRequest
+                        };
+                        options.Events = new CookieAuthenticationEvents
+                        {
+                            OnRedirectToLogin = async (context) => context.Response.StatusCode = 401,
+                            OnRedirectToAccessDenied = async (context) => context.Response.StatusCode = 403,
+                            OnSignedIn = context =>
+                            {
+                                Console.WriteLine("{0} - {1}: {2}", DateTime.Now,
+                                  "OnSignedIn", context.Principal.Identity.Name);
+                                return Task.CompletedTask;
+                            },
+                            OnSigningOut = context =>
+                            {
+                                Console.WriteLine("{0} - {1}: {2}", DateTime.Now,
+                                  "OnSigningOut", context.HttpContext.User.Identity.Name);
+                                return Task.CompletedTask;
+                            },
+                            OnValidatePrincipal = context =>
+                            {
+                                Console.WriteLine("{0} - {1}: {2}", DateTime.Now,
+                                  "OnValidatePrincipal", context.Principal.Identity.Name);
+                                return Task.CompletedTask;
+                            }
+                        };
+                        //options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                        options.LoginPath = new PathString("/Security/Login");
+                        options.ReturnUrlParameter = "RequestPath";
+                        options.SlidingExpiration = true;
+                        options.TicketDataFormat = new CustomJwtDataFormat(
+                            SecurityAlgorithms.RsaSha256Signature,
+                            tokenValidationParameters, serialiser,
+                                                  dataProtector);
+                    });
+
+
 
             // Enable the use of an [Authorize("Bearer")] attribute on methods and classes to protect.
             //services.AddAuthorization(auth =>
@@ -137,9 +215,6 @@ namespace AussieTowns
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IBookingService, BookingService>();
-
-            // Bodom: resolve service in ConfigureServices
-            var serviceProvider = services.BuildServiceProvider();
 
             services.AddTransient<ILocationRepository, LocationRepository>(x => new LocationRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<LocationRepository>>()));
             services.AddTransient<IUserRepository, UserRepository>(x => new UserRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<UserRepository>>()));
@@ -242,47 +317,11 @@ namespace AussieTowns
             //});
             #endregion
 
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                // The signing key must match!
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = TokenAuthOption.Key,
-
-                // Validate the JWT Issuer (iss) claim
-                ValidateIssuer = true,
-                ValidIssuer = TokenAuthOption.Issuer,
-
-                // Validate the JWT Audience (aud) claim
-                ValidateAudience = true,
-                ValidAudience = TokenAuthOption.Audience,
-
-                // Validate the token expiry
-                ValidateLifetime = true,
-
-                // If you want to allow a certain amount of clock drift, set that here:
-                ClockSkew = TimeSpan.Zero
-            };
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                AuthenticationScheme = "Cookie",
-                CookieName = "mtltk",
-                Events = new CookieAuthenticationEvents
-                {
-                    OnRedirectToLogin = async (context) => context.Response.StatusCode = 401,
-                    OnRedirectToAccessDenied = async (context) => context.Response.StatusCode = 403
-                },
-                TicketDataFormat = new CustomJwtDataFormat(
-                    SecurityAlgorithms.RsaSha256Signature,
-                    tokenValidationParameters)
-            });
-
-
-
             // global policy - assign here or on each controller
             app.UseCors("CorsPolicy");
+
+            //.net core 2.0
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

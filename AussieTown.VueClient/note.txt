@@ -1,5 +1,14 @@
 ﻿IMPORTANT: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore
 
+DEPLOYMENT:
+Node:
+server.js: switch on IsProd
+vue-persistedState: change script
+Net core:
+connstring
+
+404 vuejs
+
 retain Vuex state afer refresh: https://stackoverflow.com/questions/43027499/vuex-state-on-page-refresh
 
 passing router param to component prop: https://router.vuejs.org/en/essentials/passing-props.html
