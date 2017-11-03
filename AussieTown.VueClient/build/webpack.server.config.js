@@ -1,12 +1,15 @@
 const path = require('path')
 const webpack = require('webpack')
 const VueSSRPlugin = require('vue-ssr-webpack-plugin')
+const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 var utils = require('./utils')
 var config = require('../config')
 var baseWebpackConfig = require('./webpack.base.conf')
 var merge = require('webpack-merge')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')	
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+const nodeExternals = require('webpack-node-externals')
+
 
 module.exports = merge(baseWebpackConfig, {
   // The target should be set to "node" to avoid packaging built-ins.
@@ -23,19 +26,20 @@ module.exports = merge(baseWebpackConfig, {
   // We can remove the devServer block.
   performance: {
     hints: false
-  },
-  resolve: {
-    alias: {
-      'vue2-google-maps': './vue2-google-maps-server.js'
-    }
   },  		
   // Avoids bundling external dependencies, so node can load them directly from node_modules/
-  externals: Object.keys(require('../package.json').dependencies),
+  //externals: Object.keys(require('../package.json').dependencies),
+  externals: nodeExternals({
+      // do not externalize dependencies that need to be processed by webpack.
+      // you can add more file types here e.g. raw *.vue files
+      // you should also whitelist deps that modifies `global` (e.g. polyfills)
+      whitelist: /\.css$/
+  }),
   devtool: '#source-map',
   // No need to put these behind a production env variable.
   plugins: [
     // Add the SSR plugin here.
-    new VueSSRPlugin(),
+    new VueSSRServerPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       'process.env.VUE_ENV': '"server"'

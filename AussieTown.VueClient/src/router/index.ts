@@ -73,15 +73,6 @@ const router = new Router({
     mode: 'history',
     routes: [
         {
-            path: "/home",
-            name: "home",
-            component: HomePage,
-            meta: {
-                permission: UserRole.Anonymous,
-                fail: '/home'
-            }
-        },
-        {
             path: "/search/:seoString-:suburbId(\\d+)",
             name: "search",
             component: SearchPage,
@@ -217,7 +208,6 @@ const router = new Router({
                 isPublic: false
             }
         },
-
         {
             path: "/login",
             name: "login",
@@ -286,10 +276,23 @@ const router = new Router({
             }
         },
         {
+            path: "/",
+            name: "home",
+            component: HomePage,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/home'
+            }
+        },
+        {
+            path: "",
+            redirect: { name: 'home' }
+        },
+        {
             path: "*",
             redirect: { name: 'home' }
         }
-  ]
+    ]
 })
 
 router.afterEach((to, from) => {

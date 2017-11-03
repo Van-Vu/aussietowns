@@ -61,15 +61,6 @@ var router = new Router({
     mode: 'history',
     routes: [
         {
-            path: "/home",
-            name: "home",
-            component: HomePage,
-            meta: {
-                permission: UserRole.Anonymous,
-                fail: '/home'
-            }
-        },
-        {
             path: "/search/:seoString-:suburbId(\\d+)",
             name: "search",
             component: SearchPage,
@@ -270,6 +261,19 @@ var router = new Router({
                 permission: UserRole.Anonymous,
                 fail: '/home'
             }
+        },
+        {
+            path: "/",
+            name: "home",
+            component: HomePage,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/home'
+            }
+        },
+        {
+            path: "",
+            redirect: { name: 'home' }
         },
         {
             path: "*",

@@ -34,11 +34,11 @@ export default class CardFullComponent extends Vue {
         this.cost = this.listingDetail.cost;
         this.hostName = this.listingDetail.primaryOwner;
         this.imageUrls = this.listingDetail.imageUrls ? this.listingDetail.imageUrls.split(';') : '';
-        var startDatetime = new Date(this.listingDetail.schedules[0].startDate);
+        var startDatetime = this.listingDetail.schedules.length > 0 ? new Date(this.listingDetail.schedules[0].startDate) : new Date();
         this.date = Utils.formatDate(startDatetime);
         this.time = Utils.getTime(startDatetime);
         this.headerLink = this.header ? Utils.seorizeString(this.header) : '';
-        this.duration = this.listingDetail.schedules[0].duration;
+        this.duration = this.listingDetail.schedules.length > 0 ? this.listingDetail.schedules[0].duration : 0;
         this.description = this.listingDetail.description;
     }
 }
