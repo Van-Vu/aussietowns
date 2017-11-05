@@ -30,7 +30,7 @@ var LoginModal = /** @class */ (function (_super) {
         this.$emit('onClose');
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Boolean)
     ], LoginModal.prototype, "show", void 0);
     LoginModal = __decorate([

@@ -31,7 +31,7 @@ var SearchBarComponent = /** @class */ (function (_super) {
     };
     SearchBarComponent = __decorate([
         Component({
-            name: "UserSearch",
+            name: "SearchBarComponent",
             components: {
                 "locationsearch": LocationSearchComponent
             }

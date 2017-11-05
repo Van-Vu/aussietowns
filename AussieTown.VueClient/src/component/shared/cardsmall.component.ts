@@ -14,7 +14,7 @@ import Swiper from './external/vue-swiper.vue';
 })
 
 export default class CardSmallComponent extends Vue {
-    @Prop listingDetail: any;
+    @Prop() listingDetail: any;
     id: number = 0;
     location: string = '';
     hostName: string = '';
@@ -34,7 +34,7 @@ export default class CardSmallComponent extends Vue {
         this.cost = this.listingDetail.cost;
         this.hostName = this.listingDetail.primaryOwner;
         this.imageUrl = this.listingDetail.imageUrls ? this.listingDetail.imageUrls.split(';')[0] : '';
-        var startDatetime = new Date(this.listingDetail.schedules[0].startDate);
+        var startDatetime = this.listingDetail.schedules.length > 0 ? new Date(this.listingDetail.schedules[0].startDate) : new Date();
         this.date = Utils.formatDate(startDatetime);
         this.time = Utils.getTime(startDatetime);
         this.description = this.listingDetail.description;

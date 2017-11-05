@@ -37,11 +37,11 @@ var MiniProfileComponent = /** @class */ (function (_super) {
         this.$emit("removeUser", this.data);
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Object)
     ], MiniProfileComponent.prototype, "data", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Boolean)
     ], MiniProfileComponent.prototype, "isRemovable", void 0);
     MiniProfileComponent = __decorate([

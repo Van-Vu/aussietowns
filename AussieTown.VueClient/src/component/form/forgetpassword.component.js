@@ -55,7 +55,7 @@ var ForgetPasswordForm = /** @class */ (function (_super) {
             .then(function (x) { return console.log(x); });
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", String)
     ], ForgetPasswordForm.prototype, "guidString", void 0);
     ForgetPasswordForm = __decorate([

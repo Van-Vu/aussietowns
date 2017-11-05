@@ -31,7 +31,7 @@ export default class UserDetailComponent extends Vue {
         return plainToClass<UserModel, Object>(UserModel, this.$store.state.profile);
     }
 
-    asyncData({ store, route }) {
+    static asyncData({ store, route }) {
         if (route.params.profileId) {
             return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
         }

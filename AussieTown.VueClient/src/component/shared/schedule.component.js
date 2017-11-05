@@ -67,7 +67,7 @@ var ScheduleComponent = /** @class */ (function (_super) {
         });
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Object)
     ], ScheduleComponent.prototype, "schedule", void 0);
     __decorate([

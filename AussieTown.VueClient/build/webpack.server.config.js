@@ -1,12 +1,10 @@
 const path = require('path')
 const webpack = require('webpack')
-const VueSSRPlugin = require('vue-ssr-webpack-plugin')
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 var utils = require('./utils')
 var config = require('../config')
 var baseWebpackConfig = require('./webpack.base.conf')
 var merge = require('webpack-merge')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 const nodeExternals = require('webpack-node-externals')
 
@@ -14,6 +12,7 @@ const nodeExternals = require('webpack-node-externals')
 module.exports = merge(baseWebpackConfig, {
   // The target should be set to "node" to avoid packaging built-ins.
   target: 'node',
+  devtool: '#source-map',
   // The entry should be our server entry file, not the default one.
   entry: './src/main.server.ts',
   output: {
@@ -35,7 +34,6 @@ module.exports = merge(baseWebpackConfig, {
       // you should also whitelist deps that modifies `global` (e.g. polyfills)
       whitelist: /\.css$/
   }),
-  devtool: '#source-map',
   // No need to put these behind a production env variable.
   plugins: [
     // Add the SSR plugin here.

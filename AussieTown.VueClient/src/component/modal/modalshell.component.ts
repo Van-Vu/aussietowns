@@ -6,7 +6,7 @@ import { Component, Prop, Watch } from "vue-property-decorator";
 })
     
 export default class ModalShellComponent  extends Vue{
-    @Prop show: boolean;
+    @Prop() show: boolean;
     //cssClass: Object = null;
 
     get cssClass() {

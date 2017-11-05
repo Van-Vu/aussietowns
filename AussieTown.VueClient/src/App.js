@@ -193,7 +193,7 @@ var App = /** @class */ (function (_super) {
         Component({
             name: "App",
             components: {
-                "nav-menu": NavMenuComponent,
+                "navmenu": NavMenuComponent,
                 "notifications": NotificationComponent,
                 "loading": LoadingComponent,
                 'loginmodal': LoginModal,

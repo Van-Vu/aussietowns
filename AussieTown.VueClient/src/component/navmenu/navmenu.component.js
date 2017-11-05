@@ -19,7 +19,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
-import RegistrationModal from '../modal/registrationmodal.component.vue';
 import SearchBarComponent from '../shared/search/searchbar.component.vue';
 import { Utils } from '../utils';
 var NavMenuComponent = /** @class */ (function (_super) {
@@ -137,9 +136,8 @@ var NavMenuComponent = /** @class */ (function (_super) {
     ], NavMenuComponent.prototype, "onRouteParamChanged", null);
     NavMenuComponent = __decorate([
         Component({
-            name: 'nav-menu',
+            name: 'NavMenuComponent',
             components: {
-                'registrationmodal': RegistrationModal,
                 "searchbar": SearchBarComponent
             }
         })

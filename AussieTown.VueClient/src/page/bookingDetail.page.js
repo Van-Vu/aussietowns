@@ -143,11 +143,11 @@ var BookingDetailPage = /** @class */ (function (_super) {
         });
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", String)
     ], BookingDetailPage.prototype, "bookingId", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", String)
     ], BookingDetailPage.prototype, "seoString", void 0);
     BookingDetailPage = __decorate([

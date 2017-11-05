@@ -122,11 +122,11 @@ var BookingManagePage = /** @class */ (function (_super) {
         };
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", String)
     ], BookingManagePage.prototype, "listingId", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", String)
     ], BookingManagePage.prototype, "seoString", void 0);
     BookingManagePage = __decorate([

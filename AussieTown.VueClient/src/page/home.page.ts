@@ -56,7 +56,7 @@ export default class HomePage extends Vue{
     swiperDirection: string = 'horizontal';
     $mq: any;
 
-    asyncData({ store, route }) {
+    static asyncData({ store, route }) {
         return store.dispatch('FETCH_FEATURELISTINGS');
     }
 

@@ -14,7 +14,7 @@ import Swiper from './external/vue-swiper.vue';
 })
 
 export default class CardFullComponent extends Vue {
-    @Prop listingDetail: any;
+    @Prop() listingDetail: any;
     id:number = 0;
     location: string = '';
     hostName: string = '';

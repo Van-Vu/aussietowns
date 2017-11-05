@@ -53,7 +53,7 @@ var CardFullComponent = /** @class */ (function (_super) {
         this.description = this.listingDetail.description;
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Object)
     ], CardFullComponent.prototype, "listingDetail", void 0);
     CardFullComponent = __decorate([

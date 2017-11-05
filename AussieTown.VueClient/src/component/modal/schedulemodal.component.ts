@@ -13,8 +13,8 @@ import ScheduleComponent from '../shared/schedule.component.vue';
 })
 
 export default class ScheduleModal extends Vue {
-    @Prop show: boolean;
-    @Prop schedule: any;
+    @Prop() show: boolean;
+    @Prop() schedule: any;
 
     close() {
         this.$emit('onClose');

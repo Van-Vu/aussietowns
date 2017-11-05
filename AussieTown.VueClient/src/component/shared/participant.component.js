@@ -56,15 +56,15 @@ var ParticipantComponent = /** @class */ (function (_super) {
         this.$emit("userRemoved", user);
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Array)
     ], ParticipantComponent.prototype, "participants", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", String)
     ], ParticipantComponent.prototype, "participantType", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Boolean)
     ], ParticipantComponent.prototype, "isEditing", void 0);
     __decorate([

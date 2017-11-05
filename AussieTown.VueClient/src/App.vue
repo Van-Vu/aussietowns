@@ -4,7 +4,7 @@
         <vue-progress-bar></vue-progress-bar>
         <loading></loading>
         <header class="hero-head" :class="{'is-home': currentPage == 'home'}">
-            <nav-menu></nav-menu>
+            <navmenu></navmenu>
             <!--<header-banner></header-banner>-->
             <!--<loginmodal :show="showLoginModal" @onSuccessfulLogin="onSuccessfulLogin" @onClose="hideLoginModal"></loginmodal>-->
             <!--@onClose="hideModal" @onSuccessfulLogin="onSuccessfulLogin" @onScheduleSave="onSaveSchedule"-->

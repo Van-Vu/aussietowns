@@ -7,8 +7,8 @@ import { Utils } from '../utils'
 })
 
 export default class MiniProfileComponent extends Vue{
-    @Prop data: any;
-    @Prop isRemovable: boolean;
+    @Prop() data: any;
+    @Prop() isRemovable: boolean;
 
     userId: number;
     profileUrl: string;

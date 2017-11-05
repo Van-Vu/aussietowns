@@ -34,11 +34,11 @@ var ScheduleModal = /** @class */ (function (_super) {
         this.$emit('onSave', scheduleObject);
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Boolean)
     ], ScheduleModal.prototype, "show", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Object)
     ], ScheduleModal.prototype, "schedule", void 0);
     ScheduleModal = __decorate([

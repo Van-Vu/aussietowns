@@ -12,7 +12,7 @@ import RegistrationForm from '../form/registration.component.vue';
 })
 
 export default class RegistrationModal extends Vue {
-    @Prop show: boolean;
+    @Prop() show: boolean;
 
     created(): void {
     }

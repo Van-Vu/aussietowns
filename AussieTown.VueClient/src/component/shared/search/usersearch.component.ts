@@ -14,7 +14,7 @@ import AutoCompleteComponent from './autocomplete.vue';
 })
 
 export default class UserSearchComponent extends Vue {
-    @Prop initialData: AutocompleteItem;
+    @Prop() initialData: AutocompleteItem;
 
     placeHolderText = "Type in a person name / email";
     users: any[] = [];

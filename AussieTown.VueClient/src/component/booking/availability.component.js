@@ -47,11 +47,11 @@ var AvailabilityComponent = /** @class */ (function (_super) {
         this.$emit('bookingDateChanged', value);
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", String)
     ], AvailabilityComponent.prototype, "bookingDate", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Array)
     ], AvailabilityComponent.prototype, "availableDays", void 0);
     __decorate([

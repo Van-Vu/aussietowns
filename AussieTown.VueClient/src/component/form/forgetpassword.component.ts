@@ -17,7 +17,7 @@ Vue.use(VeeValidate);
 })
 
 export default class ForgetPasswordForm extends Vue {
-    @Prop guidString: string;
+    @Prop() guidString: string;
     confirmPassword: string = '';
     model: ResetPasswordModel = new ResetPasswordModel();
 

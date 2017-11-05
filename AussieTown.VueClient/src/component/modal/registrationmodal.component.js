@@ -32,7 +32,7 @@ var RegistrationModal = /** @class */ (function (_super) {
         this.$emit('onClose');
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Boolean)
     ], RegistrationModal.prototype, "show", void 0);
     RegistrationModal = __decorate([

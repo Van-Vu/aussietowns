@@ -31,7 +31,7 @@ Vue.use(VeeValidate);
 })
 
 export default class ListingPage extends Vue{
-    @Prop listingType: string;
+    @Prop() listingType: string;
 
     selectedLocation: AutocompleteItem;
     formSubmitted = false;
@@ -45,7 +45,7 @@ export default class ListingPage extends Vue{
 
     modelCache: any = null;
 
-    asyncData({ store, route }) {
+    static asyncData({ store, route }) {
         if (route.params.listingId) {
             return store.dispatch('FETCH_LISTING_BY_ID', route.params.listingId);
         } else {

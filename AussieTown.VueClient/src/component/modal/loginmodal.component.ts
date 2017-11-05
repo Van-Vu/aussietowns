@@ -12,7 +12,7 @@ import LoginForm from '../form/loginform.component.vue';
 })
 
 export default class LoginModal  extends Vue{
-    @Prop show: boolean;
+    @Prop() show: boolean;
 
     onClose() {
         this.$emit('onClose');

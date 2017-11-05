@@ -53,7 +53,7 @@ var ChangePasswordComponent = /** @class */ (function (_super) {
             .then(function (x) { return console.log(x); });
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", String)
     ], ChangePasswordComponent.prototype, "guidString", void 0);
     ChangePasswordComponent = __decorate([

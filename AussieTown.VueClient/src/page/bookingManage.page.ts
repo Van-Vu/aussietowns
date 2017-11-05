@@ -31,8 +31,8 @@ import store from '../store';
 })
 
 export default class BookingManagePage extends Vue {
-    @Prop listingId: string;
-    @Prop seoString: string;
+    @Prop() listingId: string;
+    @Prop() seoString: string;
 
     isStickyBoxRequired: boolean = true;
     isDateChoosen: boolean = false;
@@ -40,7 +40,7 @@ export default class BookingManagePage extends Vue {
     errorMsg = '';
     $mq: any;
 
-    asyncData({ store, route }) {
+    static asyncData({ store, route }) {
         console.log("Bodom fetchData: " + route.params.listingId);
         if (route.params.listingId) {
             return store.dispatch('FETCH_LISTING_WITH_BOOKING_DETAIL', route.params.listingId);

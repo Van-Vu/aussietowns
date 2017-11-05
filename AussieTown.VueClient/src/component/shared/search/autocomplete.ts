@@ -8,14 +8,14 @@ import { SelectedAutocompleteValue, AutocompleteItem } from  '../../../model/aut
 
 
 @Component({
-    name: "AutoComplete"
+    name: "AutoCompleteComponent"
 })
 export default class AutoCompleteComponent extends Vue {
-    @Prop minChars: number;
-    @Prop placeHolderText: string;
-    @Prop initialData: any;
-    @Prop cleanUp: boolean;
-    @Prop list: AutocompleteItem[];
+    @Prop() minChars: number;
+    @Prop() placeHolderText: string;
+    @Prop() initialData: any;
+    @Prop() cleanUp: boolean;
+    @Prop() list: AutocompleteItem[];
 
     //@Output('onSelect') onSelect: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
     //@Output() onSearch: EventEmitter<string> = new EventEmitter();

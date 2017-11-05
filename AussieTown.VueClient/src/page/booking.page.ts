@@ -40,7 +40,7 @@ export default class BookingPage extends Vue {
     model: BookingModel = null;
     $mq: any;
 
-    asyncData({ store, route }) {
+    static asyncData({ store, route }) {
         //if (store.state.listing instanceof ListingModel) {
         //    //route.push({ name: "home" });
         //    //route.next('/home');
@@ -100,7 +100,7 @@ export default class BookingPage extends Vue {
         };
     }
 
-    generateParticipants(store) {
+    static generateParticipants(store) {
         let users = [plainToClass(UserModel, classToPlain(store.state.loggedInUser))];
         if (store.state.booking != null && store.state.booking.participants > 0) {
             for (var i = 0; i < store.state.booking.participants - 1; i++) {

@@ -13,7 +13,7 @@ import AutoCompleteComponent from './autocomplete.vue';
 })
 
 export default class LocationSearchComponent extends Vue {
-    @Prop initialData: any;
+    @Prop() initialData: any;
 
     placeHolderText = "Location";
     locations: any[] = [];

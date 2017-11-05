@@ -4,6 +4,8 @@ import { app, router, store } from './root'
 
 const meta = (app as any).$meta() // here
 
+const isDev = process.env.NODE_ENV !== 'production'
+
 export default context => {
     if (context.cookies.mtl) {
         var mtl = JSON.parse(context.cookies.mtl);
@@ -11,6 +13,8 @@ export default context => {
     }
 
   return new Promise((resolve, reject) => {
+      const s = isDev && Date.now()
+
     // set server-side router's location
       router.push(context.url)
 
@@ -27,15 +31,15 @@ export default context => {
       }
       // call asyncData() on all matched route components
         Promise.all(matchedComponents.map(component => {
-            //var propertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(component));
-            //console.log('all Prop name: ' + propertyNames);
-            //var propertySymbol = Object.getOwnPropertyNames(component);
-            //console.log('all Symbol name: ' + propertySymbol);
-            //var extendOptions = Object.getOwnPropertyNames((component as any).extendOptions);
-            //console.log('all Symbol name: ' + extendOptions);
+            var propertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(component));
+            console.log('all Prop name: ' + propertyNames);
+            var propertySymbol = Object.getOwnPropertyNames(component);
+            console.log('all Symbol name: ' + propertySymbol);
+            var extendOptions = Object.getOwnPropertyNames((component as any).extendOptions);
+            console.log('all extendOptions name: ' + extendOptions);
 
-            if (component && (component as any).extendOptions && (component as any).extendOptions.asyncData) {
-                return (component as any).extendOptions.asyncData({
+            if (component && (component as any).asyncData) {
+                return (component as any).asyncData({
                     store,
                     route: router.currentRoute
                 })
@@ -46,6 +50,7 @@ export default context => {
             // When we attach the state to the context, and the `template` option
             // is used for the renderer, the state will automatically be
             // serialized and injected into the HTML as window.__INITIAL_STATE__.
+            isDev && console.log(`data pre-fetch: ${Date.now() - s}ms`)
             context.state = store.state
             resolve(app)
             }).catch(reject)

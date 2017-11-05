@@ -21,26 +21,26 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import SearchService from '../../../service/search.service';
 import AutoCompleteComponent from './autocomplete.vue';
-var LocationSearchComponent = /** @class */ (function (_super) {
-    __extends(LocationSearchComponent, _super);
-    function LocationSearchComponent() {
+var LocationSearchCoLocationSearchComponentmponent = /** @class */ (function (_super) {
+    __extends(LocationSearchCoLocationSearchComponentmponent, _super);
+    function LocationSearchCoLocationSearchComponentmponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.placeHolderText = "Location";
         _this.locations = [];
         return _this;
     }
-    LocationSearchComponent.prototype.onLocationSearch = function (searchTerm) {
+    LocationSearchCoLocationSearchComponentmponent.prototype.onLocationSearch = function (searchTerm) {
         var _this = this;
         (new SearchService()).getLocation(searchTerm)
             .then(function (response) { return _this.locations = response; });
     };
-    LocationSearchComponent.prototype.onLocationSelected = function (selectedItem) {
+    LocationSearchCoLocationSearchComponentmponent.prototype.onLocationSelected = function (selectedItem) {
         this.$emit("onSelected", selectedItem);
     };
-    LocationSearchComponent.prototype.triggerSearch = function () {
+    LocationSearchCoLocationSearchComponentmponent.prototype.triggerSearch = function () {
         this.$emit("HeyIAmDone");
     };
-    LocationSearchComponent.prototype.onRefreshSelect = function (selectedIndex) {
+    LocationSearchCoLocationSearchComponentmponent.prototype.onRefreshSelect = function (selectedIndex) {
         this.locations = this.locations.filter(function (d, i) {
             if (i === selectedIndex)
                 d.selected = true;
@@ -50,17 +50,17 @@ var LocationSearchComponent = /** @class */ (function (_super) {
         });
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Object)
-    ], LocationSearchComponent.prototype, "initialData", void 0);
-    LocationSearchComponent = __decorate([
+    ], LocationSearchCoLocationSearchComponentmponent.prototype, "initialData", void 0);
+    LocationSearchCoLocationSearchComponentmponent = __decorate([
         Component({
             name: "LocationSearchComponent",
             components: {
                 "autocomplete": AutoCompleteComponent
             }
         })
-    ], LocationSearchComponent);
-    return LocationSearchComponent;
+    ], LocationSearchCoLocationSearchComponentmponent);
+    return LocationSearchCoLocationSearchComponentmponent;
 }(Vue));
-export default LocationSearchComponent;
+export default LocationSearchCoLocationSearchComponentmponent;

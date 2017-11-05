@@ -15,13 +15,15 @@ import { Utils } from '../component/utils';
 //    baseURL: `http://localhost/meetthelocal/`
 //})
 
-//const http = axios.create({
-//    baseURL: `http://localhost:7048/`,
-//})
-
-export const http = axios.create({
-    baseURL: `https://api.funwithlocal.com/`
+const http = axios.create({
+    baseURL: `http://localhost:8888/`,
 })
+
+
+
+//export const http = axios.create({
+//    baseURL: `https://api.funwithlocal.com/`
+//})
 
 http.defaults.withCredentials = true;
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'https://www.funwithlocal.com';

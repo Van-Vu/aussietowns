@@ -15,9 +15,9 @@ import SearchService from '../../service/search.service';
 })
 
 export default class ParticipantComponent extends Vue {
-    @Prop participants: any[];
-    @Prop participantType: string;
-    @Prop isEditing: boolean;
+    @Prop() participants: any[];
+    @Prop() participantType: string;
+    @Prop() isEditing: boolean;
     @Prop({ default: true }) allowAdd: boolean;
     @Prop({ default: true }) allowRemove: boolean;
 

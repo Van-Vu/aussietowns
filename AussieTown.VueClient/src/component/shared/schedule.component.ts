@@ -17,7 +17,7 @@ Vue.use(VeeValidate);
     }
 })
 export default class ScheduleComponent extends Vue {
-    @Prop schedule: any;
+    @Prop() schedule: any;
     isRepeated: boolean = true;
     repeatedDay: Array<number> = [];
 

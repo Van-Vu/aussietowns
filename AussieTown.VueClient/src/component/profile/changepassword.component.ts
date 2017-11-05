@@ -16,7 +16,7 @@ Vue.use(VeeValidate);
 })
 
 export default class ChangePasswordComponent extends Vue {
-    @Prop guidString: string;
+    @Prop() guidString: string;
     confirmPassword: string = '';
     model: ResetPasswordModel = new ResetPasswordModel();
 

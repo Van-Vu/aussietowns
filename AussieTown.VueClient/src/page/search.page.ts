@@ -29,7 +29,7 @@ export default class SearchPage extends Vue {
     showListingRequest: boolean = false;
     showListingOffer: boolean = false;
 
-    asyncData({ store, route }) {
+    static asyncData({ store, route }) {
         if (route.params.suburbId) {
             return store.dispatch('SEARCH_LISTINGS_BY_SUBURB', route.params.suburbId);
         }

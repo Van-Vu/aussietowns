@@ -5,7 +5,7 @@ import LocationSearchComponent from './locationsearch.component.vue';
 
 
 @Component({
-    name: "UserSearch",
+    name: "SearchBarComponent",
     components: {
         "locationsearch": LocationSearchComponent
     }

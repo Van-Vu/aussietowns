@@ -39,7 +39,7 @@ var UserSearchComponent = /** @class */ (function (_super) {
         this.$emit("onSelected", selectedItem);
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", AutocompleteItem)
     ], UserSearchComponent.prototype, "initialData", void 0);
     UserSearchComponent = __decorate([

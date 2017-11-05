@@ -10,14 +10,14 @@
                 <div slot="title">
                     <h2>Just simple steps to open up your amazing experience</h2>
                 </div>
-                <template slot="step" scope="props">
+                <template slot="step" slot-scope="props">
                     <wizard-step :tab="props.tab"
                                  :transition="props.transition"
                                  :key="props.tab.title"
                                  :index="props.index">
                     </wizard-step>
                 </template>
-                <template slot="footer" scope="props">
+                <template slot="footer" slot-scope="props">
                     <div class=wizard-footer-left>
                         <wizard-button v-if="props.activeTabIndex > 0" @click.native="props.prevTab()" class="mtl_button">Previous</wizard-button>
                     </div>
@@ -168,7 +168,7 @@
 
             <form-wizard v-else title="Awesome" 
                 subtitle="Your host has been notified and will contact you soon to process futher.">
-                <template slot="footer" scope="props">
+                <template slot="footer" slot-scope="props">
                     <div class=wizard-footer-left>
                     </div>
                     <div class="wizard-footer-right">

@@ -1,28 +1,26 @@
 var path = require('path')
 var utils = require('./utils')
-var config = require('../config')
+var webpack = require('webpack')
 var vueLoaderConfig = require('./vue-loader.conf')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
-function resolve (dir) {
-  return path.join(__dirname, '..', dir)
-}
+const isProd = process.env.NODE_ENV === 'production'
+
 
 module.exports = {
-  entry: {
-    app: './src/main.ts'
-  },
+  devtool: isProd
+    ? false
+    : '#cheap-module-source-map',
   output: {
-    path: config.build.assetsRoot,
-    filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    path: path.resolve(__dirname, '../dist'),
+    filename: '[name].[chunkhash].js',
+    publicPath: '/dist/'
   },
   resolve: {
     extensions: ['.js', '.css', '.scss', '.vue', '.json', '.ts'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src')
+      'public': path.resolve(__dirname, '../public')
     }
   },
   module: {
@@ -67,5 +65,22 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  performance: {
+      maxEntrypointSize: 300000,
+      hints: isProd ? 'warning' : false
+  },
+  plugins: isProd
+    ? [
+        new webpack.optimize.UglifyJsPlugin({
+            compress: { warnings: false }
+        }),
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        new ExtractTextPlugin({
+            filename: 'common.[chunkhash].css'
+        })
+    ]
+    : [
+        new FriendlyErrorsPlugin()
+    ]
 }

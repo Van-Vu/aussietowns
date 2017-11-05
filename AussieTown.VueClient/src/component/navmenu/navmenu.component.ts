@@ -1,14 +1,12 @@
 import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import RegistrationModal from '../modal/registrationmodal.component.vue';
 import SearchBarComponent from '../shared/search/searchbar.component.vue';
 import { AutocompleteItem } from '../../model/autocomplete.model';
 import { Utils } from '../utils';
 
 @Component({
-    name: 'nav-menu',
+    name: 'NavMenuComponent',
     components: {
-        'registrationmodal': RegistrationModal,
         "searchbar": SearchBarComponent
     }
 })

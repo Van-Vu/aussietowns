@@ -13,7 +13,7 @@ import { ListingType } from '../../model/enum';
 })
 
 export default class ListingsComponent extends Vue {
-    asyncData({ store, route }) {
+    static asyncData({ store, route }) {
         if (route.params.profileId) {
             return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
         }

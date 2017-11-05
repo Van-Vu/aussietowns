@@ -17,9 +17,9 @@ import { GlobalConfig } from '../../GlobalConfig';
 })
 
 export default class ImageUploadComponent extends Vue {
-    @Prop uploadType: number;
-    @Prop images: ImageModel[];
-    @Prop isEditing: boolean;
+    @Prop() uploadType: number;
+    @Prop() images: ImageModel[];
+    @Prop() isEditing: boolean;
     carouselCurrentPage: number = 1;
     isUploading: boolean = false;
     maxFileAllowed: number = GlobalConfig.maxImagesPerListing;

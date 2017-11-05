@@ -31,8 +31,8 @@ import store from '../store';
 })
 
 export default class BookingDetailPage extends Vue {
-    @Prop bookingId: string;
-    @Prop seoString: string;
+    @Prop() bookingId: string;
+    @Prop() seoString: string;
 
     isStickyBoxRequired: boolean = true;
     isBooked: boolean = false;
@@ -40,7 +40,7 @@ export default class BookingDetailPage extends Vue {
     errorMsg = '';
     $mq: any;
 
-    asyncData({ store, route }) {
+    static asyncData({ store, route }) {
         console.log("Bodom fetchData: " + route.params.bookingId);
         if (route.params.bookingId) {
             return store.dispatch('FETCH_BOOKING_DETAIL', route.params.bookingId);

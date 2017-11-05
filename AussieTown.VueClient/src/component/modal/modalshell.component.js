@@ -40,7 +40,7 @@ var ModalShellComponent = /** @class */ (function (_super) {
         this.$emit('onClose');
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Boolean)
     ], ModalShellComponent.prototype, "show", void 0);
     ModalShellComponent = __decorate([

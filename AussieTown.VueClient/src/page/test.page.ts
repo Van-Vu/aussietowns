@@ -49,7 +49,7 @@ export default class TestPage extends Vue {
 
     startDate = new Date();
 
-    asyncData({ store, route }) {
+    static asyncData({ store, route }) {
         return store.dispatch('FETCH_FEATURELISTINGS');
     }
 

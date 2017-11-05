@@ -30,7 +30,6 @@ class Auth {
             //    return (this.permissions.indexOf(needed) !== -1) ? true : false;
             //}) !== undefined;
 
-            console.log('from here');
             const loggedInUser = store.state.loggedInUser;
             if (loggedInUser && (loggedInUser as any).id && (loggedInUser as any).role) {
                 // Author

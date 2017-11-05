@@ -119,7 +119,7 @@ declare module 'vue/types/options' {
 @Component({
     name: "App",
     components: {
-        "nav-menu": NavMenuComponent,
+        "navmenu": NavMenuComponent,
         "notifications": NotificationComponent,
         "loading": LoadingComponent,
         'loginmodal': LoginModal,
@@ -206,8 +206,9 @@ export default class App extends Vue {
             }
             //  start the progress bar
             this.$Progress.start();
-
-            window.scrollTo(0, 0);
+            if (process.env.VUE_ENV === 'client') {
+                window.scrollTo(0, 0);
+            }
             //  continue to next page
             next();
         })

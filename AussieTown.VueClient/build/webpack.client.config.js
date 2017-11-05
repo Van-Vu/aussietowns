@@ -6,7 +6,6 @@ var config = require('../config')
 var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var SWPrecachePlugin = require('sw-precache-webpack-plugin')
@@ -17,11 +16,8 @@ var isProd = process.env.NODE_ENV === 'production'
 console.log("Bodom environment:" + isProd)
 
 var webpackConfig = merge(baseWebpackConfig, {
-  devtool: config.build.productionSourceMap ? '#source-map' : false,
-  output: {
-    path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+  entry: {
+      app: './src/main.ts'
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -89,15 +85,9 @@ if (isProd) {
       threshold: 10240,
       minRatio: 0.8
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      sourceMap: true
-    }),
     // auto generate service worker
     new SWPrecachePlugin({
-        cacheId: 'vue-hn',
+        cacheId: 'funwithlocal',
         filename: 'service-worker.js',
         minify: true,
         dontCacheBustUrlsMatching: /./,

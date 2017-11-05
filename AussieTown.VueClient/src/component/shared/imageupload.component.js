@@ -85,15 +85,15 @@ var ImageUploadComponent = /** @class */ (function (_super) {
     ImageUploadComponent.prototype.removeImage = function () {
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Number)
     ], ImageUploadComponent.prototype, "uploadType", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Array)
     ], ImageUploadComponent.prototype, "images", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Boolean)
     ], ImageUploadComponent.prototype, "isEditing", void 0);
     ImageUploadComponent = __decorate([

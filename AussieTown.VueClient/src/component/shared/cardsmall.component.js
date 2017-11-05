@@ -51,7 +51,7 @@ var CardSmallComponent = /** @class */ (function (_super) {
         this.headerLink = Utils.seorizeString(this.header);
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Object)
     ], CardSmallComponent.prototype, "listingDetail", void 0);
     CardSmallComponent = __decorate([

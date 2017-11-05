@@ -272,7 +272,7 @@ var ListingPage = /** @class */ (function (_super) {
         };
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", String)
     ], ListingPage.prototype, "listingType", void 0);
     __decorate([

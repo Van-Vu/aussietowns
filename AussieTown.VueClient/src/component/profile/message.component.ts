@@ -20,7 +20,7 @@ export default class MessageComponent extends Vue {
     sendingMessage: string = '';
     currentConversation: number = 0;
 
-    asyncData({ store, route }) {
+    static asyncData({ store, route }) {
         if (route.params.profileId) {
             return store.dispatch('FETCH_CONVERSATIONS_BY_USER', route.params.profileId);
         }

@@ -146,28 +146,28 @@ var AutoCompleteComponent = /** @class */ (function (_super) {
         this.dontBlur = false;
     };
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Number)
     ], AutoCompleteComponent.prototype, "minChars", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", String)
     ], AutoCompleteComponent.prototype, "placeHolderText", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Object)
     ], AutoCompleteComponent.prototype, "initialData", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Boolean)
     ], AutoCompleteComponent.prototype, "cleanUp", void 0);
     __decorate([
-        Prop,
+        Prop(),
         __metadata("design:type", Array)
     ], AutoCompleteComponent.prototype, "list", void 0);
     AutoCompleteComponent = __decorate([
         Component({
-            name: "AutoComplete"
+            name: "AutoCompleteComponent"
         })
     ], AutoCompleteComponent);
     return AutoCompleteComponent;
