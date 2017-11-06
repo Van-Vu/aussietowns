@@ -46,7 +46,7 @@ var HomePage = /** @class */ (function (_super) {
         //    { "text": "slide conten", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/c20a31bb5a3b657a603b8a792d691fa407410753a5617e7077386bb692169eae/400/232/1.0" }
         //];
     }
-    HomePage.prototype.asyncData = function (_a) {
+    HomePage.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
         return store.dispatch('FETCH_FEATURELISTINGS');
     };

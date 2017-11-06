@@ -43,7 +43,7 @@ var SearchPage = /** @class */ (function (_super) {
         ];
         return _this;
     }
-    SearchPage.prototype.asyncData = function (_a) {
+    SearchPage.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
         if (route.params.suburbId) {
             return store.dispatch('SEARCH_LISTINGS_BY_SUBURB', route.params.suburbId);

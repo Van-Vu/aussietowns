@@ -29,8 +29,6 @@
 <script>
     import { GlobalConfig } from '../../../GlobalConfig';
 
-    import { IResizeImageOptions, resizeImage } from './imageResize';
-
     const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
     export default {
@@ -129,22 +127,22 @@
                 .from(Array(fileList.length).keys())
                 .map(x => {
                     // handle file changes
-                    
+                    formData.append(fieldName, fileList[x], fileList[x].name);
 
                     //this.createImage(fileList[x]);
 
                     // save it
                     //this.save(formData);
 
-                    resizeImage({
-                        file: $image.fileList[x],
-                        maxSize: 500
-                    }).then(function (resizedImage) {
-                        console.log("upload resized image")
-                        formData.append(fieldName, resizedImage[x], resizedImage[x].name);
-                    }).catch(function (err) {
-                        console.error(err);
-                    });
+                    //resizeImage({
+                    //    file: $image.fileList[x],
+                    //    maxSize: 500
+                    //}).then(function (resizedImage) {
+                    //    console.log("upload resized image")
+                    //    formData.append(fieldName, resizedImage[x], resizedImage[x].name);
+                    //}).catch(function (err) {
+                    //    console.error(err);
+                    //});
 
                 });
 

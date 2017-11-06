@@ -37,7 +37,7 @@ var BookingDetailPage = /** @class */ (function (_super) {
         _this.errorMsg = '';
         return _this;
     }
-    BookingDetailPage.prototype.asyncData = function (_a) {
+    BookingDetailPage.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
         console.log("Bodom fetchData: " + route.params.bookingId);
         if (route.params.bookingId) {

@@ -26,7 +26,6 @@ var Auth = /** @class */ (function () {
             //    }
             //    return (this.permissions.indexOf(needed) !== -1) ? true : false;
             //}) !== undefined;
-            console.log('from here');
             var loggedInUser = store.state.loggedInUser;
             if (loggedInUser && loggedInUser.id && loggedInUser.role) {
                 // Author

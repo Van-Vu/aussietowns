@@ -27,7 +27,7 @@ var MessageComponent = /** @class */ (function (_super) {
         _this.currentConversation = 0;
         return _this;
     }
-    MessageComponent.prototype.asyncData = function (_a) {
+    MessageComponent.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
         if (route.params.profileId) {
             return store.dispatch('FETCH_CONVERSATIONS_BY_USER', route.params.profileId);

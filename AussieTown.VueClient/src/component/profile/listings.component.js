@@ -23,7 +23,7 @@ var ListingsComponent = /** @class */ (function (_super) {
     function ListingsComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    ListingsComponent.prototype.asyncData = function (_a) {
+    ListingsComponent.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
         if (route.params.profileId) {
             return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);

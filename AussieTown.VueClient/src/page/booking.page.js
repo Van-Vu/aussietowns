@@ -47,7 +47,7 @@ var BookingPage = /** @class */ (function (_super) {
         //    });
         //}
     }
-    BookingPage.prototype.asyncData = function (_a) {
+    BookingPage.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
         //if (store.state.listing instanceof ListingModel) {
         //    //route.push({ name: "home" });
@@ -99,7 +99,7 @@ var BookingPage = /** @class */ (function (_super) {
             participants: this.model.participants
         };
     };
-    BookingPage.prototype.generateParticipants = function (store) {
+    BookingPage.generateParticipants = function (store) {
         var users = [plainToClass(UserModel, classToPlain(store.state.loggedInUser))];
         if (store.state.booking != null && store.state.booking.participants > 0) {
             for (var i = 0; i < store.state.booking.participants - 1; i++) {

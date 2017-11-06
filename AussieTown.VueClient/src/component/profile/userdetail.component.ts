@@ -94,15 +94,27 @@ export default class UserDetailComponent extends Vue {
         const formData = new FormData();
         Array.from(Array(fileList.length).keys())
             .map(x => {
-                formData.append('files', fileList[x], fileList[x].name);
-            });
+                //formData.append('files', fileList[x], fileList[x].name);
+                var fileName = fileList[x].name;
+                return Utils.resizeImage({
+                    file: fileList[x],
+                    maxWidth: 1010,
+                    maxHeight: 370
+                }).then((resizedImage: Blob) => {
+                    console.log("upload resized image");
+                    formData.append('files', resizedImage, fileName);
 
-        this.$store.dispatch('UPLOAD_PROFILE_HEROIMAGE',
-            {
-                data: formData,
-                actionId: this.$store.state.profile.id
-            }).then(response => {
-                this.$emit('uploadImageCompleted');
+                    this.$store.dispatch('UPLOAD_PROFILE_HEROIMAGE',
+                        {
+                            data: formData,
+                            actionId: this.$store.state.profile.id
+                        }).then(response => {
+                            this.$emit('uploadImageCompleted');
+                        });
+                }).catch((err) => {
+                    console.error(err);
+                });
+
             });
         (document.getElementById('fileUpload') as any).value = null;
     }
@@ -117,15 +129,27 @@ export default class UserDetailComponent extends Vue {
         const formData = new FormData();
         Array.from(Array(fileList.length).keys())
             .map(x => {
-                formData.append('files', fileList[x], fileList[x].name);
-            });
+                //formData.append('files', fileList[x], fileList[x].name);
+                var fileName = fileList[x].name;
 
-        this.$store.dispatch('UPLOAD_PROFILE_IMAGE',
-            {
-                data: formData,
-                actionId: this.$store.state.profile.id
-            }).then(response => {
-                this.$emit('uploadImageCompleted');
+                return Utils.resizeImage({
+                    file: fileList[x],
+                    maxWidth: 170,
+                    maxHeight: 170
+                }).then((resizedImage: Blob) => {
+                    console.log("upload resized image");
+                    formData.append('files', resizedImage, fileName);
+
+                    this.$store.dispatch('UPLOAD_PROFILE_IMAGE',
+                        {
+                            data: formData,
+                            actionId: this.$store.state.profile.id
+                        }).then(response => {
+                            this.$emit('uploadImageCompleted');
+                        });
+                }).catch((err) => {
+                    console.error(err);
+                });
             });
         (document.getElementById('profileImageUpload') as any).value = null;
     }

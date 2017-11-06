@@ -47,7 +47,7 @@ var TestPage = /** @class */ (function (_super) {
             this.currentView = 'loginmodal';
         }
     };
-    TestPage.prototype.asyncData = function (_a) {
+    TestPage.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
         return store.dispatch('FETCH_FEATURELISTINGS');
     };

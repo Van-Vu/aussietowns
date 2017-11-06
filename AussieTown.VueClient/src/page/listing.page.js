@@ -45,7 +45,7 @@ var ListingPage = /** @class */ (function (_super) {
         _this.modelCache = null;
         return _this;
     }
-    ListingPage.prototype.asyncData = function (_a) {
+    ListingPage.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
         if (route.params.listingId) {
             return store.dispatch('FETCH_LISTING_BY_ID', route.params.listingId);

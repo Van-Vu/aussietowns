@@ -155,7 +155,9 @@ var App = /** @class */ (function (_super) {
             }
             //  start the progress bar
             _this.$Progress.start();
-            window.scrollTo(0, 0);
+            if (process.env.VUE_ENV === 'client') {
+                window.scrollTo(0, 0);
+            }
             //  continue to next page
             next();
         });

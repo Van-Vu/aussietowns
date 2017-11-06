@@ -64,10 +64,11 @@
         }
 
         &_heroimage {
-            max-height: 350px;
+            max-height: 370px;
         }
 
         &_profileimage {
+            max-width: 170px;
             height: 0;
             @media all and (max-width: $is-mobile) {
                 @include absolutecenter("both","relative");

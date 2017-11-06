@@ -22,6 +22,7 @@ import UserModel from '../../model/user.model';
 import { UserRole, UserAction, NotificationType } from '../../model/enum';
 import datepicker from '../shared/external/datepicker.vue';
 import { plainToClass } from "class-transformer";
+import { Utils } from '../utils';
 import ImageUploadComponent from '../shared/imageupload.component.vue';
 Vue.use(VeeValidate);
 var UserDetailComponent = /** @class */ (function (_super) {
@@ -39,7 +40,7 @@ var UserDetailComponent = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    UserDetailComponent.prototype.asyncData = function (_a) {
+    UserDetailComponent.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
         if (route.params.profileId) {
             return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
@@ -99,13 +100,24 @@ var UserDetailComponent = /** @class */ (function (_super) {
         var formData = new FormData();
         Array.from(Array(fileList.length).keys())
             .map(function (x) {
-            formData.append('files', fileList[x], fileList[x].name);
-        });
-        this.$store.dispatch('UPLOAD_PROFILE_HEROIMAGE', {
-            data: formData,
-            actionId: this.$store.state.profile.id
-        }).then(function (response) {
-            _this.$emit('uploadImageCompleted');
+            //formData.append('files', fileList[x], fileList[x].name);
+            var fileName = fileList[x].name;
+            return Utils.resizeImage({
+                file: fileList[x],
+                maxWidth: 1010,
+                maxHeight: 370
+            }).then(function (resizedImage) {
+                console.log("upload resized image");
+                formData.append('files', resizedImage, fileName);
+                _this.$store.dispatch('UPLOAD_PROFILE_HEROIMAGE', {
+                    data: formData,
+                    actionId: _this.$store.state.profile.id
+                }).then(function (response) {
+                    _this.$emit('uploadImageCompleted');
+                });
+            }).catch(function (err) {
+                console.error(err);
+            });
         });
         document.getElementById('fileUpload').value = null;
     };
@@ -119,13 +131,24 @@ var UserDetailComponent = /** @class */ (function (_super) {
         var formData = new FormData();
         Array.from(Array(fileList.length).keys())
             .map(function (x) {
-            formData.append('files', fileList[x], fileList[x].name);
-        });
-        this.$store.dispatch('UPLOAD_PROFILE_IMAGE', {
-            data: formData,
-            actionId: this.$store.state.profile.id
-        }).then(function (response) {
-            _this.$emit('uploadImageCompleted');
+            //formData.append('files', fileList[x], fileList[x].name);
+            var fileName = fileList[x].name;
+            return Utils.resizeImage({
+                file: fileList[x],
+                maxWidth: 170,
+                maxHeight: 170
+            }).then(function (resizedImage) {
+                console.log("upload resized image");
+                formData.append('files', resizedImage, fileName);
+                _this.$store.dispatch('UPLOAD_PROFILE_IMAGE', {
+                    data: formData,
+                    actionId: _this.$store.state.profile.id
+                }).then(function (response) {
+                    _this.$emit('uploadImageCompleted');
+                });
+            }).catch(function (err) {
+                console.error(err);
+            });
         });
         document.getElementById('profileImageUpload').value = null;
     };

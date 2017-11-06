@@ -5,7 +5,7 @@
   "author": "Justin Yoo",
   "private": true,
   "scripts": {
-    "dev": "node server",
+    "dev": "npm run build:ts && node server",
     "build": "npm run build:server && npm run build:client && cross-env NODE_ENV=production node server",
     "build:ts": "tsc -p .",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.client.config.js --progress --hide-modules",

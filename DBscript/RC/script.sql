@@ -1,0 +1,1 @@
+ALTER TABLE image MODIFY COLUMN url varchar(250) NOT NULL;
