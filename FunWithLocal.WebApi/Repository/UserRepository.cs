@@ -5,10 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Common;
 using AussieTowns.Model;
+using AussieTowns.Repository;
 using Dapper;
 using Microsoft.Extensions.Logging;
 
-namespace AussieTowns.Repository
+namespace FunWithLocal.WebApi.Repository
 {
     public class UserRepository: RepositoryBase, IUserRepository
     {
@@ -118,7 +119,7 @@ namespace AussieTowns.Repository
             using (IDbConnection dbConnection = Connection)
             {
                 var sql = "UPDATE User SET firstname = @firstname, lastname = @lastname, email = @email, gender= @gender, birthday= @birthday, phone = @phone, language= @language, currency = @currency, "
-                    + "locationId = @locationId, description = @description, address= @address, emergencycontact= @emergencycontact, updatedDate=@updatedDate WHERE id = @Id";
+                    + "locationId = @locationId, description = @description, address= @address, emergencycontact= @emergencycontact, updatedDate=@updatedDate, isConfirm=@isConfirm WHERE id = @Id";
                 dbConnection.Open();
                 user.UpdatedDate = DateTime.Now;
                 return await dbConnection.ExecuteAsync(sql, user);
@@ -203,6 +204,18 @@ namespace AussieTowns.Repository
                         throw;
                     }
                 }
+            }
+        }
+
+        public async Task<User> GetByIdAndEmail(int id, string email)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "SELECT * FROM User WHERE id=@id AND email=@email AND isConfirm =0;";
+
+                dbConnection.Open();
+                var user = await dbConnection.QueryAsync<User>(sql, new { id, email });
+                return user.FirstOrDefault();
             }
         }
     }

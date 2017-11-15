@@ -32,10 +32,16 @@ var ForgetPasswordForm = /** @class */ (function (_super) {
         _this.formSubmitted = false;
         return _this;
     }
+    ForgetPasswordForm.asyncData = function (_a) {
+        var store = _a.store, route = _a.route;
+        if (route.params.guidString) {
+            return verifyResetToken(route.params.guidString).then(function (x) {
+                console.log('Bodom:' + x);
+            });
+        }
+    };
     ForgetPasswordForm.prototype.created = function () {
-        verifyResetToken(this.guidString).then(function (x) {
-            console.log(x);
-        });
+        //console.log('Bodom guidString:' + this.guidString);
     };
     ForgetPasswordForm.prototype.onResetPassword = function () {
         //this.$validator.validateAll().then(() => {

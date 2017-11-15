@@ -9,7 +9,7 @@ const isDev = process.env.NODE_ENV !== 'production'
 export default context => {
     if (context.cookies.mtl) {
         var mtl = JSON.parse(context.cookies.mtl);
-        if (mtl.loggedInUser) store.state.loggedInUser = mtl.loggedInUser;
+        if (mtl && mtl.loggedInUser) store.state.loggedInUser = mtl.loggedInUser;
     }
 
   return new Promise((resolve, reject) => {
@@ -31,12 +31,12 @@ export default context => {
       }
       // call asyncData() on all matched route components
         Promise.all(matchedComponents.map(component => {
-            var propertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(component));
-            console.log('all Prop name: ' + propertyNames);
-            var propertySymbol = Object.getOwnPropertyNames(component);
-            console.log('all Symbol name: ' + propertySymbol);
-            var extendOptions = Object.getOwnPropertyNames((component as any).extendOptions);
-            console.log('all extendOptions name: ' + extendOptions);
+            //var propertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(component));
+            //console.log('all Prop name: ' + propertyNames);
+            //var propertySymbol = Object.getOwnPropertyNames(component);
+            //console.log('all Symbol name: ' + propertySymbol);
+            //var extendOptions = Object.getOwnPropertyNames((component as any).extendOptions);
+            //console.log('all extendOptions name: ' + extendOptions);
 
             if (component && (component as any).asyncData) {
                 return (component as any).asyncData({

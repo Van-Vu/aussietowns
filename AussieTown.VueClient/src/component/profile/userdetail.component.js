@@ -22,8 +22,10 @@ import UserModel from '../../model/user.model';
 import { UserRole, UserAction, NotificationType } from '../../model/enum';
 import datepicker from '../shared/external/datepicker.vue';
 import { plainToClass } from "class-transformer";
-import { Utils } from '../utils';
 import ImageUploadComponent from '../shared/imageupload.component.vue';
+import ImageCropComponent from '../shared/imagecrop.component.vue';
+import { GlobalConfig } from '../../GlobalConfig';
+import ImageService from '../../service/image.service';
 Vue.use(VeeValidate);
 var UserDetailComponent = /** @class */ (function (_super) {
     __extends(UserDetailComponent, _super);
@@ -91,35 +93,22 @@ var UserDetailComponent = /** @class */ (function (_super) {
         }
     };
     UserDetailComponent.prototype.onReplaceHeroImage = function () {
-        document.getElementById("fileUpload").click();
+        document.getElementById("heroImageUpload").click();
     };
     UserDetailComponent.prototype.onUploadHeroImage = function (fileList) {
         var _this = this;
         if (!fileList.length)
             return;
-        var formData = new FormData();
         Array.from(Array(fileList.length).keys())
             .map(function (x) {
-            //formData.append('files', fileList[x], fileList[x].name);
-            var fileName = fileList[x].name;
-            return Utils.resizeImage({
-                file: fileList[x],
-                maxWidth: 1010,
-                maxHeight: 370
-            }).then(function (resizedImage) {
-                console.log("upload resized image");
-                formData.append('files', resizedImage, fileName);
-                _this.$store.dispatch('UPLOAD_PROFILE_HEROIMAGE', {
-                    data: formData,
-                    actionId: _this.$store.state.profile.id
-                }).then(function (response) {
-                    _this.$emit('uploadImageCompleted');
-                });
-            }).catch(function (err) {
-                console.error(err);
-            });
+            return (new ImageService()).resizeImage(GlobalConfig.heroImageSize, {
+                originalFileName: fileList[x].name,
+                originalFile: fileList[x],
+                storeAction: 'UPLOAD_PROFILE_HEROIMAGE',
+                storeActionId: _this.$store.state.profile.id
+            }).then(function () { return _this.onUploadImageSuccess(); });
         });
-        document.getElementById('fileUpload').value = null;
+        document.getElementById('heroImageUpload').value = null;
     };
     UserDetailComponent.prototype.onReplaceProfileImage = function () {
         document.getElementById("profileImageUpload").click();
@@ -128,29 +117,24 @@ var UserDetailComponent = /** @class */ (function (_super) {
         var _this = this;
         if (!fileList.length)
             return;
-        var formData = new FormData();
         Array.from(Array(fileList.length).keys())
             .map(function (x) {
-            //formData.append('files', fileList[x], fileList[x].name);
-            var fileName = fileList[x].name;
-            return Utils.resizeImage({
-                file: fileList[x],
-                maxWidth: 170,
-                maxHeight: 170
-            }).then(function (resizedImage) {
-                console.log("upload resized image");
-                formData.append('files', resizedImage, fileName);
-                _this.$store.dispatch('UPLOAD_PROFILE_IMAGE', {
-                    data: formData,
-                    actionId: _this.$store.state.profile.id
-                }).then(function (response) {
-                    _this.$emit('uploadImageCompleted');
-                });
-            }).catch(function (err) {
-                console.error(err);
-            });
+            return (new ImageService()).resizeImage(GlobalConfig.profileImageSize, {
+                originalFileName: fileList[x].name,
+                originalFile: fileList[x],
+                storeAction: 'UPLOAD_PROFILE_IMAGE',
+                storeActionId: _this.$store.state.profile.id
+            }).then(function () { return _this.onUploadImageSuccess(); });
         });
         document.getElementById('profileImageUpload').value = null;
+    };
+    UserDetailComponent.prototype.onUploadImageSuccess = function () {
+        this.$emit('uploadImageCompleted');
+        this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
+    };
+    UserDetailComponent.prototype.onUploadImageFail = function () {
+        this.$emit('uploadImageCompleted');
+        this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", type: NotificationType.Error });
     };
     UserDetailComponent.prototype.onUpdate = function () { };
     UserDetailComponent.prototype.capture = function () { };
@@ -160,7 +144,8 @@ var UserDetailComponent = /** @class */ (function (_super) {
             components: {
                 "locationsearch": LocationSearchComponent,
                 "datepicker": datepicker,
-                "imageupload": ImageUploadComponent
+                "imageupload": ImageUploadComponent,
+                "imagecrop": ImageCropComponent
             }
         })
     ], UserDetailComponent);

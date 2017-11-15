@@ -22,6 +22,14 @@ export default class UserService {
             .then(response => response);
     }
 
+    verifyToken(token: string) {
+        console.log('Bodom verify Token:' + token);
+        return http.get('api/user/verifyToken/' + token).then(response => {
+                return response;
+            }
+        );        
+    }
+
     getMiniProfile(id: number) {
         return http.get('api/user/summary/' + id)
             .then(response => {
@@ -33,6 +41,11 @@ export default class UserService {
     getUserInfo(id: number) {
         return http.get('api/user/' + id)
             .then(response => response.data);
+    }
+
+    confirm(user: any) {
+        return http.post('api/user/confirm', { token: user.token, firstName: user.firstName, lastName: user.lastName })
+            .then(response => response);        
     }
 
     update(user: any) {

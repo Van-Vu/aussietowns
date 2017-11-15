@@ -4,12 +4,20 @@ import VeeValidate from 'vee-validate';
 import LocationSearchComponent from "../shared/search/locationsearch.component.vue";
 import UserModel from '../../model/user.model';
 import ImageModel from '../../model/image.model';
+
+
 import { UserRole, UserAction, NotificationType } from '../../model/enum';
 import { AutocompleteItem } from '../../model/autocomplete.model';
 import datepicker from '../shared/external/datepicker.vue';
 import { plainToClass } from "class-transformer";
 import { Utils } from '../utils'; 
 import ImageUploadComponent from '../shared/imageupload.component.vue';
+
+import ImageCropComponent from '../shared/imagecrop.component.vue';
+
+import { GlobalConfig } from '../../GlobalConfig';
+
+import ImageService from '../../service/image.service';
 
 Vue.use(VeeValidate);
 
@@ -18,7 +26,8 @@ Vue.use(VeeValidate);
     components: {
         "locationsearch": LocationSearchComponent,
         "datepicker": datepicker,
-        "imageupload": ImageUploadComponent
+        "imageupload": ImageUploadComponent,
+        "imagecrop": ImageCropComponent
     }
 })
 
@@ -85,38 +94,22 @@ export default class UserDetailComponent extends Vue {
     }
 
     onReplaceHeroImage() {
-        document.getElementById("fileUpload").click();
+        document.getElementById("heroImageUpload").click();
     }
 
     onUploadHeroImage(fileList) {
         if (!fileList.length) return;
-
-        const formData = new FormData();
         Array.from(Array(fileList.length).keys())
             .map(x => {
-                //formData.append('files', fileList[x], fileList[x].name);
-                var fileName = fileList[x].name;
-                return Utils.resizeImage({
-                    file: fileList[x],
-                    maxWidth: 1010,
-                    maxHeight: 370
-                }).then((resizedImage: Blob) => {
-                    console.log("upload resized image");
-                    formData.append('files', resizedImage, fileName);
-
-                    this.$store.dispatch('UPLOAD_PROFILE_HEROIMAGE',
-                        {
-                            data: formData,
-                            actionId: this.$store.state.profile.id
-                        }).then(response => {
-                            this.$emit('uploadImageCompleted');
-                        });
-                }).catch((err) => {
-                    console.error(err);
-                });
-
+                return (new ImageService()).resizeImage(GlobalConfig.heroImageSize, 
+                    {
+                        originalFileName: fileList[x].name,
+                        originalFile: fileList[x],
+                        storeAction: 'UPLOAD_PROFILE_HEROIMAGE',
+                        storeActionId: this.$store.state.profile.id
+                    }).then(() => this.onUploadImageSuccess());
             });
-        (document.getElementById('fileUpload') as any).value = null;
+        (document.getElementById('heroImageUpload') as any).value = null;
     }
 
     onReplaceProfileImage() {
@@ -126,33 +119,29 @@ export default class UserDetailComponent extends Vue {
     onUploadProfileImage(fileList) {
         if (!fileList.length) return;
 
-        const formData = new FormData();
         Array.from(Array(fileList.length).keys())
             .map(x => {
-                //formData.append('files', fileList[x], fileList[x].name);
-                var fileName = fileList[x].name;
-
-                return Utils.resizeImage({
-                    file: fileList[x],
-                    maxWidth: 170,
-                    maxHeight: 170
-                }).then((resizedImage: Blob) => {
-                    console.log("upload resized image");
-                    formData.append('files', resizedImage, fileName);
-
-                    this.$store.dispatch('UPLOAD_PROFILE_IMAGE',
-                        {
-                            data: formData,
-                            actionId: this.$store.state.profile.id
-                        }).then(response => {
-                            this.$emit('uploadImageCompleted');
-                        });
-                }).catch((err) => {
-                    console.error(err);
-                });
+                return (new ImageService()).resizeImage(GlobalConfig.profileImageSize,
+                {
+                    originalFileName: fileList[x].name,
+                    originalFile: fileList[x],
+                    storeAction: 'UPLOAD_PROFILE_IMAGE',
+                    storeActionId: this.$store.state.profile.id
+                    }).then(() => this.onUploadImageSuccess());
             });
         (document.getElementById('profileImageUpload') as any).value = null;
     }
+
+    onUploadImageSuccess() {
+        this.$emit('uploadImageCompleted');
+        this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
+    }
+
+    onUploadImageFail() {
+        this.$emit('uploadImageCompleted');
+        this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", type: NotificationType.Error });
+    }
+
 onUpdate(){}
 capture(){}
 }

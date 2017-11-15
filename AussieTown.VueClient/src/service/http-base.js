@@ -1,7 +1,9 @@
 import axios from 'axios';
 import Vue from "vue";
 import store from '../store';
+import router from '../router';
 import { Utils } from '../component/utils';
+import { GlobalConfig } from '../GlobalConfig';
 Vue.prototype.$http = axios;
 //export const http = axios.create({
 //    baseURL: `http://10.0.0.98/meetthelocal/`
@@ -16,7 +18,9 @@ var http = axios.create({
 //    baseURL: `https://api.funwithlocal.com/`
 //})
 http.defaults.withCredentials = true;
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'https://www.funwithlocal.com';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = process.env.NODE_ENV == 'production'
+    ? GlobalConfig.accessControl.prod
+    : GlobalConfig.accessControl.dev;
 //axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
 //axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Authorization';
 //axios.defaults.headers.common['Access-Control-Request-Method'] = "GET, POST, PUT, DELETE, OPTIONS";
@@ -51,6 +55,7 @@ http.interceptors.response.use(function (response) {
     console.log('Bodom handleError');
     if (response) {
         Utils.handleError(store, response);
+        router.push("home");
     }
     // Do something with response error
     if (error.response)

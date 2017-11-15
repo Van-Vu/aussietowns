@@ -9,6 +9,6 @@
 </template>
 
 <script lang="ts">
-    import SearchBarComponent from "./searchbar.component.ts";
-    export default SearchBarComponent;
+import SearchBarComponent from "./searchbar.component.ts";
+export default SearchBarComponent;
 </script>

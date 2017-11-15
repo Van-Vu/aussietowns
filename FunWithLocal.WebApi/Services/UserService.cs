@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AussieTowns.Common;
-using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Repository;
-using Microsoft.AspNetCore.Hosting.Internal;
+using AussieTowns.Services;
+using FunWithLocal.WebApi.Repository;
 using Microsoft.Extensions.Logging;
 
-
-namespace AussieTowns.Services
+namespace FunWithLocal.WebApi.Services
 {
     public class UserService: IUserService
     {
@@ -77,20 +76,11 @@ namespace AussieTowns.Services
             
         }
 
-        public async Task<int> RequestPasswordReset(int userId)
+        public async Task<int> RequestPasswordReset(int userId, string resetToken, DateTime expiryDate)
         {
             try
             {
-                var token = Guid.NewGuid().ToString();
-                var expiryDate = DateTime.Today.AddDays(1);
-
-                var resetLink = $"https://www.funwithlocal.com/resetpassword/{token}";
-                var subject = "Reset password";
-
-                resetLink.SendEmail(subject);
-
-                return await _userRepository.RequestPasswordReset(userId, token, expiryDate);
-
+                return await _userRepository.RequestPasswordReset(userId, resetToken, expiryDate);
             }
             catch (Exception e)
             {
@@ -102,6 +92,11 @@ namespace AussieTowns.Services
         public async Task<int> UpdatePassword(User user, bool isChangePassword)
         {
             return await _userRepository.ChangePassword(user, isChangePassword);
+        }
+
+        public async Task<User> GetByIdAndEmail(int id, string email)
+        {
+            return await _userRepository.GetByIdAndEmail(id, email);
         }
 
         //public ICollection<User> SearchUsers(string term)

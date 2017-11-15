@@ -20,7 +20,8 @@ export default new Vuex.Store({
     plugins: [
         createPersistedState({
             getState: function (key) { return Cookies.getJSON(key); },
-            setState: function (key, state) { return Cookies.set(key, state, { expires: 3, secure: false }); },
+            setState: function (key, state) { if (state)
+                Cookies.set(key, state, { expires: 3, secure: false }); },
             filter: function (mutation) { return mutation.type === 'UPDATE_CURRENT_USER'; },
             key: 'mtl',
             paths: ['loggedInUser']
@@ -57,7 +58,7 @@ export default new Vuex.Store({
             return '';
         },
         profileLink: function (state) {
-            if (state.loggedInUser) {
+            if (typeof state.loggedInUser != 'undefined' && typeof state.loggedInUser != 'function') {
                 return Utils.seorizeString(Utils.getProfileFullName(state.loggedInUser));
             }
             return null;
@@ -135,6 +136,12 @@ export default new Vuex.Store({
                 commit('UPDATE_PROFILE', profile);
                 return response;
             });
+        },
+        // via confirm email cpage
+        CONFIRM_USER: function (_a, profile) {
+            var commit = _a.commit, state = _a.state;
+            return (new UserService()).confirm(profile)
+                .then(function (response) { return response; });
         },
         INSERT_USER: function (_a, profile) {
             var commit = _a.commit, state = _a.state;
@@ -227,7 +234,11 @@ export default new Vuex.Store({
         },
         SHOW_SCHEDULE_MODAL: function (_a, payload) {
             var commit = _a.commit;
-            commit('SHOW_SCHEDULE_MODAL', { state: true, data: payload });
+            commit('SHOW_SCHEDULE_MODAL', payload);
+        },
+        SHOW_IMAGECROP_MODAL: function (_a, payload) {
+            var commit = _a.commit;
+            return commit('SHOW_IMAGECROP_MODAL', payload);
         },
         HIDE_MODAL: function (_a) {
             var commit = _a.commit;
@@ -272,6 +283,12 @@ export default new Vuex.Store({
             var commit = _a.commit;
             return (new BookingService()).getAllBookingsByDate(payload).then(function (response) {
                 commit('UPDATE_BOOKING_GROUPS_DETAIL', response);
+            });
+        },
+        VERIFY_EMAIL_TOKEN: function (_a, payload) {
+            var commit = _a.commit;
+            return (new UserService()).verifyToken(payload).then(function (response) {
+                commit('UPDATE_PROFILE', response);
             });
         },
         TEST: function (_a, payload) {
@@ -390,16 +407,22 @@ export default new Vuex.Store({
             //Vue.set(state, 'showLoginModal', value);
         },
         SHOW_SCHEDULE_MODAL: function (state, payload) {
-            if (payload.state) {
-                var onSaveSchedule = void 0;
-                var onHideScheduleModal = void 0;
-                state.dynamicModal = {
-                    name: 'schedulemodal',
-                    props: { show: true, schedule: payload.data },
-                    events: { onSave: onSaveSchedule, onClose: onHideScheduleModal }
-                };
-            }
+            var onSaveSchedule;
+            var onHideScheduleModal;
+            state.dynamicModal = {
+                name: 'schedulemodal',
+                props: { show: true, schedule: payload },
+                events: { onSave: onSaveSchedule, onClose: onHideScheduleModal }
+            };
             //Vue.set(state, 'showScheduleModal', value);
+        },
+        SHOW_IMAGECROP_MODAL: function (state, payload) {
+            var onUploadImage;
+            return state.dynamicModal = {
+                name: 'imagecropmodal',
+                props: { show: true, imageSources: payload.images, imageSizeSettings: payload.setting },
+                events: { onSave: onUploadImage }
+            };
         },
         HIDE_MODAL: function (state) {
             if (state.dynamicModal && state.dynamicModal.props) {

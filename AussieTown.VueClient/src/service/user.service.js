@@ -18,6 +18,12 @@ var UserService = /** @class */ (function () {
         return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId })
             .then(function (response) { return response; });
     };
+    UserService.prototype.verifyToken = function (token) {
+        console.log('Bodom verify Token:' + token);
+        return http.get('api/user/verifyToken/' + token).then(function (response) {
+            return response;
+        });
+    };
     UserService.prototype.getMiniProfile = function (id) {
         return http.get('api/user/summary/' + id)
             .then(function (response) {
@@ -28,6 +34,10 @@ var UserService = /** @class */ (function () {
     UserService.prototype.getUserInfo = function (id) {
         return http.get('api/user/' + id)
             .then(function (response) { return response.data; });
+    };
+    UserService.prototype.confirm = function (user) {
+        return http.post('api/user/confirm', { token: user.token, firstName: user.firstName, lastName: user.lastName })
+            .then(function (response) { return response; });
     };
     UserService.prototype.update = function (user) {
         return http.put('api/user/' + user.id, user)

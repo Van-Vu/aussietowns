@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Common;
-using AussieTowns.ViewModel;
+using FunWithLocal.WebApi.ViewModel;
 
 namespace AussieTowns.Services
 {
@@ -11,6 +11,8 @@ namespace AussieTowns.Services
     {
         Task<int> SendBookingConfirmEmail(BookingEmailViewModel emailViewModel, string hostEmail, string hostName);
 
-        Task<int> SendWelcomeEmail(string receivers);
+        Task<int> SendWelcomeEmail(WelcomeEmailViewModel viewModel, string receivers);
+
+        Task<int> SendResetPasswordEmail(ResetPasswordEmailViewModel viewModel, string receivers);
     }
 }

@@ -7,11 +7,14 @@ using AussieTowns.Auth;
 using AussieTowns.Repository;
 using AussieTowns.Services;
 using AutoMapper;
+using FunWithLocal.WebApi.Repository;
+using FunWithLocal.WebApi.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +25,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using RazorLight;
 using Serilog;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.RollingFile;
@@ -97,6 +101,9 @@ namespace FunWithLocal.WebApi
                 // If you want to allow a certain amount of clock drift, set that here:
                 ClockSkew = TimeSpan.Zero
             };
+
+            // https://stackoverflow.com/questions/38795103/encrypt-string-in-net-core
+            services.AddDataProtection();
 
             // Add framework services with JSON loop ignore: http://stackoverflow.com/a/38382021/1284688
             services.AddMvc()
@@ -204,6 +211,8 @@ namespace FunWithLocal.WebApi
             services.Configure<AppSettings>(Configuration.GetSection("FwlSettings"));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IRazorLightEngine>(f => new EngineFactory()
+                .ForFileSystem($"{Directory.GetCurrentDirectory()}\\Content\\EmailTemplates"));
 
             services.AddTransient<ISearchService, SearchService>();
             services.AddTransient<IUserService, UserService>();
@@ -212,6 +221,8 @@ namespace FunWithLocal.WebApi
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IBookingService, BookingService>();
+            services.AddTransient<ISecurityTokenService, SecurityTokenService>();
+            
 
             services.AddTransient<ILocationRepository, LocationRepository>(x => new LocationRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<LocationRepository>>()));
             services.AddTransient<IUserRepository, UserRepository>(x => new UserRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<UserRepository>>()));

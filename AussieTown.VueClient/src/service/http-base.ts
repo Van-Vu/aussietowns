@@ -2,7 +2,9 @@ import axios from 'axios';
 import Vue from "vue";
 import { NotificationType } from '../model/enum';
 import store from '../store';
+import router from '../router';
 import { Utils } from '../component/utils';
+import { GlobalConfig } from '../GlobalConfig';
 
 (Vue.prototype as any).$http = axios;
 
@@ -26,7 +28,9 @@ const http = axios.create({
 //})
 
 http.defaults.withCredentials = true;
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'https://www.funwithlocal.com';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = process.env.NODE_ENV == 'production'
+    ? GlobalConfig.accessControl.prod
+    : GlobalConfig.accessControl.dev;
 //axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
 //axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Authorization';
 //axios.defaults.headers.common['Access-Control-Request-Method'] = "GET, POST, PUT, DELETE, OPTIONS";
@@ -68,6 +72,7 @@ http.interceptors.response.use(response => {
 
     if (response) {
         Utils.handleError(store, response);
+        router.push("home");
     }
 
     // Do something with response error

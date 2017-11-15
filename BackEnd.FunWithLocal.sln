@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AussieTowns", "AussieTowns\AussieTowns.csproj", "{49D5CE04-6072-47F6-ADE0-2CE77BA182F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunWithLocal.WebApi", "FunWithLocal.WebApi\FunWithLocal.WebApi.csproj", "{415713D8-43A7-4B68-9CF7-47D32CC9C278}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunWithLocal.WebApi", "FunWithLocal.WebApi\FunWithLocal.WebApi.csproj", "{415713D8-43A7-4B68-9CF7-47D32CC9C278}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

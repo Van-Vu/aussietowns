@@ -5,11 +5,13 @@ using AussieTowns.Auth;
 using AussieTowns.Common;
 using AussieTowns.Model;
 using AussieTowns.Services;
+using FunWithLocal.WebApi.Services;
+using FunWithLocal.WebApi.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
-
-namespace AussieTowns.Controllers
+namespace FunWithLocal.WebApi.Controllers
 {
     // https://stackoverflow.com/questions/17128038/c-sharp-rsa-encryption-decryption-with-transmission
     // https://stackoverflow.com/questions/23734792/c-sharp-export-private-public-rsa-key-from-rsacryptoserviceprovider-to-pem-strin
@@ -22,11 +24,13 @@ namespace AussieTowns.Controllers
     public class AuthController
     {
         private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IUserService userService, ILogger<AuthController> logger)
+        public AuthController(IUserService userService, IEmailService emailService, ILogger<AuthController> logger)
         {
             _userService = userService;
+            _emailService = emailService;
             _logger = logger;
         }
 
@@ -39,7 +43,8 @@ namespace AussieTowns.Controllers
                 var user = await _userService.VerifyResetToken(token);
                 if (user == null)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(token),"Invalid Token");
+                    _logger.LogError("Reset token invalid: {token}", token);
+                    throw new SecurityTokenExpiredException("Invalid Token");
                 }
 
 
@@ -72,7 +77,12 @@ namespace AussieTowns.Controllers
                     throw new ArgumentOutOfRangeException(nameof(request), "Invalid Request");
                 }
 
-                var reset = await _userService.RequestPasswordReset(user.Id);
+                var token = Guid.NewGuid().ToString();
+                var resetLink = $"https://www.funwithlocal.com/resetpassword/{token}";
+
+                await _emailService.SendResetPasswordEmail(new ResetPasswordEmailViewModel { ResetLink = resetLink }, request.Email);
+
+                var reset = await _userService.RequestPasswordReset(user.Id, token, DateTime.Today.AddDays(2));
 
                 return reset;
             }
@@ -93,14 +103,14 @@ namespace AussieTowns.Controllers
 
                 if (string.IsNullOrEmpty(request.ResetToken) || request.IsChangePassword)
                 {
-                    throw new ArgumentNullException(nameof(request), "Token is required");
+                    throw new SecurityTokenExpiredException("Invalid Token");
                 }
 
                 var user = await _userService.VerifyResetToken(request.ResetToken);
                 if (user == null)
                 {
-                    _logger.LogInformation("Can't find user with email: {email}", request.Email);
-                    throw new ArgumentOutOfRangeException(nameof(request), "Invalid Request");
+                    _logger.LogError("Reset token invalid: {request.ResetToken}", request.ResetToken);
+                    throw new SecurityTokenExpiredException("Invalid Token");
                 }
 
                 var realPassword = request.NewPassword.RsaDecrypt();

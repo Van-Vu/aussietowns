@@ -23,10 +23,16 @@ export default class ForgetPasswordForm extends Vue {
 
     formSubmitted: boolean = false;
 
+    static asyncData({ store, route }) {
+        if (route.params.guidString) {
+            return verifyResetToken(route.params.guidString).then(x => {
+                console.log('Bodom:' + x);
+            });
+        }
+    }
+
     created() {
-        verifyResetToken(this.guidString).then(x => {
-            console.log(x);
-        });
+        //console.log('Bodom guidString:' + this.guidString);
     }
 
 

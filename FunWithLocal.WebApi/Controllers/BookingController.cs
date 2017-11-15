@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AussieTowns.Common;
 using AussieTowns.Model;
 using AussieTowns.Services;
-using AussieTowns.ViewModel;
+using FunWithLocal.WebApi.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;

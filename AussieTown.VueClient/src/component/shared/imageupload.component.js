@@ -19,10 +19,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import UploadImage from './external/vueuploadimage.vue';
+import VueUploadImage from './external/vueuploadimage.vue';
 import Swiper from './external/vue-swiper.vue';
 import RingLoader from './external/ringloader.vue';
+import { NotificationType } from '../../model/enum';
 import { GlobalConfig } from '../../GlobalConfig';
+import ImageService from '../../service/image.service';
 var ImageUploadComponent = /** @class */ (function (_super) {
     __extends(ImageUploadComponent, _super);
     function ImageUploadComponent() {
@@ -57,30 +59,53 @@ var ImageUploadComponent = /** @class */ (function (_super) {
         });
         ;
     };
-    ImageUploadComponent.prototype.onUploadImages = function (formData) {
+    ImageUploadComponent.prototype.onUploadImages = function (fileList) {
         var _this = this;
         var storeAction;
         var actionId;
-        this.isUploading = true;
-        if (this.uploadType === 0) {
-            storeAction = 'UPLOAD_LISTING_IMAGES';
-            actionId = this.$store.state.listing.id;
-        }
-        else {
-            storeAction = 'UPLOAD_PROFILE_IMAGES';
-            actionId = this.$store.state.profile.id;
-        }
-        this.$store.dispatch(storeAction, {
-            data: formData,
-            actionId: actionId
-        }).then(function (response) {
-            _this.maxFileAllowed -= response;
-            _this.$emit('uploadImageCompleted');
-            _this.isUploading = false;
-        })
-            .catch(function (error) {
-            _this.isUploading = false;
+        Array.from(Array(fileList.length).keys())
+            .map(function (x) {
+            return (new ImageService()).resizeImage(GlobalConfig.listingImageSize, {
+                originalFileName: fileList[x].name,
+                originalFile: fileList[x],
+                storeAction: 'UPLOAD_LISTING_IMAGES',
+                storeActionId: _this.$store.state.listing.id
+            }).then(function () { return _this.onUploadImageSuccess(); });
         });
+        //for (var value of formData.values()) {
+        //return (new ImageService()).resizeImage(GlobalConfig.heroImageSize,
+        //    {
+        //        originalFileName: fileList[x].name,
+        //        originalFile: fileList[x],
+        //        storeAction: 'UPLOAD_PROFILE_HEROIMAGE',
+        //        storeActionId: this.$store.state.profile.id
+        //    }).then(() => this.onUploadImageSuccess());
+        //    console.log(value); 
+        //}
+        //this.isUploading = true;
+        //if (this.uploadType === 0) {
+        //    storeAction = 'UPLOAD_LISTING_IMAGES';
+        //    actionId = this.$store.state.listing.id;
+        //} else {
+        //    storeAction = 'UPLOAD_PROFILE_IMAGES';
+        //    actionId = this.$store.state.profile.id;
+        //}
+        //this.$store.dispatch(storeAction,
+        //{
+        //    data: formData,
+        //    actionId: actionId
+        //}).then(response => {
+        //    this.maxFileAllowed -= response as any;
+        //    this.$emit('uploadImageCompleted');
+        //    this.isUploading = false;
+        //})
+        //.catch(error => {
+        //    this.isUploading = false;
+        //});
+    };
+    ImageUploadComponent.prototype.onUploadImageSuccess = function () {
+        this.$emit('uploadImageCompleted');
+        this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
     };
     ImageUploadComponent.prototype.removeImage = function () {
     };
@@ -100,7 +125,7 @@ var ImageUploadComponent = /** @class */ (function (_super) {
         Component({
             name: "ImageUploadComponent",
             components: {
-                'upload-image': UploadImage,
+                'vueUploadImage': VueUploadImage,
                 'swiper': Swiper,
                 'ringloader': RingLoader
             }

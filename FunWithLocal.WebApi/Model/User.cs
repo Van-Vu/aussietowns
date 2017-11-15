@@ -31,6 +31,8 @@ namespace AussieTowns.Model
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsActive { get; set; }
+        public bool IsConfirm { get; set; }
+        public string Token { get; set; }
         public UserSource Source { get; set; }
         public string ExternalId { get; set; }
         public int Role { get; set; }

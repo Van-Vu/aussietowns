@@ -49,6 +49,10 @@
                         <span v-show="errors.has('confirmPassword')" class="help is-danger">{{ errors.first('confirmPassword') }}</span>
                     </p>
                 </div>
+                <div class="forgotpassword field" v-if="!isForgotPassword">
+                    <a @click.prevent="isForgotPassword = true">Forgot your password</a>
+                </div>
+
                 <div class="field has-text-centered">
                     <button type="submit" class="button is-full button mtl_button-no-round mtl-btn-large">{{ isLogin ? 'Submit' : 'Register' }}</button>
                 </div>

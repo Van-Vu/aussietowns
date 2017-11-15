@@ -6,7 +6,7 @@ var isDev = process.env.NODE_ENV !== 'production';
 export default function (context) {
     if (context.cookies.mtl) {
         var mtl = JSON.parse(context.cookies.mtl);
-        if (mtl.loggedInUser)
+        if (mtl && mtl.loggedInUser)
             store.state.loggedInUser = mtl.loggedInUser;
     }
     return new Promise(function (resolve, reject) {
@@ -24,12 +24,12 @@ export default function (context) {
             }
             // call asyncData() on all matched route components
             Promise.all(matchedComponents.map(function (component) {
-                var propertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(component));
-                console.log('all Prop name: ' + propertyNames);
-                var propertySymbol = Object.getOwnPropertyNames(component);
-                console.log('all Symbol name: ' + propertySymbol);
-                var extendOptions = Object.getOwnPropertyNames(component.extendOptions);
-                console.log('all extendOptions name: ' + extendOptions);
+                //var propertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(component));
+                //console.log('all Prop name: ' + propertyNames);
+                //var propertySymbol = Object.getOwnPropertyNames(component);
+                //console.log('all Symbol name: ' + propertySymbol);
+                //var extendOptions = Object.getOwnPropertyNames((component as any).extendOptions);
+                //console.log('all extendOptions name: ' + extendOptions);
                 if (component && component.asyncData) {
                     return component.asyncData({
                         store: store,

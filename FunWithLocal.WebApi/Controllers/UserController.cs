@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using AussieTowns.Auth;
 using AussieTowns.Common;
@@ -14,18 +11,18 @@ using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
 using AutoMapper;
+using FunWithLocal.WebApi.Services;
+using FunWithLocal.WebApi.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using FunWithLocal.WebApi;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace AussieTowns.Controllers
+namespace FunWithLocal.WebApi.Controllers
 {
     [Route("api/[controller]")]
     public class UserController : Controller
@@ -36,10 +33,15 @@ namespace AussieTowns.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<UserController> _logger;
         private readonly IAuthorizationService _authorizationService;
+        private readonly ISecurityTokenService _securityTokenService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppSettings _appSettings;
         private readonly IImageService _imageService;
 
-        public UserController(IUserService userService, IEmailService emailService, IHostingEnvironment hostingEnv, IMapper mapper, ILogger<UserController> logger, IAuthorizationService authorizationService, IOptions<AppSettings> appSettings, IImageService imageService)
+        public UserController(IUserService userService, IEmailService emailService, IHostingEnvironment hostingEnv, 
+            IMapper mapper, ILogger<UserController> logger, IAuthorizationService authorizationService,
+            ISecurityTokenService securityTokenService, IHttpContextAccessor httpContextAccessor,
+            IOptions<AppSettings> appSettings, IImageService imageService)
         {
             _userService = userService;
             _emailService = emailService;
@@ -47,6 +49,8 @@ namespace AussieTowns.Controllers
             _mapper = mapper;
             _logger = logger;
             _authorizationService = authorizationService;
+            _securityTokenService = securityTokenService;
+            _httpContextAccessor = httpContextAccessor;
             _imageService = imageService;
             _appSettings = appSettings.Value;
         }
@@ -70,14 +74,20 @@ namespace AussieTowns.Controllers
                 }
 
                 var userId = await _userService.Register(user);
-                if (userId > 1)
-                {
-                    await _emailService.SendWelcomeEmail(user.Email);
-                    user.Id = userId;
-                    return GenerateToken(user);
-                }
+                if (userId <= 1) throw new ArgumentOutOfRangeException(nameof(user), "Can't register user");
 
-                throw new ArgumentOutOfRangeException(nameof(user), "Can't register user");
+                user.Id = userId;
+                var expiresIn = DateTime.Now + TokenAuthOption.ExpiresSpan;
+                var userInfo = $"{user.Id}|{user.Email}|{expiresIn.Ticks}";
+                var confirmEmailToken = $"{Request.Headers["Access-Control-Allow-Origin"]}/confirmemail/{_securityTokenService.Encrypt(userInfo)}";
+                    
+                await _emailService.SendWelcomeEmail(new WelcomeEmailViewModel{EmailConfirmationToken = confirmEmailToken},  user.Email);
+
+                return new
+                {
+                    accessToken = _securityTokenService.CreateTokenString(user, expiresIn),
+                    loggedInUser = _mapper.Map<User, UserLoggedIn>(user)
+                };
             }
             catch (Exception e)
             {
@@ -130,6 +140,49 @@ namespace AussieTowns.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.Message, e);
+                throw;
+            }
+        }
+
+        [HttpGet("verifyToken/{token}")]
+        public async Task<UserResponse> VerifyEmailtoken(string token)
+        {
+            try
+            {
+                var user = await GetUserInfoFromToken(token);
+
+                if (user == null) throw new ArgumentNullException(nameof(token));
+
+                return _mapper.Map<User, UserResponse>(user);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                _logger.LogInformation("Can't verify token: {tokenString}", token);
+                throw new ValidationException("Token is incorrect");
+            }
+        }
+
+        [HttpPost("confirm")]
+        public async Task<dynamic> Confirm([FromBody] User user)
+        {
+            try
+            {
+                var existingUser = await GetUserInfoFromToken(user.Token);
+
+                if (existingUser == null) throw new ArgumentNullException(nameof(user));
+
+                existingUser.FirstName = user.FirstName;
+                existingUser.LastName = user.LastName;
+                existingUser.IsConfirm = true;
+                var updatedStatus = await _userService.Update(existingUser);
+
+                return updatedStatus;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                _logger.LogInformation("Can't confirm this user: {user}", user);
                 throw;
             }
         }
@@ -330,38 +383,37 @@ namespace AussieTowns.Controllers
         private dynamic GenerateToken(User user)
         {
             var expiresIn = DateTime.Now + TokenAuthOption.ExpiresSpan;
-            var token = GenerateToken(user, expiresIn);
+            var token = _securityTokenService.CreateTokenString(user, expiresIn);
 
             return new 
             {
-                expiresIn = TokenAuthOption.ExpiresSpan.TotalSeconds,
-                tokeyType = TokenAuthOption.TokenType,
                 accessToken = token,
                 loggedInUser = _mapper.Map<User,UserLoggedIn>(user)
             };
         }
 
-        private string GenerateToken(User user, DateTime expires)
+        private async Task<User> GetUserInfoFromToken(string token)
         {
-            var handler = new JwtSecurityTokenHandler();
+            var decryptText = _securityTokenService.Decrypt(token);
 
-            ClaimsIdentity identity = new ClaimsIdentity(
-                new GenericIdentity(user.Email, "TokenAuth"),
-                new[] {
-                    new Claim("userId", user.Id.ToString()),
-                    new Claim("role", user.Role.ToString()),
-                }
-            );
-
-            var securityToken = handler.CreateToken(new SecurityTokenDescriptor
+            var userInfo = decryptText.Split('|');
+            if (userInfo.Length == 3)
             {
-                Issuer = TokenAuthOption.Issuer,
-                Audience = TokenAuthOption.Audience,
-                SigningCredentials = TokenAuthOption.SigningCredentials,
-                Subject = identity,
-                Expires = expires
-            });
-            return handler.WriteToken(securityToken);
+                var expiryTime = Convert.ToInt64(userInfo[2]);
+                if (DateTime.Now.Ticks <= expiryTime)
+                {
+                    var userId = Convert.ToInt32(userInfo[0]);
+                    var email = userInfo[1];
+
+                    if (userId > 0)
+                    {
+                        return await _userService.GetByIdAndEmail(userId, email);
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }
+

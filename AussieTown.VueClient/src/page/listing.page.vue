@@ -1,4 +1,4 @@
-﻿i<template>
+﻿<template>
         <div class="page-content container tile" :class="{editing:isEditing}">
             <div class="listing-main-content tile is-8 is-vertical box">
                     <div class="box-header-strip"></div>

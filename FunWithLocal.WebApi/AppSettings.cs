@@ -14,6 +14,8 @@
         public string DefaultEmailName { get; set; }
         public string EmailTemplateFolder { get; set; }
         public string WelcomeEmailTemplate { get; set; }
+
+        public string ResetPasswordEmailTemplate { get; set; }
         public string BookingGuestsEmailTemplate { get; set; }
         public string BookingHostsEmailTemplate { get; set; }
         public string WelcomeEmailSubject { get; set; }

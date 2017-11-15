@@ -1,6 +1,5 @@
 ﻿import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import axios from "axios";
 import LocationSearchComponent from './locationsearch.component.vue';
 
 

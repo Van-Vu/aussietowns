@@ -1,4 +1,5 @@
 import { ListingType, NotificationType } from '../model/enum';
+import { GlobalConfig } from '../GlobalConfig';
 var Utils = /** @class */ (function () {
     function Utils() {
     }
@@ -61,59 +62,86 @@ var Utils = /** @class */ (function () {
             rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
             rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */);
     };
-    // https://stackoverflow.com/questions/10333971/html5-pre-resize-images-before-uploading
-    Utils.resizeImage = function (settings) {
+    // https://stackoverflow.com/questions/10333971/html5-pre-resize-images-before-uploading: foundation
+    // https://stackoverflow.com/questions/26015497/how-to-resize-then-crop-an-image-with-canvas: understand crop
+    // https://stackoverflow.com/questions/41129735/html5-canvas-todataurl-output-size-bigger-than-original-image-size: to dataURI make it big
+    // bodom: potential memory leak
+    Utils.resizeImage = function (settings, originaleFile) {
         var _this = this;
-        var file = settings.file;
-        var maxWidth = settings.maxWidth;
-        var maxHeight = settings.maxHeight;
         var reader = new FileReader();
         var image = new Image();
-        var canvas = document.createElement('canvas');
-        var dataURItoBlob = function (dataURI) {
-            var bytes = dataURI.split(',')[0].indexOf('base64') >= 0 ?
-                atob(dataURI.split(',')[1]) :
-                unescape(dataURI.split(',')[1]);
-            var mime = dataURI.split(',')[0].split(':')[1].split(';')[0];
-            var max = bytes.length;
-            var ia = new Uint8Array(max);
-            for (var i = 0; i < max; i++)
-                ia[i] = bytes.charCodeAt(i);
-            return new Blob([ia], { type: mime });
-        };
         var resize = function () {
             var width = image.width;
             var height = image.height;
-            var canvas = document.createElement('canvas');
-            canvas.width = image.width;
-            canvas.height = image.height;
-            canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
-            var scale;
-            if (width > height) {
-                //if (width > maxWidth) {
-                //    width = maxWidth;
-                //    height *= maxWidth / width;
-                //    if (height > maxHeight) height = maxHeight;
-                //}
-                scale = maxWidth / width;
+            if (width > settings.maxWidth || height > settings.maxHeight) {
+                var canvas = document.createElement('canvas');
+                canvas.width = image.width;
+                canvas.height = image.height;
+                canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+                var resizeScale;
+                var cropScale;
+                if (width > height) {
+                    //if (width > maxWidth) {
+                    //    width = maxWidth;
+                    //    height *= maxWidth / width;
+                    //    if (height > maxHeight) height = maxHeight;
+                    //}
+                    resizeScale = settings.maxWidth / width;
+                    cropScale = resizeScale;
+                    // Bodom: only crop 1/2 when it's Hero image
+                    if (settings.maxWidth > GlobalConfig.listingImageSize.maxWidth) {
+                        cropScale = settings.maxWidth / width / 2;
+                    }
+                }
+                else {
+                    //if (height > maxHeight) {
+                    //    height = maxHeight;
+                    //    width *= maxHeight / height;
+                    //    if (width > maxWidth) width = maxWidth;
+                    //}
+                    resizeScale = settings.maxHeight / height;
+                    cropScale = resizeScale;
+                    // Bodom: only crop 1/2 when it's Hero image
+                    if (settings.maxHeight > GlobalConfig.listingImageSize.maxHeight) {
+                        cropScale = settings.maxHeight / height / 2;
+                    }
+                }
+                var resizeCanvas = document.createElement('canvas');
+                resizeCanvas = _this.scaleCanvasWithAlgorithm(canvas, resizeScale);
+                var cropCanvas = document.createElement('canvas');
+                cropCanvas = _this.scaleCanvasWithAlgorithm(canvas, cropScale);
+                //var test = this.dataURItoBlob(resizeCanvas.toDataURL('image/jpeg', 1));
+                return new Promise(function (ok, no) {
+                    resizeCanvas.toBlob(function (resizeBlob) {
+                        ok({
+                            resizedImage: {
+                                width: resizeCanvas.width,
+                                height: resizeCanvas.height,
+                                imageBlob: resizeBlob
+                            },
+                            cropImage: {
+                                width: cropCanvas.width,
+                                height: cropCanvas.height,
+                                dataUrl: cropCanvas.toDataURL('image/jpeg', 0.7)
+                            }
+                        });
+                    }, "image/jpeg");
+                });
             }
             else {
-                //if (height > maxHeight) {
-                //    height = maxHeight;
-                //    width *= maxHeight / height;
-                //    if (width > maxWidth) width = maxWidth;
-                //}
-                scale = maxHeight / height;
+                return new Promise(function (ok, no) {
+                    ok({
+                        resizedImage: {
+                            width: width,
+                            height: height,
+                            imageBlob: originaleFile
+                        }
+                    });
+                });
             }
-            //canvas.width = width;
-            //canvas.height = height;
-            //canvas.getContext('2d').drawImage(image, 0, 0, width, height);
-            canvas = _this.scaleCanvasWithAlgorithm(canvas, scale);
-            var dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-            return dataURItoBlob(dataUrl);
         };
         return new Promise(function (ok, no) {
-            if (!file.type.match(/image.*/)) {
+            if (!originaleFile.type.match(/image.*/)) {
                 no(new Error("Not an image"));
                 return;
             }
@@ -121,7 +149,7 @@ var Utils = /** @class */ (function () {
                 image.onload = function () { return ok(resize()); };
                 image.src = readerEvent.target.result;
             };
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(originaleFile);
         });
     };
     ;
@@ -177,11 +205,51 @@ var Utils = /** @class */ (function () {
             }
         }
     };
+    Utils.cropImage = function (mainImageInfo, expectedImageInfo) {
+        var canvas = document.createElement('canvas');
+        var reader = new FileReader();
+        var image = new Image();
+        var resize = function () {
+            var cropCanvas = document.createElement('canvas');
+            // Bodom: have to set this otherwise it takes default size 300x150
+            cropCanvas.width = expectedImageInfo.width;
+            cropCanvas.height = expectedImageInfo.height;
+            cropCanvas.getContext('2d').drawImage(image, 0, expectedImageInfo.top, expectedImageInfo.width, expectedImageInfo.height, 0, 0, expectedImageInfo.width, expectedImageInfo.height);
+            return new Promise(function (ok, no) {
+                cropCanvas.toBlob(function (cropBlob) {
+                    ok(cropBlob);
+                }, "image/jpeg");
+            });
+        };
+        return new Promise(function (ok, no) {
+            reader.onload = function (readerEvent) {
+                image.onload = function () { return ok(resize()); };
+                image.src = readerEvent.target.result;
+            };
+            //var theImage = this.dataURItoBlob(cropImageInfo.imageBlob);
+            reader.readAsDataURL(mainImageInfo.imageBlob);
+        });
+    };
+    Utils.dataURItoBlob = function (dataURI) {
+        var bytes = dataURI.split(',')[0].indexOf('base64') >= 0 ?
+            atob(dataURI.split(',')[1]) :
+            unescape(dataURI.split(',')[1]);
+        var mime = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        var max = bytes.length;
+        var ia = new Uint8Array(max);
+        for (var i = 0; i < max; i++)
+            ia[i] = bytes.charCodeAt(i);
+        return new Blob([ia], { type: mime });
+    };
+    ;
     Utils.handleError = function (store, error) {
         store.dispatch("DISABLE_LOADING");
         switch (error.status) {
             case 400:
                 store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
+                break;
+            case 401:
+                store.dispatch('ADD_NOTIFICATION', { title: "You are not authorized to view this page!", type: NotificationType.Error });
                 break;
             case 403:
                 store.dispatch('SHOW_LOGIN_MODAL');

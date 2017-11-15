@@ -44,4 +44,8 @@
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="1.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FunWithLocal.WebApi\FunWithLocal.WebApi.csproj" />
+  </ItemGroup>
+
 </Project>

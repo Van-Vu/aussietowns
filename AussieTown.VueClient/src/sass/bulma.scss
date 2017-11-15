@@ -2386,7 +2386,8 @@ button.button, input[type="submit"].button {
   img {
     display: block;
     height: auto;
-    width: 100%;
+    //Bodom
+    /*width: 100%;*/
   }
   &.is-square img, &.is-1by1 img, &.is-4by3 img, &.is-3by2 img, &.is-16by9 img, &.is-2by1 img {
     bottom: 0;

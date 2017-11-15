@@ -22,6 +22,7 @@ export default class UserModel {
     public video: string;
     public heroImageUrl: string;
     public role: UserRole;
+    public token: string;
     public operatorListings: ListingModel[];
     public guestListings: ListingModel[];
 

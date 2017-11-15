@@ -1,1 +1,3 @@
 ALTER TABLE image MODIFY COLUMN url varchar(250) NOT NULL;
+
+ALTER TABLE User ADD COLUMN isConfirm bit(1) DEFAULT 0;

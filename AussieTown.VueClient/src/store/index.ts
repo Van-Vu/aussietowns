@@ -30,7 +30,7 @@ export default new Vuex.Store({
     plugins: [
         createPersistedState({
             getState: (key) => Cookies.getJSON(key),
-            setState: (key, state) => Cookies.set(key, state, { expires: 3, secure: false }),
+            setState: (key, state) => {if (state) Cookies.set(key, state, { expires: 3, secure: false })},
             filter: (mutation) => { return mutation.type === 'UPDATE_CURRENT_USER' },
             key: 'mtl',
             paths: ['loggedInUser']
@@ -67,7 +67,7 @@ export default new Vuex.Store({
             return '';
         },
         profileLink: state => {
-            if (state.loggedInUser) {
+            if (typeof state.loggedInUser != 'undefined' && typeof state.loggedInUser != 'function') {
                 return Utils.seorizeString(Utils.getProfileFullName(state.loggedInUser)) ;
             }
             return null;
@@ -135,6 +135,11 @@ export default new Vuex.Store({
                     commit('UPDATE_PROFILE', profile);
                     return response;
                 });
+        },
+        // via confirm email cpage
+        CONFIRM_USER({ commit, state }, profile) {
+            return (new UserService()).confirm(profile)
+                .then(response => response);
         },
         INSERT_USER({ commit, state }, profile) {
             (new UserService()).signup(profile);
@@ -211,7 +216,10 @@ export default new Vuex.Store({
             commit('SHOW_LOGIN_MODAL', true);
         },
         SHOW_SCHEDULE_MODAL({ commit }, payload) {
-            commit('SHOW_SCHEDULE_MODAL', {state: true, data: payload});
+            commit('SHOW_SCHEDULE_MODAL', payload);
+        },
+        SHOW_IMAGECROP_MODAL({ commit }, payload) {
+            return commit('SHOW_IMAGECROP_MODAL', payload);
         },
         HIDE_MODAL({ commit }) {
             commit('HIDE_MODAL');
@@ -253,6 +261,11 @@ export default new Vuex.Store({
         FETCH_ALL_BOOKING_BY_DATE({ commit }, payload) {
             return (new BookingService()).getAllBookingsByDate(payload).then(response => {
                 commit('UPDATE_BOOKING_GROUPS_DETAIL', response);
+            });
+        },
+        VERIFY_EMAIL_TOKEN({ commit }, payload) {
+            return (new UserService()).verifyToken(payload).then(response => {
+                commit('UPDATE_PROFILE', response);
             });
         },
         TEST({ commit, state }, payload) {
@@ -369,18 +382,24 @@ export default new Vuex.Store({
             //Vue.set(state, 'showLoginModal', value);
         },
         SHOW_SCHEDULE_MODAL(state, payload) {
-            if (payload.state) {
-                let onSaveSchedule: any;
-                let onHideScheduleModal: any;
+            let onSaveSchedule: any;
+            let onHideScheduleModal: any;
 
-                state.dynamicModal = {
-                    name: 'schedulemodal',
-                    props: { show: true, schedule: payload.data},
-                    events: { onSave:onSaveSchedule, onClose: onHideScheduleModal }
-                }
+            state.dynamicModal = {
+                name: 'schedulemodal',
+                props: { show: true, schedule: payload},
+                events: { onSave:onSaveSchedule, onClose: onHideScheduleModal }
             }
-
             //Vue.set(state, 'showScheduleModal', value);
+        },
+        SHOW_IMAGECROP_MODAL(state, payload) {
+            let onUploadImage: any;
+
+            return state.dynamicModal = {
+                name: 'imagecropmodal',
+                props: { show: true, imageSources: payload.images, imageSizeSettings: payload.setting },
+                events: { onSave: onUploadImage }
+            }
         },
         HIDE_MODAL(state) {
             if (state.dynamicModal && (state.dynamicModal as any).props) {

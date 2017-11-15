@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AussieTowns.ViewModel
+namespace FunWithLocal.WebApi.ViewModel
 {
     public class BookingEmailViewModel
     {

@@ -9,6 +9,8 @@ import LoadingComponent from './component/shared/loading.component.vue';
 
 import LoginModal from './component/modal/loginmodal.component.vue';
 import ScheduleModalComponent from './component/modal/schedulemodal.component.vue';
+import ImageCropModalComponent from './component/modal/imagecropmodal.component.vue';
+
 
 import LogService from './service/log.service';
 import router from './router'
@@ -123,7 +125,8 @@ declare module 'vue/types/options' {
         "notifications": NotificationComponent,
         "loading": LoadingComponent,
         'loginmodal': LoginModal,
-        'schedulemodal': ScheduleModalComponent
+        'schedulemodal': ScheduleModalComponent,
+        'imagecropmodal': ImageCropModalComponent
     },
     metaInfo: {
         // if no subcomponents specify a metaInfo.title, this title will be used

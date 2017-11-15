@@ -26,7 +26,7 @@
                 <span class="absolute-center">Uploading ...</span>
                 <ringloader class="absolute-center"></ringloader>
             </div>
-            <upload-image v-if="isEditing" :maxFileAllowed="maxFileAllowed" :maxFileConfig="maxFileConfig" @uploadImages="onUploadImages"></upload-image>
+            <vueUploadImage v-if="isEditing" :maxFileAllowed="maxFileAllowed" :maxFileConfig="maxFileConfig" @uploadImages="onUploadImages"></vueUploadImage>
         </div>
     </div>
 </template>

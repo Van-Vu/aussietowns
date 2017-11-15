@@ -90,6 +90,9 @@ Upload listing & profile image
 
 DONE bug: check availability when not Login
 
+bug can't load font, facebookapi, google api network error
+DONE bug profileLink when wrong when user not log in (loggedInUser is null)
+
 Refactor booking, bookingdetail, bookingManage page
 
 
@@ -100,7 +103,7 @@ image guide: https://images.guide/
 Blog post:
 - Authentication
 - CORS: startup line 177
-
+- Resize and Crop image
 
 Image processing
 dynamic loading module

@@ -1,38 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
 using AussieTowns.Common;
 using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
+using FunWithLocal.WebApi.Services;
+using FunWithLocal.WebApi.ViewModel;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using Newtonsoft.Json;
-using FunWithLocal.WebApi;
 
-
-namespace AussieTowns.Controllers
+namespace FunWithLocal.WebApi.Controllers
 {
     [Route("api/[controller]")]
     public class TestController
     {
         private readonly ILogger _logger;
         private readonly ISearchService _searchService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmailService _emailService;
         private readonly IHostingEnvironment _hostingEnv;
         private readonly AppSettings _appSettings;
+        private readonly ISecurityTokenService _securityTokenService;
 
-        public TestController(ILogger<TestController> logger, ISearchService searchService, IEmailService emailService, IHostingEnvironment hostingEnv, IOptions<AppSettings> appSettings)
+        public TestController(ILogger<TestController> logger, ISearchService searchService,
+            IHttpContextAccessor httpContextAccessor, ISecurityTokenService securityTokenService,
+            IEmailService emailService, IHostingEnvironment hostingEnv, IOptions<AppSettings> appSettings)
         {
             _logger = logger;
             _searchService = searchService;
+            _httpContextAccessor = httpContextAccessor;
             _emailService = emailService;
             _hostingEnv = hostingEnv;
             _appSettings = appSettings.Value;
+            _securityTokenService = securityTokenService;
         }
 
         [HttpGet("test")]
@@ -127,14 +133,59 @@ namespace AussieTowns.Controllers
         }
 
         [HttpGet("welcome")]
-        public void TestWelcomeMail()
+        public async void TestWelcomeMail()
         {
             try
             {
                 //var emailContent = System.IO.File.ReadAllText(_appSettings.WelcomeEmailTemplate);
 
                 //var emailContent = "Hello {firstname}";
-                _emailService.SendWelcomeEmail("cob911@gmail.com");
+                //_emailService.SendWelcomeEmail("cob911@gmail.com");
+                //var test = _httpContextAccessor;
+                //var hosting = _hostingEnv;
+
+                var confirmEmailToken = $"{StringHelper.GetCurrentHostEnvironemnt(_httpContextAccessor)}user/confirmemail/{_securityTokenService.CreateTokenString(new User { Id = 1, Role = 1, Email = "asdasdf@afasd.com" }, DateTime.Now)}";
+
+                var abs = await _emailService.SendWelcomeEmail(new WelcomeEmailViewModel { EmailConfirmationToken = confirmEmailToken }, "tabs+ca48b81e72da@gapps.emailtests.com");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        [HttpGet("encrypt")]
+        public async void Encrypt()
+        {
+            try
+            {
+                var encryptString = _securityTokenService.Encrypt("hey there");
+
+                var decrypt = _securityTokenService.Decrypt(encryptString);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        [HttpGet("reset")]
+        public async void TestResetMail()
+        {
+            try
+            {
+                //var emailContent = System.IO.File.ReadAllText(_appSettings.WelcomeEmailTemplate);
+
+                //var emailContent = "Hello {firstname}";
+                //_emailService.SendWelcomeEmail("cob911@gmail.com");
+                //var test = _httpContextAccessor;
+                //var hosting = _hostingEnv;
+
+                var confirmEmailToken = $"{StringHelper.GetCurrentHostEnvironemnt(_httpContextAccessor)}user/confirmemail/{_securityTokenService.CreateTokenString(new User { Id = 1, Role = 1, Email = "asdasdf@afasd.com" }, DateTime.Now)}";
+
+                var abs = await _emailService.SendResetPasswordEmail(new ResetPasswordEmailViewModel { ResetLink = confirmEmailToken }, "email@gmail.com");
             }
             catch (Exception e)
             {

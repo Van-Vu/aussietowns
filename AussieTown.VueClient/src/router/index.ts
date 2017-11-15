@@ -41,6 +41,7 @@ import BookingDetailPage from '../page/bookingdetail.page.vue';
 import BookingManagePage from '../page/bookingmanage.page.vue';
 import AboutPage from '../page/static/about.page.vue';
 import TermsAndConditionsPage from '../page/static/termsandconditions.page.vue';
+import ConfirmEmailPage from '../page/confirmemail.page.vue';
 
 import App from '../App.vue';
 
@@ -54,6 +55,7 @@ import LoginForm from '../component/form/loginform.component.vue';
 import RegistrationForm from '../component/form/registration.component.vue';
 import ChangePasswordComponent from '../component/profile/changepassword.component.vue';
 import ForgetPasswordForm from '../component/form/forgetpassword.component.vue';
+
 import { UserRole } from '../model/enum';
 
 import Meta from 'vue-meta';
@@ -82,6 +84,15 @@ const router = new Router({
             }
         },
         {
+            path: "/confirmemail/:confirmToken",
+            name: "confirmEmail",
+            component: ConfirmEmailPage,
+            meta: {
+                permission: UserRole.User,
+                fail: '/login'
+            }
+        },
+        {
             path: "/profile/:seoString-:profileId(\\d+)",
             component: ProfilePage,
             children: [
@@ -94,7 +105,7 @@ const router = new Router({
                     meta: {
                         permission: UserRole.User,
                         isPublic: true,
-                        fail: '/home'
+                        fail: '/'
                     }
                 },
                 {
@@ -106,7 +117,7 @@ const router = new Router({
                     meta: {
                         permission: UserRole.Editor,
                         isPublic: false,
-                        fail: '/home'
+                        fail: '/'
                     }
                 },
                 
@@ -119,7 +130,7 @@ const router = new Router({
                     meta: {
                         permission: UserRole.SuperAdmin,
                         isPublic: false,
-                        fail: '/home'
+                        fail: '/'
                     }
                 },
                 {
@@ -129,7 +140,7 @@ const router = new Router({
                     meta: {
                         permission: UserRole.Admin,
                         isPublic: false,
-                        fail: '/home'
+                        fail: '/'
                     }
                 },
                 {
@@ -139,7 +150,7 @@ const router = new Router({
                     meta: {
                         permission: UserRole.SuperAdmin,
                         isPublic: false,
-                        fail: '/home'
+                        fail: '/'
                     }
                 },
                 {
@@ -149,7 +160,7 @@ const router = new Router({
                     meta: {
                         permission: UserRole.SuperAdmin,
                         isPublic: false,
-                        fail: '/home'
+                        fail: '/'
                     }
                 }
             ]
@@ -161,7 +172,7 @@ const router = new Router({
             props: true,
             meta: {
                 permission: UserRole.User,
-                fail: '/home',
+                fail: '/',
                 isPublic: false
             }
         },
@@ -172,7 +183,7 @@ const router = new Router({
             props: true,
             meta: {
                 permission: UserRole.Anonymous,
-                fail: '/home'
+                fail: '/'
             }
         },
         {
@@ -182,7 +193,7 @@ const router = new Router({
             props: true,
             meta: {
                 permission: UserRole.User,
-                fail: '/home',
+                fail: '/',
                 isPublic: false
             }
         },
@@ -193,7 +204,7 @@ const router = new Router({
             props: true,
             meta: {
                 permission: UserRole.User,
-                fail: '/home',
+                fail: '/',
                 isPublic: false
             }
         },
@@ -204,7 +215,7 @@ const router = new Router({
             props: true,
             meta: {
                 permission: UserRole.User,
-                fail: '/home',
+                fail: '/',
                 isPublic: false
             }
         },
@@ -215,7 +226,7 @@ const router = new Router({
             props: true,
             meta: {
                 permission: UserRole.Anonymous,
-                fail: '/home'
+                fail: '/'
             }
         },
         {
@@ -225,7 +236,7 @@ const router = new Router({
             props: true,
             meta: {
                 permission: UserRole.Anonymous,
-                fail: '/home'
+                fail: '/'
             }
         },
         {
@@ -234,9 +245,8 @@ const router = new Router({
             component: ForgetPasswordForm,
             props: true,
             meta: {
-                permission: UserRole.User,
-                fail: '/home',
-                isPublic: false
+                permission: UserRole.Anonymous,
+                fail: '/'
             }
         },
         {
@@ -245,7 +255,7 @@ const router = new Router({
             component: HelpPage,
             meta: {
                 permission: UserRole.Anonymous,
-                fail: '/home'
+                fail: '/'
             }
         },
         {
@@ -254,7 +264,7 @@ const router = new Router({
             component: AboutPage,
             meta: {
                 permission: UserRole.Anonymous,
-                fail: '/home'
+                fail: '/'
             }
         },
         {
@@ -263,7 +273,7 @@ const router = new Router({
             component: TermsAndConditionsPage,
             meta: {
                 permission: UserRole.Anonymous,
-                fail: '/home'
+                fail: '/'
             }
         },
         {
@@ -272,7 +282,7 @@ const router = new Router({
             component: TestPage,
             meta: {
                 permission: UserRole.Anonymous,
-                fail: '/home'
+                fail: '/'
             }
         },
         {
@@ -281,7 +291,7 @@ const router = new Router({
             component: HomePage,
             meta: {
                 permission: UserRole.Anonymous,
-                fail: '/home'
+                fail: '/'
             }
         },
         {

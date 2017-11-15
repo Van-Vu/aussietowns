@@ -11,7 +11,8 @@
                 <h1 id="homepagetyping">Have a blast with real locals.</h1>
             </article>
             <article id="searchBarHomepage">
-                <searchbar @onSelect="onSelect($event)" @onSearch="onSearch($event)" ></searchbar>
+                <!--Bodom: no need for now, come bak later
+                <searchbar @onSelect="onSelect($event)" @onSearch="onSearch($event)" ></searchbar>-->
             </article>
         </section>
 
