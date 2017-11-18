@@ -13,7 +13,10 @@ import { Utils } from '../component/utils';
 import * as Cookies from 'js-cookie';
 import { ScreenSize } from '../model/enum';
 import { detectScreenSize } from '../service/screen.service';
- 
+
+import vMediaQuery from '../component/shared/external/v-media-query';
+Vue.use(vMediaQuery);
+
 @Component({
     name: 'HomePage',
     components: {

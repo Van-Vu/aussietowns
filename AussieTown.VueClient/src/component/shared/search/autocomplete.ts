@@ -3,7 +3,6 @@
 
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import axios from "axios";
 import { SelectedAutocompleteValue, AutocompleteItem } from  '../../../model/autocomplete.model'
 
 

@@ -2,14 +2,14 @@ export var ListingType;
 (function (ListingType) {
     ListingType[ListingType["Offer"] = 0] = "Offer";
     ListingType[ListingType["Request"] = 1] = "Request";
-})(ListingType || (ListingType = {}));
+})(ListingType = ListingType || (ListingType = {}));
 export var RepeatedType;
 (function (RepeatedType) {
     RepeatedType[RepeatedType["None"] = 0] = "None";
     RepeatedType[RepeatedType["Daily"] = 1] = "Daily";
     RepeatedType[RepeatedType["Weekly"] = 2] = "Weekly";
     RepeatedType[RepeatedType["Monthly"] = 3] = "Monthly";
-})(RepeatedType || (RepeatedType = {}));
+})(RepeatedType = RepeatedType || (RepeatedType = {}));
 export var RepeatedDay;
 (function (RepeatedDay) {
     RepeatedDay[RepeatedDay["Monday"] = 1] = "Monday";
@@ -19,13 +19,13 @@ export var RepeatedDay;
     RepeatedDay[RepeatedDay["Friday"] = 16] = "Friday";
     RepeatedDay[RepeatedDay["Saturday"] = 32] = "Saturday";
     RepeatedDay[RepeatedDay["Sunday"] = 64] = "Sunday";
-})(RepeatedDay || (RepeatedDay = {}));
+})(RepeatedDay = RepeatedDay || (RepeatedDay = {}));
 export var UserSource;
 (function (UserSource) {
     UserSource[UserSource["Native"] = 0] = "Native";
     UserSource[UserSource["Facebook"] = 1] = "Facebook";
     UserSource[UserSource["Google"] = 2] = "Google";
-})(UserSource || (UserSource = {}));
+})(UserSource = UserSource || (UserSource = {}));
 export var UserRole;
 (function (UserRole) {
     UserRole[UserRole["Anonymous"] = 0] = "Anonymous";
@@ -33,22 +33,22 @@ export var UserRole;
     UserRole[UserRole["Editor"] = 2] = "Editor";
     UserRole[UserRole["Admin"] = 4] = "Admin";
     UserRole[UserRole["SuperAdmin"] = 8] = "SuperAdmin";
-})(UserRole || (UserRole = {}));
+})(UserRole = UserRole || (UserRole = {}));
 export var UserAction;
 (function (UserAction) {
     UserAction[UserAction["View"] = 0] = "View";
     UserAction[UserAction["Edit"] = 1] = "Edit";
     UserAction[UserAction["Delete"] = 2] = "Delete";
-})(UserAction || (UserAction = {}));
+})(UserAction = UserAction || (UserAction = {}));
 export var NotificationType;
 (function (NotificationType) {
     NotificationType["Success"] = "is-success";
     NotificationType["Warning"] = "is-warning";
     NotificationType["Error"] = "is-error";
-})(NotificationType || (NotificationType = {}));
+})(NotificationType = NotificationType || (NotificationType = {}));
 export var ScreenSize;
 (function (ScreenSize) {
     ScreenSize[ScreenSize["Desktop"] = 0] = "Desktop";
     ScreenSize[ScreenSize["Tablet"] = 1] = "Tablet";
     ScreenSize[ScreenSize["Mobile"] = 2] = "Mobile";
-})(ScreenSize || (ScreenSize = {}));
+})(ScreenSize = ScreenSize || (ScreenSize = {}));

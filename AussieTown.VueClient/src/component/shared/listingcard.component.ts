@@ -6,6 +6,13 @@ import ListingModel from '../../model/listing.model';
 import Swiper from './external/vue-swiper.vue';
 
 
+import lazy from 'vue-lazy-image';
+
+Vue.use(lazy, {
+    loading: '/static/images/loading.gif', //loading image 
+    try: 2, // the count of try to load one image 
+});
+
 @Component({
     name: "CardFull",
     components: {

@@ -21,6 +21,11 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { Utils } from '../utils';
 import Swiper from './external/vue-swiper.vue';
+import lazy from 'vue-lazy-image';
+Vue.use(lazy, {
+    loading: '/static/images/loading.gif',
+    try: 2,
+});
 var CardSmallComponent = /** @class */ (function (_super) {
     __extends(CardSmallComponent, _super);
     function CardSmallComponent() {

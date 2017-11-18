@@ -28,6 +28,8 @@ import { detectScreenSize } from '../service/screen.service';
 import UserSearchComponent from '../component/shared/search/usersearch.component.vue';
 import RingLoader from '../component/shared/external/ringloader.vue';
 import store from '../store';
+import vMediaQuery from '../component/shared/external/v-media-query';
+Vue.use(vMediaQuery);
 var BookingManagePage = /** @class */ (function (_super) {
     __extends(BookingManagePage, _super);
     function BookingManagePage() {

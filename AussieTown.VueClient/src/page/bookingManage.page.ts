@@ -14,6 +14,9 @@ import RingLoader from '../component/shared/external/ringloader.vue';
 
 import store from '../store';
 
+import vMediaQuery from '../component/shared/external/v-media-query';
+Vue.use(vMediaQuery);
+
 @Component({
     name: 'BookingDetailPage',
     components: {

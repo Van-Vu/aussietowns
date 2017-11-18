@@ -5,56 +5,56 @@ import store from '../store';
 
 // LAZY LOADING ATTEMP
 // https://github.com/vuejs/vue-router/issues/1379
-//const HomePage = (resolve) => (require as any)(['../page/home.page.vue'], module => {
-//    resolve(module.default)
-//})
+const HomePage = () => import('../page/home.page.vue')
+
 //const SearchPage = (resolve) => (require as any)(['../page/search.page.vue'], module => {
 //    resolve(module.default)
 //})
-//const ListingPage = (resolve) => (require as any)(['../page/listing.page.vue'], module => {
-//    resolve(module.default)
-//})
-//const ProfilePage = (resolve) => (require as any)(['../page/profile.page.vue'], module => {
-//    resolve(module.default)
-//})
-//const TestPage = (resolve) => (require as any)(['../page/test.page.vue'], module => {
-//    resolve(module.default)
-//})
-//const HelpPage = (resolve) => (require as any)(['../page/static/help.page.vue'], module => {
-//    resolve(module.default)
-//})
-//const AboutPage = (resolve) => (require as any)(['../page/static/about.page.vue'], module => {
-//    resolve(module.default)
-//})
-//const TermsAndConditionsPage = (resolve) => (require as any)(['../page/static/termsandconditions.page.vue'], module => {
-//    resolve(module.default)
-//})
+const ListingPage = () => import('../page/listing.page.vue')
+const ProfilePage = () => import('../page/profile.page.vue')
+const TestPage = () => import('../page/test.page.vue')
+const HelpPage = () => import('../page/static/help.page.vue')
+const AboutPage = () => import('../page/static/about.page.vue')
+const TermsAndConditionsPage = () => import('../page/static/termsandconditions.page.vue')
+const BookingPage = () => import('../page/booking.page.vue')
+const BookingDetailPage = () => import('../page/bookingdetail.page.vue')
+const BookingManagePage = () => import('../page/bookingmanage.page.vue')
+const ConfirmEmailPage = () => import('../page/confirmemail.page.vue')
 
-import HomePage from '../page/home.page.vue';
-import SearchPage from '../page/search.page.vue';
-import ListingPage from '../page/listing.page.vue';
-import ProfilePage from '../page/profile.page.vue';
-import TestPage from '../page/test.page.vue';
-import HelpPage from '../page/static/help.page.vue';
-import BookingPage from '../page/booking.page.vue'
-import BookingDetailPage from '../page/bookingdetail.page.vue';
-import BookingManagePage from '../page/bookingmanage.page.vue';
-import AboutPage from '../page/static/about.page.vue';
-import TermsAndConditionsPage from '../page/static/termsandconditions.page.vue';
-import ConfirmEmailPage from '../page/confirmemail.page.vue';
+const MessageComponent = () => import('../component/profile/message.component.vue')
+const TripComponent = () => import('../component/profile/trip.component.vue')
+const UserImageComponent = () => import('../component/profile/userimage.component.vue')
+const UserDetailComponent = () => import('../component/profile/userdetail.component.vue')
+const ListingsComponent = () => import('../component/profile/listings.component.vue')
 
-import App from '../App.vue';
+const LoginForm = () => import('../component/form/loginform.component.vue')
+const RegistrationForm = () => import('../component/form/registration.component.vue')
+const ChangePasswordComponent = () => import('../component/profile/changepassword.component.vue')
+const ForgetPasswordForm = () => import('../component/form/forgetpassword.component.vue')
 
-import MessageComponent from '../component/profile/message.component.vue';
-import TripComponent from '../component/profile/trip.component.vue';
-import UserImageComponent from '../component/profile/userimage.component.vue';
-import UserDetailComponent from '../component/profile/userdetail.component.vue';
-import ListingsComponent from '../component/profile/listings.component.vue';
+//import HomePage from '../page/home.page.vue';
+//import SearchPage from '../page/search.page.vue';
+//import ListingPage from '../page/listing.page.vue';
+//import ProfilePage from '../page/profile.page.vue';
+//import TestPage from '../page/test.page.vue';
+//import HelpPage from '../page/static/help.page.vue';
+//import BookingPage from '../page/booking.page.vue'
+//import BookingDetailPage from '../page/bookingdetail.page.vue';
+//import BookingManagePage from '../page/bookingmanage.page.vue';
+//import AboutPage from '../page/static/about.page.vue';
+//import TermsAndConditionsPage from '../page/static/termsandconditions.page.vue';
+//import ConfirmEmailPage from '../page/confirmemail.page.vue';
 
-import LoginForm from '../component/form/loginform.component.vue';
-import RegistrationForm from '../component/form/registration.component.vue';
-import ChangePasswordComponent from '../component/profile/changepassword.component.vue';
-import ForgetPasswordForm from '../component/form/forgetpassword.component.vue';
+//import MessageComponent from '../component/profile/message.component.vue';
+//import TripComponent from '../component/profile/trip.component.vue';
+//import UserImageComponent from '../component/profile/userimage.component.vue';
+//import UserDetailComponent from '../component/profile/userdetail.component.vue';
+//import ListingsComponent from '../component/profile/listings.component.vue';
+
+//import LoginForm from '../component/form/loginform.component.vue';
+//import RegistrationForm from '../component/form/registration.component.vue';
+//import ChangePasswordComponent from '../component/profile/changepassword.component.vue';
+//import ForgetPasswordForm from '../component/form/forgetpassword.component.vue';
 
 import { UserRole } from '../model/enum';
 
@@ -74,15 +74,15 @@ Vue.use(Meta, {
 const router = new Router({
     mode: 'history',
     routes: [
-        {
-            path: "/search/:seoString-:suburbId(\\d+)",
-            name: "search",
-            component: SearchPage,
-            meta: {
-                permission: UserRole.User,
-                fail: '/login'
-            }
-        },
+        //{
+        //    path: "/search/:seoString-:suburbId(\\d+)",
+        //    name: "search",
+        //    component: SearchPage,
+        //    meta: {
+        //        permission: UserRole.User,
+        //        fail: '/login'
+        //    }
+        //},
         {
             path: "/confirmemail/:confirmToken",
             name: "confirmEmail",

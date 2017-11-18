@@ -15,8 +15,13 @@ import NumberChooser from '../component/shared/numberchooser.component.vue';
 import { ScreenSize, NotificationType, UserRole, UserAction } from '../model/enum';
 import { detectScreenSize } from '../service/screen.service';
 import AvailabilityComponent from '../component/booking/availability.component.vue';
+import VueMask from 'v-mask';
 
+Vue.use(VueMask);
 Vue.use(VeeValidate);
+
+import vMediaQuery from '../component/shared/external/v-media-query';
+Vue.use(vMediaQuery);
 
 @Component({
     name: 'ListingPage',

@@ -9,7 +9,8 @@
                     :pagination-visible="false"
                     :pagination-clickable="false"
                     @slide-change-end="onSlideChangeEnd"
-                    :loop="false">
+                    :loop="false"
+                    :totalImage="images.length">
                 <div v-if="images.length > 0" v-for="image in images">
                     <img :src="image.url" :alt="image.url"/>
                 </div>

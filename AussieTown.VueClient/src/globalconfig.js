@@ -6,7 +6,7 @@ export var GlobalConfig;
     GlobalConfig.profileImageSize = { maxWidth: 170, maxHeight: 170 };
     GlobalConfig.listingImageSize = { maxWidth: 640, maxHeight: 360 };
     GlobalConfig.accessControl = { dev: "http://localhost:3000", prod: "https://www.funwithlocal.com" };
-})(GlobalConfig || (GlobalConfig = {}));
+})(GlobalConfig = GlobalConfig || (GlobalConfig = {}));
 //const install = (Vue, options) => {
 //    Vue.prototype.$config = Vue.$config = {base: 'asdfasdfasfda'}
 //} 

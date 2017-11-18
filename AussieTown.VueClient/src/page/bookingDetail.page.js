@@ -27,6 +27,10 @@ import { ScreenSize } from '../model/enum';
 import { detectScreenSize } from '../service/screen.service';
 import UserSearchComponent from '../component/shared/search/usersearch.component.vue';
 import RingLoader from '../component/shared/external/ringloader.vue';
+import vMediaQuery from '../component/shared/external/v-media-query';
+Vue.use(vMediaQuery);
+import VueMask from 'v-mask';
+Vue.use(VueMask);
 var BookingDetailPage = /** @class */ (function (_super) {
     __extends(BookingDetailPage, _super);
     function BookingDetailPage() {

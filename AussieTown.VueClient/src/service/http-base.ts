@@ -2,7 +2,6 @@ import axios from 'axios';
 import Vue from "vue";
 import { NotificationType } from '../model/enum';
 import store from '../store';
-import router from '../router';
 import { Utils } from '../component/utils';
 import { GlobalConfig } from '../GlobalConfig';
 
@@ -72,7 +71,6 @@ http.interceptors.response.use(response => {
 
     if (response) {
         Utils.handleError(store, response);
-        router.push("home");
     }
 
     // Do something with response error

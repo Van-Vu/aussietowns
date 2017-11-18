@@ -15,6 +15,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: '[name].[chunkhash].js',
+    chunkFilename: '[name]-chunk.[chunkhash].js',
     publicPath: '/dist/'
   },
   resolve: {
@@ -75,10 +76,10 @@ module.exports = {
         new webpack.optimize.UglifyJsPlugin({
             compress: { warnings: false }
         }),
-        new webpack.optimize.ModuleConcatenationPlugin(),
-        new ExtractTextPlugin({
-            filename: 'common.[chunkhash].css'
-        })
+        new webpack.optimize.ModuleConcatenationPlugin()
+        //new ExtractTextPlugin({
+        //    filename: 'common.[chunkhash].css'
+        //})
     ]
     : [
         new FriendlyErrorsPlugin()

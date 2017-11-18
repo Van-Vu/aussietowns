@@ -13,6 +13,15 @@ import { Utils } from '../component/utils';
 import RingLoader from '../component/shared/external/ringloader.vue';
 
 import store from '../store';
+import VueFormWizard from 'vue-form-wizard';
+Vue.use(VueFormWizard);
+
+import VueMask from 'v-mask';
+Vue.use(VueMask);
+
+import vMediaQuery from '../component/shared/external/v-media-query';
+Vue.use(vMediaQuery);
+
 
 @Component({
     name: 'BookingPage',

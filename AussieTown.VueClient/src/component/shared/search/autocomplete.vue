@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script>
+<script  lang="ts">
   import AutoCompleteComponent from "./autocomplete.ts";
   export default AutoCompleteComponent;
 </script>

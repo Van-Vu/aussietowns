@@ -26,6 +26,10 @@ import { UserSource, UserRole } from '../../model/enum';
 import { fetchPublicKey, decryptTextFromServer, requestPasswordReset, encryptText } from '../../service/auth.service';
 import { NotificationType } from '../../model/enum';
 Vue.use(VeeValidate);
+import GSignInButton from 'vue-google-signin-button';
+Vue.use(GSignInButton);
+import FBSignInButton from 'vue-facebook-signin-button';
+Vue.use(FBSignInButton);
 var LoginForm = /** @class */ (function (_super) {
     __extends(LoginForm, _super);
     function LoginForm() {

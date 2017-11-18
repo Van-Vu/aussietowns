@@ -23,6 +23,8 @@ import CardFullComponent from '../component/shared/listingcard.component.vue';
 import { Utils } from '../component/utils';
 import { ScreenSize } from '../model/enum';
 import { detectScreenSize } from '../service/screen.service';
+import vMediaQuery from '../component/shared/external/v-media-query';
+Vue.use(vMediaQuery);
 var HomePage = /** @class */ (function (_super) {
     __extends(HomePage, _super);
     function HomePage() {

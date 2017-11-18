@@ -26,6 +26,8 @@ import ImageUploadComponent from '../shared/imageupload.component.vue';
 import ImageCropComponent from '../shared/imagecrop.component.vue';
 import { GlobalConfig } from '../../GlobalConfig';
 import ImageService from '../../service/image.service';
+import VueMask from 'v-mask';
+Vue.use(VueMask);
 Vue.use(VeeValidate);
 var UserDetailComponent = /** @class */ (function (_super) {
     __extends(UserDetailComponent, _super);

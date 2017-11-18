@@ -12,6 +12,13 @@ import { NotificationType } from '../../model/enum';
 
 Vue.use(VeeValidate);
 
+import GSignInButton from 'vue-google-signin-button';
+Vue.use(GSignInButton);
+
+import FBSignInButton from 'vue-facebook-signin-button';
+Vue.use(FBSignInButton);
+
+
 declare const FB: any;
 declare const gapi: any;
 declare const JSEncrypt: any;

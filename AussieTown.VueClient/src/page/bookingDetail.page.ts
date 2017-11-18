@@ -14,6 +14,13 @@ import RingLoader from '../component/shared/external/ringloader.vue';
 
 import store from '../store';
 
+import vMediaQuery from '../component/shared/external/v-media-query';
+Vue.use(vMediaQuery);
+
+import VueMask from 'v-mask';
+Vue.use(VueMask);
+
+
 @Component({
     name: 'BookingDetailPage',
     components: {

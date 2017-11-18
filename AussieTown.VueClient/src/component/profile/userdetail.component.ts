@@ -19,6 +19,9 @@ import { GlobalConfig } from '../../GlobalConfig';
 
 import ImageService from '../../service/image.service';
 
+import VueMask from 'v-mask';
+
+Vue.use(VueMask);
 Vue.use(VeeValidate);
 
 @Component({

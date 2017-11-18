@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Vue from "vue";
 import store from '../store';
-import router from '../router';
 import { Utils } from '../component/utils';
 import { GlobalConfig } from '../GlobalConfig';
 Vue.prototype.$http = axios;
@@ -55,7 +54,6 @@ http.interceptors.response.use(function (response) {
     console.log('Bodom handleError');
     if (response) {
         Utils.handleError(store, response);
-        router.push("home");
     }
     // Do something with response error
     if (error.response)

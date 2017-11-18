@@ -59,18 +59,6 @@
                 </div>
             </div>
         </div>
-        <!--<form-wizard v-else title="Awesome"
-                        subtitle="Your host has been notified ! He will contact you soon to process futher">
-            <template slot="footer" scope="props">
-                <div class=wizard-footer-left>
-                </div>
-                <div class="wizard-footer-right">
-                </div>
-            </template>
-            <tab-content title="Finish"
-                            icon="icon icon-checkbox-checked">
-            </tab-content>
-        </form-wizard>-->
         <div class="tile is-vertical" :class="{'is-sticky-box': isStickyBoxRequired}">
             <div class="field box">
                 <div class="box-header-strip"></div>

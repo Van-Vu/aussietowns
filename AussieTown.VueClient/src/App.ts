@@ -15,8 +15,6 @@ import ImageCropModalComponent from './component/modal/imagecropmodal.component.
 import LogService from './service/log.service';
 import router from './router'
 
-import "reflect-metadata";
-
 //if (process.env.VUE_ENV === 'client') {
 //    Vue.component('datepicker', require('vuejs-datepicker'))
 //    Vue.component('vue-timepicker', require('vue2-timepicker'))
@@ -25,19 +23,6 @@ import "reflect-metadata";
 import VueCookie from 'vue-js-cookie';
 Vue.use(VueCookie);
 
-
-import GSignInButton from 'vue-google-signin-button';
-Vue.use(GSignInButton);
-
-import FBSignInButton from 'vue-facebook-signin-button';
-Vue.use(FBSignInButton);
-
-import lazy from 'vue-lazy-image';
-
-Vue.use(lazy, {
-    loading: '/static/images/loading.gif', //loading image 
-    try: 2, // the count of try to load one image 
-});
 
 import Acl from './plugin/vue-acl';
 Vue.use(Acl, { router: router, init: 'any' });
@@ -65,29 +50,16 @@ Vue.directive('focus', {
     //}
 })
 
-import VueMask from 'v-mask';
-Vue.use(VueMask);
-
-import vMediaQuery from './component/shared/external/v-media-query';
-Vue.use(vMediaQuery);
-
 Vue.config.errorHandler = function (err, vm, info) {
     // handle error
     // `info` is a Vue-specific error info, e.g. which lifecycle hook
     // the error was found in. Only available in 2.2.0+
 
-    console.log('damn it!');
     console.log(info);
     console.log(err);
 
     (new LogService()).logError(err.message, err.stack);
 }
-
-import VueFormWizard from 'vue-form-wizard';
-Vue.use(VueFormWizard);
-
-import VueTheMask from 'vue-the-mask';
-Vue.use(VueTheMask);
 
 import { Validator } from 'vee-validate';
 
@@ -130,14 +102,17 @@ declare module 'vue/types/options' {
     },
     metaInfo: {
         // if no subcomponents specify a metaInfo.title, this title will be used
-        title: 'Default Title',
+        title: 'Fun with Local',
         // all titles will be injected into this template
-        titleTemplate: '%s | My Awesome Webapp',
+        titleTemplate: '%s | FWL',
         meta: [
             { charset: 'utf-8' },
             { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },
             { name: 'theme-color', content: '#99CD4E' },
             { name: 'mobile-web-app-capable', content: 'yes' }
+        ],
+        link: [
+            { rel: 'manifest', href: '/static/manifest.json' }
         ]
     }
 })

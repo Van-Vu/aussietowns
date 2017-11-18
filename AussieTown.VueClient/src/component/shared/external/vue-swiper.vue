@@ -74,6 +74,10 @@
             showNavButton: {
                 type: Boolean,
                 default: false
+            },
+            totalImage: {
+                type: Number,
+                default: 0
             }
         },
         data() {
@@ -157,6 +161,8 @@
                 }
             },
             isNextAvailable(){
+                if (this.totalImage < 1) return false;
+                
                 if (this.$refs.wrap){
                     return !Utils.isElementInViewport(this.$refs.wrap.lastElementChild);
                 }

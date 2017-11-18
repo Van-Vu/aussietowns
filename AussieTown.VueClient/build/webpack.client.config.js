@@ -47,12 +47,24 @@ var webpackConfig = merge(baseWebpackConfig, {
             )
         }
     }),
+
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'veevalidate',
+        minChunks(module, count) {
+            var context = module.context;
+            var targets = ['vee-validate']
+            return context && context.indexOf('node_modules') >= 0 && targets.find(t => new RegExp('\\\\' + t + '\\\\', 'i').test(context));
+        },
+    }),
+
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
-    new webpack.optimize.CommonsChunkPlugin({
-        name: 'manifest',
-        chunks: ['vendor']
-    }),
+    //new webpack.optimize.CommonsChunkPlugin({
+    //    name: 'manifest',
+    //    chunks: ['vendor']
+    //}),
+
+
     // copy custom static assets
     new CopyWebpackPlugin([
       {
