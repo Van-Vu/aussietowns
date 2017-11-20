@@ -46,7 +46,6 @@ Vue.config.errorHandler = function (err, vm, info) {
     // handle error
     // `info` is a Vue-specific error info, e.g. which lifecycle hook
     // the error was found in. Only available in 2.2.0+
-    console.log('damn it!');
     console.log(info);
     console.log(err);
     (new LogService()).logError(err.message, err.stack);
@@ -187,9 +186,9 @@ var App = /** @class */ (function (_super) {
             },
             metaInfo: {
                 // if no subcomponents specify a metaInfo.title, this title will be used
-                title: 'Default Title',
+                title: 'Fun with Local',
                 // all titles will be injected into this template
-                titleTemplate: '%s | My Awesome Webapp',
+                titleTemplate: '%s | FWL',
                 meta: [
                     { charset: 'utf-8' },
                     { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },

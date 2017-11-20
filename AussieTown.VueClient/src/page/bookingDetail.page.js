@@ -23,8 +23,6 @@ import UserModel from '../model/user.model';
 import BookingService from '../service/booking.service';
 import { plainToClass, classToPlain } from "class-transformer";
 import AvailabilityComponent from '../component/booking/availability.component.vue';
-import { ScreenSize } from '../model/enum';
-import { detectScreenSize } from '../service/screen.service';
 import UserSearchComponent from '../component/shared/search/usersearch.component.vue';
 import RingLoader from '../component/shared/external/ringloader.vue';
 import vMediaQuery from '../component/shared/external/v-media-query';
@@ -35,7 +33,7 @@ var BookingDetailPage = /** @class */ (function (_super) {
     __extends(BookingDetailPage, _super);
     function BookingDetailPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.isStickyBoxRequired = true;
+        _this.isStickyBoxRequired = false;
         _this.isBooked = false;
         _this.isLoading = false;
         _this.errorMsg = '';
@@ -59,18 +57,18 @@ var BookingDetailPage = /** @class */ (function (_super) {
     BookingDetailPage.prototype.created = function () {
     };
     BookingDetailPage.prototype.mounted = function () {
-        var screenSize = detectScreenSize(this.$mq);
-        switch (screenSize) {
-            case ScreenSize.Desktop:
-                this.isStickyBoxRequired = true;
-                break;
-            case ScreenSize.Tablet:
-                this.isStickyBoxRequired = false;
-                break;
-            case ScreenSize.Mobile:
-                this.isStickyBoxRequired = false;
-                break;
-        }
+        //var screenSize = detectScreenSize(this.$mq);
+        //switch (screenSize) {
+        //    case ScreenSize.Desktop:
+        //        this.isStickyBoxRequired = true;
+        //        break;
+        //    case ScreenSize.Tablet:
+        //        this.isStickyBoxRequired = false;
+        //        break;
+        //    case ScreenSize.Mobile:
+        //        this.isStickyBoxRequired = false;
+        //        break;
+        //}
     };
     BookingDetailPage.prototype.onModify = function () {
         var _this = this;

@@ -179,30 +179,25 @@
                 </tab-content>
             </form-wizard>
         </div>
-        <div class="tile is-vertical" :class="{'is-sticky-box': isStickyBoxRequired}">
-            <div class="field box">
+        <div class="tile is-parent">
+            <div class="tile is-child is-vertical box">
                 <div class="box-header-strip"></div>
                 <router-link :to="{ name: 'listingDetail', params: { seoString: model.listing.headerLink, listingId: model.listing.id }}">
-                    <h2 class="listing-headertext">{{ model.listing.header }}</h2>
+                    <h2 class="tile is-child listing-headertext">{{ model.listing.header }}</h2>
                 </router-link>
-                <a class="columns listing-headertext" >
-                    
-                </a>
-                <div class="columns">
-                    <div class="column is-2" for="firstName">Date</div>
-                    <div class="column">{{ model.bookingDate }}</div>
+                <div class="tile is-child">
+                    <div class="tile is-2" for="firstName">Date</div>
+                    <div class="tile">{{ model.bookingDate }}</div>
                 </div>
-                <div class="columns">
-                    <div class="column is-2" for="firstName">Time</div>
-                    <div class="column">{{ model.bookingTime }}</div>
-                    </div>
-                <div class="tile">
+                <div class="tile is-child">
+                    <div class="tile is-2" for="firstName">Time</div>
+                    <div class="tile">{{ model.bookingTime }}</div>
+                </div>
+                <div class="tile is-child">
                     {{ model.listing.description }}
                 </div>
             </div>
-
         </div>
-
     </div>
 </template>
 

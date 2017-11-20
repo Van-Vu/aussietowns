@@ -32,11 +32,6 @@
             }
         }
 
-        .icon {
-            right: 10px !important;
-            top: 10px;
-        }
-
         &_heroimage, &_profileimage {
             background-image: linear-gradient(-135deg,#70e1f5,#ffd194);
             overflow: hidden;
@@ -92,4 +87,8 @@
     .is-profile {
         width: 100%;
     }
+}
+
+.changepassword {
+    align-items: center;
 }

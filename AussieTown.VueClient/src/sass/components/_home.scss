@@ -115,10 +115,12 @@
 /* The typing effect */
 @-webkit-keyframes typing {
     0% { width: 0 }
+    20% { width: 0 }
   100% { width: 100% }
 }
 @keyframes typing {
     0% { width: 0 }
+    20% { width: 0 }
   100% { width: 100% }
 }
 

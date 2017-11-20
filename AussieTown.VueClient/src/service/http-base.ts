@@ -12,13 +12,13 @@ import { GlobalConfig } from '../GlobalConfig';
 //    baseURL: `http://10.0.0.98/meetthelocal/`
 //})
 
-//export const http = axios.create({
-//    baseURL: `http://localhost/meetthelocal/`
-//})
-
-const http = axios.create({
-    baseURL: `http://localhost:8888/`,
+export const http = axios.create({
+    baseURL: `http://localhost/meetthelocal/`
 })
+
+//const http = axios.create({
+//    baseURL: `http://localhost:8888/`,
+//})
 
 
 

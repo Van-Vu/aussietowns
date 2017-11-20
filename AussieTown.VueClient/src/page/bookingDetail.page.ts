@@ -41,7 +41,7 @@ export default class BookingDetailPage extends Vue {
     @Prop() bookingId: string;
     @Prop() seoString: string;
 
-    isStickyBoxRequired: boolean = true;
+    isStickyBoxRequired: boolean = false;
     isBooked: boolean = false;
     isLoading = false;
     errorMsg = '';
@@ -64,20 +64,20 @@ export default class BookingDetailPage extends Vue {
     }
 
     mounted() {
-        var screenSize = detectScreenSize(this.$mq);
-        switch (screenSize) {
-            case ScreenSize.Desktop:
-                this.isStickyBoxRequired = true;
-                break;
+        //var screenSize = detectScreenSize(this.$mq);
+        //switch (screenSize) {
+        //    case ScreenSize.Desktop:
+        //        this.isStickyBoxRequired = true;
+        //        break;
 
-            case ScreenSize.Tablet:
-                this.isStickyBoxRequired = false;
-                break;
+        //    case ScreenSize.Tablet:
+        //        this.isStickyBoxRequired = false;
+        //        break;
 
-            case ScreenSize.Mobile:
-                this.isStickyBoxRequired = false;
-                break;
-        }
+        //    case ScreenSize.Mobile:
+        //        this.isStickyBoxRequired = false;
+        //        break;
+        //}
     }
 
     onModify() {

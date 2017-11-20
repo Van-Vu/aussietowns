@@ -1,13 +1,13 @@
 ﻿<template>
-    <div class="page-content container tile is-vertical">
+    <div class="page-content tile">
         <div v-if="true" class="tile is-8 is-vertical is-parent">
-            <div class="tile is-vertical box">
+            <div class="tile is-child is-vertical box">
                 <div class="box-header-strip"></div>
                 <availability :bookingDate="model.bookingDate" :bookingTime="model.bookingTime"
                     @bookingDateChanged="onBookingDateChanged" @bookingTimeChanged="onBookingTimeChanged">
                 </availability>
             </div>
-            <div class="tile is-vertical box">
+            <div class="tile is-child is-vertical box">
                 <div class="box-header-strip"></div>
                 <ul class="wrap-collabsible">
                     <li class="tile is-vertical is-parent" v-for="(user, index) in model.participants">
@@ -73,33 +73,29 @@
                     </li>
                 </ul>
             </div>
-            <div class="container is-gapless is-flex is-sticky-bottom">
-                <button class="column is-half button mtl_button-no-round" @click="onModify">Modify</button>
-                <button class="column is-half button mtl_button-no-round" @click="onWithdraw">Withdraw</button>
+            <div class="tile is-parent is-flex is-sticky-bottom">
+                <button class="tile is-half is-child button mtl_button-no-round" @click="onModify">Modify</button>
+                <button class="tile is-half is-child button mtl_button-no-round" @click="onWithdraw">Withdraw</button>
             </div>
         </div>
-        <div class="tile is-vertical" :class="{'is-sticky-box': isStickyBoxRequired}">
-            <div class="field box">
+        <div class="tile is-parent">
+            <div class="tile is-child is-vertical box">
                 <div class="box-header-strip"></div>
                 <router-link :to="{ name: 'listingDetail', params: { seoString: model.listing.headerLink, listingId: model.listing.id }}">
-                    <h2 class="listing-headertext">{{ model.listing.header }}</h2>
+                    <h2 class="tile is-child listing-headertext">{{ model.listing.header }}</h2>
                 </router-link>
-                <a class="columns listing-headertext">
-
-                </a>
-                <div class="columns">
-                    <div class="column is-2" for="firstName">Date</div>
-                    <div class="column">{{ model.bookingDate }}</div>
+                <div class="tile is-child">
+                    <div class="tile is-2" for="firstName">Date</div>
+                    <div class="tile">{{ model.bookingDate }}</div>
                 </div>
-                <div class="columns">
-                    <div class="column is-2" for="firstName">Time</div>
-                    <div class="column">{{ model.bookingTime }}</div>
+                <div class="tile is-child">
+                    <div class="tile is-2" for="firstName">Time</div>
+                    <div class="tile">{{ model.bookingTime }}</div>
                 </div>
-                <div class="tile">
+                <div class="tile is-child">
                     {{ model.listing.description }}
                 </div>
             </div>
-
         </div>
     </div>
 </template>

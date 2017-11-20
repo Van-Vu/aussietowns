@@ -184,9 +184,6 @@ export default class App extends Vue {
             }
             //  start the progress bar
             this.$Progress.start();
-            if (process.env.VUE_ENV === 'client') {
-                window.scrollTo(0, 0);
-            }
             //  continue to next page
             next();
         })
@@ -194,6 +191,9 @@ export default class App extends Vue {
         this.$router.afterEach((to, from) => {
             //  finish the progress bar
             this.$Progress.finish();
+            if (process.env.VUE_ENV === 'client') {
+                window.scrollTo(0, 0);
+            }
         })
 
     }

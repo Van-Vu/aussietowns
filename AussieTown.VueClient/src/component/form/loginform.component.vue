@@ -1,13 +1,13 @@
 ﻿<template>
     <div>
         <div v-show="!isForgotPassword" class="tile  is-vertical">
-            <div class="columns is-parent">
-                <fb-signin-button class="column is-6 fb-signin-button box" :params="fbSignInParams"
+            <div class="tile is-parent">
+                <fb-signin-button class="tile is-6 fb-signin-button box" :params="fbSignInParams"
                                   @success="onFbSignInSuccess"
                                   @error="onFbSignInError">
                     <span>FACEBOOK</span>
                 </fb-signin-button>
-                <g-signin-button class="column is-6 g-signin-button box" :params="googleSignInParams"
+                <g-signin-button class="tile is-6 g-signin-button box" :params="googleSignInParams"
                                  @success="onGgSignInSuccess"
                                  @error="onGgSignInError">
                     <span>GOOGLE</span>
@@ -21,6 +21,8 @@
             <form @submit.prevent="validateBeforeSubmit" v-if="!formSubmitted">
                 <div class="field">
                     <p class="control has-icon has-icon-right">
+                        <!--data-vv-validate-on="'blur'"
+                        v-model.lazy="model.email"-->
                         <input name="email" v-model="model.email" v-validate="'required|email'"
                                :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="Enter your email">
                         <span class="icon">

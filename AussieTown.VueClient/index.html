@@ -144,14 +144,32 @@
     //    statusChangeCallback(response);
     //});
 </script>
+    
+    
 
-<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+
 <script>
-    WebFont.load({
+    // https://stackoverflow.com/questions/9863931/how-can-i-detect-when-a-google-web-font-is-ready-and-displayed-in-the-page
+    WebFontConfig = {
         google: {
             families: ['Nothing You Could Do']
+        },
+        /* Called when all of the web fonts have either finished loading or failed to load, as long as at least one loaded successfully. */
+        active: function () {
+            console.log('font ready');
         }
-    });
+    };
+
+    /* async! */
+    (function () {
+        var wf = document.createElement('script');
+        wf.src = ('https:' == document.location.protocol ? 'https' : 'http') + '://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+        wf.type = 'text/javascript';
+        wf.async = 'true';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(wf, s);
+    })();
+
 </script>
 </body>
 </html>

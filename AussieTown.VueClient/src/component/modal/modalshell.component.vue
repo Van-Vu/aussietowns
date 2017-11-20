@@ -8,10 +8,6 @@
             <section class="modal-card-body">
                 <slot name="body"></slot>
             </section>
-            <!--<footer class="modal-card-foot">
-                <slot name="footer">
-                </slot>
-            </footer>-->
         </section>
     </transition>
 </template>

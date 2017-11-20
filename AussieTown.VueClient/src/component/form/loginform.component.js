@@ -20,6 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
 import UserService from '../../service/user.service';
+import { Validator } from 'vee-validate';
 import VeeValidate from 'vee-validate';
 import LoginModel from '../../model/login.model';
 import { UserSource, UserRole } from '../../model/enum';
@@ -52,6 +53,21 @@ var LoginForm = /** @class */ (function (_super) {
     }
     LoginForm.prototype.onisLoginChanged = function (value, oldValue) {
         this.$validator.reset();
+    };
+    LoginForm.prototype.created = function () {
+        Validator.extend('verify_coupon', {
+            getMessage: function (field) { return "The " + field + " is not a valid coupon."; },
+            validate: function (value) { return new Promise(function (resolve) {
+                // API call or database access.
+                var validCoupons = ['SUMMER2016', 'WINTER2016', 'FALL2016'];
+                setTimeout(function () {
+                    resolve({
+                        valid: value && validCoupons.indexOf(value.toUpperCase()) !== -1
+                    });
+                }, 500);
+            }); }
+        });
+        this.$validator.attach('coupon', 'required|verify_coupon');
     };
     LoginForm.prototype.validateBeforeSubmit = function (e) {
         var _this = this;

@@ -90,11 +90,13 @@ Upload listing & profile image
 
 DONE bug: check availability when not Login
 
-bug can't load font, facebookapi, google api network error
+DONE bug can't load font, facebookapi, google api network error
 DONE bug profileLink when wrong when user not log in (loggedInUser is null)
+DONE dynamic loading module
 
 Refactor booking, bookingdetail, bookingManage page
-
+Custom / Async validation: http://vee-validate.logaretm.com/examples.html#validate-form
+DONE Transition
 
 image guide: https://images.guide/
 	https://cloudinary.com/pricing
@@ -106,7 +108,7 @@ Blog post:
 - Resize and Crop image
 
 Image processing
-dynamic loading module
+
 
 Tech debt:
 DONE use: https://github.com/weilao/vue-swiper but imitate https://github.com/warpcgd/vue-slider

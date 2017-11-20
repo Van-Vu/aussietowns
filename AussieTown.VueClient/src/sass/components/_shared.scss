@@ -53,7 +53,7 @@
 }
 
 .page-content {
-    width: 100%;
+    width: 97%;
     top: $size-header-height;
     margin-bottom: $size-header-height !important;
     margin-left: auto;
@@ -61,7 +61,7 @@
 
     @media all and (min-width: $is-tablet) {
         top: 0;
-        width:80%;
+        width:95%;
         max-width: $is-widescreen;
     }
 }
@@ -77,7 +77,7 @@
     }
 }
 
-.tile.is-4, .tile.is-3, .tile.is-2 {
+.tile.is-4, .tile.is-3, .tile.is-2, .tile.is-5 {
     font-weight: 700;
     align-items: center;
     justify-content: flex-start;
@@ -87,4 +87,49 @@ input[type="checkbox"] {
     border-color: #b8b8bd;
     border-width: .2rem;
     border-radius: .3rem;
+}
+
+.quad {
+   > li {
+        width:25%;
+          float:left;
+  display:inline;
+    }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.slide-fade-enter-active {
+  animation: fadeInLeft .5s;
+}
+
+@keyframes fadeOutRight {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+.slide-fade-leave-active {
+  animation: fadeOutRight .5s;
+}
+
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
 }

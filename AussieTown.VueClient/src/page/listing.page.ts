@@ -43,7 +43,7 @@ export default class ListingPage extends Vue{
     isOffer: boolean = false;
     isEditing: boolean = false;
     editingSchedule: ScheduleModel = null;
-    isStickyBoxRequired: boolean = true;
+    isStickyBoxRequired: boolean = false;
 
     $mq: any;
     $auth: any;
@@ -89,20 +89,20 @@ export default class ListingPage extends Vue{
     }
 
     mounted() {
-        var screenSize = detectScreenSize(this.$mq);
-        switch (screenSize) {
-            case ScreenSize.Desktop:
-                this.isStickyBoxRequired = true;
-                break;
+        //var screenSize = detectScreenSize(this.$mq);
+        //switch (screenSize) {
+        //    case ScreenSize.Desktop:
+        //        this.isStickyBoxRequired = true;
+        //        break;
 
-            case ScreenSize.Tablet:
-                this.isStickyBoxRequired = false;
-                break;
+        //    case ScreenSize.Tablet:
+        //        this.isStickyBoxRequired = false;
+        //        break;
 
-            case ScreenSize.Mobile:
-                this.isStickyBoxRequired = false;
-                break;
-        }        
+        //    case ScreenSize.Mobile:
+        //        this.isStickyBoxRequired = false;
+        //        break;
+        //}        
 
         if (!(this.$route.params as any).listingId) {
             this.isEditing = true;

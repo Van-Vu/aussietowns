@@ -29,8 +29,7 @@ import { ListingType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
 import ImageUploadComponent from '../component/shared/imageupload.component.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
-import { ScreenSize, NotificationType, UserRole, UserAction } from '../model/enum';
-import { detectScreenSize } from '../service/screen.service';
+import { NotificationType, UserRole, UserAction } from '../model/enum';
 import AvailabilityComponent from '../component/booking/availability.component.vue';
 import VueMask from 'v-mask';
 Vue.use(VueMask);
@@ -45,7 +44,7 @@ var ListingPage = /** @class */ (function (_super) {
         _this.isOffer = false;
         _this.isEditing = false;
         _this.editingSchedule = null;
-        _this.isStickyBoxRequired = true;
+        _this.isStickyBoxRequired = false;
         _this.modelCache = null;
         return _this;
     }
@@ -96,18 +95,18 @@ var ListingPage = /** @class */ (function (_super) {
         configurable: true
     });
     ListingPage.prototype.mounted = function () {
-        var screenSize = detectScreenSize(this.$mq);
-        switch (screenSize) {
-            case ScreenSize.Desktop:
-                this.isStickyBoxRequired = true;
-                break;
-            case ScreenSize.Tablet:
-                this.isStickyBoxRequired = false;
-                break;
-            case ScreenSize.Mobile:
-                this.isStickyBoxRequired = false;
-                break;
-        }
+        //var screenSize = detectScreenSize(this.$mq);
+        //switch (screenSize) {
+        //    case ScreenSize.Desktop:
+        //        this.isStickyBoxRequired = true;
+        //        break;
+        //    case ScreenSize.Tablet:
+        //        this.isStickyBoxRequired = false;
+        //        break;
+        //    case ScreenSize.Mobile:
+        //        this.isStickyBoxRequired = false;
+        //        break;
+        //}        
         if (!this.$route.params.listingId) {
             this.isEditing = true;
         }

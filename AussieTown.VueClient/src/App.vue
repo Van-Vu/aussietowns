@@ -12,7 +12,7 @@
 
         </header>
         <section class="hero-body">
-            <transition :duration="{ enter: 5000, leave: 500 }" name="fade">
+            <transition name="slide-fade">
                 <router-view></router-view>
             </transition>
         </section>
