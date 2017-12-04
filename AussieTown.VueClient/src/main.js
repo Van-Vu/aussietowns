@@ -6,6 +6,15 @@ import merge from 'lodash.merge';
 import ListingModel from './model/listing.model';
 import UserModel from './model/user.model';
 import { plainToClass } from "class-transformer";
+import VueAnalytics from 'vue-ua';
+Vue.use(VueAnalytics, {
+    // [Required] The name of your app as specified in Google Analytics.
+    appName: 'FunWithLocal',
+    // [Required] The version of your app.
+    appVersion: '1.0',
+    // [Required] Your Google Analytics tracking ID.
+    trackingId: 'UA-110375519-1'
+});
 // a global mixin that calls `asyncData` when a route component's params change
 Vue.mixin({
     beforeRouteUpdate: function (to, from, next) {
@@ -52,14 +61,12 @@ router.onReady(function () {
             return next();
         }
         // this is where we should trigger a loading indicator if there is one
-        store.dispatch("ENABLE_LOADING");
         Promise.all(activated.map(function (component) {
             //console.log('here in client:' + (c as any).options.methods.asyncData)
             if (component && component.asyncData) {
                 return component.asyncData({ store: store, route: to });
             }
             // stop loading indicator
-            store.dispatch("DISABLE_LOADING");
         })).then(function () {
             next();
         }).catch(next);

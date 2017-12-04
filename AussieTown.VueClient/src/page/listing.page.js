@@ -40,10 +40,9 @@ var ListingPage = /** @class */ (function (_super) {
     __extends(ListingPage, _super);
     function ListingPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.formSubmitted = false;
+        _this.formSubmitting = false;
         _this.isOffer = false;
         _this.isEditing = false;
-        _this.editingSchedule = null;
         _this.isStickyBoxRequired = false;
         _this.modelCache = null;
         return _this;
@@ -205,18 +204,32 @@ var ListingPage = /** @class */ (function (_super) {
         console.log(scheduleObject);
     };
     ListingPage.prototype.onEditSchedule = function (scheduleObject) {
-        this.editingSchedule = scheduleObject;
         this.$store.dispatch('SHOW_SCHEDULE_MODAL', scheduleObject);
     };
     ListingPage.prototype.onHideScheduleModal = function () {
         this.$store.dispatch('HIDE_SCHEDULE_MODAL');
+    };
+    ListingPage.prototype.onEnquire = function () {
+        if (this.isLoggedIn) {
+            var primaryHost = this.model.tourOperators.find(function (x) { return x.isPrimary == true; });
+            this.$store.dispatch('SHOW_CONTACT_MODAL', {
+                senderId: this.$store.state.loggedInUser.id,
+                receiverId: primaryHost.id,
+                receiverName: primaryHost.fullname,
+                listingId: this.model.id,
+                listingHeader: this.model.header
+            });
+        }
+        else {
+            Utils.handleError(this.$store, { status: 403 });
+        }
     };
     ListingPage.prototype.constructShedule = function (model) {
         var schedules = model.schedules;
         var scheduleArr = [];
         for (var i = 0; i < schedules.length; i++) {
             var schedule = schedules[i];
-            if (Array.isArray(schedule.dateRange)) {
+            if (!this.isOffer && Array.isArray(schedule.dateRange)) {
                 schedule.startDate = schedule.dateRange[0];
                 schedule.endDate = schedule.dateRange[1];
                 schedule.repeatedDay = [];

@@ -1,13 +1,13 @@
 ﻿<template>
     <div>
         <div v-show="!isForgotPassword" class="tile  is-vertical">
-            <div class="tile is-parent">
-                <fb-signin-button class="tile is-6 fb-signin-button box" :params="fbSignInParams"
+            <div class="tile">
+                <fb-signin-button class="tile is-6 is-half-mobile fb-signin-button box" :params="fbSignInParams"
                                   @success="onFbSignInSuccess"
                                   @error="onFbSignInError">
                     <span>FACEBOOK</span>
                 </fb-signin-button>
-                <g-signin-button class="tile is-6 g-signin-button box" :params="googleSignInParams"
+                <g-signin-button class="tile is-6 is-half-mobile g-signin-button box" :params="googleSignInParams"
                                  @success="onGgSignInSuccess"
                                  @error="onGgSignInError">
                     <span>GOOGLE</span>
@@ -18,16 +18,14 @@
                 <hr style="margin-top: -10px;">
             </div>
 
-            <form @submit.prevent="validateBeforeSubmit" v-if="!formSubmitted">
+            <form @submit.prevent="validateBeforeSubmit">
                 <div class="field">
-                    <p class="control has-icon has-icon-right">
+                    <p class="control has-icon has-icon-right" :class="{'is-loading': isValidatingEmail}">
                         <!--data-vv-validate-on="'blur'"
                         v-model.lazy="model.email"-->
-                        <input name="email" v-model="model.email" v-validate="'required|email'"
+                        <input name="email" v-model="email" @blur="validateEmail"
                                :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="Enter your email">
-                        <span class="icon">
-                            <i class="icon icon-envelope-o"></i>
-                        </span>
+                        <i class="icon icon-envelope-o" v-show="!isValidatingEmail"></i>
                         <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
                     </p>
                 </div>
@@ -51,12 +49,12 @@
                         <span v-show="errors.has('confirmPassword')" class="help is-danger">{{ errors.first('confirmPassword') }}</span>
                     </p>
                 </div>
-                <div class="forgotpassword field" v-if="!isForgotPassword">
-                    <a @click.prevent="isForgotPassword = true">Forgot your password</a>
+                <div class="forgotpassword field" v-if="isLogin">
+                    <a @click.prevent="switchToForgotPassword(true)">Forgot your password</a>
                 </div>
 
                 <div class="field has-text-centered">
-                    <button type="submit" class="button is-full button mtl_button-no-round mtl-btn-large">{{ isLogin ? 'Submit' : 'Register' }}</button>
+                    <button type="submit" class="button is-full button mtl_button-no-round mtl-btn-large" :class="{'is-loading': formSubmitting}">{{ isLogin ? 'Submit' : 'Register' }}</button>
                 </div>
                 <!--<div class="field">
                     <input class="is-pulled-left checkbox" type="checkbox" id="rememberme" value="1" v-model="model.rememberme">
@@ -66,22 +64,18 @@
                 <hr />
 
                 <div v-if="isLogin">
-                    Not a member yet? <a @click.prevent="isLogin = false">Sign up</a>
+                    Not a member yet? <a @click.prevent="changeLoginMode(false)">Sign up</a>
                 </div>
                 <div v-if="!isLogin">
-                    Already have an account? <a @click.prevent="isLogin = true">Log in</a>
+                    Already have an account? <a @click.prevent="changeLoginMode(true)">Log in</a>
                 </div>
             </form>
-
-            <div v-else>
-                <h1 class="submitted">Form submitted successfully!</h1>
-            </div>
         </div>
-        <div v-show="isForgotPassword">
+        <div v-if="isForgotPassword">
             <span>Enter your email & we'll send you a password reset link.</span>
             <div class="field">
                 <p class="control has-icon has-icon-right">
-                    <input name="email" v-model="model.email" v-validate="'required|email'"
+                    <input name="email" v-model="email" v-validate="'required|email'"
                            :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="Enter your email">
                     <span class="icon">
                         <i class="icon icon-envelope-o"></i>
@@ -94,7 +88,7 @@
             </div>
             <hr />
             <div class="field">
-                <a class="absolute-center-x" @click="isForgotPassword = false">Back to signin</a>
+                <a class="absolute-center-x" @click="switchToForgotPassword(false)">Back to signin</a>
             </div>
             
         </div>

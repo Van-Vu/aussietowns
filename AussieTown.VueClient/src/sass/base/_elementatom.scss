@@ -68,27 +68,3 @@
 a {
     cursor: pointer;
 }
-
-html {
-    overflow-y: auto;
-}
-
-html,
-body{
-    background-color: $c-lightgrey-lightest;
-}
-
-html,
-body,
-#app {
-  height: 100%; /* needed for proper layout */
-
-  .showModal{
-      overflow-y: hidden;
-  }
-}
-
-#app {
-  //display: flex;
-  flex-direction: column;
-}

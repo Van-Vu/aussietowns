@@ -41,13 +41,9 @@ var ScheduleComponent = /** @class */ (function (_super) {
         };
         return _this;
     }
-    Object.defineProperty(ScheduleComponent.prototype, "model", {
-        get: function () {
-            return this.$store.state.dynamicModal.props.schedule;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    //get model() {
+    //    return this.$store.state.dynamicModal.props.schedule;
+    //}
     //@Watch('schedule')
     //onScheduleChanged(value: ScheduleModel, oldValue: ScheduleModel) {
     //    this.model = value;
@@ -69,7 +65,7 @@ var ScheduleComponent = /** @class */ (function (_super) {
     __decorate([
         Prop(),
         __metadata("design:type", Object)
-    ], ScheduleComponent.prototype, "schedule", void 0);
+    ], ScheduleComponent.prototype, "model", void 0);
     __decorate([
         Watch('isRepeated'),
         __metadata("design:type", Function),

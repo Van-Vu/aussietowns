@@ -44,12 +44,13 @@ export default {
 <style lang="scss">
 .number-chooser {
     .number {
-        margin-right: 0.5em;
-        margin-left: 0.5em;
-        padding-top: 0;
-        padding-left: 1em;
-        padding-right: 1em;
-        min-width: 5em;
+        margin-left: 22px;
+        margin-right: 20px;
+        font-size: 1.75rem;
+    }
+    
+    div {
+        display:inline-block;
     }
 }
 .plus, .minus {

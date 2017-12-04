@@ -2,11 +2,9 @@
     <div class="container">
         <section class="header-main">
             <div class="background">
-                <!--<img v-if="screenSize == 0" src="/static/images/homepage_desktop.jpg" />
-                <img v-if="screenSize == 1" src="/static/images/homepage_tablet.jpg" />
-                <img v-if="screenSize == 2" src="/static/images/homepage_mobile.jpg" />-->
                 <img :src="backgroundImage" alt="Background Image"/>
             </div>
+            <img class="backgroundShadow" v-if="showShadowImage" src="/static/images/shadow.jpg"/>
             <article id="typingwrapper">
                 <h1 id="homepagetyping">Have a blast with real locals.</h1>
             </article>
@@ -23,23 +21,69 @@
                 </li>
             </ul>
 
-            <h1>Hello, world!</h1>
-            <p>Welcome to your new single-page application, built with:</p>
-            <ul>
-                <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-                <li><a href='https://angular.io/'>Angular 2</a> and <a href='http://www.typescriptlang.org/'>TypeScript</a> for client-side code</li>
-                <li><a href='https://webpack.github.io/'>Webpack</a> for building and bundling client-side resources</li>
-                <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
+            <h2>What is FunWithLocal</h2>
+            <ul class="bullet-item">
+                <li>“The marketplace for travellers who want to have real fun via real experiences with real locals.”</li>
+                <li>We create this platform for travellers to discover new experience like a local, for locals to share their knowledge, their stories and meet new people</li>
+                <li>We want to create a community for you so that everywhere you go, you can always say: I have a mate</li>
             </ul>
-            <p>To help you get started, we've also set up:</p>
-            <ul>
-                <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-                <li><strong>Server-side prerendering</strong>. For faster initial loading and improved SEO, your Angular 2 app is prerendered on the server. The resulting HTML is then transferred to the browser where a client-side copy of the app takes over.</li>
-                <li><strong>Webpack dev middleware</strong>. In development mode, there's no need to run the <code>webpack</code> build tool. Your client-side resources are dynamically built on demand. Updates are available as soon as you modify any file.</li>
-                <li><strong>Hot module replacement</strong>. In development mode, you don't even need to reload the page after making most changes. Within seconds of saving changes to files, your Angular 2 app will be rebuilt and a new instance injected is into the page.</li>
-                <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and the <code>webpack</code> build tool produces minified static CSS and JavaScript files.</li>
+            <h2>Why us</h2>
+            <ul class="bullet-item">
+                <li>Build up your reputation as a seasoned traveller</li>
+                <li>Meet new people, make new friend</li>
+                <li>Participate in a community to support each other wherever you go</li>
+                <li>At this point, using our platfrom is free. We don't charge you anything because we want you to have the best experience at the most reasonable price determined by you host</li>
+                <li>Experience every precious moment of your time while travel</li>
             </ul>
-        </section>
+            <h2>How it works</h2>
+            <div class="tile">
+                <div class="tile is-6 is-vertical">
+                    <h3>For travellers:</h3>
+                    <ul class="bullet-item">
+                        <li>Search a tour of your destination</li>
+                        <li>Request a booking</li>
+                        <li>Receive contact information from your host</li>
+                        <li>Settle payment</li>
+                        <li>Confirm booking</li>
+                        <li><strong>Ready to rock</strong></li>
+                    </ul>
+                </div>
+                <div class="tile is-6 is-vertical">
+                    <h3>For hosts:</h3>
+                    <ul class="bullet-item">
+                        <li>Create an experience</li>
+                        <li>Wait for booking request</li>
+                        <li>Contact your guests to settle payment</li>
+                        <li>Prepare for the experience</li>
+                        <li><strong>Ready to rock</strong></li>
+                    </ul>
+                </div>
+            </div>
+            <h2>So what's the catch</h2>
+            <div class="tile">
+                <div class="tile is-6 is-vertical">
+                    <h3>For travellers:</h3>
+                    <ul class="bullet-item">
+                        <li>Enjoy unique local experiences</li>
+                        <li>Fair price</li>
+                        <li>Directly from a local host</li>
+                        <li>Meet new friends</li>
+                        <li>Learn exciting facts from real locals</li>
+                    </ul>
+
+                </div>
+                <div class="tile is-6 is-vertical">
+                    <h3>For hosts:</h3>
+                    <ul class="bullet-item">
+                        <li>Earn money by doing what you are good at</li>
+                        <li>Sell directly to the tourist</li>
+                        <li>Get a fair price</li>
+                        <li>Know the tourist you will meet in advance</li>
+                        <li>Meet new friends</li>
+                    </ul>
+                </div>
+            </div>
+</section>
     </div>
 </template>
 

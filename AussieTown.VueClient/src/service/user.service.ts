@@ -58,6 +58,11 @@ export default class UserService {
             .then(response => response.data);
     }
 
+    verifyEmail(email: string) {
+        return http.get('api/user/verifyEmail/' + email)
+            .then(response => response);
+    } 
+
     delete(_id: string) {
         return http.delete('/users/' + _id);
     }

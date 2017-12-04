@@ -1,7 +1,7 @@
 ﻿<template>
     <modalshell :show.sync="show" @onClose="onClose">
-        <h1 slot="header">Login</h1>
-        <loginform @onSuccessfulLogin="onClose" slot="body"></loginform>
+        <h1 slot="header">{{headerText}}</h1>
+        <loginform @onSuccessfulLogin="onClose" @onChangeMode="changeMode" slot="body"></loginform>
     </modalshell>
 </template>
 

@@ -219,20 +219,6 @@ namespace AussieTowns.Repository
                             "DELETE FROM TourOperator WHERE UserId = @userId AND ListingId = @listingId";
                         updateTasks.Add(dbConnection.ExecuteAsync(oldOperatorSql, oldOperators));
 
-                        var guestSql = "SELECT * FROM TourGuest WHERE ListingId = @listingId";
-                        var tourGuests = await dbConnection.QueryAsync<TourGuest>(guestSql, new { listingId = listing.Id });
-
-                        var newGuests =
-                            listing.TourGuests.Where(p => tourGuests.All(p2 => p2.ExistingUserId != p.ExistingUserId));
-                        var oldGuests =
-                            tourGuests.Where(p => listing.TourGuests.All(p2 => p2.ExistingUserId != p.ExistingUserId));
-                        var newGuestSql = "INSERT INTO TourGuest VALUES(@listingId, @userId, @isPrimary)";
-                        updateTasks.Add(dbConnection.ExecuteAsync(newGuestSql, newGuests));
-
-                        var oldGuestSql =
-                            "DELETE FROM TourGuest WHERE UserId = @userId AND ListingId = @listingId";
-                        updateTasks.Add(dbConnection.ExecuteAsync(oldGuestSql, oldGuests));
-
                         await Task.WhenAll(updateTasks);
 
                         //Bodom

@@ -22,6 +22,7 @@ import UserModel from '../../model/user.model';
 import { UserRole, UserAction, NotificationType } from '../../model/enum';
 import datepicker from '../shared/external/datepicker.vue';
 import { plainToClass } from "class-transformer";
+import { Utils } from '../utils';
 import ImageUploadComponent from '../shared/imageupload.component.vue';
 import ImageCropComponent from '../shared/imagecrop.component.vue';
 import { GlobalConfig } from '../../GlobalConfig';
@@ -63,6 +64,13 @@ var UserDetailComponent = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UserDetailComponent.prototype, "isLoggedIn", {
+        get: function () {
+            return this.$store.getters.isLoggedIn;
+        },
+        enumerable: true,
+        configurable: true
+    });
     UserDetailComponent.prototype.onLocationSelected = function (item) {
         this.model.locationId = +item.id;
     };
@@ -86,6 +94,19 @@ var UserDetailComponent = /** @class */ (function (_super) {
     };
     UserDetailComponent.prototype.contructBeforeSubmit = function (model) {
         return this.model;
+    };
+    UserDetailComponent.prototype.onEnquire = function () {
+        if (this.isLoggedIn) {
+            this.$store.dispatch('SHOW_CONTACT_MODAL', {
+                senderId: this.$store.state.loggedInUser.id,
+                receiverId: this.model.id,
+                receiverName: this.model.firstName + " " + this.model.lastName,
+                listingId: null
+            });
+        }
+        else {
+            Utils.handleError(this.$store, { status: 403 });
+        }
     };
     UserDetailComponent.prototype.onUploadImageCompleted = function () {
         if (this.canEdit) {
@@ -126,7 +147,7 @@ var UserDetailComponent = /** @class */ (function (_super) {
                 originalFile: fileList[x],
                 storeAction: 'UPLOAD_PROFILE_IMAGE',
                 storeActionId: _this.$store.state.profile.id
-            }).then(function () { return _this.onUploadImageSuccess(); });
+            }).catch(function (er) { return console.log(er); });
         });
         document.getElementById('profileImageUpload').value = null;
     };

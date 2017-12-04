@@ -1,5 +1,17 @@
 ﻿IMPORTANT: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore
 
+iisexpress-reverse proxy: https://stackoverflow.com/questions/3313616/iis-express-enable-external-request/15809698#15809698
+	iisexpress-proxy 8888 to 8000
+
+Editor: 
+https://github.com/FranzSkuffka/vue-medium-editor
+https://github.com/PeakTai/vue-html5-editor
+
+CSS trick:
+Cascade: https://codepen.io/grayghostvisuals/pen/ByLYam
+http://blog.grayghostvisuals.com/sass/real-sass-real-maps/
+wave text: https://codepen.io/lbebber/pen/EVxvWN
+
 DEPLOYMENT:
 Node:
 server.js: switch on IsProd
@@ -95,7 +107,7 @@ DONE bug profileLink when wrong when user not log in (loggedInUser is null)
 DONE dynamic loading module
 
 Refactor booking, bookingdetail, bookingManage page
-Custom / Async validation: http://vee-validate.logaretm.com/examples.html#validate-form
+DONE Custom / Async validation: http://vee-validate.logaretm.com/examples.html#validate-form
 DONE Transition
 
 image guide: https://images.guide/

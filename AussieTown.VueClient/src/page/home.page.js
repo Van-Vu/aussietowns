@@ -34,6 +34,7 @@ var HomePage = /** @class */ (function (_super) {
         _this.searchSuburb = null;
         _this.backgroundImage = '';
         _this.swiperDirection = 'horizontal';
+        _this.showShadowImage = true;
         return _this;
         //requestSlides: Array<any> = [
         //    { "text": "slide conten asdfa sdfasfd asdf asdf asdf as dfasd", "imgSrc": "https://images.outbrain.com/Imaginarium/api/uuid/a5bdb2fc08f9096fb1ef3afca2e5c1ff5292daf9fe7b86b8710d091ae7fa5547/400/232/1.0" },
@@ -87,14 +88,17 @@ var HomePage = /** @class */ (function (_super) {
             case ScreenSize.Desktop:
                 this.backgroundImage = '/static/images/homepage_desktop.jpg';
                 this.swiperDirection = 'horizontal';
+                this.showShadowImage = true;
                 break;
             case ScreenSize.Tablet:
                 this.backgroundImage = '/static/images/homepage_tablet.jpg';
                 this.swiperDirection = 'vertical';
+                this.showShadowImage = false;
                 break;
             case ScreenSize.Mobile:
                 this.backgroundImage = '/static/images/homepage_mobile.jpg';
                 this.swiperDirection = 'vertical';
+                this.showShadowImage = false;
                 break;
         }
     };

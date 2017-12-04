@@ -18,10 +18,10 @@
                     </wizard-step>
                 </template>
                 <template slot="footer" slot-scope="props">
-                    <div class=wizard-footer-left>
+                    <div class="wizard-footer-left tile is-6 is-half-mobile">
                         <wizard-button v-if="props.activeTabIndex > 0" @click.native="props.prevTab()" class="mtl_button">Previous</wizard-button>
                     </div>
-                    <div class="wizard-footer-right">
+                    <div class="wizard-footer-right tile is-6 is-half-mobile">
                         <wizard-button v-if="!props.isLastStep" @click.native="props.nextTab()" class="wizard-footer-right mtl_button">Next</wizard-button>
 
                         <wizard-button v-else  @click.native="props.nextTab()" class="wizard-footer-right finish-button" :style="props.fillButtonStyle">{{props.isLastStep ? 'Confirm' : 'Next'}}</wizard-button>

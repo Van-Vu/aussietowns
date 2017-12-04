@@ -13,8 +13,13 @@ import LoginForm from '../form/loginform.component.vue';
 
 export default class LoginModal  extends Vue{
     @Prop() show: boolean;
+    headerText: string = 'Login';
 
     onClose() {
         this.$emit('onClose');
+    }
+
+    changeMode(value) {
+        this.headerText = value;
     }
 }

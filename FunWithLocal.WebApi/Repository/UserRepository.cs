@@ -218,5 +218,17 @@ namespace FunWithLocal.WebApi.Repository
                 return user.FirstOrDefault();
             }
         }
+
+        public async Task<User> GetByEmail(string email)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "SELECT * FROM User WHERE email=@email;";
+
+                dbConnection.Open();
+                var user = await dbConnection.QueryAsync<User>(sql, new { email });
+                return user.FirstOrDefault();
+            }
+        }
     }
 }

@@ -5,14 +5,17 @@ import { Utils } from '../component/utils';
 import { GlobalConfig } from '../GlobalConfig';
 Vue.prototype.$http = axios;
 //export const http = axios.create({
-//    baseURL: `http://10.0.0.98/meetthelocal/`
+//    baseURL: `http://192.168.1.52/meetthelocal/`
 //})
-export var http = axios.create({
-    baseURL: "http://localhost/meetthelocal/"
-});
+//export const http = axios.create({
+//    baseURL: `http://localhost/meetthelocal/`
+//})
 //const http = axios.create({
 //    baseURL: `http://localhost:8888/`,
 //})
+var http = axios.create({
+    baseURL: "http://10.0.0.98:8000/",
+});
 //export const http = axios.create({
 //    baseURL: `https://api.funwithlocal.com/`
 //})

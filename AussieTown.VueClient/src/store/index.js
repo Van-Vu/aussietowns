@@ -10,6 +10,7 @@ import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
 import UserModel from '../model/user.model';
 import ConversationModel from '../model/conversation.model';
+import ContactModel from '../model/contact.model';
 import { ListingType, NotificationType } from '../model/enum';
 import { Utils } from '../component/utils';
 import { plainToClass } from "class-transformer";
@@ -42,7 +43,8 @@ export default new Vuex.Store({
         featureListings: [],
         dynamicModal: {},
         showLoginModal: false,
-        showScheduleModal: false
+        showScheduleModal: false,
+        contact: ContactModel
     },
     getters: {
         isLoggedIn: function (state) {
@@ -58,10 +60,10 @@ export default new Vuex.Store({
             return '';
         },
         profileLink: function (state) {
-            if (typeof state.loggedInUser != 'undefined' && typeof state.loggedInUser != 'function') {
+            if (state.loggedInUser != null && typeof state.loggedInUser != 'undefined' && typeof state.loggedInUser != 'function') {
                 return Utils.seorizeString(Utils.getProfileFullName(state.loggedInUser));
             }
-            return null;
+            return '';
         },
         userId: function (state) {
             if (state.loggedInUser) {
@@ -174,6 +176,14 @@ export default new Vuex.Store({
                 }
             });
         },
+        SEND_ENQUIRY: function (_a, enquiry) {
+            var dispatch = _a.dispatch, commit = _a.commit;
+            return (new MessageService()).sendEnquiry(enquiry).then(function (response) {
+                if (response == 1) {
+                    dispatch('ADD_NOTIFICATION', { title: enquiry.receiverName + " has been notified", type: NotificationType.Success });
+                }
+            });
+        },
         ADD_NOTIFICATION: function (_a, notification) {
             var dispatch = _a.dispatch, commit = _a.commit;
             commit('ADD_NOTIFICATION', notification);
@@ -239,6 +249,10 @@ export default new Vuex.Store({
         SHOW_IMAGECROP_MODAL: function (_a, payload) {
             var commit = _a.commit;
             return commit('SHOW_IMAGECROP_MODAL', payload);
+        },
+        SHOW_CONTACT_MODAL: function (_a, payload) {
+            var commit = _a.commit;
+            commit('SHOW_CONTACT_MODAL', payload);
         },
         HIDE_MODAL: function (_a) {
             var commit = _a.commit;
@@ -422,6 +436,14 @@ export default new Vuex.Store({
                 name: 'imagecropmodal',
                 props: { show: true, imageSources: payload.images, imageSizeSettings: payload.setting },
                 events: { onSave: onUploadImage }
+            };
+        },
+        SHOW_CONTACT_MODAL: function (state, payload) {
+            var onContact;
+            return state.dynamicModal = {
+                name: 'contactmodal',
+                props: { show: true, contactModel: payload },
+                events: { onContact: onContact }
             };
         },
         HIDE_MODAL: function (state) {

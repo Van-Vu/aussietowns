@@ -20,6 +20,7 @@ const BookingPage = () => import('../page/booking.page.vue')
 const BookingDetailPage = () => import('../page/bookingdetail.page.vue')
 const BookingManagePage = () => import('../page/bookingmanage.page.vue')
 const ConfirmEmailPage = () => import('../page/confirmemail.page.vue')
+const ArticlePage = () => import('../page/article.page.vue')
 
 const MessageComponent = () => import('../component/profile/message.component.vue')
 const TripComponent = () => import('../component/profile/trip.component.vue')
@@ -180,6 +181,26 @@ const router = new Router({
             path: "/listing/:seoString-:listingId(\\d+)",
             name: "listingDetail",
             component: ListingPage,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
+            path: "/whatson/:seoString-:articleId(\\d+)",
+            name: "whatson",
+            component: ArticlePage,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
+            path: "/about/:seoString-:articleId(\\d+)",
+            name: "aboutus",
+            component: ArticlePage,
             props: true,
             meta: {
                 permission: UserRole.Anonymous,

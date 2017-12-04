@@ -278,7 +278,7 @@ namespace FunWithLocal.WebApi
                     context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
 
                     // Bodom: refactor this to Switch
-                    if (error != null && (error.Error is ArgumentNullException || error.Error is ValidationException))
+                    if (error != null && error.Error is ArgumentNullException)
                     {
                         context.Response.StatusCode = 400;
                     }
@@ -293,6 +293,10 @@ namespace FunWithLocal.WebApi
                     else if (error != null && (error?.Error is ArgumentOutOfRangeException || error.Error is KeyNotFoundException))
                     {
                         context.Response.StatusCode = 404;
+                    }
+                    else if (error != null && error.Error is ValidationException)
+                    {
+                        context.Response.StatusCode = 422;
                     }
                     else if (error?.Error != null)
                     {

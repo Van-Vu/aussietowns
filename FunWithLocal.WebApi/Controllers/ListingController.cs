@@ -14,11 +14,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using FunWithLocal.WebApi;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace AussieTowns.Controllers
+namespace FunWithLocal.WebApi.Controllers
 {
     [Route("api/[controller]")]
     public class ListingController : Controller

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AussieTowns.Model;
-using AussieTowns.Repository;
+using FunWithLocal.WebApi.Model;
+using FunWithLocal.WebApi.Repository;
 
-namespace AussieTowns.Services
+namespace FunWithLocal.WebApi.Services
 {
     public class MessageService: IMessageService
     {
@@ -26,6 +27,11 @@ namespace AussieTowns.Services
         public async Task<int> SendMessage(Message message)
         {
             return await _messageRepository.Insert(message);
+        }
+
+        public async Task<int> SendEnquiry(Enquiry enquiry)
+        {
+            return await _messageRepository.InsertEnquiry(enquiry);
         }
     }
 }

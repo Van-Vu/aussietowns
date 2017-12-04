@@ -8,6 +8,7 @@
                         :performance-mode="false"
                         :pagination-visible="false"
                         :pagination-clickable="true"
+                        :totalImage="imageUrls.length"
                         :loop="false">
                     <div v-for="url in imageUrls">
                         <img v-lazy="url" :alt="url"/>

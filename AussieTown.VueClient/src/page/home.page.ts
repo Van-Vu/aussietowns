@@ -57,6 +57,7 @@ export default class HomePage extends Vue{
     searchSuburb: AutocompleteItem = null;
     backgroundImage: string = '';
     swiperDirection: string = 'horizontal';
+    showShadowImage: boolean = true;
     $mq: any;
 
     static asyncData({ store, route }) {
@@ -97,16 +98,19 @@ export default class HomePage extends Vue{
             case ScreenSize.Desktop:
                 this.backgroundImage = '/static/images/homepage_desktop.jpg';
                 this.swiperDirection = 'horizontal';
+                this.showShadowImage = true;
                 break;
 
             case ScreenSize.Tablet:
                 this.backgroundImage = '/static/images/homepage_tablet.jpg';
                 this.swiperDirection = 'vertical';
+                this.showShadowImage = false;
                 break;
 
             case ScreenSize.Mobile:
                 this.backgroundImage = '/static/images/homepage_mobile.jpg';
                 this.swiperDirection = 'vertical';
+                this.showShadowImage = false;
                 break;
         }
 

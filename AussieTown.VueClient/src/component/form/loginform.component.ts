@@ -2,6 +2,7 @@
 import { Component, Prop, Watch } from "vue-property-decorator";
 import UserService from '../../service/user.service';
 
+import { Validator } from 'vee-validate';
 import VeeValidate from 'vee-validate';
 import LoginModel from '../../model/login.model';
 import { UserSource, UserRole } from '../../model/enum';
@@ -30,12 +31,15 @@ declare const JSEncrypt: any;
 
 export default class LoginForm extends Vue {
     isForgotPassword: boolean = false;
-    formSubmitted: boolean = false;
+    formSubmitting: boolean = false;
     model: LoginModel = new LoginModel();
+    email: string = '';
     confirmPassword: string = '';
     rawPassword: string = '';
     $cookie: any;
     $auth: any;
+
+    isValidatingEmail: boolean = false;
 
     // Login or Signup
     isLogin: boolean = true;
@@ -51,20 +55,59 @@ export default class LoginForm extends Vue {
     @Watch('isLogin')
     onisLoginChanged(value: boolean, oldValue: boolean) {
         (this.$validator as any).reset();
+
+        //if (value) {
+        //    this.$validator.attach('email', 'required|email|verify_email');
+        //} else {
+        //    this.$validator.attach('email', 'required|email');
+        //}
+    }
+
+    created() {
+        // https://jsfiddle.net/pp0w8u6s/
+        // http://vee-validate.logaretm.com/examples.html#debounce-example
+        Validator.extend('verify_email', {
+            getMessage: field => `This ${field} already exists.`,
+            validate: value => new Promise((resolve) => {
+                if (this.isLogin) {
+                    resolve({ valid: true });
+                    return;
+                }
+
+                this.isValidatingEmail = true;
+                (new UserService()).verifyEmail(value)
+                    .then(response => {
+                        resolve({ valid: response });
+                        this.isValidatingEmail = false;
+                    })
+                    .catch(error => {
+                        this.isValidatingEmail = false;
+                        resolve({ valid: true })
+                    });
+            })
+        });
+        this.$validator.attach('email', 'required|email|verify_email');
+    }
+
+    validateEmail() {
+        this.$validator.validate('email', this.email);
     }
 
     validateBeforeSubmit(e) {
-        this.$validator.validateAll().then((result) => {
-            (this.$validator as any).reset();
+        this.$validator.validateAll({ email: this.email, password: this.rawPassword }).then((result) => {
             if (result) {
+                this.formSubmitting = true;
                 if (this.rawPassword) {
                     this.model.password = encryptText(this.rawPassword);
                 }
+
+                this.model.email = this.email;
                 if (this.isLogin) {
-                    this.login(this.model);
+                    this.login(this.model).then(() => this.formSubmitting = false);
                 } else {
-                    this.signup(this.model);
-                }                
+                    this.signup(this.model).then(() => this.formSubmitting = false);
+                }
+                (this.$validator as any).reset();                
             }
         }).catch(() => {
             // eslint-disable-next-line
@@ -73,18 +116,15 @@ export default class LoginForm extends Vue {
     }
 
     login(model) {
-        (new UserService()).login(model)
-            .then(responseToken => this.handleLoginToken(responseToken))
-            .catch(error => {
-                this.$store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: error.message ? error.message : error.data, type: NotificationType.Error });
-            });
+        return (new UserService()).login(model)
+            .then(responseToken => this.handleLoginToken(responseToken));
     }
 
     signup(model) {
         model.role = UserRole.User;
         model.images = [{ "url": model.photoUrl }];
 
-        (new UserService()).signup(model)
+        return (new UserService()).signup(model)
         .then(responseToken => this.handleLoginToken(responseToken));
     }
 
@@ -97,10 +137,6 @@ export default class LoginForm extends Vue {
 
     setCookies(accessToken) {
         this.$cookie.set('mtltk', accessToken);    
-    }
-
-    submitForm() {
-        this.formSubmitted = true;
     }
 
     onResetPassword() {
@@ -194,4 +230,15 @@ export default class LoginForm extends Vue {
         })
     }
 
+    changeLoginMode(value) {
+        this.isLogin = value;
+        (this.$validator as any).reset();
+        this.$emit('onChangeMode', value ? 'Login' : 'Sign Up');
+    }
+
+    switchToForgotPassword(value) {
+        this.isForgotPassword = value;
+        (this.$validator as any).reset();
+        this.$emit('onChangeMode', value ? 'Forgot password' : 'Login');
+    }
 }

@@ -33,6 +33,9 @@ var TestPage = /** @class */ (function (_super) {
         _this.numberChooser = 0;
         _this.currentView = 'listingcard';
         _this.listings = [];
+        _this.isValidating = false;
+        _this.rawPassword = '';
+        _this.email = '';
         _this.disableDays = {
             days: [6, 0] // Disable Saturday's and Sunday's
         };
@@ -56,12 +59,32 @@ var TestPage = /** @class */ (function (_super) {
         //this.$store.dispatch('SEARCH_LISTINGS_BY_SUBURB', 129).then(() => {
         //    this.listings = this.$store.state.searchListings;
         //});
+        //v - validate="'required|email'"
+        this.$validator.attach('email', 'required|email');
     };
     TestPage.prototype.checkLogginUser = function () {
         this.$store.dispatch('TEST');
     };
     TestPage.prototype.addNotification = function () {
         this.$store.dispatch('ADD_NOTIFICATION', { title: "this is title", text: "this is the text", type: NotificationType.Success });
+    };
+    TestPage.prototype.validateBeforeSubmit = function () {
+        alert('validate');
+    };
+    TestPage.prototype.onContact = function () {
+        this.$ua.trackEvent('TestPage', 'Contact Click', '', 0);
+        this.$store.dispatch('SHOW_CONTACT_MODAL', {
+            senderId: 1,
+            receiverId: 2,
+            receiverName: 'Hey there',
+            listingId: 15,
+            listingHeader: 'this is listing 15'
+        });
+    };
+    TestPage.prototype.onBlur = function (value) {
+        this.isValidating = true;
+        this.$validator.validate('email', this.email);
+        //this.isValidating = false;
     };
     TestPage = __decorate([
         Component({

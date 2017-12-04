@@ -11,17 +11,25 @@
     background: -moz-linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
     background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));*/
     @media all and (min-width: $is-desktop) {
-        border-top: 5px solid $c-brand-primary;
+        /*border-top: 5px solid $c-brand-primary;*/
     }
 
     &__logo {
         position: absolute;
-        background-image: url("/static/images/logo.png");
+        background-image: url("/static/images/logoMobile.png");
         background-repeat: no-repeat;
         background-position: center;
         background-size: contain;
-        width: 170px;
-        height: 40px;
+        width: 90px;
+        height: 35px;
+        top: -8px;
+        left: 20px;
+
+        @media all and (min-width: $is-desktop) {
+            width: 170px;
+            height: 70px;
+            background-image: url("/static/images/logo.png");
+        }
     }
 
     &.is-sticky {

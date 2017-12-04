@@ -32,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Content\EmailTemplates\Welcome.cshtml" />
+    <None Include="Content\EmailTemplates\*" CopyToPublishDirectory="Always" />
   </ItemGroup>
-
 </Project>

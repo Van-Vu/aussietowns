@@ -17,7 +17,7 @@ Vue.use(VeeValidate);
     }
 })
 export default class ScheduleComponent extends Vue {
-    @Prop() schedule: any;
+    @Prop() model: any;
     isRepeated: boolean = true;
     repeatedDay: Array<number> = [];
 
@@ -34,9 +34,9 @@ export default class ScheduleComponent extends Vue {
         days: [6, 0] // Disable Saturday's and Sunday's
     };
 
-    get model() {
-        return this.$store.state.dynamicModal.props.schedule;
-    }
+    //get model() {
+    //    return this.$store.state.dynamicModal.props.schedule;
+    //}
 
     //@Watch('schedule')
     //onScheduleChanged(value: ScheduleModel, oldValue: ScheduleModel) {

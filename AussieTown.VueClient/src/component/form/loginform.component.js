@@ -25,7 +25,6 @@ import VeeValidate from 'vee-validate';
 import LoginModel from '../../model/login.model';
 import { UserSource, UserRole } from '../../model/enum';
 import { fetchPublicKey, decryptTextFromServer, requestPasswordReset, encryptText } from '../../service/auth.service';
-import { NotificationType } from '../../model/enum';
 Vue.use(VeeValidate);
 import GSignInButton from 'vue-google-signin-button';
 Vue.use(GSignInButton);
@@ -36,10 +35,12 @@ var LoginForm = /** @class */ (function (_super) {
     function LoginForm() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.isForgotPassword = false;
-        _this.formSubmitted = false;
+        _this.formSubmitting = false;
         _this.model = new LoginModel();
+        _this.email = '';
         _this.confirmPassword = '';
         _this.rawPassword = '';
+        _this.isValidatingEmail = false;
         // Login or Signup
         _this.isLogin = true;
         _this.googleSignInParams = {
@@ -53,36 +54,56 @@ var LoginForm = /** @class */ (function (_super) {
     }
     LoginForm.prototype.onisLoginChanged = function (value, oldValue) {
         this.$validator.reset();
+        //if (value) {
+        //    this.$validator.attach('email', 'required|email|verify_email');
+        //} else {
+        //    this.$validator.attach('email', 'required|email');
+        //}
     };
     LoginForm.prototype.created = function () {
-        Validator.extend('verify_coupon', {
-            getMessage: function (field) { return "The " + field + " is not a valid coupon."; },
+        var _this = this;
+        // https://jsfiddle.net/pp0w8u6s/
+        // http://vee-validate.logaretm.com/examples.html#debounce-example
+        Validator.extend('verify_email', {
+            getMessage: function (field) { return "This " + field + " already exists."; },
             validate: function (value) { return new Promise(function (resolve) {
-                // API call or database access.
-                var validCoupons = ['SUMMER2016', 'WINTER2016', 'FALL2016'];
-                setTimeout(function () {
-                    resolve({
-                        valid: value && validCoupons.indexOf(value.toUpperCase()) !== -1
-                    });
-                }, 500);
+                if (_this.isLogin) {
+                    resolve({ valid: true });
+                    return;
+                }
+                _this.isValidatingEmail = true;
+                (new UserService()).verifyEmail(value)
+                    .then(function (response) {
+                    resolve({ valid: response });
+                    _this.isValidatingEmail = false;
+                })
+                    .catch(function (error) {
+                    _this.isValidatingEmail = false;
+                    resolve({ valid: true });
+                });
             }); }
         });
-        this.$validator.attach('coupon', 'required|verify_coupon');
+        this.$validator.attach('email', 'required|email|verify_email');
+    };
+    LoginForm.prototype.validateEmail = function () {
+        this.$validator.validate('email', this.email);
     };
     LoginForm.prototype.validateBeforeSubmit = function (e) {
         var _this = this;
-        this.$validator.validateAll().then(function (result) {
-            _this.$validator.reset();
+        this.$validator.validateAll({ email: this.email, password: this.rawPassword }).then(function (result) {
             if (result) {
+                _this.formSubmitting = true;
                 if (_this.rawPassword) {
                     _this.model.password = encryptText(_this.rawPassword);
                 }
+                _this.model.email = _this.email;
                 if (_this.isLogin) {
-                    _this.login(_this.model);
+                    _this.login(_this.model).then(function () { return _this.formSubmitting = false; });
                 }
                 else {
-                    _this.signup(_this.model);
+                    _this.signup(_this.model).then(function () { return _this.formSubmitting = false; });
                 }
+                _this.$validator.reset();
             }
         }).catch(function () {
             // eslint-disable-next-line
@@ -91,17 +112,14 @@ var LoginForm = /** @class */ (function (_super) {
     };
     LoginForm.prototype.login = function (model) {
         var _this = this;
-        (new UserService()).login(model)
-            .then(function (responseToken) { return _this.handleLoginToken(responseToken); })
-            .catch(function (error) {
-            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: error.message ? error.message : error.data, type: NotificationType.Error });
-        });
+        return (new UserService()).login(model)
+            .then(function (responseToken) { return _this.handleLoginToken(responseToken); });
     };
     LoginForm.prototype.signup = function (model) {
         var _this = this;
         model.role = UserRole.User;
         model.images = [{ "url": model.photoUrl }];
-        (new UserService()).signup(model)
+        return (new UserService()).signup(model)
             .then(function (responseToken) { return _this.handleLoginToken(responseToken); });
     };
     LoginForm.prototype.handleLoginToken = function (token) {
@@ -112,9 +130,6 @@ var LoginForm = /** @class */ (function (_super) {
     };
     LoginForm.prototype.setCookies = function (accessToken) {
         this.$cookie.set('mtltk', accessToken);
-    };
-    LoginForm.prototype.submitForm = function () {
-        this.formSubmitted = true;
     };
     LoginForm.prototype.onResetPassword = function () {
         requestPasswordReset(this.model.email)
@@ -195,6 +210,16 @@ var LoginForm = /** @class */ (function (_super) {
             console.log(encryptedText);
             decryptTextFromServer(encryptedText).then(function (x) { return console.log(x); });
         });
+    };
+    LoginForm.prototype.changeLoginMode = function (value) {
+        this.isLogin = value;
+        this.$validator.reset();
+        this.$emit('onChangeMode', value ? 'Login' : 'Sign Up');
+    };
+    LoginForm.prototype.switchToForgotPassword = function (value) {
+        this.isForgotPassword = value;
+        this.$validator.reset();
+        this.$emit('onChangeMode', value ? 'Forgot password' : 'Login');
     };
     __decorate([
         Watch('isLogin'),

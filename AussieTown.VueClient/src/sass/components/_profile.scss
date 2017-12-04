@@ -67,7 +67,7 @@
             height: 0;
             @media all and (max-width: $is-mobile) {
                 @include absolutecenter("both","relative");
-                width: 35%;
+                width: 30%;
             }
         }
     }

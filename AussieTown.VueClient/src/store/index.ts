@@ -15,6 +15,7 @@ import UserModel from '../model/user.model';
 import RequestResult from '../model/RequestResult';
 import ConversationModel from '../model/conversation.model';
 import MessageModel from '../model/message.model';
+import ContactModel from '../model/contact.model';
 
 import { ListingType, NotificationType } from '../model/enum';
 
@@ -51,7 +52,8 @@ export default new Vuex.Store({
         featureListings: [],
         dynamicModal: {},
         showLoginModal: false,
-        showScheduleModal: false
+        showScheduleModal: false,
+        contact: ContactModel
     },
     getters: {
         isLoggedIn: state => {
@@ -67,10 +69,10 @@ export default new Vuex.Store({
             return '';
         },
         profileLink: state => {
-            if (typeof state.loggedInUser != 'undefined' && typeof state.loggedInUser != 'function') {
+            if (state.loggedInUser != null && typeof state.loggedInUser != 'undefined' && typeof state.loggedInUser != 'function') {
                 return Utils.seorizeString(Utils.getProfileFullName(state.loggedInUser)) ;
             }
-            return null;
+            return '';
         },
         userId: state => {
             if (state.loggedInUser) {
@@ -169,6 +171,13 @@ export default new Vuex.Store({
                 
             });                
         },
+        SEND_ENQUIRY({ dispatch, commit }, enquiry) {
+            return (new MessageService()).sendEnquiry(enquiry).then(response => {
+                if ((response as any) == 1) {
+                    dispatch('ADD_NOTIFICATION', { title: `${enquiry.receiverName} has been notified`, type: NotificationType.Success});
+                }
+            });
+        },
         ADD_NOTIFICATION({ dispatch, commit }, notification) {
             commit('ADD_NOTIFICATION', notification);
             setTimeout(() => {dispatch('REMOVE_NOTIFICATION', notification)}, 10000);
@@ -220,6 +229,9 @@ export default new Vuex.Store({
         },
         SHOW_IMAGECROP_MODAL({ commit }, payload) {
             return commit('SHOW_IMAGECROP_MODAL', payload);
+        },
+        SHOW_CONTACT_MODAL({ commit }, payload) {
+            commit('SHOW_CONTACT_MODAL', payload);
         },
         HIDE_MODAL({ commit }) {
             commit('HIDE_MODAL');
@@ -399,6 +411,15 @@ export default new Vuex.Store({
                 name: 'imagecropmodal',
                 props: { show: true, imageSources: payload.images, imageSizeSettings: payload.setting },
                 events: { onSave: onUploadImage }
+            }
+        },
+        SHOW_CONTACT_MODAL(state, payload) {
+            let onContact: any;
+
+            return state.dynamicModal = {
+                name: 'contactmodal',
+                props: { show: true, contactModel: payload },
+                events: { onContact: onContact }
             }
         },
         HIDE_MODAL(state) {

@@ -60,6 +60,10 @@ export default class UserDetailComponent extends Vue {
         return this.$auth.check(UserRole.Editor, (this.$route.params as any).profileId, UserAction.Edit);
     }
 
+    get isLoggedIn() {
+        return this.$store.getters.isLoggedIn;
+    }
+
     onLocationSelected(item: AutocompleteItem) {
         this.model.locationId = +item.id;
     }
@@ -86,6 +90,21 @@ export default class UserDetailComponent extends Vue {
 
     contructBeforeSubmit(model) {
         return this.model;
+    }
+
+    onEnquire() {
+        if (this.isLoggedIn) {
+            this.$store.dispatch('SHOW_CONTACT_MODAL',
+                {
+                    senderId: this.$store.state.loggedInUser.id,
+                    receiverId: this.model.id,
+                    receiverName: `${this.model.firstName} ${this.model.lastName}`,
+                    listingId: null
+                });
+        } else {
+            Utils.handleError(this.$store, { status: 403 });
+        }
+
     }
 
     onUploadImageCompleted() {
@@ -130,7 +149,7 @@ export default class UserDetailComponent extends Vue {
                     originalFile: fileList[x],
                     storeAction: 'UPLOAD_PROFILE_IMAGE',
                     storeActionId: this.$store.state.profile.id
-                    }).then(() => this.onUploadImageSuccess());
+                    }).catch((er) => console.log(er));
             });
         (document.getElementById('profileImageUpload') as any).value = null;
     }

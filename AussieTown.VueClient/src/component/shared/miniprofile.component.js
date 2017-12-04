@@ -29,7 +29,7 @@ var MiniProfileComponent = /** @class */ (function (_super) {
         this.userId = this.data.id;
         this.profileImageUrl = this.data.photoUrl;
         this.profileUrl = '';
-        this.fullName = this.data.fullname;
+        this.fullName = this.data.fullname == ' ' ? this.data.email : this.data.fullname;
         this.shortDescription = this.data.shortDescription;
         this.profileLink = Utils.seorizeString(this.fullName);
     };

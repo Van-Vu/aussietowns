@@ -51,6 +51,17 @@ body {
   line-height: 1.5;
 }
 
+.hero-head,.hero-foot {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.hero-body {
+  flex-grow: 1;
+  flex-shrink: 0;
+  background-color: $c-neutral-white;
+}
+
 a {
   color: #008489;
   cursor: pointer;
@@ -445,7 +456,7 @@ button.button, input[type="submit"].button {
   max-height: 600px;
   max-width: 100%;
   min-height: 120px;
-  min-width: 100%;
+  /*min-width: 100%;*/
   padding: 0.625em;
   resize: vertical;
 }
@@ -867,7 +878,7 @@ button.button, input[type="submit"].button {
   padding-right: 0.875em;
   white-space: nowrap;
   &.is-success {
-    background-color: #23d160;
+    background-color: $c-brand-primary;
     color: #fff;
   }
 }
@@ -1448,6 +1459,46 @@ button.button, input[type="submit"].button {
     flex-direction: column;
     > .tile.is-child:not(:last-child) {
       margin-bottom: 1.5rem !important;
+    }
+  }
+  &.is-pulled-right {
+      -webkit-box-pack: end;
+      -ms-flex-pack: end;
+      justify-content: flex-end;
+      padding-left: 0.75em;
+  }
+  &.is-center {
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+  }
+  &.is-full{
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: $is-mobile), print {
+  .tile {
+    &.is-half-mobile {
+        -webkit-box-flex: 0;
+        -ms-flex: none;
+        flex: none;
+        width: 49%;
+        display: inline-block;
+    }
+    &.is-full-mobile {
+      -webkit-box-flex: 0;
+      -ms-flex: none;
+      flex: none;
+      width: 100%;
     }
   }
 }

@@ -1,7 +1,7 @@
 ﻿<template>
     <div class="nav-bar container" :class="{'is-sticky': isSticky}">
-        <div class="columns is-gapless is-mobile">
-            <div class="column is-two-thirds-desktop" style="position: relative;">
+        <div class="tile is-gapless is-mobile">
+            <div class="tile is-two-thirds-desktop" style="position: relative;">
                 <!--<div class='nav-bar__logo '></div>-->
                 <router-link :to="{name:'home'}" class="nav-bar__logo"></router-link>
                 <div class="second-search-bar is-hidden-mobile" v-show="isSticky">
@@ -9,8 +9,8 @@
                 </div>
             </div>
 
-            <div class="column is-one-quarter-mobile is-one-third-desktop">
-                <ul  class="is-pulled-right">
+            <div class="tile is-one-quarter-mobile is-one-third-desktop is-pulled-right">
+                <ul>
                     <li class="li-horizontal nav-link  is-hidden-mobile" v-if="isLoggedIn"><router-link :to="{ name: 'newListing', params: { listingType: 'offer' }}">Create Experience</router-link></li>
                     <li class="li-horizontal nav-link  is-hidden-mobile"><router-link :to="{ name: 'help' }">How it works</router-link></li>
                     <li class="li-horizontal nav-link  is-hidden-mobile"><router-link :to="{ name: 'about'}">About</router-link></li>

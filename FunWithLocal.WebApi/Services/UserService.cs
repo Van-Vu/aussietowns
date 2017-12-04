@@ -99,6 +99,11 @@ namespace FunWithLocal.WebApi.Services
             return await _userRepository.GetByIdAndEmail(id, email);
         }
 
+        public async Task<User> GetByEmail(string email)
+        {
+            return await _userRepository.GetByEmail(email);
+        }
+
         //public ICollection<User> SearchUsers(string term)
         //{
         //    return _userRepository.GetAll().Where(x => x.FirstName.Contains(term) || x.LastName.Contains(term) || x.Email.Contains(term)).ToList();

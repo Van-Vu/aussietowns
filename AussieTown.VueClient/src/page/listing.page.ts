@@ -39,10 +39,9 @@ export default class ListingPage extends Vue{
     @Prop() listingType: string;
 
     selectedLocation: AutocompleteItem;
-    formSubmitted = false;
+    formSubmitting = false;
     isOffer: boolean = false;
     isEditing: boolean = false;
-    editingSchedule: ScheduleModel = null;
     isStickyBoxRequired: boolean = false;
 
     $mq: any;
@@ -211,12 +210,28 @@ export default class ListingPage extends Vue{
     }
 
     onEditSchedule(scheduleObject) {
-        this.editingSchedule = scheduleObject;
         this.$store.dispatch('SHOW_SCHEDULE_MODAL', scheduleObject);
     }
 
     onHideScheduleModal() {
         this.$store.dispatch('HIDE_SCHEDULE_MODAL');
+    }
+
+    onEnquire() {
+        if (this.isLoggedIn) {
+            let primaryHost = this.model.tourOperators.find(x => x.isPrimary == true)
+            this.$store.dispatch('SHOW_CONTACT_MODAL',
+                {
+                    senderId: this.$store.state.loggedInUser.id,
+                    receiverId: primaryHost.id,
+                    receiverName: primaryHost.fullname,
+                    listingId: this.model.id,
+                    listingHeader: this.model.header
+                });
+        } else {
+            Utils.handleError(this.$store, { status: 403 });
+        }
+
     }
 
     constructShedule(model) {
@@ -226,7 +241,7 @@ export default class ListingPage extends Vue{
         for (var i = 0; i < schedules.length; i++) {
             var schedule = schedules[i];
 
-            if (Array.isArray(schedule.dateRange)) {
+            if (!this.isOffer && Array.isArray(schedule.dateRange)) {
                 schedule.startDate = schedule.dateRange[0];
                 schedule.endDate = schedule.dateRange[1];
                 schedule.repeatedDay = [];

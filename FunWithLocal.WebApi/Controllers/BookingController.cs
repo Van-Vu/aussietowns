@@ -8,11 +8,9 @@ using AussieTowns.Model;
 using AussieTowns.Services;
 using FunWithLocal.WebApi.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
-namespace AussieTowns.Controllers
+namespace FunWithLocal.WebApi.Controllers
 {
     [Route("api/[controller]")]
     public class BookingController: Controller

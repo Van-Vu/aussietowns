@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Model;
+using AussieTowns.Repository;
 using Dapper;
+using FunWithLocal.WebApi.Model;
 using Microsoft.Extensions.Logging;
 
-namespace AussieTowns.Repository
+namespace FunWithLocal.WebApi.Repository
 {
     public class MessageRepository: RepositoryBase, IMessageRepository
     {
@@ -101,7 +102,39 @@ namespace AussieTowns.Repository
                         throw;
                     }
                 }
+            }
+        }
 
+        public async Task<int> InsertEnquiry(Enquiry enquiry)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+                using (var tran = dbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        var now = DateTime.Now;
+
+                        var conversationSql = "INSERT INTO conversation(userOne, userTwo, lastMessageTime) VALUES (@senderId, @receiverId,@now);";
+                        await dbConnection.ExecuteAsync(conversationSql, new{enquiry.SenderId, enquiry.ReceiverId, now});
+
+                        var conversationId = Convert.ToInt16(await dbConnection.ExecuteScalarAsync("SELECT LAST_INSERT_ID()"));
+
+                        var messageSql = "INSERT INTO conversation_reply(conversationId, messageContent, userId, time)"
+                            + " VALUES(@conversationId, @messageContent, @userId, @time)";
+                        await dbConnection.ExecuteAsync(messageSql, new { conversationId, messageContent = enquiry.Message, userId = enquiry.SenderId, time = now });
+
+                        tran.Commit();
+                        return 1;
+                    }
+                    catch (Exception e)
+                    {
+                        tran.Rollback();
+                        _logger.LogCritical(e.Message, e);
+                        throw;
+                    }
+                }
             }
         }
     }

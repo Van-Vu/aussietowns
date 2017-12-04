@@ -35,6 +35,11 @@ export default class TestPage extends Vue {
     currentView: string = 'listingcard';
     listings: any[] = [];
 
+    isValidating: boolean = false;
+    rawPassword: string = '';
+    email: string = '';
+    $ua: any;
+
     switchModal() {
         if (this.currentView == 'loginmodal') {
             this.currentView = 'listingcard';
@@ -60,6 +65,9 @@ export default class TestPage extends Vue {
         //this.$store.dispatch('SEARCH_LISTINGS_BY_SUBURB', 129).then(() => {
         //    this.listings = this.$store.state.searchListings;
         //});
+
+        //v - validate="'required|email'"
+        this.$validator.attach('email', 'required|email');
     }
 
     checkLogginUser() {
@@ -68,6 +76,29 @@ export default class TestPage extends Vue {
 
     addNotification() {
         this.$store.dispatch('ADD_NOTIFICATION', { title: "this is title", text: "this is the text", type: NotificationType.Success });
+    }
+
+    validateBeforeSubmit() {
+        alert('validate');
+    }
+
+    onContact() {
+        this.$ua.trackEvent('TestPage', 'Contact Click', '', 0);
+
+        this.$store.dispatch('SHOW_CONTACT_MODAL',
+        {
+            senderId: 1,
+            receiverId: 2,
+            receiverName: 'Hey there',
+            listingId: 15,
+            listingHeader: 'this is listing 15'
+        });
+    }
+
+    onBlur(value) {
+        this.isValidating = true;
+        this.$validator.validate('email', this.email);
+        //this.isValidating = false;
     }
 
 }

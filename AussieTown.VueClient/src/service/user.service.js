@@ -47,6 +47,10 @@ var UserService = /** @class */ (function () {
         return http.get('api/user/tour/' + id)
             .then(function (response) { return response.data; });
     };
+    UserService.prototype.verifyEmail = function (email) {
+        return http.get('api/user/verifyEmail/' + email)
+            .then(function (response) { return response; });
+    };
     UserService.prototype.delete = function (_id) {
         return http.delete('/users/' + _id);
     };

@@ -101,6 +101,15 @@ function render(req, res) {
 
     const context = { url: req.url, cookies: req.cookies }
 
+
+    // The user needs to login again
+    if (req.xhr) {
+        console.log('Bodom XHR');
+    } else {
+        console.log('Bodom Direct entry');
+    }
+
+
     renderer.renderToStream(context)
     .on('error', handleError)
     .on('end', () => console.log(`whole request: ${Date.now() - s}ms`))

@@ -10,7 +10,32 @@
             test here
         </router-link>
 
+        <button @click="onContact">Contact Someone</button>
 
+        <form @submit.prevent="validateBeforeSubmit">
+            <div class="field">
+                <p class="control has-icon has-icon-right" :class="{'is-loading': isValidating}">
+                    <input name="email" v-model="email" @blur="onBlur"
+                           :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="Enter your email">
+                    <i class="icon icon-envelope-o" v-show="!isValidating"></i>
+                    <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
+                </p>
+            </div>
+            <div class="field">
+                <p class="control has-icon has-icon-right">
+                    <input name="password" v-model="rawPassword" v-validate="'required'"
+                           :class="{'input': true, 'is-danger': errors.has('password') }" type="password" placeholder="●●●●●●●">
+                    <span class="icon user">
+                        <i class="icon icon-lock"></i>
+                    </span>
+                    <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
+                </p>
+            </div>
+            <div class="field has-text-centered">
+                <button type="submit" class="button is-full button mtl_button-no-round mtl-btn-large">Submit</button>
+            </div>
+        </form>
+        <div>Hey test</div>
         <ul>
             <li v-for="listing in listings">
                 <listingcard :listingDetail="listing"></listingcard>

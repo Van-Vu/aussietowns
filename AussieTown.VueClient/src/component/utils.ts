@@ -315,7 +315,7 @@ export class Utils {
 
         switch (error.status) {
             case 400:
-                store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
+                store.dispatch('ADD_NOTIFICATION', { title: "Submit incorrect information", type: NotificationType.Error });
                 break;
             case 401:
                 store.dispatch('ADD_NOTIFICATION', { title: "You are not authorized to view this page!", type: NotificationType.Error });
@@ -324,12 +324,13 @@ export class Utils {
                 store.dispatch('SHOW_LOGIN_MODAL');
                 store.dispatch('ADD_NOTIFICATION', { title: "Login required", text: "Please login or register to proceed", type: NotificationType.Warning });
                 break;
+            case 422:
+                store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: "Email or Password is incorrect", type: NotificationType.Warning });
+                break;
             case 500:
                 store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
                 break;
         }
-
-        store.dispatch('LOG_ERROR', { message: `${error.data}`, stack: error.config.data });
     }
 
     public static getProfileImage(url) {

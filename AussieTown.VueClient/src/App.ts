@@ -10,7 +10,7 @@ import LoadingComponent from './component/shared/loading.component.vue';
 import LoginModal from './component/modal/loginmodal.component.vue';
 import ScheduleModalComponent from './component/modal/schedulemodal.component.vue';
 import ImageCropModalComponent from './component/modal/imagecropmodal.component.vue';
-
+import ContactModal from './component/modal/contactmodal.component.vue';
 
 import LogService from './service/log.service';
 import router from './router'
@@ -98,7 +98,8 @@ declare module 'vue/types/options' {
         "loading": LoadingComponent,
         'loginmodal': LoginModal,
         'schedulemodal': ScheduleModalComponent,
-        'imagecropmodal': ImageCropModalComponent
+        'imagecropmodal': ImageCropModalComponent,
+        'contactmodal': ContactModal
     },
     metaInfo: {
         // if no subcomponents specify a metaInfo.title, this title will be used
@@ -109,11 +110,19 @@ declare module 'vue/types/options' {
             { charset: 'utf-8' },
             { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },
             { name: 'theme-color', content: '#99CD4E' },
-            { name: 'mobile-web-app-capable', content: 'yes' }
+            { name: 'mobile-web-app-capable', content: 'yes' },
+            { name: 'description', content: 'Desire for unique experiences like a local with no booking fee? Includes travel tips, do\'s and dont\'s, hidden gems, indoor, outdoor activities. Check this out !' },
+            { property: 'og:title', content: 'Fun with Local' },
+            { property: 'og:type', content: 'website' },
+            { property: 'og:url', content: 'https://funwithlocal.com' },
+            { property: 'og:site_name', content: 'Fun with Local' },
+            { property: 'og:description', content: 'Fun with Local' },
         ],
         link: [
             { rel: 'manifest', href: '/static/manifest.json' }
-        ]
+        ],
+        //Bodom: dangerous
+        __dangerouslyDisableSanitizers: ['meta']
     }
 })
 
@@ -122,6 +131,7 @@ export default class App extends Vue {
     //dynamicProps: string = '';
     $Progress: any;
     $cookie: any;
+    $ua: any;
 
     get currentPage() {
         return this.$store.state.currentPage;
@@ -182,18 +192,22 @@ export default class App extends Vue {
                 // parse meta tags
                 this.$Progress.parseMeta(meta);
             }
+
             //  start the progress bar
-            this.$Progress.start();
+            //this.$Progress.start();
+            this.$store.dispatch("ENABLE_LOADING");
+            if (process.env.VUE_ENV === 'client') {
+                window.scrollTo(0, 0);
+                this.$ua.trackView(to.meta.analytics || to.path, true)
+            }
             //  continue to next page
             next();
         })
         //  hook the progress bar to finish after we've finished moving router-view
         this.$router.afterEach((to, from) => {
             //  finish the progress bar
-            this.$Progress.finish();
-            if (process.env.VUE_ENV === 'client') {
-                window.scrollTo(0, 0);
-            }
+            //this.$Progress.finish();
+            this.$store.dispatch("DISABLE_LOADING");
         })
 
     }

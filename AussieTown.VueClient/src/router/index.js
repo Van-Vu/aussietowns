@@ -17,6 +17,7 @@ var BookingPage = function () { return import('../page/booking.page.vue'); };
 var BookingDetailPage = function () { return import('../page/bookingdetail.page.vue'); };
 var BookingManagePage = function () { return import('../page/bookingmanage.page.vue'); };
 var ConfirmEmailPage = function () { return import('../page/confirmemail.page.vue'); };
+var ArticlePage = function () { return import('../page/article.page.vue'); };
 var MessageComponent = function () { return import('../component/profile/message.component.vue'); };
 var TripComponent = function () { return import('../component/profile/trip.component.vue'); };
 var UserImageComponent = function () { return import('../component/profile/userimage.component.vue'); };
@@ -165,6 +166,26 @@ var router = new Router({
             path: "/listing/:seoString-:listingId(\\d+)",
             name: "listingDetail",
             component: ListingPage,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
+            path: "/whatson/:seoString-:articleId(\\d+)",
+            name: "whatson",
+            component: ArticlePage,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
+            path: "/about/:seoString-:articleId(\\d+)",
+            name: "aboutus",
+            component: ArticlePage,
             props: true,
             meta: {
                 permission: UserRole.Anonymous,

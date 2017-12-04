@@ -24,10 +24,15 @@ import LoginForm from '../form/loginform.component.vue';
 var LoginModal = /** @class */ (function (_super) {
     __extends(LoginModal, _super);
     function LoginModal() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.headerText = 'Login';
+        return _this;
     }
     LoginModal.prototype.onClose = function () {
         this.$emit('onClose');
+    };
+    LoginModal.prototype.changeMode = function (value) {
+        this.headerText = value;
     };
     __decorate([
         Prop(),

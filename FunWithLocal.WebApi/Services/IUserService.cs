@@ -10,6 +10,9 @@ namespace FunWithLocal.WebApi.Services
         Task<User> GetById(int id);
 
         Task<User> GetByIdAndEmail(int id, string email);
+
+        Task<User> GetByEmail(string email);
+
         Task<User> VerifyUser(User user);
         Task<IEnumerable<User>> SearchUser(string searchTerm);
         Task<int> Register(User user);

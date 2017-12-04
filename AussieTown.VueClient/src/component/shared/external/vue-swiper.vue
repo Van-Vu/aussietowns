@@ -16,7 +16,7 @@
              }"
                  @transitionend="_onTransitionEnd">
                 <slot></slot>
-                <div name="EndOfSlide" style="width: 1px; height: 1px;"></div>
+                <!--<div name="EndOfSlide" style="width: 1px; height: 1px;"></div>-->
             </div>
             <div class="swiper-pagination"
                  v-show="paginationVisible">
@@ -113,6 +113,7 @@
         methods: {
             next() {
                 var page = this.currentPage;
+                console.log('isNextAvailable: ' + this.isNextAvailable());
                 if (this.isNextAvailable() || this.loop) {
                     this.setPage(page + 1);
                 } else {
@@ -162,10 +163,14 @@
             },
             isNextAvailable(){
                 if (this.totalImage < 1) return false;
+
+                return this.currentPage < this.slideEls.length; 
+
+                //if (!this.showNavButton) return true;
                 
-                if (this.$refs.wrap){
-                    return !Utils.isElementInViewport(this.$refs.wrap.lastElementChild);
-                }
+                //if (this.$refs.wrap){
+                //    return !Utils.isElementInViewport(this.$refs.wrap.lastElementChild);
+                //}
                 
                 return true;
             },
@@ -183,14 +188,13 @@
                 this.dragging = true;
                 this.transitionDuration = 0;
 
-                document.addEventListener('touchmove', this._onTouchMove, {passive: true});
-                document.addEventListener('touchend', this._onTouchEnd, false);
-                document.addEventListener('mousemove', this._onTouchMove, false);
-                document.addEventListener('mouseup', this._onTouchEnd, false);
+                this.$refs.wrap.addEventListener('touchmove', this._onTouchMove, {passive: true});
+                this.$refs.wrap.addEventListener('touchend', this._onTouchEnd, false);
+                this.$refs.wrap.addEventListener('mousemove', this._onTouchMove, false);
+                this.$refs.wrap.addEventListener('mouseup', this._onTouchEnd, false);
             },
             _onTouchMove(e) {
                 this.delta = this._getTouchPos(e) - this.startPos;
-
                 if (!this.performanceMode) {
                     this._setTranslate(this.startTranslate + this.delta);
                     this.$emit('slider-move', this._getTranslate());
@@ -212,10 +216,10 @@
                     this._revert();
                 }
 
-                document.removeEventListener('touchmove', this._onTouchMove, {passive: true});
-                document.removeEventListener('touchend', this._onTouchEnd);
-                document.removeEventListener('mousemove', this._onTouchMove);
-                document.removeEventListener('mouseup', this._onTouchEnd);
+                this.$refs.wrap.removeEventListener('touchmove', this._onTouchMove, {passive: true});
+                this.$refs.wrap.removeEventListener('touchend', this._onTouchEnd);
+                this.$refs.wrap.removeEventListener('mousemove', this._onTouchMove);
+                this.$refs.wrap.removeEventListener('mouseup', this._onTouchEnd);
             },
             _onWheel(e) {
                 if (this.mousewheelControl) {

@@ -315,6 +315,22 @@ namespace FunWithLocal.WebApi.Controllers
             }
         }
 
+        [HttpGet("verifyEmail/{email}")]
+        //[Authorize(Policy = "AtLeastEditor")]
+        public async Task<bool> VerifyEmail(string email)
+        {
+            try
+            {
+                var user = await _userService.GetByEmail(email);
+                //true: good to go ahead
+                return user == null;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                throw;
+            }
+        }
 
         [HttpGet("search")]
         public async Task<IEnumerable<MiniProfile>> SearchUser([FromQuery]string term)

@@ -5,7 +5,7 @@
                 <img v-if="model.heroImageUrl" :src="model.heroImageUrl" alt="HeroImage" />
             </figure>
             <input id="heroImageUpload" type="file" style="display:none;" @change="onUploadHeroImage($event.target.files); fileCount = $event.target.files.length" accept="image/*">
-            <i class="icon icon-pencil icon-btn" @click.prevent="onReplaceHeroImage"></i>
+            <i class="icon icon-pencil icon-btn" v-if="canEdit" @click.prevent="onReplaceHeroImage"></i>
         </header>
         <section class="tile is-parent">
             <div class="tile is-3 is-vertical userdetail_profileimage">
@@ -13,12 +13,12 @@
                     <img v-if="model.images && model.images.length > 0" class="profile-image" :src="model.images[0].url" alt="profile image" />
                 </figure>
                 <input id="profileImageUpload" type="file" style="display:none;" @change="onUploadProfileImage($event.target.files); fileCount = $event.target.files.length" accept="image/*">
-                <i class="icon icon-pencil icon-btn" @click.prevent="onReplaceProfileImage"></i>
+                <i class="icon icon-pencil icon-btn" v-if="canEdit" @click.prevent="onReplaceProfileImage"></i>
             </div>
             <div class="userdetail container tile is-vertical is-parent" :class="{editing:isEditing}">
                 <div class="tile is-parent">
                     <div class="tile is-3">Email Address</div>
-                    <div class="tile control has-icon has-icon-right">
+                    <div class="tile is-vertical control has-icon has-icon-right">
                         <input name="email" v-if="isEditing" v-model="model.email" v-validate="'required|email'"
                                :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="">
                         <i v-if="isEditing" class="icon icon-lock"></i>
@@ -29,7 +29,7 @@
                 <hr />
                 <div class="tile is-parent">
                     <div class="tile is-3">First Name</div>
-                    <div class="tile control has-icon has-icon-right">
+                    <div class="tile is-vertical control has-icon has-icon-right">
                         <input name="firstname" v-if="isEditing" v-model="model.firstName" v-validate="'required|alpha_spaces|max:30'"
                                :class="{'input': true, 'is-danger': errors.has('firstname') }" type="text">
                         <i v-if="isEditing" class="icon icon-lock"></i>
@@ -40,7 +40,7 @@
                 <hr />
                 <div class="tile is-parent">
                     <div class="tile is-3">Last Name</div>
-                    <div class="tile control has-icon has-icon-right">
+                    <div class="tile is-vertical control has-icon has-icon-right">
                         <input name="lastname" v-if="isEditing" v-model="model.lastName" v-validate="'required|alpha_spaces|max:30'"
                                :class="{'input': true, 'is-danger': errors.has('lastname') }" type="text">
                         <i v-if="isEditing" class="icon icon-lock"></i>
@@ -60,7 +60,7 @@
                 <hr />
                 <div class="tile is-parent">
                     <div class="tile is-3">Phone Number</div>
-                    <div class="tile control has-icon has-icon-right">
+                    <div class="tile is-vertical control has-icon has-icon-right">
                         <input name="phone" v-if="isEditing" v-model="model.phone" class="input" type="text" v-mask="'##########'">
                         <i v-if="isEditing" class="icon icon-lock"></i>
                         <label v-if="!isEditing">{{ model.phone }}</label>
@@ -120,11 +120,12 @@
                         <label v-if="!isEditing">{{ model.emergencyContact }}</label>
                     </div>
                 </div>
-
-                <div class="tile is-parent is-gapless is-flex is-sticky-bottom">
-                    <button class="tile is-full-mobile is-2-desktop button mtl_button-no-round" v-if="!isEditing && canEdit" @click="onEdit">Edit</button>
-                    <button class="tile is-half-mobile is-2-desktop button mtl_button-no-round" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
-                    <button class="tile is-half-mobile is-2-desktop button mtl_button-no-round" v-if="isEditing" @click="onCancelEdit">Cancel</button>
+                <hr />
+                <div class="tile is-gapless is-flex is-sticky-bottom is-center">
+                    <button class="tile is-6 is-center button mtl_button-no-round" v-if="!canEdit" @click="onEnquire">Ask me a question</button>
+                    <button class="tile is-6 is-full-mobile is-2-desktop button mtl_button-no-round" v-if="!isEditing && canEdit" @click="onEdit">Edit</button>
+                    <button class="tile is-half-mobile button mtl_button-no-round" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
+                    <button class="tile is-half-mobile button mtl_button-no-round" v-if="isEditing" @click="onCancelEdit">Cancel</button>
                 </div>
             </div>
         </section>
