@@ -34,4 +34,10 @@
   <ItemGroup>
     <None Include="Content\EmailTemplates\*" CopyToPublishDirectory="Always" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="privatekey.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

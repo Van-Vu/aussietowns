@@ -23,17 +23,15 @@ var ContactForm = /** @class */ (function (_super) {
     __extends(ContactForm, _super);
     function ContactForm() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.isSending = false;
+        _this.formSubmitting = false;
         return _this;
     }
     ContactForm.prototype.onContact = function () {
         var _this = this;
-        this.isSending = true;
+        this.formSubmitting = true;
         this.$store.dispatch("SEND_ENQUIRY", this.model)
-            .then(function () {
-            var adsfad = 'asdfasdfa';
-            _this.isSending = false;
-        });
+            .then(function () { return _this.$emit('onClose'); })
+            .catch(function () { return _this.formSubmitting = false; });
     };
     __decorate([
         Prop(),

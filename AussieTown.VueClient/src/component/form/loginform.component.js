@@ -98,10 +98,10 @@ var LoginForm = /** @class */ (function (_super) {
                 }
                 _this.model.email = _this.email;
                 if (_this.isLogin) {
-                    _this.login(_this.model).then(function () { return _this.formSubmitting = false; });
+                    _this.login(_this.model).then(function () { return _this.formSubmitting = false; }).catch(function () { return _this.formSubmitting = false; });
                 }
                 else {
-                    _this.signup(_this.model).then(function () { return _this.formSubmitting = false; });
+                    _this.signup(_this.model).then(function () { return _this.formSubmitting = false; }).catch(function () { return _this.formSubmitting = false; });
                 }
                 _this.$validator.reset();
             }

@@ -14,7 +14,7 @@
                         :class="{'textarea tile is-child': true, 'is-danger': errors.has('message') }" rows="5" placeholder=""></textarea>
         </div>
         <div class="has-text-centered">
-            <button type="submit" class="tile is-6 button mtl_button-no-round is-medium" :class="{'is-loading': isSending}">Send</button>
+            <button type="submit" class="tile is-6 button mtl_button-no-round is-medium" :class="{'is-loading': formSubmitting}">Send</button>
         </div>
     </form>
 </template>

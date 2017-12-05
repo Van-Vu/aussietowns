@@ -32,7 +32,7 @@ namespace AussieTowns.Auth
 
                 //we want to decrypt, therefore we need a csp and load our private key
 
-                var pemReader = new PemReader(File.OpenText(@"D:\privatekey.pem"));
+                var pemReader = new PemReader(File.OpenText(@"privatekey.pem"));
                 var rsaCryptoServiceProvider = new RSACryptoServiceProvider();
                 rsaCryptoServiceProvider.ImportParameters(pemReader.ReadPrivatekey());
 

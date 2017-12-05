@@ -140,6 +140,7 @@ var ListingPage = /** @class */ (function (_super) {
             this.$validator.validateAll().then(function (result) {
                 if (result) {
                     _this.$store.dispatch("ENABLE_LOADING");
+                    _this.formSubmitting = true;
                     if (_this.model.id > 0) {
                         return _this.$store.dispatch('UPDATE_LISTING', _this.contructBeforeSubmit(_this.model))
                             .then(function () {
@@ -149,7 +150,8 @@ var ListingPage = /** @class */ (function (_super) {
                         })
                             .catch(function (err) {
                             _this.onCancelEdit();
-                        });
+                        })
+                            .then(function () { return _this.formSubmitting = false; });
                     }
                     else {
                         return _this.$store.dispatch('INSERT_LISTING', _this.contructBeforeSubmit(_this.model))
@@ -164,7 +166,8 @@ var ListingPage = /** @class */ (function (_super) {
                                 type: NotificationType.Success
                             });
                         })
-                            .catch(function (err) { return _this.onCancelEdit(); });
+                            .catch(function (err) { return _this.onCancelEdit(); })
+                            .then(function () { return _this.formSubmitting = false; });
                     }
                 }
             }).catch(function () {

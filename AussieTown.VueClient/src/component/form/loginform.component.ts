@@ -103,9 +103,9 @@ export default class LoginForm extends Vue {
 
                 this.model.email = this.email;
                 if (this.isLogin) {
-                    this.login(this.model).then(() => this.formSubmitting = false);
+                    this.login(this.model).then(() => this.formSubmitting = false).catch(() => this.formSubmitting = false);
                 } else {
-                    this.signup(this.model).then(() => this.formSubmitting = false);
+                    this.signup(this.model).then(() => this.formSubmitting = false).catch(() => this.formSubmitting = false);
                 }
                 (this.$validator as any).reset();                
             }

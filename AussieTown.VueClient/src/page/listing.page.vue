@@ -11,10 +11,10 @@
                             <label v-if="!isEditing" class="listing-headertext">{{ model.header }}</label>
                         </div>
                     </div>
-                    <!--<div v-if="isOffer && model.id" class="field" style="text-align:center;">
+                    <div v-if="isOffer && model.id" class="field" style="text-align:center;">
                         <label v-if="isEditing" class="label" for="header">Images</label>
                         <imageupload id="imageupload" :isEditing="isEditing" :uploadType="0" :images="model.imageList" @uploadImageCompleted="onUploadImageCompleted"></imageupload>
-                    </div>-->
+                    </div>
 
                     <div v-show="isOffer" class="tile is-parent">
                         <div class="tile is-2">Host</div>
@@ -68,7 +68,7 @@
                                          :allowRemove="false" @userAdded="onUserAdded" @userRemoved="onUserRemoved"></participant>
                         </div>
                     </div>
-                <div class="is-gapless is-flex is-sticky-bottom">
+                <div class="tile is-gapless is-flex is-sticky-bottom is-center">
                     <button class="tile is-6 is-full-mobile button mtl_button-no-round" v-if="!canEdit" @click="onEnquire">Ask host a question</button>
                     <button class="tile is-6 is-full-mobile button mtl_button-no-round" :class="{'is-loading': formSubmitting}" v-if="!isEditing && canEdit" @click="onEdit">Edit</button>
                     <button class="tile is-6 is-half-mobile is-child button mtl_button-no-round" v-if="isEditing" @click="onInsertorUpdate">Submit</button>

@@ -137,21 +137,21 @@ export default class ListingPage extends Vue{
             this.$validator.validateAll().then((result) => {
                 if (result) {
                     this.$store.dispatch("ENABLE_LOADING");
+                    this.formSubmitting = true;
                     if (this.model.id > 0) {
                         return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model))
                             .then(() => {
-                                this.$store.dispatch("DISABLE_LOADING");
                                 this.$store.dispatch('ADD_NOTIFICATION',
                                     { title: "Update success", type: NotificationType.Success });
                                 this.isEditing = false;
                             })
                             .catch(err => {
                                 this.onCancelEdit();
-                            });
+                            })
+                            .then(() => this.$store.dispatch("DISABLE_LOADING"));
                     } else {
                         return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model))
                             .then(listingId => {
-                                this.$store.dispatch("DISABLE_LOADING");
                                 this.$router.push({
                                     name: 'listingDetail',
                                     params: { seoString: Utils.seorizeString(this.model.header), listingId: listingId }
@@ -163,7 +163,8 @@ export default class ListingPage extends Vue{
                                     type: NotificationType.Success
                                 });
                             })
-                            .catch(err => this.onCancelEdit());
+                            .catch(err => this.onCancelEdit())
+                            .then(() => this.$store.dispatch("DISABLE_LOADING"));
                     }
                 }
             }).catch(() => {

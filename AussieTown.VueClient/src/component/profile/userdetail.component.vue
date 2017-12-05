@@ -124,8 +124,8 @@
                 <div class="tile is-gapless is-flex is-sticky-bottom is-center">
                     <button class="tile is-6 is-center button mtl_button-no-round" v-if="!canEdit" @click="onEnquire">Ask me a question</button>
                     <button class="tile is-6 is-full-mobile is-2-desktop button mtl_button-no-round" v-if="!isEditing && canEdit" @click="onEdit">Edit</button>
-                    <button class="tile is-half-mobile button mtl_button-no-round" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
-                    <button class="tile is-half-mobile button mtl_button-no-round" v-if="isEditing" @click="onCancelEdit">Cancel</button>
+                    <button class="tile is-6 is-half-mobile button mtl_button-no-round" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
+                    <button class="tile is-6 is-half-mobile button mtl_button-no-round" v-if="isEditing" @click="onCancelEdit">Cancel</button>
                 </div>
             </div>
         </section>

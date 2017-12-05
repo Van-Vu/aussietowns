@@ -1,7 +1,7 @@
 ﻿<template>
     <modalshell :show.sync="show" @onClose="onClose">
         <h1 slot="header">Send a message</h1>
-        <contactform :model="contactModel" slot="body"></contactform>
+        <contactform :model="contactModel" @closeModal="onClose" slot="body"></contactform>
     </modalshell>
 </template>
 

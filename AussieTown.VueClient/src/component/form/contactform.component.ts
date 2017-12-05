@@ -12,15 +12,13 @@ import ContactModel from '../../model/contact.model';
 
 export default class ContactForm extends Vue {
     @Prop() model: any;
-    isSending: boolean = false;
+    formSubmitting: boolean = false;
 
     onContact() {
-        this.isSending = true;
+        this.formSubmitting = true;
         this.$store.dispatch("SEND_ENQUIRY", this.model)
-            .then(() => {
-                let adsfad = 'asdfasdfa';
-                this.isSending = false;
-            });
+            .then(() => this.$emit('onClose'))
+            .catch(() => this.formSubmitting = false);
     }
 }
 

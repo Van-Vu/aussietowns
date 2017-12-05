@@ -7,3 +7,4 @@ FunWithLocal.WebApi/obj/
 FunWithLocal.WebApi/Properties/
 logs/
 ReleaseCandidate/
+FunWithLocal.WebApi/privatekey.pem

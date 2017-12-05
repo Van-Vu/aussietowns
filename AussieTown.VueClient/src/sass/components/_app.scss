@@ -201,6 +201,7 @@ ul {
     z-index: 10;
     >button{
         height: 2.25rem;
+        margin: 0;
     }
 
     @media all and (min-width: $is-mobile) {
@@ -309,7 +310,7 @@ input[type="checkbox"] {
 }
 
 .slide-fade-enter-active {
-  animation: fadeInLeft 1s;
+  animation: fadeInLeft 0.5s;
 }
 
 @keyframes fadeOutRight {
@@ -324,7 +325,7 @@ input[type="checkbox"] {
 }
 
 .slide-fade-leave-active {
-  animation: fadeOutRight 1s;
+  animation: fadeOutRight 0.5s;
 }
 
 .slide-fade-enter, .slide-fade-leave-to
