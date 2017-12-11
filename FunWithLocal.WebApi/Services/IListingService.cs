@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AussieTowns.Model;
+using FunWithLocal.WebApi.Model;
 
-namespace AussieTowns.Services
+namespace FunWithLocal.WebApi.Services
 {
     public interface IListingService
     {
         Task<IEnumerable<Listing>> GetListingsByUserId(int userId);
         Task<IEnumerable<ListingView>> GetListingsBySuburb(int suburbId);
+
+        Task<IEnumerable<ListingView>> GetFeatureListings();
         Task<ListingView> GetListingViewById(int listingId);
         Task<Listing> GetListingDetail(int id);
         Task<int> InsertListing(Listing listing);
         Task<int> UpdateListing(Listing listing);
         Task<int> DeActivateListing(int id);
-        Task<Image> FetchImageByUrl(int listingId, string url);
         Task<IEnumerable<int>> MapListingHeaderToId(string header);
-        Task<int> DeleteImage(int imageId);
     }
 }

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using AussieTowns.Common;
 using AussieTowns.Model;
+using AussieTowns.Repository;
 using Dapper;
+using FunWithLocal.WebApi.Model;
 using Microsoft.Extensions.Logging;
 
-namespace AussieTowns.Repository
+namespace FunWithLocal.WebApi.Repository
 {
     public class BookingRepository: RepositoryBase, IBookingRepository
     {

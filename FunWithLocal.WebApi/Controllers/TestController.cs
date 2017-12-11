@@ -3,6 +3,9 @@ using AussieTowns.Common;
 using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using FunWithLocal.WebApi.Model;
 using FunWithLocal.WebApi.Services;
 using FunWithLocal.WebApi.ViewModel;
 using MailKit.Net.Smtp;
@@ -14,23 +17,27 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using Newtonsoft.Json;
+using Wangkanai.Detection;
 
 namespace FunWithLocal.WebApi.Controllers
 {
     [Route("api/[controller]")]
-    public class TestController
+    public class TestController: Controller
     {
         private readonly ILogger _logger;
         private readonly ISearchService _searchService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmailService _emailService;
         private readonly IHostingEnvironment _hostingEnv;
+        private readonly IUserAgent _useragent;
+        private readonly IDevice _device;
         private readonly AppSettings _appSettings;
         private readonly ISecurityTokenService _securityTokenService;
 
         public TestController(ILogger<TestController> logger, ISearchService searchService,
             IHttpContextAccessor httpContextAccessor, ISecurityTokenService securityTokenService,
-            IEmailService emailService, IHostingEnvironment hostingEnv, IOptions<AppSettings> appSettings)
+            IEmailService emailService, IHostingEnvironment hostingEnv, IOptions<AppSettings> appSettings,
+            IDeviceResolver deviceResolver)
         {
             _logger = logger;
             _searchService = searchService;
@@ -39,6 +46,9 @@ namespace FunWithLocal.WebApi.Controllers
             _hostingEnv = hostingEnv;
             _appSettings = appSettings.Value;
             _securityTokenService = securityTokenService;
+
+            _useragent = deviceResolver.UserAgent;
+            _device = deviceResolver.Device;
         }
 
         [HttpGet("test")]
@@ -208,6 +218,41 @@ namespace FunWithLocal.WebApi.Controllers
             {
                 Console.WriteLine(e);
                 throw;
+            }
+        }
+
+        [HttpGet("cloudinary")]
+        public void Cloundinary()
+        {
+            // Assigned cloud name: dbncss4uz
+            Account account = new Account(
+              "dbncss4uz",
+              "755678623562733",
+              "sI8Sk2eyDL5odFEEO4XUOhxVAMM");
+
+            Cloudinary cloudinary = new Cloudinary(account);
+
+            var uploadParams = new ImageUploadParams()
+            {
+                File = new FileDescription(@"D:\profile.png")
+            };
+            var uploadResult = cloudinary.Upload(uploadParams);
+        }
+
+        [HttpGet("detect")]
+        public void DetectClient()
+        {
+            if (_device.Type == DeviceType.Desktop)
+            {
+                //some logic
+            }
+            else if (_device.Type == DeviceType.Mobile)
+            {
+                //some logic
+            }
+            else if (_device.Type == DeviceType.Tablet)
+            {
+                //some logic
             }
         }
     }

@@ -4,7 +4,7 @@
     font-size: 22px;
 }
 
-.listing-main-content {
+.listing-page {
     hr {
         width: 83.33333%;
         margin-left: 16.66667%;
@@ -17,6 +17,26 @@
 
     .is-2 {
         font-weight:500;
+    }
+
+    @media only screen and (min-width : $is-tablet) and (max-width : $is-tablet-max){
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        > .tile.is-child:not(:last-child) {
+            margin-bottom: 1.5rem !important;
+        }
+    }
+
+    .listing-content {
+        -webkit-box-flex: 0;
+        -ms-flex: none;
+        flex: none;
+        width: 100%;
+        @media only screen and (min-width : $is-desktop) {
+            width: 66.66667%;
+        }
     }
 }
 
@@ -34,14 +54,16 @@
 
 .listing-swiper {
     position: relative;
-    min-width: 320px;
+    /*min-width: 320px;*/
     width:100%;
+    background: $c-darkgrey-light;
     
     // maintain 16:9 ratio
     padding-top: 56.25%;
 
     .swiper {
         height: 100%;
+        width: 100%;
         @extend .absolute-center-y;
     }
 

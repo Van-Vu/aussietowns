@@ -14,29 +14,33 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 import RingLoader from './external/ringloader.vue';
-var LoadingComponent = /** @class */ (function (_super) {
-    __extends(LoadingComponent, _super);
-    function LoadingComponent() {
+var ZoneLoadingComponent = /** @class */ (function (_super) {
+    __extends(ZoneLoadingComponent, _super);
+    function ZoneLoadingComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(LoadingComponent.prototype, "isLoading", {
-        get: function () {
-            return this.$store.state.isLoading;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    LoadingComponent = __decorate([
+    __decorate([
+        Prop(),
+        __metadata("design:type", Boolean)
+    ], ZoneLoadingComponent.prototype, "isLoading", void 0);
+    __decorate([
+        Prop({ default: 'Loading' }),
+        __metadata("design:type", String)
+    ], ZoneLoadingComponent.prototype, "loadingText", void 0);
+    ZoneLoadingComponent = __decorate([
         Component({
-            name: "LoadingComponent",
+            name: "ZoneLoadingComponent",
             components: {
                 "ringloader": RingLoader
             }
         })
-    ], LoadingComponent);
-    return LoadingComponent;
+    ], ZoneLoadingComponent);
+    return ZoneLoadingComponent;
 }(Vue));
-export default LoadingComponent;
+export default ZoneLoadingComponent;

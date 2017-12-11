@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using AussieTowns.Auth;
 using AussieTowns.Common;
@@ -9,11 +11,16 @@ using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
 using AutoMapper;
+using FunWithLocal.WebApi.Common;
+using FunWithLocal.WebApi.Model;
+using FunWithLocal.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Rest.Azure;
+using Wangkanai.Detection;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,16 +31,21 @@ namespace FunWithLocal.WebApi.Controllers
     {
         private readonly IListingService _listingService;
         private readonly IBookingService _bookingService;
+        private readonly IImageStorageService _imageStorageService;
+        private readonly IImageStorageService _cloudinaryService;
         private readonly IMapper _mapper;
         private readonly ILogger<ListingController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppSettings _appSettings;
         private readonly IImageService _imageService;
+        private readonly IDevice _device;
 
         readonly IAuthorizationService _authorizationService;
 
         public ListingController(IListingService listingService, IMapper mapper, IOptions<AppSettings> appSettings,
-            ILogger<ListingController> logger, IHttpContextAccessor httpContextAccessor, IEmailService emailService, IAuthorizationService authorizationService, IImageService imageService, IBookingService bookingService)
+            ILogger<ListingController> logger, IHttpContextAccessor httpContextAccessor, IEmailService emailService, 
+            IAuthorizationService authorizationService, IImageService imageService, IBookingService bookingService,
+            IDeviceResolver deviceResolver, IImageStorageService imageStorageService) 
         {
             _listingService = listingService;
             _mapper = mapper;
@@ -42,8 +54,9 @@ namespace FunWithLocal.WebApi.Controllers
             _authorizationService = authorizationService;
             _imageService = imageService;
             _bookingService = bookingService;
+            _imageStorageService = imageStorageService;
             _appSettings = appSettings.Value;
-
+            _device = deviceResolver.Device;
         }
 
         [HttpGet("{id}")]
@@ -67,7 +80,11 @@ namespace FunWithLocal.WebApi.Controllers
                 //    return _mapper.Map<Listing, ListingSummary>(listing);
                 //}
 
-                return _mapper.Map<Listing, ListingResponse>(listing);
+                return _mapper.Map<Listing, ListingResponse>(listing,
+                        opts => opts.BeforeMap((x, y) =>
+                        {
+                            x.ImageList = _imageStorageService.TransformImageUrls(x.ImageList, ImageType.Listing, _device);
+                        }));
             }
             catch (Exception e)
             {
@@ -95,7 +112,10 @@ namespace FunWithLocal.WebApi.Controllers
 
                 return new 
                 {
-                    listing= _mapper.Map<Listing, ListingResponse>(listing),
+                    listing= _mapper.Map<Listing, ListingResponse>(listing, opts => opts.BeforeMap((x, y) =>
+                        {
+                            x.ImageList = _imageStorageService.TransformImageUrls(x.ImageList, ImageType.Listing, _device);
+                        })),
                     slots = bookingSlots.Select(x => _mapper.Map<BookingSlot,BookingSlotResponse>(x))
                 };
             }
@@ -187,19 +207,11 @@ namespace FunWithLocal.WebApi.Controllers
                 var imageUrls = new List<Image>();
                 foreach (var file in files)
                 {
-                    if (file.Length > 0)
-                    {
-                        // Bodom hack: deal with this later
-                        var result = await AwsS3Extensions.SaveToS3Async(
-                            AwsS3Extensions.GetS3Client(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
-                                _appSettings.AwsS3Region),
-                            file.OpenReadStream(), "meetthelocal-development", $"images/listings/{listingId}/{file.FileName}");
+                    if (file.Length <= 0) continue;
 
-                        var imageUrl = $"https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/listings/{listingId}/{file.FileName}";
-                        await _imageService.InsertListingImage(listingId, imageUrl);
+                    var newImage = await _imageService.InsertListingImage(listingId, file);
 
-                        imageUrls.Add(new Image { Url = imageUrl });
-                    }
+                    imageUrls.Add(newImage);
                 }
 
                 return imageUrls;
@@ -229,7 +241,7 @@ namespace FunWithLocal.WebApi.Controllers
                 if (!(await _authorizationService.AuthorizeAsync(User, listing, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
-                var image = await _listingService.FetchImageByUrl(listingId, url);
+                var image = await _imageService.FetchImageByUrl(listingId, url);
 
                 if (image == null)
                 {
@@ -246,7 +258,7 @@ namespace FunWithLocal.WebApi.Controllers
 
 
 
-                return await _listingService.DeleteImage(image.ImageId);
+                return await _imageService.DeleteImage(image.ImageId);
             }
             catch (Exception e)
             {
@@ -264,7 +276,11 @@ namespace FunWithLocal.WebApi.Controllers
 
                 var listingsSummary = await _listingService.GetListingsByUserId(userId);
 
-                return listingsSummary.Select(listing => _mapper.Map<Listing, ListingSummary>(listing));
+                return listingsSummary.Select(listing => _mapper.Map<Listing, ListingSummary>(listing, 
+                    opts => opts.BeforeMap((x, y) =>
+                        {
+                            x.ImageList = _imageStorageService.TransformImageUrls(x.ImageList, ImageType.Listing, _device);
+                        })));
             }
             catch (Exception e)
             {
@@ -279,9 +295,13 @@ namespace FunWithLocal.WebApi.Controllers
         {
             try
             {
-                var listingsView = await _listingService.GetListingsBySuburb(139);
+                var listingsView = await _listingService.GetFeatureListings();
 
-                var listingSummary = listingsView.Take(3).Select(x => _mapper.Map<ListingView, ListingSummary>(x));
+                var listingSummary = listingsView.Select(listing => _mapper.Map<ListingView, ListingSummary>(listing,
+                    opts => opts.BeforeMap((x, y) =>
+                    {
+                        x.ImageUrls = _imageStorageService.TransformImageUrls(x.ImageUrls, ImageType.ListingCard, _device);
+                    })));
 
                 return listingSummary;
             }
@@ -301,7 +321,11 @@ namespace FunWithLocal.WebApi.Controllers
 
                 var listingsSummary = await _listingService.GetListingsBySuburb(suburbId);
 
-                return listingsSummary.Select(x => _mapper.Map<ListingView, ListingSummary>(x));
+                return listingsSummary.Select(listing => _mapper.Map<ListingView, ListingSummary>(listing,
+                                        opts => opts.BeforeMap((x, y) =>
+                                        {
+                                            x.ImageUrls = _imageStorageService.TransformImageUrls(x.ImageUrls, ImageType.Listing, _device);
+                                        })));
             }
             catch (Exception e)
             {

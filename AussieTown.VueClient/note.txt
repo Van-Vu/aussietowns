@@ -118,8 +118,38 @@ Blog post:
 - Authentication
 - CORS: startup line 177
 - Resize and Crop image
+- AutoMapper beforemap
 
-Image processing
+PROGRESS Image to cloudinary
+	listing:
+		mobile: h_212,c_fit,f_auto,q_auto
+		rest: h_360,c_fit,f_auto,q_auto
+	user:
+		profile
+			mobile: h_113,w_113,c_fit,f_auto,q_auto
+			rest: h_170,c_fit,f_auto,q_auto
+		hero image
+			mobile: h_124,c_fit,f_auto,q_auto
+			ipad: h_300,c_fit,f_auto,q_auto
+			desktop: h_370,c_fit,f_auto,q_auto
+	listing card:
+		mobile: w_415,h_233,c_fit,f_auto,q_auto
+		ipad: w_292,h_165,c_fit,f_auto,q_auto
+		desktop: w_362,h_204,c_fit,f_auto,q_auto
+
+
+Social pages
+Title
+BUG: locationid on listing page: required
+
+
+
+
+
+
+
+
+
 
 
 Tech debt:
@@ -130,7 +160,8 @@ a-frame ?
 
 
 REFACTOR:
-DONE fetch user / message / conversation / trips separatedly
+fetch user / message / conversation / trips separatedly
+image crop modal
 
 
 Apple scrollbar:

@@ -1,9 +1,10 @@
 ﻿import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import VueUploadImage from './external/vueuploadimage.vue';
 import Swiper from './external/vue-swiper.vue';
 import ImageModel from '../../model/image.model';
-import RingLoader from './external/ringloader.vue';
+import ZoneLoadingComponent from '../shared/zoneloading.component.vue';
+
 import { NotificationType } from '../../model/enum';
 import { GlobalConfig } from '../../GlobalConfig';
 
@@ -14,7 +15,7 @@ import ImageService from '../../service/image.service';
     components: {
         'vueUploadImage': VueUploadImage,
         'swiper': Swiper,
-        'ringloader': RingLoader
+        'zoneloading': ZoneLoadingComponent
     }
 })
 
@@ -26,6 +27,13 @@ export default class ImageUploadComponent extends Vue {
     isUploading: boolean = false;
     maxFileAllowed: number = GlobalConfig.maxImagesPerListing;
     maxFileConfig: number = GlobalConfig.maxImagesPerListing;
+
+    @Watch('$store.state.isImageCropping')
+    onImageCroppingModalChanged(value: string, oldValue: string) {
+        if (!value) {
+            this.$emit('uploadImageCompleted');
+        }
+    }
 
     created() {
         if (this.images) {
@@ -56,7 +64,7 @@ export default class ImageUploadComponent extends Vue {
     onUploadImages(fileList) {
         let storeAction;
         let actionId;
-
+        this.isUploading = true;
         Array.from(Array(fileList.length).keys())
             .map(x => {
                 return (new ImageService()).resizeImage(GlobalConfig.listingImageSize,
@@ -65,7 +73,12 @@ export default class ImageUploadComponent extends Vue {
                         originalFile: fileList[x],
                         storeAction: 'UPLOAD_LISTING_IMAGES',
                         storeActionId: this.$store.state.listing.id
-                    }).then(() => this.onUploadImageSuccess());
+                    }).then(() => {
+                            this.isUploading = false;
+                            if (!this.$store.state.isImageCropping) {
+                                this.$emit('uploadImageCompleted');    
+                            }
+                        });
             });
 
         //for (var value of formData.values()) {
@@ -100,11 +113,6 @@ export default class ImageUploadComponent extends Vue {
         //.catch(error => {
         //    this.isUploading = false;
         //});
-    }
-
-    onUploadImageSuccess() {
-        this.$emit('uploadImageCompleted');
-        this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
     }
 
     removeImage() {

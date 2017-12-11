@@ -4,9 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Model;
 using AussieTowns.Repository;
+using AussieTowns.Services;
 using AutoMapper;
+using FunWithLocal.WebApi.Model;
+using FunWithLocal.WebApi.Repository;
 
-namespace AussieTowns.Services
+namespace FunWithLocal.WebApi.Services
 {
     public class BookingService: IBookingService
     {

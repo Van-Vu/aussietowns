@@ -19,7 +19,7 @@ import Vue from "vue";
 import Component from 'vue-class-component';
 import NavMenuComponent from './component/navmenu/navmenu.component.vue';
 import NotificationComponent from './component/shared/notification.component.vue';
-import LoadingComponent from './component/shared/loading.component.vue';
+import PageLoadingComponent from './component/shared/pageloading.component.vue';
 import LoginModal from './component/modal/loginmodal.component.vue';
 import ScheduleModalComponent from './component/modal/schedulemodal.component.vue';
 import ImageCropModalComponent from './component/modal/imagecropmodal.component.vue';
@@ -105,13 +105,13 @@ var App = /** @class */ (function (_super) {
             en: {
                 custom: {
                     email: {
-                        required: '*'
+                        required: 'Email is required'
                     },
                     firstname: {
-                        required: '*'
+                        required: 'Firstname is required'
                     },
                     lastname: {
-                        required: '*'
+                        required: 'Lastname is required'
                     },
                     phone: {
                         required: '*'
@@ -183,7 +183,7 @@ var App = /** @class */ (function (_super) {
             components: {
                 "navmenu": NavMenuComponent,
                 "notifications": NotificationComponent,
-                "loading": LoadingComponent,
+                "loading": PageLoadingComponent,
                 'loginmodal': LoginModal,
                 'schedulemodal': ScheduleModalComponent,
                 'imagecropmodal': ImageCropModalComponent,
@@ -192,8 +192,6 @@ var App = /** @class */ (function (_super) {
             metaInfo: {
                 // if no subcomponents specify a metaInfo.title, this title will be used
                 title: 'Fun with Local',
-                // all titles will be injected into this template
-                titleTemplate: '%s | FWL',
                 meta: [
                     { charset: 'utf-8' },
                     { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },

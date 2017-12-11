@@ -16,10 +16,6 @@ export default class ImageCropComponent extends Vue {
     @Prop() imageSources: ResizedImageInfo;
     @Prop() imageSizeSettings: ImageSize;
 
-    get isLoading() {
-        return this.$store.state.isLoading;
-    }
-
     isHeroImage(): boolean {
         return this.imageSizeSettings.maxWidth > GlobalConfig.listingImageSize.maxWidth;
     }
@@ -47,6 +43,8 @@ export default class ImageCropComponent extends Vue {
             imageBlob: null
         })
         .then((finalImage: Blob) => {
+            this.$store.dispatch("ENABLE_LOADING");
+
             formData.append('files', finalImage, this.imageSources.originalFileName);
 
             this.$store.dispatch(this.imageSources.storeAction,
@@ -54,7 +52,9 @@ export default class ImageCropComponent extends Vue {
                     data: formData,
                     actionId: this.imageSources.storeActionId
                 }).then(response => {
-                    this.$emit('uploadImageCompleted');
+                    this.$store.dispatch("DISABLE_LOADING");
+                    this.$store.dispatch("IMAGECROP_FINISH");
+                    this.$emit('imageCropCompleted');
                 });
         });
     }

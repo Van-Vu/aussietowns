@@ -25,6 +25,7 @@ import { plainToClass } from "class-transformer";
 import { Utils } from '../utils';
 import ImageUploadComponent from '../shared/imageupload.component.vue';
 import ImageCropComponent from '../shared/imagecrop.component.vue';
+import ZoneLoadingComponent from '../shared/zoneloading.component.vue';
 import { GlobalConfig } from '../../GlobalConfig';
 import ImageService from '../../service/image.service';
 import VueMask from 'v-mask';
@@ -36,6 +37,8 @@ var UserDetailComponent = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.isEditing = false;
         _this.modelCache = null;
+        _this.isHeroImageUploading = false;
+        _this.isProfileImageUploading = false;
         return _this;
     }
     Object.defineProperty(UserDetailComponent.prototype, "model", {
@@ -124,12 +127,19 @@ var UserDetailComponent = /** @class */ (function (_super) {
             return;
         Array.from(Array(fileList.length).keys())
             .map(function (x) {
+            _this.isHeroImageUploading = true;
             return (new ImageService()).resizeImage(GlobalConfig.heroImageSize, {
                 originalFileName: fileList[x].name,
                 originalFile: fileList[x],
                 storeAction: 'UPLOAD_PROFILE_HEROIMAGE',
                 storeActionId: _this.$store.state.profile.id
-            }).then(function () { return _this.onUploadImageSuccess(); });
+            }).then(function () {
+                if (!_this.$store.state.isImageCropping) {
+                    _this.onUploadImageSuccess();
+                }
+            })
+                .catch(function () { return _this.onUploadImageFail(); })
+                .then(function () { return _this.isHeroImageUploading = false; });
         });
         document.getElementById('heroImageUpload').value = null;
     };
@@ -142,21 +152,28 @@ var UserDetailComponent = /** @class */ (function (_super) {
             return;
         Array.from(Array(fileList.length).keys())
             .map(function (x) {
+            _this.isProfileImageUploading = true;
             return (new ImageService()).resizeImage(GlobalConfig.profileImageSize, {
                 originalFileName: fileList[x].name,
                 originalFile: fileList[x],
                 storeAction: 'UPLOAD_PROFILE_IMAGE',
                 storeActionId: _this.$store.state.profile.id
-            }).catch(function (er) { return console.log(er); });
+            })
+                .then(function () { return _this.isProfileImageUploading = false; })
+                .catch(function () { return _this.onUploadImageFail(); });
         });
         document.getElementById('profileImageUpload').value = null;
     };
     UserDetailComponent.prototype.onUploadImageSuccess = function () {
         this.$emit('uploadImageCompleted');
+        this.isHeroImageUploading = false;
+        this.isProfileImageUploading = false;
         this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
     };
     UserDetailComponent.prototype.onUploadImageFail = function () {
         this.$emit('uploadImageCompleted');
+        this.isHeroImageUploading = false;
+        this.isProfileImageUploading = false;
         this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", type: NotificationType.Error });
     };
     UserDetailComponent.prototype.onUpdate = function () { };
@@ -168,7 +185,8 @@ var UserDetailComponent = /** @class */ (function (_super) {
                 "locationsearch": LocationSearchComponent,
                 "datepicker": datepicker,
                 "imageupload": ImageUploadComponent,
-                "imagecrop": ImageCropComponent
+                "imagecrop": ImageCropComponent,
+                "zoneloading": ZoneLoadingComponent
             }
         })
     ], UserDetailComponent);

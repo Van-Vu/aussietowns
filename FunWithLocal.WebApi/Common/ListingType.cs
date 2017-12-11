@@ -1,4 +1,4 @@
-﻿namespace AussieTowns.Common
+﻿namespace FunWithLocal.WebApi.Common
 {
     public enum ListingType
     {

@@ -1,11 +1,11 @@
 ﻿<template>
-    <div class="confirmEmail">
-        <form v-if="!isConfirmed" class="tile is-half is-offset-one-quarter" @submit.prevent="onChangePassword">
+    <div class="page-content confirmEmail tile is-center">
+        <form v-if="!isConfirmed" class="tile is-6 is-offset-one-quarter is-vertical " @submit.prevent="onChangePassword">
             <div>Hi {{model.email}}, please enter your name then you're done </div>
             <hr />
             <div class="tile is-parent">
                 <div class="tile is-3">First Name</div>
-                <div class="tile control has-icon has-icon-right">
+                <div class="tile is-vertical control has-icon has-icon-right">
                     <input name="firstname" v-model="model.firstName" v-validate="'required|alpha_spaces|max:30'"
                            :class="{'input': true, 'is-danger': errors.has('firstname') }" type="text">
                     <i class="icon icon-lock"></i>
@@ -15,7 +15,7 @@
             <hr />
             <div class="tile is-parent ">
                 <div class="tile is-3">Last Name</div>
-                <div class="tile control has-icon has-icon-right">
+                <div class="tile is-vertical control has-icon has-icon-right">
                     <input name="lastname" v-model="model.lastName" v-validate="'required|alpha_spaces|max:30'"
                            :class="{'input': true, 'is-danger': errors.has('lastname') }" type="text">
                     <i class="icon icon-lock"></i>

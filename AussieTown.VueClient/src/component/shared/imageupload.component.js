@@ -18,11 +18,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import VueUploadImage from './external/vueuploadimage.vue';
 import Swiper from './external/vue-swiper.vue';
-import RingLoader from './external/ringloader.vue';
-import { NotificationType } from '../../model/enum';
+import ZoneLoadingComponent from '../shared/zoneloading.component.vue';
 import { GlobalConfig } from '../../GlobalConfig';
 import ImageService from '../../service/image.service';
 var ImageUploadComponent = /** @class */ (function (_super) {
@@ -35,6 +34,11 @@ var ImageUploadComponent = /** @class */ (function (_super) {
         _this.maxFileConfig = GlobalConfig.maxImagesPerListing;
         return _this;
     }
+    ImageUploadComponent.prototype.onImageCroppingModalChanged = function (value, oldValue) {
+        if (!value) {
+            this.$emit('uploadImageCompleted');
+        }
+    };
     ImageUploadComponent.prototype.created = function () {
         if (this.images) {
             this.maxFileAllowed -= this.images.length;
@@ -63,6 +67,7 @@ var ImageUploadComponent = /** @class */ (function (_super) {
         var _this = this;
         var storeAction;
         var actionId;
+        this.isUploading = true;
         Array.from(Array(fileList.length).keys())
             .map(function (x) {
             return (new ImageService()).resizeImage(GlobalConfig.listingImageSize, {
@@ -70,7 +75,12 @@ var ImageUploadComponent = /** @class */ (function (_super) {
                 originalFile: fileList[x],
                 storeAction: 'UPLOAD_LISTING_IMAGES',
                 storeActionId: _this.$store.state.listing.id
-            }).then(function () { return _this.onUploadImageSuccess(); });
+            }).then(function () {
+                _this.isUploading = false;
+                if (!_this.$store.state.isImageCropping) {
+                    _this.$emit('uploadImageCompleted');
+                }
+            });
         });
         //for (var value of formData.values()) {
         //return (new ImageService()).resizeImage(GlobalConfig.heroImageSize,
@@ -103,10 +113,6 @@ var ImageUploadComponent = /** @class */ (function (_super) {
         //    this.isUploading = false;
         //});
     };
-    ImageUploadComponent.prototype.onUploadImageSuccess = function () {
-        this.$emit('uploadImageCompleted');
-        this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
-    };
     ImageUploadComponent.prototype.removeImage = function () {
     };
     __decorate([
@@ -121,13 +127,19 @@ var ImageUploadComponent = /** @class */ (function (_super) {
         Prop(),
         __metadata("design:type", Boolean)
     ], ImageUploadComponent.prototype, "isEditing", void 0);
+    __decorate([
+        Watch('$store.state.isImageCropping'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String]),
+        __metadata("design:returntype", void 0)
+    ], ImageUploadComponent.prototype, "onImageCroppingModalChanged", null);
     ImageUploadComponent = __decorate([
         Component({
             name: "ImageUploadComponent",
             components: {
                 'vueUploadImage': VueUploadImage,
                 'swiper': Swiper,
-                'ringloader': RingLoader
+                'zoneloading': ZoneLoadingComponent
             }
         })
     ], ImageUploadComponent);

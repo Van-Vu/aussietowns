@@ -6,6 +6,7 @@
             </figure>
             <input id="heroImageUpload" type="file" style="display:none;" @change="onUploadHeroImage($event.target.files); fileCount = $event.target.files.length" accept="image/*">
             <i class="icon icon-pencil icon-btn" v-if="canEdit" @click.prevent="onReplaceHeroImage"></i>
+            <zoneloading :isLoading="isHeroImageUploading" :loadingText="'Uploading'"></zoneloading>
         </header>
         <section class="tile is-parent">
             <div class="tile is-3 is-vertical userdetail_profileimage">
@@ -14,10 +15,13 @@
                 </figure>
                 <input id="profileImageUpload" type="file" style="display:none;" @change="onUploadProfileImage($event.target.files); fileCount = $event.target.files.length" accept="image/*">
                 <i class="icon icon-pencil icon-btn" v-if="canEdit" @click.prevent="onReplaceProfileImage"></i>
+                <zoneloading :isLoading="isProfileImageUploading" :loadingText="'Uploading'"></zoneloading>
             </div>
             <div class="userdetail container tile is-vertical is-parent" :class="{editing:isEditing}">
                 <div class="tile is-parent">
                     <div class="tile is-3">Email Address</div>
+                    <button @click="isHeroImageUploading = !isHeroImageUploading"> switch</button>
+                    <button @click="isProfileImageUploading = !isProfileImageUploading"> switch2</button>
                     <div class="tile is-vertical control has-icon has-icon-right">
                         <input name="email" v-if="isEditing" v-model="model.email" v-validate="'required|email'"
                                :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="">

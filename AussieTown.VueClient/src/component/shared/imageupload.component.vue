@@ -23,10 +23,8 @@
             </div>
         </div>
         <div>
-            <div class="loading-screen is-flex is-overlay" v-if="isUploading">
-                <span class="absolute-center">Uploading ...</span>
-                <ringloader class="absolute-center"></ringloader>
-            </div>
+            <zoneloading :isLoading="isUploading" :loadingText="'Uploading'"></zoneloading>
+            <button @click="isUploading = !isUploading">Switch</button>
             <vueUploadImage v-if="isEditing" :maxFileAllowed="maxFileAllowed" :maxFileConfig="maxFileConfig" @uploadImages="onUploadImages"></vueUploadImage>
         </div>
     </div>

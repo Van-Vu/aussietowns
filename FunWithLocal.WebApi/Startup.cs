@@ -105,6 +105,9 @@ namespace FunWithLocal.WebApi
             // https://stackoverflow.com/questions/38795103/encrypt-string-in-net-core
             services.AddDataProtection();
 
+            // https://github.com/wangkanai/Detection
+            services.AddDetection().AddDevice();
+
             // Add framework services with JSON loop ignore: http://stackoverflow.com/a/38382021/1284688
             services.AddMvc()
                 .AddJsonOptions(
@@ -222,7 +225,8 @@ namespace FunWithLocal.WebApi
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IBookingService, BookingService>();
             services.AddTransient<ISecurityTokenService, SecurityTokenService>();
-            
+            services.AddTransient<IImageStorageService, ImageCloudinaryService>();
+
 
             services.AddTransient<ILocationRepository, LocationRepository>(x => new LocationRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<LocationRepository>>()));
             services.AddTransient<IUserRepository, UserRepository>(x => new UserRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<UserRepository>>()));

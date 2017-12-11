@@ -15,6 +15,8 @@ import ImageUploadComponent from '../shared/imageupload.component.vue';
 
 import ImageCropComponent from '../shared/imagecrop.component.vue';
 
+import ZoneLoadingComponent from '../shared/zoneloading.component.vue';
+
 import { GlobalConfig } from '../../GlobalConfig';
 
 import ImageService from '../../service/image.service';
@@ -30,7 +32,8 @@ Vue.use(VeeValidate);
         "locationsearch": LocationSearchComponent,
         "datepicker": datepicker,
         "imageupload": ImageUploadComponent,
-        "imagecrop": ImageCropComponent
+        "imagecrop": ImageCropComponent,
+        "zoneloading": ZoneLoadingComponent
     }
 })
 
@@ -38,6 +41,8 @@ export default class UserDetailComponent extends Vue {
     isEditing: boolean = false;
     modelCache: any = null;
     $auth: any;
+    isHeroImageUploading: boolean = false;
+    isProfileImageUploading: boolean = false;
 
     get model() {
         return plainToClass<UserModel, Object>(UserModel, this.$store.state.profile);
@@ -123,13 +128,20 @@ export default class UserDetailComponent extends Vue {
         if (!fileList.length) return;
         Array.from(Array(fileList.length).keys())
             .map(x => {
+                this.isHeroImageUploading = true;
                 return (new ImageService()).resizeImage(GlobalConfig.heroImageSize, 
                     {
                         originalFileName: fileList[x].name,
                         originalFile: fileList[x],
                         storeAction: 'UPLOAD_PROFILE_HEROIMAGE',
                         storeActionId: this.$store.state.profile.id
-                    }).then(() => this.onUploadImageSuccess());
+                    }).then(() => {
+                        if (!this.$store.state.isImageCropping) {
+                            this.onUploadImageSuccess();
+                        }
+                    })
+                    .catch(() => this.onUploadImageFail())
+                    .then(() => this.isHeroImageUploading = false);
             });
         (document.getElementById('heroImageUpload') as any).value = null;
     }
@@ -143,24 +155,31 @@ export default class UserDetailComponent extends Vue {
 
         Array.from(Array(fileList.length).keys())
             .map(x => {
+                this.isProfileImageUploading = true;
                 return (new ImageService()).resizeImage(GlobalConfig.profileImageSize,
-                {
-                    originalFileName: fileList[x].name,
-                    originalFile: fileList[x],
-                    storeAction: 'UPLOAD_PROFILE_IMAGE',
-                    storeActionId: this.$store.state.profile.id
-                    }).catch((er) => console.log(er));
+                    {
+                        originalFileName: fileList[x].name,
+                        originalFile: fileList[x],
+                        storeAction: 'UPLOAD_PROFILE_IMAGE',
+                        storeActionId: this.$store.state.profile.id
+                    })
+                    .then(() => this.isProfileImageUploading = false)
+                    .catch(() => this.onUploadImageFail());
             });
         (document.getElementById('profileImageUpload') as any).value = null;
     }
 
     onUploadImageSuccess() {
         this.$emit('uploadImageCompleted');
+        this.isHeroImageUploading = false;
+        this.isProfileImageUploading = false;
         this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload finish", type: NotificationType.Success });
     }
 
     onUploadImageFail() {
         this.$emit('uploadImageCompleted');
+        this.isHeroImageUploading = false;
+        this.isProfileImageUploading = false;
         this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", type: NotificationType.Error });
     }
 

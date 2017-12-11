@@ -1,4 +1,6 @@
-﻿namespace FunWithLocal.WebApi
+﻿using FunWithLocal.WebApi.Common;
+
+namespace FunWithLocal.WebApi
 {
     public class AppSettings
     {
@@ -20,5 +22,7 @@
         public string BookingHostsEmailTemplate { get; set; }
         public string WelcomeEmailSubject { get; set; }
         public string BookingEmailSubject { get; set; }
+
+        public CloudinarySettings CloudinarySettings { get; set; }
     }
 }

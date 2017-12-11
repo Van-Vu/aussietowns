@@ -1,4 +1,6 @@
-﻿namespace AussieTowns.Model
+﻿using FunWithLocal.WebApi.Model;
+
+namespace AussieTowns.Model
 {
     public class TourOperator
     {

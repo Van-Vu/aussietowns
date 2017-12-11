@@ -5,10 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Common;
 using AussieTowns.Model;
+using AussieTowns.Repository;
 using Dapper;
+using FunWithLocal.WebApi.Common;
+using FunWithLocal.WebApi.Model;
 using Microsoft.Extensions.Logging;
 
-namespace AussieTowns.Repository
+namespace FunWithLocal.WebApi.Repository
 {
     public class ListingRepository: RepositoryBase, IListingRepository
     {
@@ -255,23 +258,15 @@ namespace AussieTowns.Repository
             }
         }
 
-        public async Task<Image> GetImageByUrl(int listingId, string url)
+        public async Task<IEnumerable<ListingView>> GetFeatureListings()
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT i.* FROM Image i INNER JOIN Listing l ON l.id = i.listingid WHERE i.listingid=@listingid AND i.url=@url";
+                var sql = "select * from listingview where isFeatured=1";
                 dbConnection.Open();
-                var image = await dbConnection.QueryAsync<Image>(sql, new { listingId, url });
-                return image.FirstOrDefault();
-            }
-        }
+                var listingviews = await dbConnection.QueryAsync<ListingView>(sql);
 
-        public async Task<int> DeleteImage(int imageId)
-        {
-            using (IDbConnection dbConnection = Connection)
-            {
-                var deleteSql = "DELETE FROM Image WHERE imageId = @imageId";
-                return await dbConnection.ExecuteAsync(deleteSql, new {imageId});
+                return listingviews;
             }
         }
     }

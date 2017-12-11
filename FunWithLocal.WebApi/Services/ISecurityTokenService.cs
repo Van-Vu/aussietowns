@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AussieTowns.Model;
+using FunWithLocal.WebApi.Model;
 
 namespace FunWithLocal.WebApi.Services
 {

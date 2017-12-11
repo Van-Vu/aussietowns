@@ -29,6 +29,9 @@ var ImageCropModalComponent = /** @class */ (function (_super) {
     ImageCropModalComponent.prototype.onClose = function () {
         this.$emit('onClose');
     };
+    ImageCropModalComponent.prototype.onCompleted = function () {
+        this.onClose();
+    };
     __decorate([
         Prop(),
         __metadata("design:type", Boolean)

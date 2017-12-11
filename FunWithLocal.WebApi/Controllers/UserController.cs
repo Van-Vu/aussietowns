@@ -11,6 +11,9 @@ using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
 using AutoMapper;
+using FunWithLocal.WebApi.Common;
+using FunWithLocal.WebApi.Extensions;
+using FunWithLocal.WebApi.Model;
 using FunWithLocal.WebApi.Services;
 using FunWithLocal.WebApi.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +22,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Wangkanai.Detection;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -37,11 +41,14 @@ namespace FunWithLocal.WebApi.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppSettings _appSettings;
         private readonly IImageService _imageService;
+        private readonly IImageStorageService _imageStorageService;
+        private readonly IDevice _device;
 
         public UserController(IUserService userService, IEmailService emailService, IHostingEnvironment hostingEnv, 
             IMapper mapper, ILogger<UserController> logger, IAuthorizationService authorizationService,
             ISecurityTokenService securityTokenService, IHttpContextAccessor httpContextAccessor,
-            IOptions<AppSettings> appSettings, IImageService imageService)
+            IOptions<AppSettings> appSettings, IImageService imageService,
+            IImageStorageService imageStorageService, IDeviceResolver deviceResolver)
         {
             _userService = userService;
             _emailService = emailService;
@@ -52,7 +59,9 @@ namespace FunWithLocal.WebApi.Controllers
             _securityTokenService = securityTokenService;
             _httpContextAccessor = httpContextAccessor;
             _imageService = imageService;
+            _imageStorageService = imageStorageService;
             _appSettings = appSettings.Value;
+            _device = deviceResolver.Device;
         }
 
         [HttpPost("register")]
@@ -86,7 +95,12 @@ namespace FunWithLocal.WebApi.Controllers
                 return new
                 {
                     accessToken = _securityTokenService.CreateTokenString(user, expiresIn),
-                    loggedInUser = _mapper.Map<User, UserLoggedIn>(user)
+                    loggedInUser = _mapper.Map<User, UserLoggedIn>(user, opts => opts.BeforeMap((x, y) =>
+                    {
+                        x.TransformImageUrls(_imageStorageService, _device);
+                        x.Images = _imageStorageService.TransformImageUrls(x.Images, ImageType.UserProfile, _device);
+                        x.HeroImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.UserHeroImage, _device, x.HeroImageUrl);
+                    }))
                 };
             }
             catch (Exception e)
@@ -153,7 +167,13 @@ namespace FunWithLocal.WebApi.Controllers
 
                 if (user == null) throw new ArgumentNullException(nameof(token));
 
-                return _mapper.Map<User, UserResponse>(user);
+                return _mapper.Map<User, UserResponse>(user
+                    , opts => opts.BeforeMap((x, y) =>
+                    {
+                        x.TransformImageUrls(_imageStorageService, _device);
+                        x.Images = _imageStorageService.TransformImageUrls(x.Images, ImageType.UserProfile, _device);
+                        x.HeroImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.UserHeroImage, _device, x.HeroImageUrl);
+                    }));
             }
             catch (Exception e)
             {
@@ -196,29 +216,13 @@ namespace FunWithLocal.WebApi.Controllers
                 if (!(await _authorizationService.AuthorizeAsync(User, new User { Id = id }, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
-                foreach (var file in files)
-                {
-                    if (file.Length > 0)
-                    {
-                        // Bodom hack: deal with this later
-                        var result = await AwsS3Extensions.SaveToS3Async(
-                            AwsS3Extensions.GetS3Client(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
-                                _appSettings.AwsS3Region),
-                            file.OpenReadStream(), "meetthelocal-development", $"images/profiles/{id}/{file.FileName}");
+                if (files == null || files.Count > 1) throw new ArgumentNullException(nameof(files));
+                var file = files.FirstOrDefault();
+                if (file != null && file.Length <= 0) throw new ArgumentNullException(nameof(file));
 
-                        var imageUrl = $"https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/profiles/{id}/{file.FileName}";
-                        var uploadResult = await _imageService.InsertProfileImage(id, imageUrl);
+                var newImageUrl = await _imageService.InsertProfileImage(id, file);
 
-                        if (uploadResult >= 1)
-                        {
-                            return imageUrl;
-                        }
-
-                        throw new ArgumentNullException(nameof(files));
-                    }
-                }
-
-                throw new ArgumentNullException(nameof(files));
+                return !string.IsNullOrEmpty(newImageUrl) ? newImageUrl : string.Empty;
             }
             catch (Exception e)
             {
@@ -236,28 +240,13 @@ namespace FunWithLocal.WebApi.Controllers
                 if (!(await _authorizationService.AuthorizeAsync(User, new User { Id = id }, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
-                foreach (var file in files)
-                {
-                    if (file.Length <= 0) throw new ArgumentNullException(nameof(files));
+                if (files == null || files.Count > 1) throw new ArgumentNullException(nameof(files));
+                var file = files.FirstOrDefault();
+                if (file != null && file.Length <= 0) throw new ArgumentNullException(nameof(file));
 
-                    // Bodom hack: deal with this later
-                    var result = await AwsS3Extensions.SaveToS3Async(
-                        AwsS3Extensions.GetS3Client(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
-                            _appSettings.AwsS3Region),
-                        file.OpenReadStream(), "meetthelocal-development", $"images/profiles/{id}/{file.FileName}");
+                var newImageUrl = await _imageService.InsertHeroImage(id, file);
 
-                    var imageUrl = $"https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/profiles/{id}/{file.FileName}";
-                    var uploadResult = await _imageService.InsertHeroImage(id, imageUrl);
-
-                    if (uploadResult == 1)
-                    {
-                        return imageUrl;
-                    }
-
-                    throw new ArgumentNullException(nameof(files));
-                }
-
-                throw new ArgumentNullException(nameof(files));
+                return !string.IsNullOrEmpty(newImageUrl) ? newImageUrl : string.Empty;
             }
             catch (Exception e)
             {
@@ -285,7 +274,13 @@ namespace FunWithLocal.WebApi.Controllers
 
                 if (user == null) throw new ArgumentNullException(nameof(userId));
 
-                return _mapper.Map<User,UserResponse>(user);
+                return _mapper.Map<User, UserResponse>(user
+                    ,opts => opts.BeforeMap((x, y) =>
+                    {
+                        x.TransformImageUrls(_imageStorageService, _device);
+                        x.Images = _imageStorageService.TransformImageUrls(x.Images,ImageType.UserProfile, _device);
+                        x.HeroImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.UserHeroImage, _device,x.HeroImageUrl);
+                    }));
             }
             catch (Exception e)
             {
@@ -404,7 +399,12 @@ namespace FunWithLocal.WebApi.Controllers
             return new 
             {
                 accessToken = token,
-                loggedInUser = _mapper.Map<User,UserLoggedIn>(user)
+                loggedInUser = _mapper.Map<User,UserLoggedIn>(user, opts => opts.BeforeMap((x, y) =>
+                {
+                    x.TransformImageUrls(_imageStorageService, _device);
+                    x.Images = _imageStorageService.TransformImageUrls(x.Images, ImageType.UserProfile, _device);
+                    x.HeroImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.UserHeroImage, _device, x.HeroImageUrl);
+                }))
             };
         }
 

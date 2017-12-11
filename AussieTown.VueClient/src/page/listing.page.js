@@ -40,7 +40,6 @@ var ListingPage = /** @class */ (function (_super) {
     __extends(ListingPage, _super);
     function ListingPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.formSubmitting = false;
         _this.isOffer = false;
         _this.isEditing = false;
         _this.isStickyBoxRequired = false;
@@ -140,23 +139,20 @@ var ListingPage = /** @class */ (function (_super) {
             this.$validator.validateAll().then(function (result) {
                 if (result) {
                     _this.$store.dispatch("ENABLE_LOADING");
-                    _this.formSubmitting = true;
                     if (_this.model.id > 0) {
                         return _this.$store.dispatch('UPDATE_LISTING', _this.contructBeforeSubmit(_this.model))
                             .then(function () {
-                            _this.$store.dispatch("DISABLE_LOADING");
                             _this.$store.dispatch('ADD_NOTIFICATION', { title: "Update success", type: NotificationType.Success });
                             _this.isEditing = false;
                         })
                             .catch(function (err) {
                             _this.onCancelEdit();
                         })
-                            .then(function () { return _this.formSubmitting = false; });
+                            .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); });
                     }
                     else {
                         return _this.$store.dispatch('INSERT_LISTING', _this.contructBeforeSubmit(_this.model))
                             .then(function (listingId) {
-                            _this.$store.dispatch("DISABLE_LOADING");
                             _this.$router.push({
                                 name: 'listingDetail',
                                 params: { seoString: Utils.seorizeString(_this.model.header), listingId: listingId }
@@ -167,7 +163,7 @@ var ListingPage = /** @class */ (function (_super) {
                             });
                         })
                             .catch(function (err) { return _this.onCancelEdit(); })
-                            .then(function () { return _this.formSubmitting = false; });
+                            .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); });
                     }
                 }
             }).catch(function () {

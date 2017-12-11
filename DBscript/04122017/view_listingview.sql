@@ -1,5 +1,5 @@
 CREATE OR REPLACE VIEW listingview AS 
-select l.id, l.type, l.cost, l.currency, l.header, l.description, l.requirement, l.minParticipant, l.upsell, l.isFeatured,
+select l.id, l.type, l.cost, l.currency, l.header, l.description, l.requirement, l.minParticipant,
 d.id as suburbId, concat(d.suburbname,', ', d.state ) as suburbname, d.postcode, d.area, d.region, d.lat, d.lng, 
 CAST(concat(
     '[', 
@@ -18,7 +18,7 @@ inner join user u on u.id = o.userid
 left outer join listingimageview as i on i.listingid = l.id
 where o.isPrimary = 1 group by l.id
 union
-select l.id, l.type, l.cost, l.currency, l.header, l.description, l.requirement, l.minParticipant, l.upsell, l.isFeatured,
+select l.id, l.type, l.cost, l.currency, l.header, l.description, l.requirement, l.minParticipant,
 d.id as suburbId, concat(d.suburbname,', ', d.state ) as suburbname, d.postcode, d.area, d.region, d.lat, d.lng, 
 CAST(concat(
     '[', 

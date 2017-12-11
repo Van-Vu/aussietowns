@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AussieTowns.Common;
+﻿using System.Collections.Generic;
+using AussieTowns.Model;
+using FunWithLocal.WebApi.Common;
 
-namespace AussieTowns.Model
+namespace FunWithLocal.WebApi.Model
 {
     public class ListingRequest
     {

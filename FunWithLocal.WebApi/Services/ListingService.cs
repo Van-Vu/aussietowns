@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AussieTowns.Model;
-using AussieTowns.Repository;
+using FunWithLocal.WebApi.Common;
+using FunWithLocal.WebApi.Model;
+using FunWithLocal.WebApi.Repository;
 
-namespace AussieTowns.Services
+namespace FunWithLocal.WebApi.Services
 {
     public class ListingService: IListingService
     {
@@ -54,14 +56,9 @@ namespace AussieTowns.Services
             return await _listingRepository.GetListingIdByHeader(header);
         }
 
-        public async Task<Image> FetchImageByUrl(int listingId, string url)
+        public async Task<IEnumerable<ListingView>> GetFeatureListings()
         {
-            return await _listingRepository.GetImageByUrl(listingId, url);
-        }
-
-        public async Task<int> DeleteImage(int imageId)
-        {
-            return await _listingRepository.DeleteImage(imageId);
+            return await _listingRepository.GetFeatureListings();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿<template>
-        <div class="page-content tile" :class="{editing:isEditing}">
-            <div class="listing-main-content tile is-parent is-8 is-vertical">
+        <div class="page-content listing-page tile" :class="{editing:isEditing}">
+            <div class="tile is-parent listing-content is-8 is-vertical">
                     <div class="tile is-parent">
                         <div v-if="isEditing" class="tile is-2" for="header">Header</div>
                         <div class="tile is-vertical control has-icon has-icon-right">
@@ -70,7 +70,7 @@
                     </div>
                 <div class="tile is-gapless is-flex is-sticky-bottom is-center">
                     <button class="tile is-6 is-full-mobile button mtl_button-no-round" v-if="!canEdit" @click="onEnquire">Ask host a question</button>
-                    <button class="tile is-6 is-full-mobile button mtl_button-no-round" :class="{'is-loading': formSubmitting}" v-if="!isEditing && canEdit" @click="onEdit">Edit</button>
+                    <button class="tile is-6 is-full-mobile button mtl_button-no-round" v-if="!isEditing && canEdit" @click="onEdit">Edit</button>
                     <button class="tile is-6 is-half-mobile is-child button mtl_button-no-round" v-if="isEditing" @click="onInsertorUpdate">Submit</button>
                     <button class="tile is-6 is-half-mobile is-child button mtl_button-no-round" v-if="isEditing" @click="onCancelEdit">Cancel</button>
                 </div>
@@ -87,12 +87,12 @@
                     </div>
                 </div>
 
-                <div class="field box">
+                <div class="box">
                     <div class="box-header-strip"></div>
                     <label class="label">Schedule</label>
-                    <div v-show="isOffer" class="control">
-                        <ul>
-                            <li v-for="schedule in model.schedules">
+                    <div v-show="isOffer">
+                        <ul class="tile is-vertical">
+                            <li v-for="schedule in model.schedules" class="tile is-vertical">
                                 <div class="tile is-parent is-gapless">
                                     <label class="tile is-5">Date</label>
                                     <label class="tile">{{ schedule.repeatedText }}</label>
@@ -107,7 +107,7 @@
                                 </div>
                                 <div class="tile is-parent is-gapless">
                                     <button v-if="!isEditing" id="checkAvailability" class="button mtl_button-no-round mtl-btn-large relative-center-x" @click.prevent="checkAvailability(schedule)">Check Availability</button>
-                                    <button v-if="isEditing" class="button  mtl_button relative-center-x" @click.prevent="onEditSchedule(schedule)">Edit Schedule</button>
+                                    <button v-if="isEditing" class="button mtl_button-no-round relative-center-x" @click.prevent="onEditSchedule(schedule)">Edit Schedule</button>
                                 </div>
                             </li>
                         </ul>

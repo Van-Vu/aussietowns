@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using AussieTowns.Common;
+using FunWithLocal.WebApi.Common;
+using FunWithLocal.WebApi.Model;
 
 namespace AussieTowns.Model
 {

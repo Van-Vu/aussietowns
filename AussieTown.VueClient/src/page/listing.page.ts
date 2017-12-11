@@ -39,7 +39,6 @@ export default class ListingPage extends Vue{
     @Prop() listingType: string;
 
     selectedLocation: AutocompleteItem;
-    formSubmitting = false;
     isOffer: boolean = false;
     isEditing: boolean = false;
     isStickyBoxRequired: boolean = false;
@@ -137,7 +136,6 @@ export default class ListingPage extends Vue{
             this.$validator.validateAll().then((result) => {
                 if (result) {
                     this.$store.dispatch("ENABLE_LOADING");
-                    this.formSubmitting = true;
                     if (this.model.id > 0) {
                         return this.$store.dispatch('UPDATE_LISTING', this.contructBeforeSubmit(this.model))
                             .then(() => {

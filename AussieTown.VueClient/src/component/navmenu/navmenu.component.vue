@@ -18,7 +18,7 @@
                         <a v-show="!isLoggedIn" class="button is-pulled-right mtl_button" @click.prevent="onShowLoginModal">Join</a>
                         <a v-show="isLoggedIn" class="is-pulled-right" style="margin: 0 15px;" @click="showMenuModal = !showMenuModal">
                             <figure class="image is-32x32">
-                                <img class="is-circle" alt="Profile Photo" :src="profilePhoto" />
+                                <img class="is-circle image is-32x32" alt="Profile Photo" :src="profilePhoto" />
                             </figure>
                         </a>
                         <ul v-if="isLoggedIn" v-show="showMenuModal" id="popupUserMenu">

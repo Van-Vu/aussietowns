@@ -5,6 +5,7 @@ using AussieTowns.Common;
 using AussieTowns.Model;
 using AussieTowns.Repository;
 using AussieTowns.Services;
+using FunWithLocal.WebApi.Model;
 using FunWithLocal.WebApi.Repository;
 using Microsoft.Extensions.Logging;
 

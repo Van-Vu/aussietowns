@@ -27,13 +27,6 @@ var ImageCropComponent = /** @class */ (function (_super) {
     function ImageCropComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(ImageCropComponent.prototype, "isLoading", {
-        get: function () {
-            return this.$store.state.isLoading;
-        },
-        enumerable: true,
-        configurable: true
-    });
     ImageCropComponent.prototype.isHeroImage = function () {
         return this.imageSizeSettings.maxWidth > GlobalConfig.listingImageSize.maxWidth;
     };
@@ -57,12 +50,15 @@ var ImageCropComponent = /** @class */ (function (_super) {
             imageBlob: null
         })
             .then(function (finalImage) {
+            _this.$store.dispatch("ENABLE_LOADING");
             formData.append('files', finalImage, _this.imageSources.originalFileName);
             _this.$store.dispatch(_this.imageSources.storeAction, {
                 data: formData,
                 actionId: _this.imageSources.storeActionId
             }).then(function (response) {
-                _this.$emit('uploadImageCompleted');
+                _this.$store.dispatch("DISABLE_LOADING");
+                _this.$store.dispatch("IMAGECROP_FINISH");
+                _this.$emit('imageCropCompleted');
             });
         });
     };

@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using FunWithLocal.WebApi.Model;
+using Microsoft.AspNetCore.Http;
 
-namespace AussieTowns.Services
+namespace FunWithLocal.WebApi.Services
 {
     public interface IImageService
     {
-        Task<int> InsertListingImage(int listingId, string url);
-        Task<int> InsertProfileImage(int profileId, string url);
-        Task<int> InsertHeroImage(int profileId, string url);
+        Task<Image> InsertListingImage(int listingId, IFormFile file);
+        Task<string> InsertProfileImage(int profileId, IFormFile file);
+        Task<string> InsertHeroImage(int profileId, IFormFile file);
+        Task<Image> FetchImageByUrl(int listingId, string url);
+        Task<int> DeleteImage(int imageId);
+
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AussieTowns.Common;
-using Microsoft.AspNetCore.Authentication;
+﻿using System.Collections.Generic;
+using AussieTowns.Model;
+using FunWithLocal.WebApi.Common;
 
-namespace AussieTowns.Model
+namespace FunWithLocal.WebApi.Model
 {
     public class ListingResponse
     {
@@ -19,6 +16,7 @@ namespace AussieTowns.Model
         public string Requirement { get; set; }
         public int MinParticipant { get; set; }
 
+        public ListingUpsell Upsell { get; set; }
         public ICollection<ScheduleResponse> Schedules { get; set; }
         public ICollection<MiniProfile> TourOperators { get; set; }
 

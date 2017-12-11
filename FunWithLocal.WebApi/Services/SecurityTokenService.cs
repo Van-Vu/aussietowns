@@ -7,6 +7,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using AussieTowns.Auth;
 using AussieTowns.Model;
+using FunWithLocal.WebApi.Model;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
 

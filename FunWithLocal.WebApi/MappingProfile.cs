@@ -4,6 +4,8 @@ using System.Linq;
 using AussieTowns.Common;
 using AussieTowns.Model;
 using AutoMapper;
+using FunWithLocal.WebApi.Common;
+using FunWithLocal.WebApi.Model;
 using Newtonsoft.Json;
 
 namespace FunWithLocal.WebApi
@@ -74,8 +76,7 @@ namespace FunWithLocal.WebApi
                 .ForMember(dest => dest.OperatorListings,
                     opts => opts.MapFrom(src => src.OperatorListings.Select(Mapper.Map<ListingView, ListingSummary>)))
                 .ForMember(dest => dest.GuestListings,
-                    opts => opts.MapFrom(src => src.GuestListings.Select( Mapper.Map<ListingView, ListingSummary>)))
-                .ForMember(dest => dest.Images, opts => opts.MapFrom(src => src.Images));
+                    opts => opts.MapFrom(src => src.GuestListings.Select( Mapper.Map<ListingView, ListingSummary>)));
 
             CreateMap<BookingSlot, BookingSlotResponse>()
                 .ForMember(dest => dest.BookingDate,

@@ -4,6 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using FunWithLocal.WebApi.Model;
+using FunWithLocal.WebApi.Repository;
 using Microsoft.Extensions.Logging;
 
 namespace AussieTowns.Repository
@@ -51,6 +53,26 @@ namespace AussieTowns.Repository
                 dbConnection.Open();
                 var ret = await dbConnection.ExecuteAsync(sql, new { userId = profileId, heroImageUrl = url});
                 return ret;
+            }
+        }
+
+        public async Task<Image> GetImageByUrl(int listingId, string url)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "SELECT i.* FROM Image i INNER JOIN Listing l ON l.id = i.listingid WHERE i.listingid=@listingid AND i.url=@url";
+                dbConnection.Open();
+                var image = await dbConnection.QueryAsync<Image>(sql, new { listingId, url });
+                return image.FirstOrDefault();
+            }
+        }
+
+        public async Task<int> DeleteImage(int imageId)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var deleteSql = "DELETE FROM Image WHERE imageId = @imageId";
+                return await dbConnection.ExecuteAsync(deleteSql, new { imageId });
             }
         }
     }

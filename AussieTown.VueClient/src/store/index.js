@@ -42,9 +42,9 @@ export default new Vuex.Store({
         isLoading: '',
         featureListings: [],
         dynamicModal: {},
-        showLoginModal: false,
-        showScheduleModal: false,
-        contact: ContactModel
+        modalOpenning: false,
+        contact: ContactModel,
+        isImageCropping: false
     },
     getters: {
         isLoggedIn: function (state) {
@@ -250,6 +250,10 @@ export default new Vuex.Store({
             var commit = _a.commit;
             return commit('SHOW_IMAGECROP_MODAL', payload);
         },
+        IMAGECROP_FINISH: function (_a) {
+            var commit = _a.commit;
+            return commit('IMAGECROP_FINISH');
+        },
         SHOW_CONTACT_MODAL: function (_a, payload) {
             var commit = _a.commit;
             commit('SHOW_CONTACT_MODAL', payload);
@@ -417,29 +421,35 @@ export default new Vuex.Store({
                     props: { show: true },
                     events: { 'value-updated': test }
                 };
+                Vue.set(state, 'modalOpenning', true);
             }
-            //Vue.set(state, 'showLoginModal', value);
         },
         SHOW_SCHEDULE_MODAL: function (state, payload) {
             var onSaveSchedule;
             var onHideScheduleModal;
-            state.dynamicModal = {
+            Vue.set(state, 'modalOpenning', true);
+            return state.dynamicModal = {
                 name: 'schedulemodal',
                 props: { show: true, schedule: payload },
                 events: { onSave: onSaveSchedule, onClose: onHideScheduleModal }
             };
-            //Vue.set(state, 'showScheduleModal', value);
         },
         SHOW_IMAGECROP_MODAL: function (state, payload) {
             var onUploadImage;
+            Vue.set(state, 'isImageCropping', true);
+            Vue.set(state, 'modalOpenning', true);
             return state.dynamicModal = {
                 name: 'imagecropmodal',
                 props: { show: true, imageSources: payload.images, imageSizeSettings: payload.setting },
                 events: { onSave: onUploadImage }
             };
         },
+        IMAGECROP_FINISH: function (state) {
+            Vue.set(state, 'isImageCropping', false);
+        },
         SHOW_CONTACT_MODAL: function (state, payload) {
             var onContact;
+            Vue.set(state, 'modalOpenning', true);
             return state.dynamicModal = {
                 name: 'contactmodal',
                 props: { show: true, contactModel: payload },
@@ -451,6 +461,7 @@ export default new Vuex.Store({
                 state.dynamicModal.props.show = false;
                 state.dynamicModal.props.name = '';
             }
+            Vue.set(state, 'modalOpenning', false);
             // will lose the fly-out effect of run this statement
             //setTimeout(() => { state.dynamicModal = null; }, 200);
         },

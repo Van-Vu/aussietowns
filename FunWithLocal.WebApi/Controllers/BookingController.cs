@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using AussieTowns.Common;
 using AussieTowns.Model;
 using AussieTowns.Services;
+using FunWithLocal.WebApi.Model;
+using FunWithLocal.WebApi.Services;
 using FunWithLocal.WebApi.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

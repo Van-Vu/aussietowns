@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using AussieTowns.Common;
+using AussieTowns.Model;
 
-namespace AussieTowns.Model
+namespace FunWithLocal.WebApi.Model
 {
     public class User
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Model;
+using FunWithLocal.WebApi.Model;
 
-namespace AussieTowns.Services
+namespace FunWithLocal.WebApi.Services
 {
     public interface IBookingService
     {

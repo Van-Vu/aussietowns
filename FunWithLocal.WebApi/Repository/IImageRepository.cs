@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using FunWithLocal.WebApi.Model;
 
-namespace AussieTowns.Repository
+namespace FunWithLocal.WebApi.Repository
 {
     public interface IImageRepository
     {
         Task<int> InsertListingImage(int listingId, string url);
         Task<int> InsertProfileImage(int profileId, string url);
         Task<int> InsertHeroImage(int profileId, string url);
+
+        Task<Image> GetImageByUrl(int listingId, string url);
+        Task<int> DeleteImage(int imageId);
+
     }
 }

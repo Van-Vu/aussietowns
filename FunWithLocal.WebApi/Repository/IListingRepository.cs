@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AussieTowns.Model;
+using FunWithLocal.WebApi.Common;
+using FunWithLocal.WebApi.Model;
 
-namespace AussieTowns.Repository
+namespace FunWithLocal.WebApi.Repository
 {
     public interface IListingRepository
     {
@@ -15,8 +15,8 @@ namespace AussieTowns.Repository
         Task<int> InsertListing(Listing listing);
         Task<int> UpdateListing(Listing listing);
         Task<int> DeActivateListing(int listingId);
-        Task<Image> GetImageByUrl(int listingId, string url);
         Task<IEnumerable<int>> GetListingIdByHeader(string header);
-        Task<int> DeleteImage(int imageId);
+
+        Task<IEnumerable<ListingView>> GetFeatureListings();
     }
 }

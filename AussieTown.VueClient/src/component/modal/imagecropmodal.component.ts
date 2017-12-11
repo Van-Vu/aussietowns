@@ -19,4 +19,8 @@ export default class ImageCropModalComponent extends Vue {
     onClose() {
         this.$emit('onClose');
     }
+
+    onCompleted() {
+        this.onClose();
+    }
 }

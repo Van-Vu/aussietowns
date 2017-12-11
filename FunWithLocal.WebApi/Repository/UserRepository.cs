@@ -7,6 +7,7 @@ using AussieTowns.Common;
 using AussieTowns.Model;
 using AussieTowns.Repository;
 using Dapper;
+using FunWithLocal.WebApi.Model;
 using Microsoft.Extensions.Logging;
 
 namespace FunWithLocal.WebApi.Repository
@@ -65,7 +66,7 @@ namespace FunWithLocal.WebApi.Repository
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT * FROM User LEFT JOIN Image ON user.id=image.userid WHERE firstname like CONCAT('%',@term,'%') OR lastname like CONCAT('%',@term,'%') OR email like CONCAT('%',@term,'%')";
+                var sql = "SELECT * FROM User LEFT JOIN Image ON user.id=image.userid AND image.isActive = true WHERE firstname like CONCAT('%',@term,'%') OR lastname like CONCAT('%',@term,'%') OR email like CONCAT('%',@term,'%')";
                 dbConnection.Open();
                 return  await dbConnection.QueryAsync<User, Image, User>(sql, (user, image) =>
                 {
@@ -84,7 +85,7 @@ namespace FunWithLocal.WebApi.Repository
                 {
                     try
                     {
-                        var userSql = "INSERT INTO User(Firstname, Lastname, email, salt, password, gender,birthday, phone, language, currency, locationId, description, address, emergencycontact, videourl,source, externalid, createdDate,updatedDate,isActive,role) "
+                        var userSql = "INSERT INTO User(Firstname, Lastname, email, salt, password, gender,birthday, phone, language, currency, locationId, description, address, emergencycontact, videourl, source, externalid, createdDate,updatedDate,isActive,role) "
                                 + "VALUES (@firstname, @lastname, @email, @salt, @password, @gender, @birthday, @phone, @language, @currency, @locationId, @description, @address, @emergencycontact, @videourl, @source, @externalid, @createdDate,@updatedDate,@isActive,@role)";
                         user.CreatedDate = DateTime.Now;
                         user.UpdatedDate = DateTime.Now;
