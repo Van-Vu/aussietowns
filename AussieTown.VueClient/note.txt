@@ -119,8 +119,9 @@ Blog post:
 - CORS: startup line 177
 - Resize and Crop image
 - AutoMapper beforemap
+- Cookies in Node server
 
-PROGRESS Image to cloudinary
+DONE Image to cloudinary
 	listing:
 		mobile: h_212,c_fit,f_auto,q_auto
 		rest: h_360,c_fit,f_auto,q_auto
@@ -137,10 +138,19 @@ PROGRESS Image to cloudinary
 		ipad: w_292,h_165,c_fit,f_auto,q_auto
 		desktop: w_362,h_204,c_fit,f_auto,q_auto
 
-
 Social pages
-Title
-BUG: locationid on listing page: required
+Intermittent issue: async doesn't trigger
+booking.participants. existingUserId: what happens to non-existed user
+secure userdetail info
+
+DONE Email template: remove birthday
+DONE VeeValidate messages
+DONE Double booking
+DONE Error pages: background image
+DONE BookingDetail acl issue
+DONE Access direct http://localhost:3000/booking/testing-11 doesn't have cookies since it requests from node
+DONE Title
+DONE BUG: locationid on listing page: required
 
 
 

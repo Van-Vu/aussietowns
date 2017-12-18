@@ -7,6 +7,7 @@ import ListingModel from './model/listing.model';
 import UserModel from './model/user.model';
 import { plainToClass } from "class-transformer";
 import VueAnalytics from 'vue-ua';
+import { Utils } from './component/utils';
 Vue.use(VueAnalytics, {
     // [Required] The name of your app as specified in Google Analytics.
     appName: 'FunWithLocal',
@@ -69,7 +70,12 @@ router.onReady(function () {
             // stop loading indicator
         })).then(function () {
             next();
-        }).catch(next);
+        }).catch(function (err) {
+            Utils.handleRouteError(store, to, err);
+            console.log('Bodom catch');
+            console.log(err);
+            next();
+        });
     });
     // actually mount to DOM
     app.$mount('#app');

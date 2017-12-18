@@ -3,12 +3,19 @@
         <router-link :to="{ name: 'bookingManage', params: { seoString: 'testing', listingId: '19' } }">
             <label class="tab-text">Manage Booking</label>
         </router-link>
+
+        <router-link :to="{ name: 'bookingDetail', params: { seoString: 'testing', bookingId: '11' } }">
+            <label class="tab-text">View Booking</label>
+        </router-link>
+
+
         <datepicker id="availDay" :range="false"></datepicker>
 
 
         <router-link :to="{ name: 'resetpassword', params: { guidString: 'cbe74c7a-9b54-402e-9d8e-d86ffb75fa85' } }">
             test here
         </router-link>
+
 
         <button @click="onContact">Contact Someone</button>
 

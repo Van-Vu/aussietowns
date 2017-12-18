@@ -1,6 +1,7 @@
 ﻿import { ListingType, NotificationType } from '../model/enum';
 import { ImageInfo, ImageSize } from '../model/imageinfo.model';
 import { GlobalConfig } from '../GlobalConfig';
+import router from '../router';
 
 declare function unescape(s: string): string;
 declare function escape(s: string): string;
@@ -310,25 +311,55 @@ export class Utils {
         return new Blob([ia], { type: mime });
     };
 
-    public static handleError(store, error: any) {
-        store.dispatch("DISABLE_LOADING");
+    public static handleXHRError(store, error: any) {
+        // server don't need notification
+        if (process.env.VUE_ENV === 'client') {
+            store.dispatch("DISABLE_LOADING");
+
+            switch (error.status) {
+                case 400:
+                    store.dispatch('ADD_NOTIFICATION', { title: "Submit incorrect information", type: NotificationType.Error });
+                    break;
+                case 401:
+                    store.dispatch('ADD_NOTIFICATION', { title: "You are not authorized to view this page!", type: NotificationType.Error });
+                    break;
+                case 403:
+                    store.dispatch('ADD_NOTIFICATION', { title: "Permission denied", text: "Please login to perform this action", type: NotificationType.Warning });
+                    break;
+                case 422:
+                    store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: "Email or Password is incorrect", type: NotificationType.Warning });
+                    break;
+                case 500:
+                    store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
+                    break;
+            }
+
+        }
+    }
+
+    public static handleRouteError(store, route, error: any) {
+        console.log(route);
 
         switch (error.status) {
             case 400:
-                store.dispatch('ADD_NOTIFICATION', { title: "Submit incorrect information", type: NotificationType.Error });
+                router.push('home');
                 break;
             case 401:
-                store.dispatch('ADD_NOTIFICATION', { title: "You are not authorized to view this page!", type: NotificationType.Error });
+                router.push(`/login/?returnUrl=${route.fullPath}`);
                 break;
             case 403:
-                store.dispatch('SHOW_LOGIN_MODAL');
-                store.dispatch('ADD_NOTIFICATION', { title: "Login required", text: "Please login or register to proceed", type: NotificationType.Warning });
+                if (store.getters.isLoggedIn) {
+                    window.location.href = '/static/page/403.html';
+                    //router.push('/static/page/403.html');
+                } else {
+                    router.push(`/login/?returnUrl=${route.fullPath}`);    
+                }
                 break;
-            case 422:
-                store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: "Email or Password is incorrect", type: NotificationType.Warning });
+            case 404:
+                window.location.href = '/static/page/404.html';
                 break;
             case 500:
-                store.dispatch('ADD_NOTIFICATION', { title: "Error occurs but no worries, we're on it!", type: NotificationType.Error });
+                window.location.href = '/static/page/500.html';
                 break;
         }
     }
@@ -339,5 +370,11 @@ export class Utils {
 
     public static getProfileFullName(user) {
         return (user.firstName && user.lastName) ? `${user.firstName} ${user.lastName}` : user.email;
+    }
+
+    public static getCurrentHost() {
+        return process.env.NODE_ENV == 'production'
+            ? GlobalConfig.accessControl.prod
+            : GlobalConfig.accessControl.dev;
     }
 }

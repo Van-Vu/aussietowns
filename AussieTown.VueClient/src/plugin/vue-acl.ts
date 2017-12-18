@@ -16,20 +16,6 @@ class Auth {
 
     check(permission = UserRole.Anonymous, userId = -1, action = UserAction.View, isPublic = true) {
         if (typeof permission != 'undefined') {
-            //const permissions = (permission.indexOf('|') !== -1) ? permission.split('|') : [permission];
-
-            //return permissions.find((permission) => {
-            //    const needed = (permission.indexOf('&') !== -1) ? permission.split('&') : permission;
-
-            //    if (Array.isArray(needed)) {
-            //        return needed.every(need => {
-            //            return this.permissions.indexOf(need) !== -1;
-            //        });
-            //    }
-
-            //    return (this.permissions.indexOf(needed) !== -1) ? true : false;
-            //}) !== undefined;
-
             const loggedInUser = store.state.loggedInUser;
             if (loggedInUser && (loggedInUser as any).id && (loggedInUser as any).role) {
                 // Author
@@ -49,21 +35,44 @@ class Auth {
 
     set router(router) {
         router.beforeEach((to, from, next) => {
-            const fail = to.meta.fail || '/'
-            if (typeof to.meta.permission == 'undefined')
+            //let fail = to.meta.fail || '/'
+
+            //if (typeof to.meta.permission == 'undefined')
+            //    next()
+            //else {
+            //    if (!this.check(to.meta.permission, to.params.profileId, UserAction.View, to.meta.isPublic)) {
+            //        store.dispatch('ADD_NOTIFICATION', { title: "Login Required", text: "Please Login or Register to explore more. It's super easy", type: NotificationType.Warning });
+            //        if (this.role !== UserRole.Anonymous) {
+            //            console.log('ACL false');
+            //            return next(false)
+            //        }
+
+            //        if (to.meta.returnRequired) {
+            //            fail += `?returnUrl=${to.fullPath}`;
+            //        }
+            //        console.log('ACL fail:' + fail);
+            //        return next(fail)
+            //    }
+            //    next()
+            //}
+
+
+            let fail = to.meta.fail || '/'
+            if (typeof to.meta.permission == 'undefined' || to.meta.permission == UserRole.Anonymous)
                 next()
             else {
-                if (!this.check(to.meta.permission, to.params.profileId, UserAction.View, to.meta.isPublic)) {
-                    if (this.role !== UserRole.Anonymous) {
-                        //trigger Login
-                        //store.dispatch('SHOW_LOGIN_MODAL')
-                        store.dispatch('ADD_NOTIFICATION', { title: "Login Required", text: "Please Login or Register to explore more. It's Free !", type: NotificationType.Warning });
-
-                        return next(false)
-                    }
-                    return next(fail)
+                if (to.meta.isPublic != 'undefined' && to.meta.isPublic)
+                    next()
+                else {
+                    if (store.getters.isLoggedIn) {
+                        next()
+                    } else {
+                        store.dispatch('ADD_NOTIFICATION', { title: "Login Required", text: "Please Login or Register to explore more. It's super easy", type: NotificationType.Warning });
+                        // Bodom: comeback
+                        //next(fail)
+                        next()
+                    }                    
                 }
-                next()
             }
         })
     }    

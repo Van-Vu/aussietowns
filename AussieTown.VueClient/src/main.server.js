@@ -8,6 +8,8 @@ export default function (context) {
         var mtl = JSON.parse(context.cookies.mtl);
         if (mtl && mtl.loggedInUser)
             store.state.loggedInUser = mtl.loggedInUser;
+        if (context.cookies.mtltk)
+            store.state.token = context.cookies.mtltk;
     }
     return new Promise(function (resolve, reject) {
         var s = isDev && Date.now();

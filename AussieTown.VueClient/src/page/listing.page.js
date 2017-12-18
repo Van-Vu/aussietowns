@@ -92,23 +92,6 @@ var ListingPage = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    ListingPage.prototype.mounted = function () {
-        //var screenSize = detectScreenSize(this.$mq);
-        //switch (screenSize) {
-        //    case ScreenSize.Desktop:
-        //        this.isStickyBoxRequired = true;
-        //        break;
-        //    case ScreenSize.Tablet:
-        //        this.isStickyBoxRequired = false;
-        //        break;
-        //    case ScreenSize.Mobile:
-        //        this.isStickyBoxRequired = false;
-        //        break;
-        //}        
-        if (!this.$route.params.listingId) {
-            this.isEditing = true;
-        }
-    };
     Object.defineProperty(ListingPage.prototype, "canEdit", {
         get: function () {
             // Create new listing
@@ -126,6 +109,38 @@ var ListingPage = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    ListingPage.prototype.metaInfo = function () {
+        return {
+            meta: [
+                { vmid: 'description', name: 'description', content: this.model.header },
+                { vmid: 'ogtitle', property: 'og:title', content: this.model.header },
+                { vmid: 'ogurl', property: 'og:url', content: "" + Utils.getCurrentHost() + this.$route.fullPath },
+                { vmid: 'ogdescription', property: 'og:description', content: this.model.header }
+            ],
+            title: this.model.header,
+        };
+    };
+    ListingPage.prototype.created = function () {
+        this.$validator.attach('location', 'required', this.model.locationDetail);
+        this.$validator.attach('minParticipant', 'min_value:1', this.model.minParticipant);
+    };
+    ListingPage.prototype.mounted = function () {
+        //var screenSize = detectScreenSize(this.$mq);
+        //switch (screenSize) {
+        //    case ScreenSize.Desktop:
+        //        this.isStickyBoxRequired = true;
+        //        break;
+        //    case ScreenSize.Tablet:
+        //        this.isStickyBoxRequired = false;
+        //        break;
+        //    case ScreenSize.Mobile:
+        //        this.isStickyBoxRequired = false;
+        //        break;
+        //}        
+        if (!this.$route.params.listingId) {
+            this.isEditing = true;
+        }
+    };
     ListingPage.prototype.onUploadImageCompleted = function () {
         if (this.canEdit) {
             this.model.imageList = this.$store.state.listing.imageList;
@@ -136,7 +151,7 @@ var ListingPage = /** @class */ (function (_super) {
     ListingPage.prototype.onInsertorUpdate = function () {
         var _this = this;
         if (this.canEdit) {
-            this.$validator.validateAll().then(function (result) {
+            this.$validator.validateAll(this.model).then(function (result) {
                 if (result) {
                     _this.$store.dispatch("ENABLE_LOADING");
                     if (_this.model.id > 0) {
@@ -196,7 +211,7 @@ var ListingPage = /** @class */ (function (_super) {
             this.$router.push({ name: "booking" });
         }
         else {
-            Utils.handleError(this.$store, { status: 403 });
+            Utils.handleXHRError(this.$store, { status: 403 });
         }
     };
     ListingPage.prototype.onSaveSchedule = function (scheduleObject) {
@@ -220,7 +235,7 @@ var ListingPage = /** @class */ (function (_super) {
             });
         }
         else {
-            Utils.handleError(this.$store, { status: 403 });
+            Utils.handleXHRError(this.$store, { status: 403 });
         }
     };
     ListingPage.prototype.constructShedule = function (model) {

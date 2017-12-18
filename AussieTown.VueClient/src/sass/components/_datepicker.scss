@@ -1,6 +1,7 @@
 ﻿.date-picker{
     position: relative;
     /*height: 32px;*/
+    width: 100%;
 
     &.is-inline{
         .date-panel{
@@ -20,6 +21,10 @@
     padding: 6px 10px 6px 4px;
     height: 32px;
     box-sizing: border-box;
+
+    &:focus, &.is-focused, &:active, &.is-active {
+        border-color: #00d1b2;
+    }
 }
 .input-date{
     height: 100%;

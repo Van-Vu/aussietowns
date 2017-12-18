@@ -27,7 +27,7 @@
                     <div class="tile is-parent">
                         <div class="tile is-2">Where</div>
                         <div class="tile is-vertical control has-icon has-icon-right">
-                            <locationsearch v-if="isEditing" :initialData="model.locationDetail" @onSelected="onLocationSelected($event)"></locationsearch>
+                            <locationsearch v-model="model.locationDetail" v-if="isEditing" :initialData="model.locationDetail" @onSelected="onLocationSelected($event)"></locationsearch>
                             <label v-if="!isEditing">{{ model.locationDetail ? model.locationDetail.name : ''}}</label>
                             <i v-if="isEditing" class="icon icon-lock"></i>
                             <span v-show="errors.has('location')" class="help is-danger">{{ errors.first('location') }}</span>
@@ -58,6 +58,7 @@
                         <div class="tile">
                             <numberchooser v-if="isEditing" v-model="model.minParticipant"></numberchooser>
                             <label v-if="!isEditing">{{ model.minParticipant }}</label>
+                            <span v-show="errors.has('minParticipant')" class="help is-danger">{{ errors.first('minParticipant') }}</span>
                         </div>
                     </div>
                     <hr />

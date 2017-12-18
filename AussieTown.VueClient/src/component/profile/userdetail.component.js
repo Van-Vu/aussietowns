@@ -108,7 +108,7 @@ var UserDetailComponent = /** @class */ (function (_super) {
             });
         }
         else {
-            Utils.handleError(this.$store, { status: 403 });
+            Utils.handleXHRError(this.$store, { status: 403 });
         }
     };
     UserDetailComponent.prototype.onUploadImageCompleted = function () {

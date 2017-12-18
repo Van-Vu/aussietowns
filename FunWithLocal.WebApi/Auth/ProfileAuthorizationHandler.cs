@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Common;
-using AussieTowns.Model;
 using FunWithLocal.WebApi.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Extensions.Logging;
 
-namespace AussieTowns.Auth
+namespace FunWithLocal.WebApi.Auth
 {
     public class ProfileAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, User>
     {

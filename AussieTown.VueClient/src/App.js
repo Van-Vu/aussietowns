@@ -33,6 +33,8 @@ import router from './router';
 //Vue.use(ElementUI);
 import VueCookie from 'vue-js-cookie';
 Vue.use(VueCookie);
+// BODOM: DO NOT REMOVE for class-transformer
+import "reflect-metadata";
 import Acl from './plugin/vue-acl';
 Vue.use(Acl, { router: router, init: 'any' });
 Vue.directive('focus', {
@@ -114,13 +116,26 @@ var App = /** @class */ (function (_super) {
                         required: 'Lastname is required'
                     },
                     phone: {
-                        required: '*'
+                        required: 'Phone is required'
                     },
                     address: {
-                        required: '*'
+                        required: 'Address is required'
                     },
                     emergencyContact: {
-                        required: '*'
+                        required: 'Emergency Contact is required'
+                    },
+                    location: {
+                        required: 'Location is required'
+                    },
+                    description: {
+                        required: 'Description is required',
+                        max: 'Maximum 300 chatacters allowed'
+                    },
+                    minParticipant: {
+                        min_value: 'Minimum 1 participant'
+                    },
+                    cost: {
+                        required: 'How much do you want to charge'
                     }
                 }
             }
@@ -193,19 +208,19 @@ var App = /** @class */ (function (_super) {
                 // if no subcomponents specify a metaInfo.title, this title will be used
                 title: 'Fun with Local',
                 meta: [
-                    { charset: 'utf-8' },
-                    { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },
-                    { name: 'theme-color', content: '#99CD4E' },
-                    { name: 'mobile-web-app-capable', content: 'yes' },
-                    { name: 'description', content: 'Desire for unique experiences like a local with no booking fee? Includes travel tips, do\'s and dont\'s, hidden gems, indoor, outdoor activities. Check this out !' },
-                    { property: 'og:title', content: 'Fun with Local' },
-                    { property: 'og:type', content: 'website' },
-                    { property: 'og:url', content: 'https://funwithlocal.com' },
-                    { property: 'og:site_name', content: 'Fun with Local' },
-                    { property: 'og:description', content: 'Fun with Local' },
+                    { vmid: 'charset', charset: 'utf-8' },
+                    { vmid: 'viewport', name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },
+                    { vmid: 'theme-color', name: 'theme-color', content: '#99CD4E' },
+                    { vmid: 'mobile-web-app-capable', name: 'mobile-web-app-capable', content: 'yes' },
+                    { vmid: 'description', name: 'description', content: 'Desire for unique experiences like a local with no booking fee? Includes travel tips, do and dont, hidden gems, indoor, outdoor activities. Check this out !' },
+                    { vmid: 'ogtitle', property: 'og:title', content: 'Fun with Local' },
+                    { vmid: 'ogtype', property: 'og:type', content: 'website' },
+                    { vmid: 'ogurl', property: 'og:url', content: 'https://funwithlocal.com' },
+                    { vmid: 'ogsitename', property: 'og:site_name', content: 'Fun with Local' },
+                    { vmid: 'ogdescription', property: 'og:description', content: 'Fun with Local' }
                 ],
                 link: [
-                    { rel: 'manifest', href: '/static/manifest.json' }
+                    { vmid: 'manifest', rel: 'manifest', href: '/manifest.json' }
                 ],
                 //Bodom: dangerous
                 __dangerouslyDisableSanitizers: ['meta']

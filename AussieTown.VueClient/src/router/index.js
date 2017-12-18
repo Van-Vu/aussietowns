@@ -52,12 +52,7 @@ import { UserRole } from '../model/enum';
 import Meta from 'vue-meta';
 Vue.use(Router);
 Vue.use(Meta);
-Vue.use(Meta, {
-    keyName: 'metaInfo',
-    attribute: 'data-vue-meta',
-    ssrAttribute: 'data-vue-meta-server-rendered',
-    tagIDKeyName: 'vmid' // the property name that vue-meta uses to determine whether to overwrite or append a tag
-});
+Vue.use(Meta);
 var router = new Router({
     mode: 'history',
     routes: [
@@ -199,7 +194,8 @@ var router = new Router({
             props: true,
             meta: {
                 permission: UserRole.User,
-                fail: '/',
+                returnRequired: true,
+                fail: '/login',
                 isPublic: false
             }
         },
@@ -210,7 +206,7 @@ var router = new Router({
             props: true,
             meta: {
                 permission: UserRole.User,
-                fail: '/',
+                fail: '/login',
                 isPublic: false
             }
         },

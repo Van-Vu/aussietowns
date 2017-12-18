@@ -196,6 +196,7 @@ var BookingPage = /** @class */ (function (_super) {
             },
             beforeRouteEnter: function (to, from, next) {
                 if (store.state.listing instanceof ListingModel) {
+                    //Bodom comeback
                     store.state.booking = new BookingModel(store.state.listing);
                     next();
                 }

@@ -41,7 +41,7 @@ var BookingDetailPage = /** @class */ (function (_super) {
     }
     BookingDetailPage.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
-        console.log("Bodom fetchData: " + route.params.bookingId);
+        console.log('BookingDetailPage async');
         if (route.params.bookingId) {
             return store.dispatch('FETCH_BOOKING_DETAIL', route.params.bookingId);
         }
@@ -54,7 +54,22 @@ var BookingDetailPage = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(BookingDetailPage.prototype, "currentUser", {
+        get: function () {
+            return this.$store.state.loggedInUser;
+        },
+        enumerable: true,
+        configurable: true
+    });
     BookingDetailPage.prototype.created = function () {
+        var _this = this;
+        if (this.model.participants) {
+            var participant = this.model.participants.find(function (x) { return x.id === _this.currentUser.id; });
+            if (!participant) {
+                //Bodom: 403 page
+                //this.$router.push("home");
+            }
+        }
     };
     BookingDetailPage.prototype.mounted = function () {
         //var screenSize = detectScreenSize(this.$mq);
@@ -79,7 +94,7 @@ var BookingDetailPage = /** @class */ (function (_super) {
     };
     BookingDetailPage.prototype.onWithdraw = function () {
         var _this = this;
-        (new BookingService()).withdrawBooking(this.model.id, this.model.participants.map(function (element) { return element.name; }).join(","))
+        (new BookingService()).withdrawBooking(this.model.id, this.model.participants.map(function (element) { return element.firstName; }).join(","))
             .then(function () {
             _this.isBooked = true;
         });

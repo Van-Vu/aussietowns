@@ -13,9 +13,20 @@
             box-shadow: none;
             border: 0;
             font-size: 24px;
-            padding: 15px 45px;
             margin: 30px 5px;
         }
+
+         @@media screen and (min-width:412px) {
+            .confirmEmail {
+                padding: 15px 45px;
+            }
+        }
+        @@media screen and (max-width:411px) {
+            .confirmEmail {
+                padding: 10px 10px;
+            }
+        }
+
 
         .confirmEmail:hover {
             background-color: transparent;
@@ -34,25 +45,23 @@
                     <tbody>
                         <tr>
                             <td style="padding:5px;">
-                                <a href="http://google.com.au" target="_blank">
-                                    <img style="display: block; border: 0;" width="60" height="60" src="https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/www/logo.png" alt="Meet the Local" title="Meet the Local" />
+                                <a href="https://www.funwithlocal.com" target="_blank">
+                                    <img style="display: block; border: 0;" width="170" height="70" src="https://www.funwithlocal.com/static/images/logo.png" alt="Fun With Local" title="Fun With Local" />
                                 </a>
                             </td>
                         </tr>
                         <tr>
                             <td style="padding: 10px 20px 20px 20px; line-height: 24px;">
                                 <div style="font-size:24px; text-align: center; margin-bottom: 30px;">
-                                    <strong>Welcome to Meet the Local</strong>
+                                    <strong>Welcome to Fun With Local</strong>
                                 </div>
                                 <div>
-                                    Thank you for creating a Meet the Local(MTL) account. We’re excited to help you on your property journey. You have taken the first step to finding the perfect home for your next move.
+                                    Thank you for creating a Fun With Local(FWL) account. Please click the link below to confirm your email.
                                 </div>
                                 <div style="margin: 30px 0;">
                                     <a class="confirmEmail" href="@Model.EmailConfirmationToken" target="_blank">Confirm your email</a>
                                 </div>
                                 <div>
-                                    <span> Welcome to the Locals community!</span>
-                                    <br />
                                     <br /> - The Locals Team
                                 </div>
                             </td>

@@ -128,11 +128,18 @@ export default class LoginForm extends Vue {
         .then(responseToken => this.handleLoginToken(responseToken));
     }
 
-    handleLoginToken(token) {
+    handleLoginToken(response) {
+        var token = response.result;
         this.$store.dispatch('SET_CURRENT_USER', token.loggedInUser);
         this.setCookies(token.accessToken);
-        this.$emit('onSuccessfulLogin');
         this.rawPassword = '';        
+
+        if (this.$store.state.modalOpenning) {
+            this.$emit('onSuccessfulLogin');
+        } else {
+            let queryString = this.$route.query;
+            this.$router.push(queryString.returnUrl);
+        }
     }
 
     setCookies(accessToken) {
@@ -154,9 +161,10 @@ export default class LoginForm extends Vue {
         console.log('Family Name: ' + profile.getFamilyName());
         console.log('Image URL: ' + profile.getImageUrl());
         console.log('Email: ' + profile.getEmail());
-
+        this.$store.dispatch("ENABLE_LOADING");
         if (this.isLogin) {
-            this.login({ email: profile.getEmail(), source: UserSource.Google, externalId: encryptText(profile.getId()) });    
+            this.login({ email: profile.getEmail(), source: UserSource.Google, externalId: encryptText(profile.getId()) })
+                .then(() => this.$store.dispatch("DISABLE_LOADING"));
         } else {
             this.signup({
                 email: profile.getEmail(),
@@ -165,17 +173,18 @@ export default class LoginForm extends Vue {
                 photoUrl: profile.getImageUrl(),
                 source: UserSource.Google,
                 externalId: encryptText(profile.getId())
-            });
+            })
+            .then(() => this.$store.dispatch("DISABLE_LOADING"));
         }
         
     }
 
     onGgSignInError(error) {
         // `error` contains any error occurred. 
-        console.log('OH NOES', error);
     }
 
     onFbSignInSuccess(response) {
+        this.$store.dispatch("ENABLE_LOADING");
         FB.api('/me',
             { "fields": "id,name,email,first_name,last_name,picture" },
             profile => {
@@ -187,7 +196,8 @@ export default class LoginForm extends Vue {
                 console.log(`Picture: ${profile.picture.data.url}.`);
 
                 if (this.isLogin) {
-                    this.login({ email: profile.email, source: UserSource.Facebook, externalId: encryptText(profile.id) });    
+                    this.login({ email: profile.email, source: UserSource.Facebook, externalId: encryptText(profile.id) })
+                        .then(() => this.$store.dispatch("DISABLE_LOADING"));    
                 } else {
                     this.signup({
                         email: profile.email,
@@ -196,13 +206,13 @@ export default class LoginForm extends Vue {
                         photoUrl: profile.picture.data.url,
                         source: UserSource.Facebook,
                         externalId: encryptText(profile.id)
-                    });    
+                    })
+                    .then(() => this.$store.dispatch("DISABLE_LOADING"));    
                 }
             });
     }
 
     onFbSignInError(error) {
-        console.log('OH NOES', error);
     }
 
     checkFbLoginStatus() {

@@ -120,7 +120,8 @@ var NavMenuComponent = /** @class */ (function (_super) {
     };
     NavMenuComponent.prototype.onLogout = function () {
         this.$store.dispatch('SET_CURRENT_USER', null);
-        this.$cookie.set('mtltk', null);
+        this.$cookie.remove('mtltk');
+        this.$cookie.remove('mtl', null);
         this.$router.push("home");
     };
     NavMenuComponent.prototype.closeUserMenu = function (e) {

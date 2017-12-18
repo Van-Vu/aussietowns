@@ -10,7 +10,8 @@ sync(store, router)
 // DO NOT REMOVE, IT WORKS
 // Register the router hooks with thier names
 Component.registerHooks([
-    'asyncData'
+    'asyncData',
+    'metaInfo'
 ])
 
 

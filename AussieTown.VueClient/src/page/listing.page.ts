@@ -86,6 +86,39 @@ export default class ListingPage extends Vue{
         return this.$store.getters.isLoggedIn;
     }
 
+    get canEdit() {
+        // Create new listing
+        if (!(this.$route.params as any).listingId && !this.model.id && this.$store.state.loggedInUser) {
+            return true;
+        }
+
+        if (this.model.tourOperators) {
+            var primaryUser = this.model.tourOperators.filter(x => x.isPrimary === true);
+            if (primaryUser.length > 0) {
+                return this.$auth.check(UserRole.Editor, primaryUser[0].id, UserAction.Edit);
+            }            
+        }
+
+        return false;
+    }
+
+    public metaInfo(): any {
+        return {
+            meta: [
+                { vmid: 'description', name: 'description', content: this.model.header },
+                { vmid: 'ogtitle', property: 'og:title', content: this.model.header },
+                { vmid: 'ogurl', property: 'og:url', content: `${Utils.getCurrentHost()}${this.$route.fullPath}`},
+                { vmid: 'ogdescription', property: 'og:description', content: this.model.header }
+            ],
+            title: this.model.header,
+        };
+    }
+
+    created() {
+        this.$validator.attach('location', 'required', this.model.locationDetail);
+        this.$validator.attach('minParticipant', 'min_value:1', this.model.minParticipant);
+    }
+
     mounted() {
         //var screenSize = detectScreenSize(this.$mq);
         //switch (screenSize) {
@@ -107,22 +140,6 @@ export default class ListingPage extends Vue{
         }
     }
 
-    get canEdit() {
-        // Create new listing
-        if (!(this.$route.params as any).listingId && !this.model.id && this.$store.state.loggedInUser) {
-            return true;
-        }
-
-        if (this.model.tourOperators) {
-            var primaryUser = this.model.tourOperators.filter(x => x.isPrimary === true);
-            if (primaryUser.length > 0) {
-                return this.$auth.check(UserRole.Editor, primaryUser[0].id, UserAction.Edit);
-            }            
-        }
-
-        return false;
-    }
-
     onUploadImageCompleted() {
         if (this.canEdit) {
             (this.model as any).imageList = this.$store.state.listing.imageList;
@@ -133,7 +150,7 @@ export default class ListingPage extends Vue{
 
     onInsertorUpdate() {
         if (this.canEdit) {
-            this.$validator.validateAll().then((result) => {
+            this.$validator.validateAll(this.model).then((result) => {
                 if (result) {
                     this.$store.dispatch("ENABLE_LOADING");
                     if (this.model.id > 0) {
@@ -200,7 +217,7 @@ export default class ListingPage extends Vue{
         if (this.isLoggedIn) {
             this.$router.push({ name: "booking" });
         } else {
-            Utils.handleError(this.$store, {status: 403});
+            Utils.handleXHRError(this.$store, {status: 403});
         }
     }
 
@@ -228,7 +245,7 @@ export default class ListingPage extends Vue{
                     listingHeader: this.model.header
                 });
         } else {
-            Utils.handleError(this.$store, { status: 403 });
+            Utils.handleXHRError(this.$store, { status: 403 });
         }
 
     }

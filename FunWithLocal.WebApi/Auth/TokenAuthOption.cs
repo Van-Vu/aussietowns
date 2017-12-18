@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Text;
-using FunWithLocal.WebApi;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace AussieTowns.Auth
+namespace FunWithLocal.WebApi.Auth
 {
     public class TokenAuthOption
     {

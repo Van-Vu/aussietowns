@@ -8,11 +8,14 @@ import LogService from "../service/log.service";
 import BookingService from "../service/booking.service";
 import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
+import BookingModel from '../model/booking.model';
 import UserModel from '../model/user.model';
 import ConversationModel from '../model/conversation.model';
 import ContactModel from '../model/contact.model';
 import { ListingType, NotificationType } from '../model/enum';
 import { Utils } from '../component/utils';
+// BODOM: DO NOT REMOVE for class-transformer
+import "reflect-metadata";
 import { plainToClass } from "class-transformer";
 import createPersistedState from 'vuex-persistedstate';
 import * as Cookies from 'js-cookie';
@@ -31,6 +34,7 @@ export default new Vuex.Store({
     state: {
         currentPage: '',
         loggedInUser: UserModel,
+        token: null,
         listing: ListingModel,
         profile: {},
         searchListings: [],
@@ -52,6 +56,9 @@ export default new Vuex.Store({
                 return typeof state.loggedInUser.email != 'undefined' && state.loggedInUser.email !== '';
             }
             return false;
+        },
+        token: function (state) {
+            return state.token;
         },
         profilePhoto: function (state) {
             if (state.loggedInUser) {
@@ -294,7 +301,7 @@ export default new Vuex.Store({
         FETCH_LISTING_WITH_BOOKING_DETAIL: function (_a, listingId) {
             var commit = _a.commit;
             return (new ListingService()).getListingWithBookingDetailById(listingId).then(function (response) {
-                commit('UPDATE_BOOKING', response);
+                commit('UPDATE_BOOKING_LISTING_DETAIL', response);
             });
         },
         FETCH_ALL_BOOKING_BY_DATE: function (_a, payload) {
@@ -323,10 +330,10 @@ export default new Vuex.Store({
             Vue.set(state, 'listing', listingObject);
         },
         UPDATE_FEATURELISTINGS: function (state, listings) {
-            state.featureListings = listings;
+            Vue.set(state, 'featureListings', listings);
         },
         UPDATE_PROFILE: function (state, profile) {
-            state.profile = profile;
+            Vue.set(state, 'profile', profile);
         },
         UPDATE_SEARCH_LISTINGS: function (state, listings) {
             state.searchListings = listings;
@@ -348,7 +355,7 @@ export default new Vuex.Store({
             state.conversationsContent.unshift(message);
         },
         UPDATE_CURRENT_USER: function (state, loggedInUser) {
-            state.loggedInUser = loggedInUser;
+            Vue.set(state, 'loggedInUser', loggedInUser);
         },
         ADD_NOTIFICATION: function (state, notification) {
             state.notifications.push(notification);
@@ -384,6 +391,12 @@ export default new Vuex.Store({
             Vue.set(state.profile, 'images', Utils.removeFromArray(state.profile.images, image));
         },
         UPDATE_BOOKING: function (state, payload) {
+            var booking = plainToClass(BookingModel, payload)[0];
+            //let listingObject = plainToClass(ListingModel, payload.listing);
+            //payload.listing = listingObject;
+            Vue.set(state, 'booking', payload);
+        },
+        UPDATE_BOOKING_LISTING_DETAIL: function (state, payload) {
             var listingObject = plainToClass(ListingModel, payload.listing);
             payload.listing = listingObject;
             Vue.set(state, 'booking', payload);

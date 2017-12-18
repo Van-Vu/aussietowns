@@ -7,6 +7,7 @@ using AussieTowns.Auth;
 using AussieTowns.Repository;
 using AussieTowns.Services;
 using AutoMapper;
+using FunWithLocal.WebApi.Auth;
 using FunWithLocal.WebApi.Repository;
 using FunWithLocal.WebApi.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -238,6 +239,7 @@ namespace FunWithLocal.WebApi
 
             services.AddSingleton<IAuthorizationHandler, ListingAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, ProfileAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, BookingAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -48,7 +48,9 @@ export default class BookingDetailPage extends Vue {
     $mq: any;
 
     static asyncData({ store, route }) {
-        console.log("Bodom fetchData: " + route.params.bookingId);
+
+        console.log('BookingDetailPage async');
+
         if (route.params.bookingId) {
             return store.dispatch('FETCH_BOOKING_DETAIL', route.params.bookingId);
         }
@@ -60,7 +62,18 @@ export default class BookingDetailPage extends Vue {
         return this.$store.state.booking;
     }
 
+    get currentUser() {
+        return this.$store.state.loggedInUser;
+    }
+
     created() {
+        if (this.model.participants) {
+            let participant = this.model.participants.find(x => x.id === this.currentUser.id);    
+            if (!participant) {
+                //Bodom: 403 page
+                //this.$router.push("home");
+            }
+        }
     }
 
     mounted() {
@@ -88,7 +101,7 @@ export default class BookingDetailPage extends Vue {
     }
 
     onWithdraw() {
-        (new BookingService()).withdrawBooking(this.model.id, this.model.participants.map((element) => element.name).join(","))
+        (new BookingService()).withdrawBooking(this.model.id, this.model.participants.map((element) => element.firstName).join(","))
             .then(() => {
                 this.isBooked = true;
             });        

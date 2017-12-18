@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+using System.Linq;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.IdentityModel.Tokens;
 
-namespace AussieTowns.Auth
+namespace FunWithLocal.WebApi.Auth
 {
     public class CustomJwtDataFormat : ISecureDataFormat<AuthenticationTicket>
     {
@@ -47,11 +46,15 @@ namespace AussieTowns.Auth
                     throw new ArgumentException("Invalid JWT");
                 }
 
-                //if (!validJwt.Header.Alg.Equals(algorithm, StringComparison.Ordinal))
-                //{
-                //    throw new ArgumentException($"Algorithm must be '{algorithm}'");
-                //}
+                if (validJwt.Issuer != TokenAuthOption.Issuer)
+                {
+                    throw new ArgumentException("Invalid JWT");
+                }
 
+                if (validJwt.Audiences.FirstOrDefault() != TokenAuthOption.Audience)
+                {
+                    throw new ArgumentException("Invalid JWT");
+                }
 
                 return new AuthenticationTicket(principal, "Cookie");
             }
@@ -59,8 +62,9 @@ namespace AussieTowns.Auth
             {
                 return null;
             }
-            catch (ArgumentException)
+            catch (ArgumentException exception)
             {
+                var abc = exception;
                 return null;
             }
 

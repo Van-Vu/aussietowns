@@ -16,16 +16,6 @@ var Auth = /** @class */ (function () {
         if (action === void 0) { action = UserAction.View; }
         if (isPublic === void 0) { isPublic = true; }
         if (typeof permission != 'undefined') {
-            //const permissions = (permission.indexOf('|') !== -1) ? permission.split('|') : [permission];
-            //return permissions.find((permission) => {
-            //    const needed = (permission.indexOf('&') !== -1) ? permission.split('&') : permission;
-            //    if (Array.isArray(needed)) {
-            //        return needed.every(need => {
-            //            return this.permissions.indexOf(need) !== -1;
-            //        });
-            //    }
-            //    return (this.permissions.indexOf(needed) !== -1) ? true : false;
-            //}) !== undefined;
             var loggedInUser = store.state.loggedInUser;
             if (loggedInUser && loggedInUser.id && loggedInUser.role) {
                 // Author
@@ -44,22 +34,42 @@ var Auth = /** @class */ (function () {
     };
     Object.defineProperty(Auth.prototype, "router", {
         set: function (router) {
-            var _this = this;
             router.beforeEach(function (to, from, next) {
+                //let fail = to.meta.fail || '/'
+                //if (typeof to.meta.permission == 'undefined')
+                //    next()
+                //else {
+                //    if (!this.check(to.meta.permission, to.params.profileId, UserAction.View, to.meta.isPublic)) {
+                //        store.dispatch('ADD_NOTIFICATION', { title: "Login Required", text: "Please Login or Register to explore more. It's super easy", type: NotificationType.Warning });
+                //        if (this.role !== UserRole.Anonymous) {
+                //            console.log('ACL false');
+                //            return next(false)
+                //        }
+                //        if (to.meta.returnRequired) {
+                //            fail += `?returnUrl=${to.fullPath}`;
+                //        }
+                //        console.log('ACL fail:' + fail);
+                //        return next(fail)
+                //    }
+                //    next()
+                //}
                 var fail = to.meta.fail || '/';
-                if (typeof to.meta.permission == 'undefined')
+                if (typeof to.meta.permission == 'undefined' || to.meta.permission == UserRole.Anonymous)
                     next();
                 else {
-                    if (!_this.check(to.meta.permission, to.params.profileId, UserAction.View, to.meta.isPublic)) {
-                        if (_this.role !== UserRole.Anonymous) {
-                            //trigger Login
-                            //store.dispatch('SHOW_LOGIN_MODAL')
-                            store.dispatch('ADD_NOTIFICATION', { title: "Login Required", text: "Please Login or Register to explore more. It's Free !", type: NotificationType.Warning });
-                            return next(false);
+                    if (to.meta.isPublic != 'undefined' && to.meta.isPublic)
+                        next();
+                    else {
+                        if (store.getters.isLoggedIn) {
+                            next();
                         }
-                        return next(fail);
+                        else {
+                            store.dispatch('ADD_NOTIFICATION', { title: "Login Required", text: "Please Login or Register to explore more. It's super easy", type: NotificationType.Warning });
+                            // Bodom: comeback
+                            //next(fail)
+                            next();
+                        }
                     }
-                    next();
                 }
             });
         },

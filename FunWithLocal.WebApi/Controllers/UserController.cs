@@ -11,11 +11,13 @@ using AussieTowns.Extensions;
 using AussieTowns.Model;
 using AussieTowns.Services;
 using AutoMapper;
+using FunWithLocal.WebApi.Auth;
 using FunWithLocal.WebApi.Common;
 using FunWithLocal.WebApi.Extensions;
 using FunWithLocal.WebApi.Model;
 using FunWithLocal.WebApi.Services;
 using FunWithLocal.WebApi.ViewModel;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -391,10 +393,21 @@ namespace FunWithLocal.WebApi.Controllers
 
         }
 
-        private dynamic GenerateToken(User user)
+        private async Task<dynamic> GenerateToken(User user)
         {
             var expiresIn = DateTime.Now + TokenAuthOption.ExpiresSpan;
             var token = _securityTokenService.CreateTokenString(user, expiresIn);
+
+            //var claims = new List<Claim>
+            //{
+            //    new Claim(ClaimTypes.Email, user.Email)
+            //};
+
+            //var userIdentity = new ClaimsIdentity(claims, "login");
+
+            //ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
+            //await HttpContext.SignInAsync(principal);
+
 
             return new 
             {

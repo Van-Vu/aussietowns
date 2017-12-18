@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Threading.Tasks;
-using AussieTowns.Auth;
-using AussieTowns.Model;
+using FunWithLocal.WebApi.Auth;
 using FunWithLocal.WebApi.Model;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;

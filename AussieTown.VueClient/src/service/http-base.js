@@ -2,7 +2,6 @@ import axios from 'axios';
 import Vue from "vue";
 import store from '../store';
 import { Utils } from '../component/utils';
-import { GlobalConfig } from '../GlobalConfig';
 Vue.prototype.$http = axios;
 //export const http = axios.create({
 //    baseURL: `http://192.168.1.52/meetthelocal/`
@@ -20,15 +19,22 @@ var http = axios.create({
 //    baseURL: `https://api.funwithlocal.com/`
 //})
 http.defaults.withCredentials = true;
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = process.env.NODE_ENV == 'production'
-    ? GlobalConfig.accessControl.prod
-    : GlobalConfig.accessControl.dev;
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = Utils.getCurrentHost();
 //axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
 //axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Authorization';
 //axios.defaults.headers.common['Access-Control-Request-Method'] = "GET, POST, PUT, DELETE, OPTIONS";
 // Add a request interceptor
 http.interceptors.request.use(function (config) {
     // Do something before request is sent
+    console.log('XHR request:' + config.url);
+    if (process.env.VUE_ENV === 'server') {
+        axios.defaults.headers.common = {};
+        Object.keys(config.headers).map(function (key) {
+            axios.defaults.headers.common[key] = config.headers[key];
+        });
+        axios.defaults.headers.common['Cookie'] = "mtltk=" + store.getters.token;
+    }
+    console.log('Whole Config:' + config);
     return config;
 }, function (error) {
     // Do something with request error
@@ -55,8 +61,9 @@ http.interceptors.response.use(function (response) {
     //}
     var response = error.response;
     console.log('Bodom handleError');
+    console.log(error);
     if (response) {
-        Utils.handleError(store, response);
+        Utils.handleXHRError(store, response);
     }
     // Do something with response error
     if (error.response)

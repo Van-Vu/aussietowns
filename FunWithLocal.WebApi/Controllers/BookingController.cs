@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using AussieTowns.Auth;
 using AussieTowns.Common;
 using AussieTowns.Model;
 using AussieTowns.Services;
+using FunWithLocal.WebApi.Common;
 using FunWithLocal.WebApi.Model;
 using FunWithLocal.WebApi.Services;
 using FunWithLocal.WebApi.ViewModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -21,12 +26,20 @@ namespace FunWithLocal.WebApi.Controllers
         private readonly IBookingService _bookingService;
         private readonly IListingService _listingService;
         private readonly IEmailService _emailService;
+        private readonly IImageStorageService _imageStorageService;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public BookingController(ILogger<ListingController> logger, IBookingService bookingService, IListingService listingService, IEmailService emailService)
+        public BookingController(ILogger<ListingController> logger, IBookingService bookingService, 
+            IListingService listingService, IEmailService emailService, IImageStorageService imageStorageService,
+            IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _listingService = listingService;
             _emailService = emailService;
+            _imageStorageService = imageStorageService;
+            _authorizationService = authorizationService;
+            _httpContextAccessor = httpContextAccessor;
             _bookingService = bookingService;
         }
 
@@ -35,7 +48,17 @@ namespace FunWithLocal.WebApi.Controllers
         {
             try
             {
-                return await _bookingService.GetBooking(bookingId);
+                var abc = _httpContextAccessor;
+
+                var booking = await _bookingService.GetBooking(bookingId);
+                if ((await _authorizationService.AuthorizeAsync(User, booking, Operations.Read)).Succeeded)
+                    return booking;
+
+                if (User.Identity.IsAuthenticated)
+                {
+                    throw new UnauthorizedAccessException();
+                }
+                throw new ValidationException();
             }
             catch (Exception e)
             {
@@ -49,6 +72,10 @@ namespace FunWithLocal.WebApi.Controllers
         {
             try
             {
+                var listing = _listingService.GetListingViewById(listingId);
+                if (!(await _authorizationService.AuthorizeAsync(User, listing, Operations.Read)).Succeeded)
+                    throw new UnauthorizedAccessException();
+
                 return await _bookingService.GetAllBookingsByDate(listingId, bookingRequest.BookingDate, bookingRequest.Time);
             }
             catch (Exception e)
@@ -77,11 +104,12 @@ namespace FunWithLocal.WebApi.Controllers
                     Fullname = $"{item.FirstName} {item.LastName}",
                     DateOfBirth = item.Birthday.ToString(),
                     Email = item.Email,
-                    Phone = item.Phone
+                    Phone = item.Phone,
+                    EmergencyContact = item.EmergencyContact
                 }).ToList();
 
                 var listingUrl = $"{Request.Headers["Access-Control-Allow-Origin"]}/listing/{StringHelper.SeorizeListingName(listingDetail.Header, listingDetail.Id)}";
-                var bookingUrl = $"{Request.Headers["Access-Control-Allow-Origin"]}/booking/{string.Join("-", listingDetail.Header.Split(' '))}-{bookingId}";
+                var bookingUrl = $"{Request.Headers["Access-Control-Allow-Origin"]}/booking/{StringHelper.SeorizeListingName(listingDetail.Header, bookingId)}";
                 var manageBookingUrl = $"{Request.Headers["Access-Control-Allow-Origin"]}/booking/manage/{StringHelper.SeorizeListingName(listingDetail.Header, listingDetail.Id)}"; ;
 
                 var bookingEmailViewModel = new BookingEmailViewModel
@@ -90,6 +118,7 @@ namespace FunWithLocal.WebApi.Controllers
                     ListingUrl = listingUrl,
                     BookingUrl = bookingUrl,
                     ManageBookingUrl = manageBookingUrl,
+                    MainImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.Listing, null, listingDetail.ImageUrls.Split(";").FirstOrDefault()), 
                     ListingHeader = listingDetail.Header,
                     ListingDescription = listingDetail.Description,
                     BookingDate = request.BookingDate.ToString("dddd dd-MMM-yyyy", CultureInfo.DefaultThreadCurrentUICulture),
@@ -115,6 +144,10 @@ namespace FunWithLocal.WebApi.Controllers
             {
                 //if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
                 if (request == null || !request.Participants.Any()) throw new ArgumentNullException(nameof(request));
+
+                var booking = await _bookingService.GetBooking(bookingId);
+                if (!(await _authorizationService.AuthorizeAsync(User, booking, Operations.Update)).Succeeded)
+                    throw new UnauthorizedAccessException();
 
                 await _bookingService.UpdateBooking(bookingId, request);
 
@@ -155,6 +188,10 @@ namespace FunWithLocal.WebApi.Controllers
         {
             try
             {
+                var booking = await _bookingService.GetBooking(bookingId);
+                if (!(await _authorizationService.AuthorizeAsync(User, booking, Operations.Update)).Succeeded)
+                    throw new UnauthorizedAccessException();
+
                 await _bookingService.WithdrawBooking(bookingId);
                 return 1;
             }

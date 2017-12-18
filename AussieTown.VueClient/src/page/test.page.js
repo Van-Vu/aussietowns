@@ -52,7 +52,7 @@ var TestPage = /** @class */ (function (_super) {
     };
     TestPage.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
-        return store.dispatch('FETCH_FEATURELISTINGS');
+        //return store.dispatch('FETCH_FEATURELISTINGS');
     };
     TestPage.prototype.created = function () {
         this.listings = this.$store.state.featureListings;

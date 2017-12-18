@@ -1,5 +1,5 @@
 ﻿<template>
-    <div class="nav-bar container" :class="{'is-sticky': isSticky}">
+    <div class="nav-bar container" :class="{'is-sticky': isSticky}" >
         <div class="tile is-gapless is-mobile">
             <div class="tile is-two-thirds-desktop" style="position: relative;">
                 <!--<div class='nav-bar__logo '></div>-->

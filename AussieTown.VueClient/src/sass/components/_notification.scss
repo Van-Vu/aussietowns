@@ -8,6 +8,18 @@
     .notification {
         .message-header {
             justify-content: flex-start;
+
+            span {
+                margin-left: 5px;
+            }
+
+            .icon {
+                transform: rotate(45deg);
+
+                &:hover {
+                    color: #FF533D;
+                }
+            }
         }
 
         &.is-success {

@@ -14,15 +14,26 @@
         }
 
         .editTrip {
+            text-decoration: none;
             background-color: #99CD4E;
             color: #ffffff;
             text-align: center;
-            border-radius: 35px 35px;
+            border-radius: 50px 50px;
             box-shadow: none;
             border: 0;
             font-size: 24px;
-            padding: 15px 45px;
-            text-decoration: none;
+            margin: 30px 5px;
+        }
+
+        @@media screen and (min-width:412px) {
+            .editTrip {
+                padding: 15px 45px;
+            }
+        }
+        @@media screen and (max-width:411px) {
+            .editTrip {
+                padding: 10px 10px;
+            }
         }
 
         .editTrip:hover {
@@ -46,8 +57,8 @@
                     <tbody>
                         <tr>
                             <td style="padding:5px;">
-                                <a href="http://google.com.au" target="_blank">
-                                    <img style="display: block; border: 0;" width="60" height="60" src="https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/www/logo.png" alt="Meet the Local" title="Meet the Local" />
+                                <a href="https://www.funwithlocal.com" target="_blank">
+                                    <img style="display: block; border: 0;" width="170" height="70" src="https://www.funwithlocal.com/static/images/logo.png" alt="Fun With Local" title="Fun With Local" />
                                 </a>
                             </td>
                         </tr>
@@ -70,7 +81,7 @@
 									text-decoration-color: rgb(33, 153, 232);
 									text-decoration-line: none;
 									text-decoration-style: solid;">
-                                        <img style="width:100%;margin-right:auto;margin-left:auto;" src="https://s3-ap-southeast-2.amazonaws.com/meetthelocal-development/images/listings/19/homepage_mobile.jpg" />
+                                        <img style="width:100%;margin-right:auto;margin-left:auto;" src="@Model.MainImageUrl" />
                                         <p style="color: rgb(72, 72, 72);">@Model.ListingHeader</p>
                                     </a>
                                 </div>
@@ -99,17 +110,17 @@
                                         <tbody>
                                         <tr>
                                             <td>Full name</td>
-                                            <td>Date of Birth</td>
                                             <td>Email</td>
                                             <td>Phone</td>
+                                            <td>Emergency contact</td>
                                         </tr>
                                         @foreach (var item in Model.BookingParticipants)
                                         {
                                             <tr>
                                                 <td class="bordertop">@item.Fullname</td>
-                                                <td class="bordertop">@item.DateOfBirth</td>
                                                 <td class="bordertop">@item.Email</td>
                                                 <td class="bordertop">@item.Phone</td>
+                                                <td class="bordertop">@item.EmergencyContact</td>
                                             </tr>
                                         }
                                         </tbody>

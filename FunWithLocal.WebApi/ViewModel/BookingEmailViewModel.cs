@@ -7,6 +7,7 @@ namespace FunWithLocal.WebApi.ViewModel
         public int ListingId { get; set; }
         public string EmailHeader { get; set; }
         public string ListingUrl { get; set; }
+        public string MainImageUrl { get; set; }
         public string ListingHeader { get; set; }
         public string ListingDescription { get; set; }
         public string BookingDate { get; set; }
@@ -24,5 +25,7 @@ namespace FunWithLocal.WebApi.ViewModel
         public string DateOfBirth { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+
+        public string EmergencyContact { get; set; }
     }
 }

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace AussieTowns.Common
+namespace FunWithLocal.WebApi.Common
 {
     public static class StringHelper
     {
@@ -31,7 +28,8 @@ namespace AussieTowns.Common
 
         public static string SeorizeListingName(string header, int id)
         {
-            return $"{string.Join("-", header.Split(' '))}-{id}";
+            var lowerHeader = header.ToLower();
+            return $"{string.Join("-", lowerHeader.Split(' '))}-{id}";
         }
 
         public static string GetCurrentHostEnvironemnt(IHttpContextAccessor httpContextAccessor)

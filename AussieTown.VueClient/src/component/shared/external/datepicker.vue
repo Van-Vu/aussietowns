@@ -4,7 +4,7 @@
     <div class="date-picker" :class="{'is-inline': inline}">
         <div class="input-wrapper" @mouseenter="showCancel = true" @mouseleave="showCancel = false">
             <div class="input-date" @click="togglePanel">{{range ? display[0] + ' -- ' + display[1] : display}}</div>
-            <i class="icon icon-calendar"></i>
+            <i class="icon icon-calendar" @click="togglePanel"></i>
         </div>
         <transition name="toggle">
             <div class="date-panel" v-show="panelState" :style="coordinates">

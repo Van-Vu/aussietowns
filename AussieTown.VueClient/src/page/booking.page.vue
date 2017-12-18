@@ -117,7 +117,7 @@
                         </li>
                     </ul>
                 </tab-content>
-                <tab-content title="Review" :before-change="confirmBooking"
+                <tab-content title="Review"
                              icon="icon icon-file-o">
                     <ul>
                     <li class="tile is-vertical is-parent box participant-summary " v-for="(user, index) in model.participants">

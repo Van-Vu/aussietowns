@@ -20,8 +20,6 @@
             <div class="userdetail container tile is-vertical is-parent" :class="{editing:isEditing}">
                 <div class="tile is-parent">
                     <div class="tile is-3">Email Address</div>
-                    <button @click="isHeroImageUploading = !isHeroImageUploading"> switch</button>
-                    <button @click="isProfileImageUploading = !isProfileImageUploading"> switch2</button>
                     <div class="tile is-vertical control has-icon has-icon-right">
                         <input name="email" v-if="isEditing" v-model="model.email" v-validate="'required|email'"
                                :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="">

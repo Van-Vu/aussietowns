@@ -70,6 +70,11 @@ namespace FunWithLocal.WebApi.Services
                 return string.Empty;
             };
 
+            if (device == null)
+            {
+                device = new Device {Type = DeviceType.Desktop};
+            }
+
             string imageSetting;
             switch (imageType)
             {

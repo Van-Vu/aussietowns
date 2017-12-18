@@ -107,7 +107,7 @@ export default class UserDetailComponent extends Vue {
                     listingId: null
                 });
         } else {
-            Utils.handleError(this.$store, { status: 403 });
+            Utils.handleXHRError(this.$store, { status: 403 });
         }
 
     }

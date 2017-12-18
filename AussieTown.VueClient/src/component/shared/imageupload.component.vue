@@ -24,7 +24,6 @@
         </div>
         <div>
             <zoneloading :isLoading="isUploading" :loadingText="'Uploading'"></zoneloading>
-            <button @click="isUploading = !isUploading">Switch</button>
             <vueUploadImage v-if="isEditing" :maxFileAllowed="maxFileAllowed" :maxFileConfig="maxFileConfig" @uploadImages="onUploadImages"></vueUploadImage>
         </div>
     </div>

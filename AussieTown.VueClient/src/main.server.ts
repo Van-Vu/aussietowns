@@ -10,6 +10,8 @@ export default context => {
     if (context.cookies.mtl) {
         var mtl = JSON.parse(context.cookies.mtl);
         if (mtl && mtl.loggedInUser) store.state.loggedInUser = mtl.loggedInUser;
+
+        if (context.cookies.mtltk) store.state.token = context.cookies.mtltk;
     }
 
   return new Promise((resolve, reject) => {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AussieTowns.Common;
@@ -7,9 +6,8 @@ using AussieTowns.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Extensions.Logging;
-using MimeKit;
 
-namespace AussieTowns.Auth
+namespace FunWithLocal.WebApi.Auth
 {
     public class ListingAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Listing>
     {

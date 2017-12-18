@@ -5,6 +5,7 @@ using AussieTowns.Model;
 using AussieTowns.Services;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using FunWithLocal.WebApi.Common;
 using FunWithLocal.WebApi.Model;
 using FunWithLocal.WebApi.Services;
 using FunWithLocal.WebApi.ViewModel;

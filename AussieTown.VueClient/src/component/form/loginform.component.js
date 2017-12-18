@@ -122,11 +122,18 @@ var LoginForm = /** @class */ (function (_super) {
         return (new UserService()).signup(model)
             .then(function (responseToken) { return _this.handleLoginToken(responseToken); });
     };
-    LoginForm.prototype.handleLoginToken = function (token) {
+    LoginForm.prototype.handleLoginToken = function (response) {
+        var token = response.result;
         this.$store.dispatch('SET_CURRENT_USER', token.loggedInUser);
         this.setCookies(token.accessToken);
-        this.$emit('onSuccessfulLogin');
         this.rawPassword = '';
+        if (this.$store.state.modalOpenning) {
+            this.$emit('onSuccessfulLogin');
+        }
+        else {
+            var queryString = this.$route.query;
+            this.$router.push(queryString.returnUrl);
+        }
     };
     LoginForm.prototype.setCookies = function (accessToken) {
         this.$cookie.set('mtltk', accessToken);
@@ -136,6 +143,7 @@ var LoginForm = /** @class */ (function (_super) {
             .then(function (x) { return console.log(x); });
     };
     LoginForm.prototype.onGgSignInSuccess = function (googleUser) {
+        var _this = this;
         // `googleUser` is the GoogleUser object that represents the just-signed-in user. 
         // See https://developers.google.com/identity/sign-in/web/reference#users 
         var profile = googleUser.getBasicProfile(); // etc etc 
@@ -145,8 +153,10 @@ var LoginForm = /** @class */ (function (_super) {
         console.log('Family Name: ' + profile.getFamilyName());
         console.log('Image URL: ' + profile.getImageUrl());
         console.log('Email: ' + profile.getEmail());
+        this.$store.dispatch("ENABLE_LOADING");
         if (this.isLogin) {
-            this.login({ email: profile.getEmail(), source: UserSource.Google, externalId: encryptText(profile.getId()) });
+            this.login({ email: profile.getEmail(), source: UserSource.Google, externalId: encryptText(profile.getId()) })
+                .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); });
         }
         else {
             this.signup({
@@ -156,15 +166,16 @@ var LoginForm = /** @class */ (function (_super) {
                 photoUrl: profile.getImageUrl(),
                 source: UserSource.Google,
                 externalId: encryptText(profile.getId())
-            });
+            })
+                .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); });
         }
     };
     LoginForm.prototype.onGgSignInError = function (error) {
         // `error` contains any error occurred. 
-        console.log('OH NOES', error);
     };
     LoginForm.prototype.onFbSignInSuccess = function (response) {
         var _this = this;
+        this.$store.dispatch("ENABLE_LOADING");
         FB.api('/me', { "fields": "id,name,email,first_name,last_name,picture" }, function (profile) {
             console.log("Id: " + profile.id + ".");
             console.log("Name: " + profile.name + ".");
@@ -173,7 +184,8 @@ var LoginForm = /** @class */ (function (_super) {
             console.log("Last name: " + profile.last_name + ".");
             console.log("Picture: " + profile.picture.data.url + ".");
             if (_this.isLogin) {
-                _this.login({ email: profile.email, source: UserSource.Facebook, externalId: encryptText(profile.id) });
+                _this.login({ email: profile.email, source: UserSource.Facebook, externalId: encryptText(profile.id) })
+                    .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); });
             }
             else {
                 _this.signup({
@@ -183,12 +195,12 @@ var LoginForm = /** @class */ (function (_super) {
                     photoUrl: profile.picture.data.url,
                     source: UserSource.Facebook,
                     externalId: encryptText(profile.id)
-                });
+                })
+                    .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); });
             }
         });
     };
     LoginForm.prototype.onFbSignInError = function (error) {
-        console.log('OH NOES', error);
     };
     LoginForm.prototype.checkFbLoginStatus = function () {
         FB.getLoginStatus(function (response) {
