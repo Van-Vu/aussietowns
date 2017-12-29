@@ -1,0 +1,74 @@
+﻿.toggle {
+	display: inline-block;
+	text-align: center;
+    user-select: none;
+}
+.toggle--checkbox {
+    display: none;
+}
+.toggle--btn {
+	display: inline-block;
+	margin: 0 auto;
+
+	font-size: 1rem;
+
+	transition: all 350ms ease-in;
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+.toggle--btn,
+.toggle--checkbox {
+	&,
+	&:before,
+	&:after {
+		transition: all 250ms ease-in;
+	}
+	&:before,
+	&:after {
+		content: '';
+		display: block;
+	}
+}
+
+
+$toggleBtnRadius: 50px;
+$toggleBtnColor: #f9f8f6;
+
+$toggleShadowColor: #333;
+$toggleActiveColor: #FF9900;
+$toggleInactiveColor: #ccc;
+
+.toggle--push {
+	& .toggle--btn {
+		position: relative;
+		max-width: 250px;
+		/*height: $toggleBtnRadius;*/
+		background-color: $toggleBtnColor;
+		border-radius: 10px;
+        padding: 2px 5px;
+        margin: 5px 5px;
+
+		box-shadow: 0 5px 10px 0px $toggleShadowColor,
+					0 15px 20px 0px lighten($toggleShadowColor, 60%);
+
+		&,
+		&:before,
+		&:after {
+			transition-duration: 150ms;
+		}
+	}
+
+	& .toggle--checkbox {
+		&:checked, &:hover {
+			& + .toggle--btn {
+				box-shadow: 0 2px 5px 0px lighten($toggleShadowColor, 30%),
+					0 15px 20px 0px transparent;
+
+                color: $c-orange;
+			}
+		}
+	}
+}

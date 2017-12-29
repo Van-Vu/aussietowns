@@ -5,6 +5,7 @@ import LocationSearchComponent from "../shared/search/locationsearch.component.v
 import UserModel from '../../model/user.model';
 import ImageModel from '../../model/image.model';
 
+import CheckButton from '../shared/checkbutton.component.vue';
 
 import { UserRole, UserAction, NotificationType } from '../../model/enum';
 import { AutocompleteItem } from '../../model/autocomplete.model';
@@ -33,7 +34,8 @@ Vue.use(VeeValidate);
         "datepicker": datepicker,
         "imageupload": ImageUploadComponent,
         "imagecrop": ImageCropComponent,
-        "zoneloading": ZoneLoadingComponent
+        "zoneloading": ZoneLoadingComponent,
+        'checkButton': CheckButton
     }
 })
 
@@ -48,8 +50,16 @@ export default class UserDetailComponent extends Vue {
         return plainToClass<UserModel, Object>(UserModel, this.$store.state.profile);
     }
 
+    get hobbyList() {
+        return this.$store.state.hobbies;
+    }
+
     static asyncData({ store, route }) {
         if (route.params.profileId) {
+            if (store.state.hobbies == null) {
+                store.dispatch('FETCH_HOBBY_LIST');
+            }
+                
             return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
         }
     }
@@ -73,11 +83,16 @@ export default class UserDetailComponent extends Vue {
         this.model.locationId = +item.id;
     }
 
+    onUpdatedHobbyList(value) {
+        this.model.hobbies = value;
+    }
+
     onInsertorUpdate() {
         if (this.model.id > 0) {
-            return this.$store.dispatch('UPDATE_USER', this.contructBeforeSubmit(this.model))
+            return this.$store.dispatch('UPDATE_USER', this.model)
                 .then (response => {
-                    this.$store.dispatch('ADD_NOTIFICATION', { title: "Update Succeed", type: NotificationType.Success });            
+                    this.$store.dispatch('ADD_NOTIFICATION', { title: "Update Succeed", type: NotificationType.Success });
+                    this.isEditing = false;            
                 });
         }
     }
@@ -91,10 +106,6 @@ export default class UserDetailComponent extends Vue {
         this.isEditing = false;
         Object.assign(this.model, this.modelCache);
         this.modelCache = null;
-    }
-
-    contructBeforeSubmit(model) {
-        return this.model;
     }
 
     onEnquire() {
@@ -182,8 +193,5 @@ export default class UserDetailComponent extends Vue {
         this.isProfileImageUploading = false;
         this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", type: NotificationType.Error });
     }
-
-onUpdate(){}
-capture(){}
 }
 

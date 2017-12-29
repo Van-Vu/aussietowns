@@ -1,8 +1,8 @@
 ﻿<template>
     <div class="tile number-chooser">
-        <div @click="decrease"><i class="icon icon-minus-circle plus"></i></div>
+        <div @click="decrease"><i class="icon icon-minus-circle"></i></div>
         <div class="number">{{display}}</div>
-        <div @click="increase"><i class="icon icon-plus-circle minus"></i></div>
+        <div @click="increase"><i class="icon icon-plus-circle"></i></div>
     </div>
 </template>
 

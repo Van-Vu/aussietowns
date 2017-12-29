@@ -1,16 +1,16 @@
 ﻿using System.Data;
 using MySql.Data.MySqlClient;
 
-namespace AussieTowns.Repository
+namespace FunWithLocal.WebApi.Repository
 {
     public class RepositoryBase
     {
-        private readonly string connectionString;
+        private readonly string _connectionString;
         public RepositoryBase(string connString)
         {
-            connectionString = connString;
+            _connectionString = connString;
         }
 
-        protected IDbConnection Connection => new MySqlConnection(connectionString);
+        protected IDbConnection Connection => new MySqlConnection(_connectionString);
     }
 }

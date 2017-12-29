@@ -52,15 +52,15 @@
                 </div>
                 <hr />
                 <div class="tile is-parent">
-                    <div class="tile is-3">Origin location</div>
+                    <div class="tile is-3">Location</div>
                     <div class="tile">
                         <locationsearch v-if="isEditing" :initialData="model.locationDetail" @onSelected="onLocationSelected($event)"></locationsearch>
                         <span v-show="errors.has('location')" class="help is-danger">{{ errors.first('location') }}</span>
                         <label v-if="!isEditing">{{ model.locationDetail ? model.locationDetail.name : ''}}</label>
                     </div>
                 </div>
-                <hr />
-                <div class="tile is-parent">
+                <hr v-if="false"/>
+                <div class="tile is-parent" v-if="false">
                     <div class="tile is-3">Phone Number</div>
                     <div class="tile is-vertical control has-icon has-icon-right">
                         <input name="phone" v-if="isEditing" v-model="model.phone" class="input" type="text" v-mask="'##########'">
@@ -68,8 +68,8 @@
                         <label v-if="!isEditing">{{ model.phone }}</label>
                     </div>
                 </div>
-                <hr />
-                <div class="tile is-parent">
+                <hr v-if="false"/>
+                <div class="tile is-parent" v-if="false">
                     <div class="tile is-3">Gender</div>
                     <div class="tile">
                         <div class="select" v-if="isEditing">
@@ -83,8 +83,8 @@
                         <label v-if="!isEditing">{{ model.gender }}</label>
                     </div>
                 </div>
-                <hr />
-                <div class="tile is-parent">
+                <hr v-if="false"/>
+                <div class="tile is-parent" v-if="false">
                     <div class="tile is-3">Birthday</div>
                     <div class="tile">
                         <datepicker v-if="isEditing" v-model="model.birthdayText"></datepicker>
@@ -93,17 +93,17 @@
                 </div>
                 <hr />
                 <div class="tile is-parent">
-                    <div class="tile is-3">Description</div>
+                    <div class="tile is-3">About me</div>
                     <div class="tile">
                         <textarea class="textarea" v-if="isEditing" name="description"
-                                  placeholder="Short description about yourself"
+                                  placeholder="Tell others a bit about yourself"
                                   v-model="model.description" cols="40" rows="5"></textarea>
-                        <label v-if="!isEditing">{{ model.description }}</label>
+                        <label v-if="!isEditing" v-html="model.descriptionText"></label>
                     </div>
 
                 </div>
-                <hr />
-                <div class="tile is-parent">
+                <hr v-if="false">
+                <div class="tile is-parent" v-if="false">
                     <div class="tile is-3">Address</div>
                     <div class="tile">
                         <input type="text" v-if="isEditing" class="input" name="address"
@@ -112,8 +112,8 @@
                         <label v-if="!isEditing">{{ model.address }}</label>
                     </div>
                 </div>
-                <hr />
-                <div class="tile is-parent">
+                <hr v-if="false"/>
+                <div class="tile is-parent" v-if="false">
                     <div class="tile is-3">Emergency contact</div>
                     <div class="tile">
                         <input type="text" v-if="isEditing" class="input" name="emergencyContact" v-mask="'##########'"
@@ -122,6 +122,14 @@
                         <label v-if="!isEditing">{{ model.emergencyContact }}</label>
                     </div>
                 </div>
+                <hr />
+                <div class="tile is-parent">
+                    <div class="tile is-3">How about your hobby</div>
+                    <div class="tile">
+                        <checkButton :model="hobbyList" :checked="model.hobbies" :isEditing="isEditing" @onChange="onUpdatedHobbyList"></checkButton>
+                    </div>
+                </div>
+
                 <hr />
                 <div class="tile is-gapless is-flex is-sticky-bottom is-center">
                     <button class="tile is-6 is-center button mtl_button-no-round" v-if="!canEdit" @click="onEnquire">Ask me a question</button>

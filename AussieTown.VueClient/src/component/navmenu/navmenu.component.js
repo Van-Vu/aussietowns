@@ -119,10 +119,12 @@ var NavMenuComponent = /** @class */ (function (_super) {
         this.$store.dispatch('SHOW_LOGIN_MODAL');
     };
     NavMenuComponent.prototype.onLogout = function () {
-        this.$store.dispatch('SET_CURRENT_USER', null);
-        this.$cookie.remove('mtltk');
-        this.$cookie.remove('mtl', null);
-        this.$router.push("home");
+        //this.$store.dispatch('SET_CURRENT_USER', {});
+        //this.$store.dispatch('SET_TOKEN', '');
+        //this.$cookie.remove('mtltk');
+        //this.$cookie.remove('mtl');
+        //this.$router.push("home");
+        window.location.href = '/logout';
     };
     NavMenuComponent.prototype.closeUserMenu = function (e) {
         if ((!this.$el.contains(e.target)) && (e.target.id != 'popupUserMenu')) {

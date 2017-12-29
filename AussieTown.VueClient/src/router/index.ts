@@ -21,6 +21,7 @@ const BookingDetailPage = () => import('../page/bookingdetail.page.vue')
 const BookingManagePage = () => import('../page/bookingmanage.page.vue')
 const ConfirmEmailPage = () => import('../page/confirmemail.page.vue')
 const ArticlePage = () => import('../page/article.page.vue')
+const ContentPage = () => import('../page/content.page.vue')
 
 const MessageComponent = () => import('../component/profile/message.component.vue')
 const TripComponent = () => import('../component/profile/trip.component.vue')
@@ -29,6 +30,7 @@ const UserDetailComponent = () => import('../component/profile/userdetail.compon
 const ListingsComponent = () => import('../component/profile/listings.component.vue')
 
 const LoginForm = () => import('../component/form/loginform.component.vue')
+const LogoutForm = () => import('../component/form/logoutform.component.vue')
 const RegistrationForm = () => import('../component/form/registration.component.vue')
 const ChangePasswordComponent = () => import('../component/profile/changepassword.component.vue')
 const ForgetPasswordForm = () => import('../component/form/forgetpassword.component.vue')
@@ -183,9 +185,29 @@ const router = new Router({
             }
         },
         {
+            path: "/article/create",
+            name: "createArticle",
+            component: ArticlePage,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
+            path: "/article/:seoString-:articleId(\\d+)",
+            name: "editArticle",
+            component: ArticlePage,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
             path: "/whatson/:seoString-:articleId(\\d+)",
             name: "whatson",
-            component: ArticlePage,
+            component: ContentPage,
             props: true,
             meta: {
                 permission: UserRole.Anonymous,
@@ -195,7 +217,27 @@ const router = new Router({
         {
             path: "/about/:seoString-:articleId(\\d+)",
             name: "aboutus",
-            component: ArticlePage,
+            component: ContentPage,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
+            path: "/intro/:seoString-:articleId(\\d+)",
+            name: "introduction",
+            component: ContentPage,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
+            path: "/blog/:seoString-:articleId(\\d+)",
+            name: "blog",
+            component: ContentPage,
             props: true,
             meta: {
                 permission: UserRole.Anonymous,
@@ -240,6 +282,16 @@ const router = new Router({
             path: "/login",
             name: "login",
             component: LoginForm,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
+            path: "/logout",
+            name: "logout",
+            component: LogoutForm,
             props: true,
             meta: {
                 permission: UserRole.Anonymous,

@@ -73,7 +73,12 @@
     }
 
     .trip-content {
-        > ul > li {
+        .card {
+            width: 31%;
+            display: inline-block;
+        }
+
+        /*> ul > li {
             width:100%;
             display: flex;
             overflow: hidden;
@@ -81,7 +86,7 @@
             @media all and (min-width: $is-desktop) {
                 width:290px;
             }
-        }
+        }*/
     }
 
     .is-profile {

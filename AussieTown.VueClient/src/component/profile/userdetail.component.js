@@ -19,6 +19,7 @@ import { Component } from "vue-property-decorator";
 import VeeValidate from 'vee-validate';
 import LocationSearchComponent from "../shared/search/locationsearch.component.vue";
 import UserModel from '../../model/user.model';
+import CheckButton from '../shared/checkbutton.component.vue';
 import { UserRole, UserAction, NotificationType } from '../../model/enum';
 import datepicker from '../shared/external/datepicker.vue';
 import { plainToClass } from "class-transformer";
@@ -48,9 +49,19 @@ var UserDetailComponent = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UserDetailComponent.prototype, "hobbyList", {
+        get: function () {
+            return this.$store.state.hobbies;
+        },
+        enumerable: true,
+        configurable: true
+    });
     UserDetailComponent.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
         if (route.params.profileId) {
+            if (store.state.hobbies == null) {
+                store.dispatch('FETCH_HOBBY_LIST');
+            }
             return store.dispatch('FETCH_PROFILE_BY_ID', route.params.profileId);
         }
     };
@@ -77,12 +88,16 @@ var UserDetailComponent = /** @class */ (function (_super) {
     UserDetailComponent.prototype.onLocationSelected = function (item) {
         this.model.locationId = +item.id;
     };
+    UserDetailComponent.prototype.onUpdatedHobbyList = function (value) {
+        this.model.hobbies = value;
+    };
     UserDetailComponent.prototype.onInsertorUpdate = function () {
         var _this = this;
         if (this.model.id > 0) {
-            return this.$store.dispatch('UPDATE_USER', this.contructBeforeSubmit(this.model))
+            return this.$store.dispatch('UPDATE_USER', this.model)
                 .then(function (response) {
                 _this.$store.dispatch('ADD_NOTIFICATION', { title: "Update Succeed", type: NotificationType.Success });
+                _this.isEditing = false;
             });
         }
     };
@@ -94,9 +109,6 @@ var UserDetailComponent = /** @class */ (function (_super) {
         this.isEditing = false;
         Object.assign(this.model, this.modelCache);
         this.modelCache = null;
-    };
-    UserDetailComponent.prototype.contructBeforeSubmit = function (model) {
-        return this.model;
     };
     UserDetailComponent.prototype.onEnquire = function () {
         if (this.isLoggedIn) {
@@ -176,8 +188,6 @@ var UserDetailComponent = /** @class */ (function (_super) {
         this.isProfileImageUploading = false;
         this.$store.dispatch('ADD_NOTIFICATION', { title: "Upload error", type: NotificationType.Error });
     };
-    UserDetailComponent.prototype.onUpdate = function () { };
-    UserDetailComponent.prototype.capture = function () { };
     UserDetailComponent = __decorate([
         Component({
             name: 'UserDetail',
@@ -186,7 +196,8 @@ var UserDetailComponent = /** @class */ (function (_super) {
                 "datepicker": datepicker,
                 "imageupload": ImageUploadComponent,
                 "imagecrop": ImageCropComponent,
-                "zoneloading": ZoneLoadingComponent
+                "zoneloading": ZoneLoadingComponent,
+                'checkButton': CheckButton
             }
         })
     ], UserDetailComponent);

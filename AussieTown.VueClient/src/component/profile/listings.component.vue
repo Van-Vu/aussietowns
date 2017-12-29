@@ -1,10 +1,8 @@
 ﻿<template>
     <div class="trip-content">
-        <ul class="tile is-parent is-multiline is-gapless quad">
-            <li class="tile is-3" v-for="offer in listings">
-                <cardsmall :listingDetail="offer"></cardsmall>
-            </li>
-        </ul>
+        <div>
+            <listingcard v-for="offer in listings" :key="offer.id" :listingDetail="offer"></listingcard>
+        </div>
     </div>
 </template>
 

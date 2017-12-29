@@ -18,7 +18,6 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
 import Swiper from '../component/shared/external/vue-swiper.vue';
-import CardSmallComponent from '../component/shared/cardsmall.component.vue';
 import CardFullComponent from '../component/shared/listingcard.component.vue';
 import { Utils } from '../component/utils';
 import { ScreenSize } from '../model/enum';
@@ -111,7 +110,6 @@ var HomePage = /** @class */ (function (_super) {
             components: {
                 "searchbar": SearchBarComponent,
                 "swiper": Swiper,
-                "cardsmall": CardSmallComponent,
                 "listingcard": CardFullComponent
             },
             beforeRouteEnter: function (to, from, next) {

@@ -131,6 +131,7 @@ export default class LoginForm extends Vue {
     handleLoginToken(response) {
         var token = response.result;
         this.$store.dispatch('SET_CURRENT_USER', token.loggedInUser);
+        this.$store.dispatch('SET_TOKEN', token.accessToken);
         this.setCookies(token.accessToken);
         this.rawPassword = '';        
 

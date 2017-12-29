@@ -6,6 +6,7 @@ export namespace GlobalConfig {
     export const heroImageSize: ImageSize = { maxWidth: 1192, maxHeight: 370 };
     export const profileImageSize: ImageSize = { maxWidth: 170, maxHeight: 170 };
     export const listingImageSize: ImageSize = { maxWidth: 640, maxHeight: 360 };
+    export const articleImageSize: ImageSize = { maxWidth: 630, maxHeight: 360 };
     export const accessControl: any = { dev: "http://localhost:3000", prod: "https://www.funwithlocal.com" };
 }
 

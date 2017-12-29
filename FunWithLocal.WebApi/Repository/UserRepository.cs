@@ -115,12 +115,12 @@ namespace FunWithLocal.WebApi.Repository
             }
         }
 
-        public async Task<int> Update(User user)
+        public async Task<int> Update(UserRequest user)
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "UPDATE User SET firstname = @firstname, lastname = @lastname, email = @email, gender= @gender, birthday= @birthday, phone = @phone, language= @language, currency = @currency, "
-                    + "locationId = @locationId, description = @description, address= @address, emergencycontact= @emergencycontact, updatedDate=@updatedDate, isConfirm=@isConfirm WHERE id = @Id";
+                var sql = "UPDATE User SET firstname = @firstname, lastname = @lastname, email = @email, gender= @gender, birthday= @birthday, phone = @phone, language= @language, "
+                    + "hobbies=@hobbyText, locationId = @locationId, description = @description, address= @address, emergencycontact= @emergencycontact, updatedDate=@updatedDate, isConfirm=@isConfirm WHERE id = @Id";
                 dbConnection.Open();
                 user.UpdatedDate = DateTime.Now;
                 return await dbConnection.ExecuteAsync(sql, user);

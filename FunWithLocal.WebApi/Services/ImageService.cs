@@ -79,8 +79,24 @@ namespace FunWithLocal.WebApi.Services
             }
 
             throw new Exception($"Can not upload hero image {file.FileName}: Database error");
+        }
 
-            //return await _imageRepository.InsertHeroImage(profileId, url);
+        public async Task<string> InsertArticleImage(int articleId, IFormFile file)
+        {
+            var folderPath = $"article/{articleId}";
+            var cloudinaryResult = await _imageStorageService.UploadImage(file, folderPath);
+
+            if (cloudinaryResult.StatusCode != HttpStatusCode.OK)
+                throw new Exception($"Can not upload article image {file.FileName}: {cloudinaryResult.Error.Message}");
+
+            var insertImage = await _imageRepository.InsertArticleImage(articleId, cloudinaryResult.PublicId);
+
+            if (insertImage < 2)
+            {
+                return cloudinaryResult.SecureUri.OriginalString;
+            }
+
+            throw new Exception($"Can not upload hero image {file.FileName}: Database error");
         }
 
         public async Task<Image> FetchImageByUrl(int listingId, string url)
@@ -92,6 +108,5 @@ namespace FunWithLocal.WebApi.Services
         {
             return await _imageRepository.DeleteImage(imageId);
         }
-
     }
 }

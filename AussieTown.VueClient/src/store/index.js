@@ -6,12 +6,15 @@ import MessageService from "../service/message.service";
 import UploadService from "../service/fileupload.service";
 import LogService from "../service/log.service";
 import BookingService from "../service/booking.service";
+import ArticleService from "../service/article.service";
+import SettingsService from "../service/settings.service";
 import ListingModel from '../model/listing.model';
 import MiniProfile from '../model/miniprofile.model';
 import BookingModel from '../model/booking.model';
 import UserModel from '../model/user.model';
 import ConversationModel from '../model/conversation.model';
 import ContactModel from '../model/contact.model';
+import ArticleModel from '../model/article.model';
 import { ListingType, NotificationType } from '../model/enum';
 import { Utils } from '../component/utils';
 // BODOM: DO NOT REMOVE for class-transformer
@@ -48,7 +51,9 @@ export default new Vuex.Store({
         dynamicModal: {},
         modalOpenning: false,
         contact: ContactModel,
-        isImageCropping: false
+        isImageCropping: false,
+        article: ArticleModel,
+        hobbies: null
     },
     getters: {
         isLoggedIn: function (state) {
@@ -83,6 +88,10 @@ export default new Vuex.Store({
         SET_CURRENT_USER: function (_a, loggedInUser) {
             var commit = _a.commit, state = _a.state;
             return commit('UPDATE_CURRENT_USER', loggedInUser);
+        },
+        SET_TOKEN: function (_a, token) {
+            var commit = _a.commit, state = _a.state;
+            return commit('UPDATE_TOKEN', token);
         },
         SET_CURRENT_PAGE: function (_a, page) {
             var commit = _a.commit;
@@ -218,6 +227,11 @@ export default new Vuex.Store({
             return (new UploadService()).uploadProfileHeroImage(payload.data, payload.actionId)
                 .then(function (response) { return commit('UPDATE_PROFILE_HEROIMAGE', response); });
         },
+        UPLOAD_ARTICLE_IMAGE: function (_a, payload) {
+            var commit = _a.commit;
+            return (new UploadService()).uploadArticleImage(payload.data, payload.actionId)
+                .then(function (response) { return commit('UPDATE_ARTICLE_IMAGE', response); });
+        },
         REMOVE_IMAGE: function (_a, payload) {
             var commit = _a.commit;
             return (new ListingService()).deleteImage(payload.listingId, payload.url)
@@ -316,6 +330,34 @@ export default new Vuex.Store({
                 commit('UPDATE_PROFILE', response);
             });
         },
+        FETCH_ARTICLE_BY_ID: function (_a, articleId) {
+            var commit = _a.commit;
+            return (new ArticleService()).fetchArticle(articleId).then(function (response) {
+                commit('UPDATE_ARTICLE', response);
+            });
+        },
+        CREATE_NEW_ARTICLE: function (_a) {
+            var commit = _a.commit;
+            return commit('UPDATE_ARTICLE', new ArticleModel());
+        },
+        UPDATE_ARTICLE_CONTENT: function (_a, article) {
+            var commit = _a.commit;
+            return (new ArticleService()).updateArticle(article).then(function (response) {
+                //commit('UPDATE_ARTICLE', response);
+            });
+        },
+        UPDATE_ARTICLE_STATUS: function (_a, payload) {
+            var commit = _a.commit;
+            return (new ArticleService()).updateStatus(payload).then(function (response) {
+                //commit('UPDATE_ARTICLE', response);
+            });
+        },
+        FETCH_HOBBY_LIST: function (_a) {
+            var commit = _a.commit;
+            return (new SettingsService()).getAllHobbies().then(function (response) {
+                commit('UPDATE_HOBBY', response);
+            });
+        },
         TEST: function (_a, payload) {
             var commit = _a.commit, state = _a.state;
             (new UserService()).getMiniProfile(1).catch(function (error) { return commit('ADD_NOTIFICATION', error); });
@@ -355,7 +397,14 @@ export default new Vuex.Store({
             state.conversationsContent.unshift(message);
         },
         UPDATE_CURRENT_USER: function (state, loggedInUser) {
-            Vue.set(state, 'loggedInUser', loggedInUser);
+            //Vue.set(state, 'loggedInUser', loggedInUser);
+            state.loggedInUser = loggedInUser;
+            if (loggedInUser == null) {
+                Vue.set(state, 'token', null);
+            }
+        },
+        UPDATE_TOKEN: function (state, token) {
+            Vue.set(state, 'token', token);
         },
         ADD_NOTIFICATION: function (state, notification) {
             state.notifications.push(notification);
@@ -385,6 +434,9 @@ export default new Vuex.Store({
         },
         UPDATE_PROFILE_HEROIMAGE: function (state, heroImage) {
             Vue.set(state.profile, 'heroImageUrl', heroImage);
+        },
+        UPDATE_ARTICLE_IMAGE: function (state, articleImage) {
+            Vue.set(state.article, 'imageUrl', articleImage);
         },
         REMOVE_PROFILE_IMAGE: function (state, imageUrl) {
             var image = state.profile.images.find(function (x) { return x.url === imageUrl; });
@@ -483,6 +535,12 @@ export default new Vuex.Store({
         },
         DELETE_OPERATOR: function (state, value) {
             Vue.set(state.listing, 'tourOperators', Utils.removeFromArray(state.listing.tourOperators, value));
-        }
+        },
+        UPDATE_ARTICLE: function (state, payload) {
+            return Vue.set(state, 'article', payload);
+        },
+        UPDATE_HOBBY: function (state, hobbyList) {
+            Vue.set(state, 'hobbies', hobbyList);
+        },
     }
 });

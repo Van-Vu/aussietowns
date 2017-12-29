@@ -125,6 +125,7 @@ var LoginForm = /** @class */ (function (_super) {
     LoginForm.prototype.handleLoginToken = function (response) {
         var token = response.result;
         this.$store.dispatch('SET_CURRENT_USER', token.loggedInUser);
+        this.$store.dispatch('SET_TOKEN', token.accessToken);
         this.setCookies(token.accessToken);
         this.rawPassword = '';
         if (this.$store.state.modalOpenning) {

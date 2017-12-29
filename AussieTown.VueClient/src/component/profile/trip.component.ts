@@ -1,14 +1,14 @@
 ﻿import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import CardSmallComponent from '../shared/cardsmall.component.vue';
 import ListingModel from '../../model/listing.model';
 import UserModel from '../../model/user.model';
 import { ListingType } from '../../model/enum';
+import CardFullComponent from '../shared/listingcard.component.vue';
 
 @Component({
     name: "TripComponent",
     components: {
-        "cardsmall": CardSmallComponent
+        "listingcard": CardFullComponent
     }
 })
 

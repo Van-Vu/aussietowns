@@ -9,7 +9,9 @@
 
         &:hover {
             cursor: pointer;
-            background-color: rgb(207, 213, 219);
+            background-color:  $c-lightgrey-light;
+            border-top-left-radius: 25px;
+            border-bottom-left-radius: 25px;
 
             img {
                 -moz-transform: scale(1.1);

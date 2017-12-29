@@ -56,7 +56,7 @@ namespace FunWithLocal.WebApi.Services
             return await _userRepository.Insert(user);  
         }
 
-        public async Task<int> Update(User user)
+        public async Task<int> Update(UserRequest user)
         {
             return await _userRepository.Update(user);
         }

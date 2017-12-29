@@ -1,11 +1,11 @@
-﻿.content {
+﻿/*.content {
     width: 70%;
     @include absolutecenter;
     top: 20%;
     @media all and (max-width: $is-mobile) {
         width: 100%;
     }
-}
+}*/
 
 .header-main {
     position: relative;

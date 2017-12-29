@@ -1,0 +1,37 @@
+﻿.article {
+    &_image {
+        background-image: linear-gradient(-135deg,#70e1f5,#ffd194);
+        overflow: hidden;
+        position: relative;
+
+        &:hover i {
+            display: flex;
+        }
+
+        i {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
+
+            @media all and (min-width: $is-desktop) {
+                display: none;
+            }
+
+        }
+
+        figure {
+            width: 100%;
+        }
+    }
+
+    .articleHeader_left {
+        .tile {
+            max-height: 2rem;
+        }
+
+        label {
+            margin-left: 5px;
+        }
+    }
+}

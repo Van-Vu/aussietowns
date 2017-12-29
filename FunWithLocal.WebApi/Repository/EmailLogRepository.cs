@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using AussieTowns.Model;
+using AussieTowns.Repository;
 using Dapper;
 using Microsoft.Extensions.Logging;
 
-namespace AussieTowns.Repository
+namespace FunWithLocal.WebApi.Repository
 {
     public class EmailLogRepository: RepositoryBase, IEmailLogRepository
     {

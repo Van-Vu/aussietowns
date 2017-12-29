@@ -20,6 +20,16 @@ var UserModel = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UserModel.prototype, "descriptionText", {
+        get: function () {
+            return this.description ? Utils.stripHtml(this.description).replace(/\n/g, '<br/>') : '';
+        },
+        set: function (value) {
+            this.description = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return UserModel;
 }());
 export default UserModel;

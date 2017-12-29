@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="CloudinaryDotNet" Version="1.1.1" />
+    <PackageReference Include="HtmlSanitizer" Version="4.0.181" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="AutoMapper" Version="5.2.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="1.2.0" />

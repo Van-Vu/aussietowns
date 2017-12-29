@@ -6,7 +6,6 @@ import SearchService from '../service/search.service';
 import ListingService from '../service/listing.service';
 import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
 import Swiper from '../component/shared/external/vue-swiper.vue';
-import CardSmallComponent from '../component/shared/cardsmall.component.vue'
 import CardFullComponent from '../component/shared/listingcard.component.vue';
 import { AutocompleteItem } from '../model/autocomplete.model';
 import { Utils } from '../component/utils';
@@ -22,7 +21,6 @@ Vue.use(vMediaQuery);
     components: {
         "searchbar": SearchBarComponent,
         "swiper": Swiper,
-        "cardsmall": CardSmallComponent,
         "listingcard": CardFullComponent
     },
     beforeRouteEnter(to, from, next) {
@@ -61,6 +59,7 @@ export default class HomePage extends Vue{
     $mq: any;
 
     static asyncData({ store, route }) {
+        store.dispatch('FETCH_FEATUREARTICLES');
         return store.dispatch('FETCH_FEATURELISTINGS');
     }
 
@@ -70,6 +69,10 @@ export default class HomePage extends Vue{
 
     get featuredListings() {
         return this.$store.state.featureListings;
+    }
+
+    get featuredArticles() {
+        return this.$store.state.featureArticles;
     }
 
     onSelect(val: AutocompleteItem) {

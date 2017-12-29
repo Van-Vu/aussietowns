@@ -19,11 +19,13 @@ import { Component } from "vue-property-decorator";
 import SearchBarComponent from '../component/shared/search/searchbar.component.vue';
 import Swiper from '../component/shared/external/vue-swiper.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
+import SettingService from '../service/settings.service';
 import { NotificationType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
 import LoginForm from '../component/form/loginform.component.vue';
 import ScheduleComponent from '../component/shared/schedule.component.vue';
 import CardFullComponent from '../component/shared/listingcard.component.vue';
+import CheckButton from '../component/shared/checkbutton.component.vue';
 var TestPage = /** @class */ (function (_super) {
     __extends(TestPage, _super);
     function TestPage() {
@@ -33,6 +35,7 @@ var TestPage = /** @class */ (function (_super) {
         _this.numberChooser = 0;
         _this.currentView = 'listingcard';
         _this.listings = [];
+        _this.hobbies = null;
         _this.isValidating = false;
         _this.rawPassword = '';
         _this.email = '';
@@ -56,11 +59,17 @@ var TestPage = /** @class */ (function (_super) {
     };
     TestPage.prototype.created = function () {
         this.listings = this.$store.state.featureListings;
+        this.checkButtonModel;
         //this.$store.dispatch('SEARCH_LISTINGS_BY_SUBURB', 129).then(() => {
         //    this.listings = this.$store.state.searchListings;
         //});
         //v - validate="'required|email'"
         this.$validator.attach('email', 'required|email');
+    };
+    TestPage.prototype.fetchHobbies = function () {
+        var _this = this;
+        (new SettingService()).getAllHobbies()
+            .then(function (response) { _this.hobbies = response; });
     };
     TestPage.prototype.checkLogginUser = function () {
         this.$store.dispatch('TEST');
@@ -96,7 +105,8 @@ var TestPage = /** @class */ (function (_super) {
                 "datepicker": datepicker,
                 "loginmodal": LoginForm,
                 "schedulemodal": ScheduleComponent,
-                "listingcard": CardFullComponent
+                "listingcard": CardFullComponent,
+                'checkButton': CheckButton
             }
         })
     ], TestPage);

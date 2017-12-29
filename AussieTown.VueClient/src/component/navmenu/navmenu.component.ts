@@ -102,10 +102,13 @@ export default class NavMenuComponent extends Vue {
     }
 
     onLogout() {
-        this.$store.dispatch('SET_CURRENT_USER', null);
-        this.$cookie.remove('mtltk');
-        this.$cookie.remove('mtl', null);
-        this.$router.push("home");
+        //this.$store.dispatch('SET_CURRENT_USER', {});
+        //this.$store.dispatch('SET_TOKEN', '');
+        //this.$cookie.remove('mtltk');
+        //this.$cookie.remove('mtl');
+        //this.$router.push("home");
+
+        window.location.href = '/logout';
     }
 
     closeUserMenu(e) {

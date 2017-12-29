@@ -9,8 +9,11 @@ Vue.prototype.$http = axios;
 //export const http = axios.create({
 //    baseURL: `http://localhost/meetthelocal/`
 //})
+//const http = axios.create({
+//    baseURL: `http://localhost:8888/`,
+//})
 var http = axios.create({
-    baseURL: "http://localhost:8888/",
+    baseURL: "http://10.0.0.98/meetthelocal/",
 });
 //const http = axios.create({
 //    baseURL: `http://10.0.0.98:8000/`,
@@ -19,7 +22,7 @@ var http = axios.create({
 //    baseURL: `https://api.funwithlocal.com/`
 //})
 http.defaults.withCredentials = true;
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = Utils.getCurrentHost();
+http.defaults.headers.common['Access-Control-Allow-Origin'] = Utils.getCurrentHost();
 //axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
 //axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Authorization';
 //axios.defaults.headers.common['Access-Control-Request-Method'] = "GET, POST, PUT, DELETE, OPTIONS";
@@ -28,13 +31,13 @@ http.interceptors.request.use(function (config) {
     // Do something before request is sent
     console.log('XHR request:' + config.url);
     if (process.env.VUE_ENV === 'server') {
-        axios.defaults.headers.common = {};
+        http.defaults.headers.common = {};
         Object.keys(config.headers).map(function (key) {
-            axios.defaults.headers.common[key] = config.headers[key];
+            http.defaults.headers.common[key] = config.headers[key];
         });
-        axios.defaults.headers.common['Cookie'] = "mtltk=" + store.getters.token;
+        http.defaults.headers.common['Cookie'] = "mtltk=" + store.getters.token;
     }
-    console.log('Whole Config:' + config);
+    console.log('Whole Config:' + store.getters.token);
     return config;
 }, function (error) {
     // Do something with request error

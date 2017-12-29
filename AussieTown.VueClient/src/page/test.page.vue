@@ -1,5 +1,8 @@
 ﻿<template>
     <div class="page-content container tile is-vertical">
+        <checkButton :model="hobbies"></checkButton>
+
+        <button @click="fetchHobbies"> get Hobbies</button>
         <router-link :to="{ name: 'bookingManage', params: { seoString: 'testing', listingId: '19' } }">
             <label class="tab-text">Manage Booking</label>
         </router-link>
@@ -8,6 +11,17 @@
             <label class="tab-text">View Booking</label>
         </router-link>
 
+        <router-link :to="{ name: 'aboutus', params: { seoString: 'testing', articleId: 1 } }">
+            <label class="tab-text">View Article</label>
+        </router-link>
+
+        <router-link :to="{ name: 'editArticle', params: { seoString: 'testing', articleId: 1 } }">
+            <label class="tab-text">Edit Article</label>
+        </router-link>
+
+        <router-link :to="{ name: 'createArticle' }">
+            <label class="tab-text">Create New Article</label>
+        </router-link>
 
         <datepicker id="availDay" :range="false"></datepicker>
 

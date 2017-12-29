@@ -1,7 +1,7 @@
 ﻿import { AutocompleteItem } from './autocomplete.model';
 import ListingModel from './listing.model';
 import ImageModel from './image.model';
-import { UserRole } from './enum';
+import { UserRole, UserSource } from './enum';
 import { Utils } from '../component/utils';
 
 export default class UserModel {
@@ -23,8 +23,14 @@ export default class UserModel {
     public heroImageUrl: string;
     public role: UserRole;
     public token: string;
+    public hobbies: Array<string>;
     public operatorListings: ListingModel[];
     public guestListings: ListingModel[];
+    public isActive: boolean;
+    public isConfirm: boolean;
+    public videoUrl: string;
+    public userSource: UserSource;
+    public externalId: string;
 
     get birthdayText(): string {
         return Utils.formatDate(new Date(this.birthday));
@@ -32,6 +38,14 @@ export default class UserModel {
 
     set birthdayText(value: string) {
         this.birthday = value;
+    }
+
+    get descriptionText(): string {
+        return this.description ? Utils.stripHtml(this.description).replace(/\n/g, '<br/>') : '';
+    }
+
+    set descriptionText(value: string) {
+        this.description = value;
     }
 
     // Booking page needs to create empty object

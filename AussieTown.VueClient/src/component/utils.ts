@@ -47,8 +47,12 @@ export class Utils {
     }
 
     public static seorizeString(name: string) {
-        let sanitizeName = name.toLowerCase().replace(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/g, "");
-        return sanitizeName.split(' ').join('-');
+        if (!!name) {
+            let sanitizeName = name.toLowerCase().replace(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/g, "").trim();
+            return sanitizeName.split(' ').join('-');            
+        }
+
+        return '';
     }
 
     private static valueCompare(x, y) {
@@ -324,7 +328,7 @@ export class Utils {
                     store.dispatch('ADD_NOTIFICATION', { title: "You are not authorized to view this page!", type: NotificationType.Error });
                     break;
                 case 403:
-                    store.dispatch('ADD_NOTIFICATION', { title: "Permission denied", text: "Please login to perform this action", type: NotificationType.Warning });
+                    store.dispatch('ADD_NOTIFICATION', { title: "Permission denied", text: "Please login OR contact us if you believe there's something wrong", type: NotificationType.Warning });
                     break;
                 case 422:
                     store.dispatch('ADD_NOTIFICATION', { title: "Login error", text: "Email or Password is incorrect", type: NotificationType.Warning });

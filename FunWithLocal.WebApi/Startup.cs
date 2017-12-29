@@ -10,6 +10,7 @@ using AutoMapper;
 using FunWithLocal.WebApi.Auth;
 using FunWithLocal.WebApi.Repository;
 using FunWithLocal.WebApi.Services;
+using Ganss.XSS;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -227,7 +228,8 @@ namespace FunWithLocal.WebApi
             services.AddTransient<IBookingService, BookingService>();
             services.AddTransient<ISecurityTokenService, SecurityTokenService>();
             services.AddTransient<IImageStorageService, ImageCloudinaryService>();
-
+            services.AddTransient<IArticleService, ArticleService>();
+            services.AddTransient<ISettingsService, SettingsService>();
 
             services.AddTransient<ILocationRepository, LocationRepository>(x => new LocationRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<LocationRepository>>()));
             services.AddTransient<IUserRepository, UserRepository>(x => new UserRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<UserRepository>>()));
@@ -236,10 +238,15 @@ namespace FunWithLocal.WebApi
             services.AddTransient<IMessageRepository, MessageRepository>(x => new MessageRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<MessageRepository>>()));
             services.AddTransient<IEmailLogRepository, EmailLogRepository>(x => new EmailLogRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<EmailLogRepository>>()));
             services.AddTransient<IBookingRepository, BookingRepository>(x => new BookingRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<BookingRepository>>()));
+            services.AddTransient<IArticleRepository, ArticleRepository>(x => new ArticleRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<ArticleRepository>>()));
+            services.AddTransient<ISettingsRepository, SettingsRepository>(x => new SettingsRepository(mySqlConnectionString, serviceProvider.GetService<ILogger<SettingsRepository>>()));
 
             services.AddSingleton<IAuthorizationHandler, ListingAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, ProfileAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, BookingAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, ArticleAuthorizationHandler>();
+            
+            services.AddSingleton(new HtmlSanitizer());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,6 +4,8 @@ import SearchBarComponent from '../component/shared/search/searchbar.component.v
 import Swiper from '../component/shared/external/vue-swiper.vue';
 import NumberChooser from '../component/shared/numberchooser.component.vue';
 import UserService from '../service/user.service';
+import SettingService from '../service/settings.service';
+
 import { NotificationType } from '../model/enum';
 import datepicker from '../component/shared/external/datepicker.vue';
 
@@ -13,7 +15,8 @@ import ScheduleModalComponent from '../component/modal/schedulemodal.component.v
 import LoginForm from '../component/form/loginform.component.vue';
 import ScheduleComponent from '../component/shared/schedule.component.vue';
 import CardFullComponent from '../component/shared/listingcard.component.vue';
-
+import CheckButton from '../component/shared/checkbutton.component.vue';
+import CheckButtonModel from '../model/checkbutton.model';
 
 @Component({
     name: 'TestPage',
@@ -24,7 +27,8 @@ import CardFullComponent from '../component/shared/listingcard.component.vue';
         "datepicker": datepicker,
         "loginmodal": LoginForm,
         "schedulemodal": ScheduleComponent,
-        "listingcard": CardFullComponent
+        "listingcard": CardFullComponent,
+        'checkButton': CheckButton
     }
 })
 
@@ -34,11 +38,14 @@ export default class TestPage extends Vue {
     numberChooser : number = 0;
     currentView: string = 'listingcard';
     listings: any[] = [];
+    hobbies: CheckButtonModel[] = null;
+
 
     isValidating: boolean = false;
     rawPassword: string = '';
     email: string = '';
     $ua: any;
+    checkButtonModel: any;
 
     switchModal() {
         if (this.currentView == 'loginmodal') {
@@ -61,13 +68,20 @@ export default class TestPage extends Vue {
     created() {
         this.listings = this.$store.state.featureListings;
 
-
+        this.checkButtonModel
         //this.$store.dispatch('SEARCH_LISTINGS_BY_SUBURB', 129).then(() => {
         //    this.listings = this.$store.state.searchListings;
         //});
 
         //v - validate="'required|email'"
         this.$validator.attach('email', 'required|email');
+
+
+    }
+
+    fetchHobbies() {
+        (new SettingService()).getAllHobbies()
+            .then(response => {this.hobbies = response as any});        
     }
 
     checkLogginUser() {

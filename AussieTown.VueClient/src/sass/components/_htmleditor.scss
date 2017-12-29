@@ -1,0 +1,19 @@
+﻿.vue-html5-editor {
+    width: 100%;
+
+    .toolbar {
+        >ul {
+            background: $c-lightgrey-light;
+        }
+    }
+
+    .dashboard {
+        background-color: $c-lightgrey-dark !important;
+    }
+
+    .icon {
+        font-size: 20px;
+        height: auto !important;
+        width: auto !important; 
+    }
+}

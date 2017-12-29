@@ -26,6 +26,8 @@ namespace FunWithLocal.WebApi.Model
         public string VideoUrl { get; set; }
         public string HeroImageUrl { get; set; }
 
+        public string Hobbies { get; set; }
+
         public ICollection<ListingView> OperatorListings { get; set; }
         public ICollection<ListingView> GuestListings { get; set; }
 

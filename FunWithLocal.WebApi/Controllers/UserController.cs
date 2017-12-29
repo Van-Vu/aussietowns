@@ -194,10 +194,13 @@ namespace FunWithLocal.WebApi.Controllers
 
                 if (existingUser == null) throw new ArgumentNullException(nameof(user));
 
-                existingUser.FirstName = user.FirstName;
-                existingUser.LastName = user.LastName;
-                existingUser.IsConfirm = true;
-                var updatedStatus = await _userService.Update(existingUser);
+                var updatedStatus = await _userService.Update(new UserRequest
+                {
+                    Id = existingUser.Id,
+                    FirstName = existingUser.FirstName,
+                    LastName = existingUser.LastName,
+                    IsConfirm = true
+                });
 
                 return updatedStatus;
             }
@@ -352,11 +355,11 @@ namespace FunWithLocal.WebApi.Controllers
 
         [HttpPut("{id}")]
         //[Authorize("Bearer")]
-        public async Task<int> Update(int id,[FromBody] User user)
+        public async Task<int> Update(int id,[FromBody] UserRequest user)
         {
             try
             {
-                if (!(await _authorizationService.AuthorizeAsync(User, user, Operations.Update)).Succeeded)
+                if (!(await _authorizationService.AuthorizeAsync(User, new User {Id = user.Id}, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
                 return await _userService.Update(user);

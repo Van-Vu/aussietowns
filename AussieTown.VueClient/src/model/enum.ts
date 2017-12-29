@@ -13,3 +13,7 @@ export enum UserAction { View, Edit, Delete }
 export enum NotificationType { Success = 'is-success', Warning = 'is-warning', Error = 'is-error' }
 
 export enum ScreenSize { Desktop, Tablet, Mobile }
+
+export enum ArticleCategory { Blog, WhatsOn, Introduction }
+
+export enum ArticleStatus { Draft, Publish, Archive }

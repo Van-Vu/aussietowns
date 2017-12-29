@@ -52,3 +52,15 @@ export var ScreenSize;
     ScreenSize[ScreenSize["Tablet"] = 1] = "Tablet";
     ScreenSize[ScreenSize["Mobile"] = 2] = "Mobile";
 })(ScreenSize = ScreenSize || (ScreenSize = {}));
+export var ArticleCategory;
+(function (ArticleCategory) {
+    ArticleCategory[ArticleCategory["Blog"] = 0] = "Blog";
+    ArticleCategory[ArticleCategory["WhatsOn"] = 1] = "WhatsOn";
+    ArticleCategory[ArticleCategory["Introduction"] = 2] = "Introduction";
+})(ArticleCategory = ArticleCategory || (ArticleCategory = {}));
+export var ArticleStatus;
+(function (ArticleStatus) {
+    ArticleStatus[ArticleStatus["Draft"] = 0] = "Draft";
+    ArticleStatus[ArticleStatus["Publish"] = 1] = "Publish";
+    ArticleStatus[ArticleStatus["Archive"] = 2] = "Archive";
+})(ArticleStatus = ArticleStatus || (ArticleStatus = {}));

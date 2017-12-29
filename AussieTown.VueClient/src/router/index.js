@@ -18,12 +18,14 @@ var BookingDetailPage = function () { return import('../page/bookingdetail.page.
 var BookingManagePage = function () { return import('../page/bookingmanage.page.vue'); };
 var ConfirmEmailPage = function () { return import('../page/confirmemail.page.vue'); };
 var ArticlePage = function () { return import('../page/article.page.vue'); };
+var ContentPage = function () { return import('../page/content.page.vue'); };
 var MessageComponent = function () { return import('../component/profile/message.component.vue'); };
 var TripComponent = function () { return import('../component/profile/trip.component.vue'); };
 var UserImageComponent = function () { return import('../component/profile/userimage.component.vue'); };
 var UserDetailComponent = function () { return import('../component/profile/userdetail.component.vue'); };
 var ListingsComponent = function () { return import('../component/profile/listings.component.vue'); };
 var LoginForm = function () { return import('../component/form/loginform.component.vue'); };
+var LogoutForm = function () { return import('../component/form/logoutform.component.vue'); };
 var RegistrationForm = function () { return import('../component/form/registration.component.vue'); };
 var ChangePasswordComponent = function () { return import('../component/profile/changepassword.component.vue'); };
 var ForgetPasswordForm = function () { return import('../component/form/forgetpassword.component.vue'); };
@@ -168,9 +170,29 @@ var router = new Router({
             }
         },
         {
+            path: "/article/create",
+            name: "createArticle",
+            component: ArticlePage,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
+            path: "/article/:seoString-:articleId(\\d+)",
+            name: "editArticle",
+            component: ArticlePage,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
             path: "/whatson/:seoString-:articleId(\\d+)",
             name: "whatson",
-            component: ArticlePage,
+            component: ContentPage,
             props: true,
             meta: {
                 permission: UserRole.Anonymous,
@@ -180,7 +202,27 @@ var router = new Router({
         {
             path: "/about/:seoString-:articleId(\\d+)",
             name: "aboutus",
-            component: ArticlePage,
+            component: ContentPage,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
+            path: "/intro/:seoString-:articleId(\\d+)",
+            name: "introduction",
+            component: ContentPage,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
+            path: "/blog/:seoString-:articleId(\\d+)",
+            name: "blog",
+            component: ContentPage,
             props: true,
             meta: {
                 permission: UserRole.Anonymous,
@@ -225,6 +267,16 @@ var router = new Router({
             path: "/login",
             name: "login",
             component: LoginForm,
+            props: true,
+            meta: {
+                permission: UserRole.Anonymous,
+                fail: '/'
+            }
+        },
+        {
+            path: "/logout",
+            name: "logout",
+            component: LogoutForm,
             props: true,
             meta: {
                 permission: UserRole.Anonymous,

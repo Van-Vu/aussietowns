@@ -21,6 +21,10 @@
                 </li>
             </ul>
 
+            <div>
+                <listingcard v-for="article in featuredArticles" :key="article.id" :listingDetail="listing"></listingcard>
+            </div>
+
             <h2>What is FunWithLocal</h2>
             <ul class="bullet-item">
                 <li>“The marketplace for travellers who want to have real fun via real experiences with real locals.”</li>

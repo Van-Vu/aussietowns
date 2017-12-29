@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using FunWithLocal.WebApi.Model;
-using FunWithLocal.WebApi.Repository;
 using Microsoft.Extensions.Logging;
 
-namespace AussieTowns.Repository
+namespace FunWithLocal.WebApi.Repository
 {
     public class ImageRepository: RepositoryBase, IImageRepository
     {
@@ -52,6 +50,18 @@ namespace AussieTowns.Repository
                         + "WHERE id = @userId";
                 dbConnection.Open();
                 var ret = await dbConnection.ExecuteAsync(sql, new { userId = profileId, heroImageUrl = url});
+                return ret;
+            }
+        }
+
+        public async Task<int> InsertArticleImage(int articleId, string url)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "UPDATE Article SET imageUrl = @imageUrl, updatedDate = NOW()"
+                        + "WHERE id = @articleId";
+                dbConnection.Open();
+                var ret = await dbConnection.ExecuteAsync(sql, new { articleId, imageUrl = url });
                 return ret;
             }
         }

@@ -17,7 +17,7 @@ namespace FunWithLocal.WebApi.Services
         Task<User> VerifyUser(User user);
         Task<IEnumerable<User>> SearchUser(string searchTerm);
         Task<int> Register(User user);
-        Task<int> Update(User user);
+        Task<int> Update(UserRequest user);
 
         Task<int> UpdatePassword(User user, bool isChangePassword);
         Task<int> Deactivate(int id);

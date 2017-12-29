@@ -73,6 +73,8 @@ namespace FunWithLocal.WebApi
             CreateMap<User, UserResponse>()
                 .ForMember(dest => dest.LocationDetail,
                     opts => opts.MapFrom(src => Mapper.Map<SuburbDetail, AutoCompleteItem>(src.Location)))
+                .ForMember(dest => dest.Hobbies,
+                    opts => opts.MapFrom(src => string.IsNullOrEmpty(src.Hobbies) ? new List<string>().ToArray() : src.Hobbies.Split(new[] { ',' }) ))
                 .ForMember(dest => dest.OperatorListings,
                     opts => opts.MapFrom(src => src.OperatorListings.Select(Mapper.Map<ListingView, ListingSummary>)))
                 .ForMember(dest => dest.GuestListings,
@@ -83,6 +85,10 @@ namespace FunWithLocal.WebApi
                     opts => opts.MapFrom(src => src.BookingDate.Date.ToString("yyyy/MM/dd")))
                 .ForMember(dest => dest.StartTime,
                     opts => opts.MapFrom(src => src.StartTime.ToString(@"hh\:mm")));
+
+            CreateMap<Article, ArticleResponse>()
+                .ForMember(dest => dest.Author,
+                    opts => opts.MapFrom(src => Mapper.Map<User, MiniProfile>(src.Author)));
         }
     }
 
