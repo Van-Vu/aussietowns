@@ -62,7 +62,8 @@ export default new Vuex.Store({
         contact: ContactModel,
         isImageCropping: false,
         article: ArticleModel,
-        hobbies: null
+        hobbies: null,
+        featureArticles: []
     },
     getters: {
         isLoggedIn: state => {
@@ -320,6 +321,12 @@ export default new Vuex.Store({
                 //commit('UPDATE_ARTICLE', response);
             });
         },
+        FETCH_FEATUREARTICLES({ commit }) {
+            return (new ArticleService()).fetchFeatureArticles()
+                .then(response => {
+                    commit('UPDATE_FEATUREARTICLE', response);
+                });
+        },
         FETCH_HOBBY_LIST({ commit }) {
             return (new SettingsService()).getAllHobbies().then(response => {
                     commit('UPDATE_HOBBY', response);
@@ -404,6 +411,9 @@ export default new Vuex.Store({
         },
         UPDATE_ARTICLE_IMAGE(state, articleImage) {
             Vue.set(state.article, 'imageUrl', articleImage);
+        },
+        UPDATE_FEATUREARTICLE(state, articles) {
+            Vue.set(state, 'featureArticles', articles);
         },
         REMOVE_PROFILE_IMAGE(state, imageUrl) {
             let image = (state.profile as any).images.find(x => x.url === imageUrl);

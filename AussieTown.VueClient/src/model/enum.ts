@@ -17,3 +17,5 @@ export enum ScreenSize { Desktop, Tablet, Mobile }
 export enum ArticleCategory { Blog, WhatsOn, Introduction }
 
 export enum ArticleStatus { Draft, Publish, Archive }
+
+export enum CardType { Listing, Article }

@@ -65,24 +65,6 @@ Vue.config.errorHandler = function (err, vm, info) {
 
 import { Validator } from 'vee-validate';
 
-import VueProgressBar from 'vue-progressbar';
-
-const options = {
-    color: '#bffaf3',
-    failedColor: '#874b4b',
-    thickness: '50px',
-    transition: {
-        speed: '2s',
-        opacity: '0.6s',
-        termination: 300
-    },
-    autoRevert: true,
-    location: 'left',
-    inverse: false
-};
-
-Vue.use(VueProgressBar, options);
-
 // augment options
 // another option: https://github.com/declandewet/vue-meta/issues/88
 declare module 'vue/types/options' {
@@ -116,7 +98,9 @@ declare module 'vue/types/options' {
             { vmid: 'ogtype', property: 'og:type', content: 'website' },
             { vmid: 'ogurl', property: 'og:url', content: 'https://funwithlocal.com' },
             { vmid: 'ogsitename', property: 'og:site_name', content: 'Fun with Local' },
-            { vmid: 'ogdescription', property: 'og:description', content: 'Fun with Local' }
+            { vmid: 'ogdescription', property: 'og:description', content: 'Fun with Local' },
+            { vmid: 'twitterdomain', property: 'twitter:domain', content: 'funwithlocal.com' },
+            { vmid: 'twittersite', property: 'twitter:site', content: '@FunWithLocal' }
         ],
         link: [
             { vmid: 'manifest', rel: 'manifest', href: '/manifest.json' }
@@ -129,7 +113,6 @@ declare module 'vue/types/options' {
 export default class App extends Vue {
     //currentView: string = 'loginmodal';
     //dynamicProps: string = '';
-    $Progress: any;
     $cookie: any;
     $ua: any;
 
@@ -196,15 +179,14 @@ export default class App extends Vue {
         Validator.updateDictionary(dictionary);
 
         //  [App.vue specific] When App.vue is first loaded start the progress bar
-        this.$Progress.start();
         //  hook the progress bar to start before we move router-view
         this.$router.beforeEach((to, from, next) => {
             //  does the page we want to go to have a meta.progress object
-            if (to.meta.progress !== undefined) {
-                let meta = to.meta.progress
-                // parse meta tags
-                this.$Progress.parseMeta(meta);
-            }
+            //if (to.meta.progress !== undefined) {
+            //    let meta = to.meta.progress
+            //    // parse meta tags
+            //    this.$Progress.parseMeta(meta);
+            //}
 
             //  start the progress bar
             //this.$Progress.start();
@@ -240,13 +222,6 @@ export default class App extends Vue {
 
         //window.addEventListener('beforeunload', this.leaving);
     }
-
-    //leaving() {
-    //    if (!this.$store.state.rememberMe) {
-    //        this.$store.dispatch('SET_CURRENT_USER', null);
-    //        this.$cookie.set('mtltk', null);
-    //    }
-    //}
 
     onSaveSchedule(event) {
         console.log(event);

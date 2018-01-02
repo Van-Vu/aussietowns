@@ -64,3 +64,8 @@ export var ArticleStatus;
     ArticleStatus[ArticleStatus["Publish"] = 1] = "Publish";
     ArticleStatus[ArticleStatus["Archive"] = 2] = "Archive";
 })(ArticleStatus = ArticleStatus || (ArticleStatus = {}));
+export var CardType;
+(function (CardType) {
+    CardType[CardType["Listing"] = 0] = "Listing";
+    CardType[CardType["Article"] = 1] = "Article";
+})(CardType = CardType || (CardType = {}));

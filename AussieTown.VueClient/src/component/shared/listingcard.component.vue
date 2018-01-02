@@ -1,6 +1,6 @@
 ﻿<template>
     <article class="card-full">
-        <router-link :to="{ name: 'listingDetail', params: { seoString: headerLink, listingId: id }}">
+        <router-link :to="cardLinkTo">
             <div class="listing-swiper">
                 <swiper ref="swiper"
                         direction="horizontal"
@@ -22,10 +22,16 @@
             <div class="listingcard-header">
                 <h3>{{header}}</h3>
             </div>
-            <div class="listingcard-description">
+            <div class="listingcard-author" v-if="!isListingType">
+                Author: {{owner}}
+            </div>
+            <div class="listingcard-tag" v-if="!!tagList">
+                <checkButton :model="tagList" :checked="tagList" :isEditing="false"></checkButton>
+            </div>
+            <div v-if="isListingType" class="listingcard-description">
                 {{description}}
             </div>
-            <div class="listingcard-content">
+            <div v-if="isListingType" class="listingcard-content">
                 <div class="left">
                     <div>{{location }}</div>
                     <div>Duration: {{duration}} hrs</div>
@@ -34,7 +40,7 @@
                     <div>Prices from</div>
                     <div class="listingcost">{{cost}} AUD</div>
                 </div>
-                <!--<div class="listing-host">Host by: {{hostName }}</div>-->
+                <!--<div class="listing-host">Host by: {{owner}}</div>-->
                 <!--<div class="listing-review">review star here</div>-->
             </div>
             <div class="tooltip">

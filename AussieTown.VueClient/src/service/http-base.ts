@@ -16,13 +16,13 @@ import { GlobalConfig } from '../GlobalConfig';
 //    baseURL: `http://localhost/meetthelocal/`
 //})
 
-//const http = axios.create({
-//    baseURL: `http://localhost:8888/`,
-//})
-
 const http = axios.create({
-    baseURL: `http://10.0.0.98/meetthelocal/`,
+    baseURL: `http://localhost:8888/`,
 })
+
+//const http = axios.create({
+//    baseURL: `http://10.0.0.98/meetthelocal/`,
+//})
 
 //const http = axios.create({
 //    baseURL: `http://10.0.0.98:8000/`,
@@ -53,7 +53,7 @@ http.interceptors.request.use(function (config) {
         http.defaults.headers.common['Cookie'] = `mtltk=${store.getters.token}`;
     }
 
-    console.log('Whole Config:' + store.getters.token);
+    //console.log('Whole Config:' + store.getters.token);
 
     return config;
 }, function (error) {
@@ -65,7 +65,7 @@ http.interceptors.request.use(function (config) {
 // Full code: https://github.com/mzabriskie/axios/issues/690
 // Add a response interceptor
 http.interceptors.response.use(response => {
-    console.log('from interceptor');
+    //console.log('from interceptor');
     //console.log(response);
     return response.data;
 }, error => {
@@ -84,8 +84,8 @@ http.interceptors.response.use(response => {
     //}
     var response = error.response;
 
-    console.log('Bodom handleError');
-    console.log(error);
+    //console.log('Bodom handleError');
+    //console.log(error);
 
     if (response) {
         Utils.handleXHRError(store, response);

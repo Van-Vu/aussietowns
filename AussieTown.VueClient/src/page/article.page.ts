@@ -68,7 +68,6 @@ export default class ArticlePage extends Vue {
     }
 
     created() {
-        this.$store.dispatch('SET_CURRENT_PAGE', 'article');
         this.modelCache = JSON.parse(JSON.stringify(this.model));
     }
 

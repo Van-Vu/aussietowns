@@ -11,7 +11,6 @@ export default class ProfilePage extends Vue {
     $auth: any;
 
     created() {
-        this.$store.dispatch('SET_CURRENT_PAGE', 'profile');
         this.currentTab = this.$route.name;
     }
 

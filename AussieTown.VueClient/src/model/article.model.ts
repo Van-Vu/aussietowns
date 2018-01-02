@@ -9,6 +9,7 @@ export default class ArticleModel {
     public author: MiniProfile;
     public title: string;
     public content: string;
+    public sanitizedContent: string;
     public imageUrl: string;
     public tags: string;
     public tagList: Array<string>;

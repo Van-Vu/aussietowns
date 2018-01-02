@@ -46,7 +46,15 @@ namespace FunWithLocal.WebApi.Services
 
         public async Task<IEnumerable<Article>> GetFeatureArticles()
         {
-            return await _articleRepository.GetFeatureArticles();
+            var articles = (await _articleRepository.GetFeatureArticles()).ToList();
+
+            foreach (var article in articles)
+            {
+                article.Title = WebUtility.HtmlDecode(article.Title);
+                article.Content = WebUtility.HtmlDecode(article.Content);
+            }
+
+            return articles;
         }
     }
 }

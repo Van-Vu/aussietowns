@@ -21,6 +21,8 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { Utils } from '../utils';
 import Swiper from './external/vue-swiper.vue';
+import { CardType } from '../../model/enum';
+import CheckButtonComponent from "../shared/checkbutton.component.vue";
 import lazy from 'vue-lazy-image';
 Vue.use(lazy, {
     loading: '/static/images/loading.gif',
@@ -32,7 +34,7 @@ var CardFullComponent = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.id = 0;
         _this.location = '';
-        _this.hostName = '';
+        _this.owner = '';
         _this.header = '';
         _this.cost = 0;
         _this.date = '';
@@ -41,31 +43,58 @@ var CardFullComponent = /** @class */ (function (_super) {
         _this.imageUrls = '';
         _this.duration = '';
         _this.description = '';
+        _this.cardLinkTo = null;
+        _this.tagList = null;
         return _this;
     }
     CardFullComponent.prototype.created = function () {
-        this.id = this.listingDetail.id;
-        this.location = this.listingDetail.location;
-        this.header = this.listingDetail.header;
-        this.cost = this.listingDetail.cost;
-        this.hostName = this.listingDetail.primaryOwner;
-        this.imageUrls = this.listingDetail.imageUrls ? this.listingDetail.imageUrls.split(';') : '';
-        var startDatetime = this.listingDetail.schedules.length > 0 ? new Date(this.listingDetail.schedules[0].startDate) : new Date();
-        this.date = Utils.formatDate(startDatetime);
-        this.time = Utils.getTime(startDatetime);
+        this.id = this.cardDetail.id;
+        this.location = this.cardDetail.location;
+        this.header = this.cardDetail.header;
+        this.cost = this.cardDetail.cost;
+        this.owner = this.cardDetail.primaryOwner;
+        this.imageUrls = this.cardDetail.imageUrls ? this.cardDetail.imageUrls.split(';') : '';
         this.headerLink = this.header ? Utils.seorizeString(this.header) : '';
-        this.duration = this.listingDetail.schedules.length > 0 ? this.listingDetail.schedules[0].duration : 0;
-        this.description = this.listingDetail.description;
+        this.description = this.cardDetail.description;
+        if (!!this.cardDetail.schedules) {
+            var startDatetime = this.cardDetail.schedules.length > 0 ? new Date(this.cardDetail.schedules[0].startDate) : new Date();
+            this.date = Utils.formatDate(startDatetime);
+            this.time = Utils.getTime(startDatetime);
+            this.duration = this.cardDetail.schedules.length > 0 ? this.cardDetail.schedules[0].duration : 0;
+        }
+        switch (this.cardType) {
+            case CardType.Listing:
+                this.cardLinkTo = { name: 'listingDetail', params: { seoString: this.headerLink, listingId: this.id } };
+                break;
+            case CardType.Article:
+                this.cardLinkTo = { name: 'aboutus', params: { seoString: this.headerLink, articleId: this.id } };
+                break;
+        }
+        if (!!this.cardDetail.tagList) {
+            this.tagList = this.cardDetail.tagList;
+        }
     };
+    Object.defineProperty(CardFullComponent.prototype, "isListingType", {
+        get: function () {
+            return this.cardType == CardType.Listing;
+        },
+        enumerable: true,
+        configurable: true
+    });
     __decorate([
         Prop(),
         __metadata("design:type", Object)
-    ], CardFullComponent.prototype, "listingDetail", void 0);
+    ], CardFullComponent.prototype, "cardDetail", void 0);
+    __decorate([
+        Prop(),
+        __metadata("design:type", Number)
+    ], CardFullComponent.prototype, "cardType", void 0);
     CardFullComponent = __decorate([
         Component({
             name: "CardFull",
             components: {
-                "swiper": Swiper
+                "swiper": Swiper,
+                "checkButton": CheckButtonComponent
             }
         })
     ], CardFullComponent);

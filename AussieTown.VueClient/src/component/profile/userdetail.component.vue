@@ -124,7 +124,7 @@
                 </div>
                 <hr />
                 <div class="tile is-parent">
-                    <div class="tile is-3">How about your hobby</div>
+                    <div class="tile is-3">My hobbies</div>
                     <div class="tile">
                         <checkButton :model="hobbyList" :checked="model.hobbies" :isEditing="isEditing" @onChange="onUpdatedHobbyList"></checkButton>
                     </div>

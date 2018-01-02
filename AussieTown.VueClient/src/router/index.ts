@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import Router  from "vue-router";
+import VueRouter  from "vue-router";
 import store from '../store';
 
 // LAZY LOADING ATTEMP
@@ -63,14 +63,12 @@ import { UserRole } from '../model/enum';
 
 import Meta from 'vue-meta';
 
-Vue.use(Router);
+Vue.use(VueRouter);
 Vue.use(Meta);
 
-
-Vue.use(Meta)
-
-const router = new Router({
+const router = new VueRouter({
     mode: 'history',
+    fallback: false,
     routes: [
         //{
         //    path: "/search/:seoString-:suburbId(\\d+)",

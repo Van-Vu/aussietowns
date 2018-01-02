@@ -7,6 +7,10 @@ var ArticleService = /** @class */ (function () {
         return http.get("" + this.baseUrl + articleId)
             .then(function (x) { return x; });
     };
+    ArticleService.prototype.fetchFeatureArticles = function () {
+        return http.get(this.baseUrl + "feature")
+            .then(function (x) { return x; });
+    };
     ArticleService.prototype.updateArticle = function (article) {
         return http.post(this.baseUrl, article)
             .then(function (x) { return x; });

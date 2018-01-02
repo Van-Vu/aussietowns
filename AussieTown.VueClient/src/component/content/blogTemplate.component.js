@@ -20,11 +20,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import MiniProfileComponent from '../shared/miniprofile.component.vue';
+import CheckButtonComponent from "../shared/checkbutton.component.vue";
+import { Utils } from '../utils';
 var BlogTemplate = /** @class */ (function (_super) {
     __extends(BlogTemplate, _super);
     function BlogTemplate() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    Object.defineProperty(BlogTemplate.prototype, "fullUrl", {
+        get: function () {
+            return "" + Utils.getCurrentHost() + this.$route.fullPath;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BlogTemplate.prototype.onFacebookShare = function () {
+        Utils.openWindow("http://www.facebook.com/sharer.php?u=" + this.fullUrl + "&t=" + this.model.title, 'toolbar=0,status=0,width=626,height=436');
+    };
+    BlogTemplate.prototype.onTwitterShare = function () {
+        Utils.openWindow("https://www.twitter.com/intent/tweet?url=" + this.fullUrl + "&text=" + this.model.title, 'toolbar=0,status=0,width=626,height=436');
+    };
+    BlogTemplate.prototype.onGooglePlusShare = function () {
+        Utils.openWindow("http://plus.google.com/share?url=" + this.fullUrl, 'toolbar=0,status=0,width=626,height=436');
+    };
     __decorate([
         Prop(),
         __metadata("design:type", Object)
@@ -33,7 +51,8 @@ var BlogTemplate = /** @class */ (function (_super) {
         Component({
             name: "blogTemplate",
             components: {
-                "miniprofile": MiniProfileComponent
+                "miniprofile": MiniProfileComponent,
+                "checkButton": CheckButtonComponent
             }
         })
     ], BlogTemplate);

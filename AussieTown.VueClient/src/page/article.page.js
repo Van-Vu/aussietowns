@@ -75,7 +75,6 @@ var ArticlePage = /** @class */ (function (_super) {
         configurable: true
     });
     ArticlePage.prototype.created = function () {
-        this.$store.dispatch('SET_CURRENT_PAGE', 'article');
         this.modelCache = JSON.parse(JSON.stringify(this.model));
     };
     ArticlePage.prototype.onCancel = function () {

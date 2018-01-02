@@ -5,7 +5,7 @@
             <label class="toggle--btn" :for="item.id">{{item.text}}</label>
         </div>
         <div v-if="!isEditing" class="toggle toggle--push" v-for="item of readonlyValue">
-            <label class="toggle--btn">{{item.text}}</label>
+            <label class="toggle--label">{{item.text}}</label>
         </div>
     </div>
 </template>

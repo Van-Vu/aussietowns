@@ -18,23 +18,23 @@
         </section>
         <footer class="hero-foot tile is-vertical">
             <div class="social-media">
-                <a class="social-medial-link">
+                <a href="https://www.facebook.com/FunWithLocal/" target="_blank" class="social-medial-link">
                     <i class="social-medial-icon social-medial-icon_facebook"></i>
                     <span>Facebook</span>
                 </a>
-                <a class="social-medial-link">
+                <a href="https://twitter.com/FunWithLocal" target="_blank" class="social-medial-link">
                     <i class="social-medial-icon social-medial-icon_twitter"></i>
                     <span>Twitter</span>
                 </a>
-                <a class="social-medial-link">
+                <!--<a class="social-medial-link">
                     <i class="social-medial-icon social-medial-icon_googlePlus"></i>
                     <span>Google</span>
-                </a>
-                <a class="social-medial-link">
+                </a>-->
+                <a href="https://www.instagram.com/funwithlocal/" target="_blank" class="social-medial-link">
                     <i class="social-medial-icon social-medial-icon_instagram"></i>
                     <span>Instagram</span>
                 </a>
-                <a class="social-medial-link">
+                <a href="https://www.pinterest.com.au/funwithlocal" target="_blank" class="social-medial-link">
                     <i class="social-medial-icon social-medial-icon_pinterest"></i>
                     <span>Pinterest</span>
                 </a>

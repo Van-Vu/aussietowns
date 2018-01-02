@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Router from "vue-router";
+import VueRouter from "vue-router";
 import store from '../store';
 // LAZY LOADING ATTEMP
 // https://github.com/vuejs/vue-router/issues/1379
@@ -52,11 +52,11 @@ var ForgetPasswordForm = function () { return import('../component/form/forgetpa
 //import ForgetPasswordForm from '../component/form/forgetpassword.component.vue';
 import { UserRole } from '../model/enum';
 import Meta from 'vue-meta';
-Vue.use(Router);
+Vue.use(VueRouter);
 Vue.use(Meta);
-Vue.use(Meta);
-var router = new Router({
+var router = new VueRouter({
     mode: 'history',
+    fallback: false,
     routes: [
         //{
         //    path: "/search/:seoString-:suburbId(\\d+)",
@@ -350,10 +350,6 @@ var router = new Router({
         },
         {
             path: "",
-            redirect: { name: 'home' }
-        },
-        {
-            path: "*",
             redirect: { name: 'home' }
         }
     ]

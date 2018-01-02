@@ -28,7 +28,6 @@ var ProfilePage = /** @class */ (function (_super) {
         return _this;
     }
     ProfilePage.prototype.created = function () {
-        this.$store.dispatch('SET_CURRENT_PAGE', 'profile');
         this.currentTab = this.$route.name;
     };
     Object.defineProperty(ProfilePage.prototype, "canEdit", {

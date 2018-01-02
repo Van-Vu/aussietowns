@@ -43,6 +43,9 @@
 
         h2 {
             margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+
             @media all and (max-width: $is-tablet) {
                 margin-left: 10px;
             }

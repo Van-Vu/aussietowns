@@ -168,7 +168,11 @@ DONE Access direct http://localhost:3000/booking/testing-11 doesn't have cookies
 DONE Title
 DONE BUG: locationid on listing page: required
 
-
+CRITICAL BUG:
+DONE refresh home page --> go to listing --> refresh listing. Issue:
+		1- first time always return homepage
+		2- seems to add duplicate XHR calls
+	The fix: in main.server wait for router.push to complete before processing the request, otherwise it still picks up the old route
 
 
 

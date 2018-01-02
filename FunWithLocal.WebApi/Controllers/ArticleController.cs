@@ -65,13 +65,13 @@ namespace FunWithLocal.WebApi.Controllers
             }
         }
 
-        [HttpGet("features")]
-        public async Task<IEnumerable<ArticleResponse>> GetFeatureArticles()
+        [HttpGet("feature")]
+        public async Task<IEnumerable<ArticleCard>> GetFeatureArticles()
         {
             try
             {
                 var article = await _articleService.GetFeatureArticles();
-                return _mapper.Map<IEnumerable<Article>, IEnumerable<ArticleResponse>>(article);
+                return _mapper.Map<IEnumerable<Article>, IEnumerable<ArticleCard>>(article);
             }
             catch (Exception e)
             {

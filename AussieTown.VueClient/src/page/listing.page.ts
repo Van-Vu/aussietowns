@@ -49,6 +49,8 @@ export default class ListingPage extends Vue{
     modelCache: any = null;
 
     static asyncData({ store, route }) {
+
+        console.log('from listing asyncData');
         if (route.params.listingId) {
             return store.dispatch('FETCH_LISTING_BY_ID', route.params.listingId);
         } else {
@@ -56,16 +58,17 @@ export default class ListingPage extends Vue{
         }
     }
 
-    @Watch('$route.params')
-    onRouteParamChanged(value: any, oldValue: any) {
-        if (value.listingId) {
-            this.isEditing = false;
-            return this.$store.dispatch('FETCH_LISTING_BY_ID', value.listingId);
-        } else {
-            this.isEditing = true;
-            return this.$store.dispatch('CREATE_LISTING', value.listingType);
-        }
-    }
+    //@Watch('$route.params')
+    //onRouteParamChanged(value: any, oldValue: any) {
+    //    console.log('from listing watch route param');
+    //    if (value.listingId) {
+    //        this.isEditing = false;
+    //        return this.$store.dispatch('FETCH_LISTING_BY_ID', value.listingId);
+    //    } else {
+    //        this.isEditing = true;
+    //        return this.$store.dispatch('CREATE_LISTING', value.listingType);
+    //    }
+    //}
 
     get model() {
         if (this.$store.state.listing instanceof ListingModel) {
@@ -102,15 +105,27 @@ export default class ListingPage extends Vue{
         return false;
     }
 
+    get firstImageUrl() {
+        return this.model.imageList.length > 0 ? this.model.imageList[0].url : '';
+    }
+
     public metaInfo(): any {
         return {
             meta: [
-                { vmid: 'description', name: 'description', content: this.model.header },
+                { vmid: 'description', name: 'description', content: this.model.description},
                 { vmid: 'ogtitle', property: 'og:title', content: this.model.header },
                 { vmid: 'ogurl', property: 'og:url', content: `${Utils.getCurrentHost()}${this.$route.fullPath}`},
-                { vmid: 'ogdescription', property: 'og:description', content: this.model.header }
+                { vmid: 'ogdescription', property: 'og:description', content: this.model.description },
+                { vmid: 'ogtype', property: 'og:type', content: 'listing' },
+                { vmid: 'ogimage', property: 'og:image', content: this.firstImageUrl },
+                { vmid: 'ogimagewidth', property: 'og:image:width', content: "630" },
+                { vmid: 'ogimageheight', property: 'og:image:height', content: "355" },
+
+                { vmid: 'twittertitle', property: 'twitter:title', content: this.model.header },
+                { vmid: 'twitterdescription', property: 'twitter:description', content: this.model.description },
+                { vmid: 'twitterimage', property: 'twitter:image', content: this.firstImageUrl }
             ],
-            title: this.model.header,
+            title: `${this.model.header} in ${this.model.locationDetail.name}`,
         };
     }
 

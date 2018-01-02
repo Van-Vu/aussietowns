@@ -42,7 +42,7 @@ $toggleActiveColor: #FF9900;
 $toggleInactiveColor: #ccc;
 
 .toggle--push {
-	& .toggle--btn {
+	.toggle--btn {
 		position: relative;
 		max-width: 250px;
 		/*height: $toggleBtnRadius;*/
@@ -61,7 +61,7 @@ $toggleInactiveColor: #ccc;
 		}
 	}
 
-	& .toggle--checkbox {
+	.toggle--checkbox {
 		&:checked, &:hover {
 			& + .toggle--btn {
 				box-shadow: 0 2px 5px 0px lighten($toggleShadowColor, 30%),
@@ -70,5 +70,17 @@ $toggleInactiveColor: #ccc;
                 color: $c-orange;
 			}
 		}
+	}
+
+	.toggle--label {
+		position: relative;
+		max-width: 250px;
+		background-color: $toggleBtnColor;
+		border-radius: 10px;
+        padding: 2px 8px;
+        margin: 5px 5px;
+
+        box-shadow: 0 0px 10px 0px $toggleShadowColor,
+			0 5px 10px 0px lighten($toggleShadowColor, 60%);
 	}
 }

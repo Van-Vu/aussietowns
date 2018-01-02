@@ -15,14 +15,15 @@
         </section>
 
         <section class="page-content" :class="{'is-home': currentPage == 'home'}">
+            <h2>Featured experiences</h2>
             <ul>
                 <li class="li-horizontal" v-for="listing in featuredListings">
-                    <listingcard :listingDetail="listing"></listingcard>
+                    <listingcard :cardDetail="listing" :cardType="listingCardType"></listingcard>
                 </li>
             </ul>
-
+            <h2>Featured articles</h2>
             <div>
-                <listingcard v-for="article in featuredArticles" :key="article.id" :listingDetail="listing"></listingcard>
+                <listingcard v-for="article in featuredArticles" :key="article.id" :cardDetail="article" :cardType="articleCardType"></listingcard>
             </div>
 
             <h2>What is FunWithLocal</h2>

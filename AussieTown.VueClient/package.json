@@ -33,7 +33,6 @@
     "vue-js-cookie": "^2.0.0",
     "vue-lazy-image": "^1.2.0",
     "vue-meta": "^1.4.0",
-    "vue-progressbar": "^0.7.3",
     "vue-property-decorator": "^6.0.0",
     "vue-router": "^3.0.1",
     "vue-server-renderer": "^2.5.3",

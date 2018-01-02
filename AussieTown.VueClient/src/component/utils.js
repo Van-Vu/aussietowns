@@ -306,6 +306,9 @@ var Utils = /** @class */ (function () {
             ? GlobalConfig.accessControl.prod
             : GlobalConfig.accessControl.dev;
     };
+    Utils.openWindow = function (url, options) {
+        window.open(url, "_blank", options);
+    };
     return Utils;
 }());
 export { Utils };

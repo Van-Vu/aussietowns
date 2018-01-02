@@ -9,7 +9,7 @@ export default class ArticleService {
     }
 
     fetchFeatureArticles() {
-        return http.get(`${this.baseUrl}features`)
+        return http.get(`${this.baseUrl}feature`)
             .then(x => x);
     }
 

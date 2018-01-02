@@ -381,4 +381,8 @@ export class Utils {
             ? GlobalConfig.accessControl.prod
             : GlobalConfig.accessControl.dev;
     }
+
+    public static openWindow(url, options) {
+        window.open(url, "_blank", options);
+    }
 }

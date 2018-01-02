@@ -36,6 +36,10 @@
         width: 2rem;
         height: 2rem;
   }
+
+  input[type="checkbox"] {
+        display:none;
+  }
 }
 
 .toggle {

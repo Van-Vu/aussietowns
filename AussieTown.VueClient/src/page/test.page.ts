@@ -39,7 +39,7 @@ export default class TestPage extends Vue {
     currentView: string = 'listingcard';
     listings: any[] = [];
     hobbies: CheckButtonModel[] = null;
-
+    articleId: number = 0;
 
     isValidating: boolean = false;
     rawPassword: string = '';

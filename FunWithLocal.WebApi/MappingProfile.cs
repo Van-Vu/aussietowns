@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using AussieTowns.Common;
 using AussieTowns.Model;
 using AutoMapper;
@@ -88,7 +89,21 @@ namespace FunWithLocal.WebApi
 
             CreateMap<Article, ArticleResponse>()
                 .ForMember(dest => dest.Author,
-                    opts => opts.MapFrom(src => Mapper.Map<User, MiniProfile>(src.Author)));
+                    opts => opts.MapFrom(src => Mapper.Map<User, MiniProfile>(src.Author)))
+                .ForMember(dest => dest.SanitizedContent,
+                    opts => opts.MapFrom(src => src.SanitizedContent.Substring(0, Math.Min(src.SanitizedContent.Length, 150))))
+                .ForMember(dest => dest.UpdatedDate,
+                    opts => opts.MapFrom(src => src.UpdatedDate.ToString("hh:mm dd MMMM yyyy")));
+
+            CreateMap<Article, ArticleCard>()
+                .ForMember(dest => dest.PrimaryOwner,
+                    opts => opts.MapFrom(src => $"{src.Author.FirstName} {src.Author.LastName}"))
+                .ForMember(dest => dest.Description,
+                    opts => opts.MapFrom(src => src.Content.Substring(0, Math.Min(src.Content.Length, 160))))
+                .ForMember(dest => dest.Header,
+                    opts => opts.MapFrom(src => src.Title.Substring(0, Math.Min(src.Title.Length, 55)) + " ..."))
+                .ForMember(dest => dest.ImageUrls,
+                    opts => opts.MapFrom(src => src.ImageUrl));
         }
     }
 

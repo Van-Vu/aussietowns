@@ -4,6 +4,8 @@ import AutoCompleteComponent from "../shared/autocomplete.vue";
 import { Utils } from '../utils';
 import ListingModel from '../../model/listing.model';
 import Swiper from './external/vue-swiper.vue';
+import { CardType } from '../../model/enum';
+import CheckButtonComponent from "../shared/checkbutton.component.vue";
 
 
 import lazy from 'vue-lazy-image';
@@ -16,15 +18,17 @@ Vue.use(lazy, {
 @Component({
     name: "CardFull",
     components: {
-        "swiper": Swiper
+        "swiper": Swiper,
+        "checkButton": CheckButtonComponent
     }
 })
 
 export default class CardFullComponent extends Vue {
-    @Prop() listingDetail: any;
+    @Prop() cardDetail: any;
+    @Prop() cardType: CardType;
     id:number = 0;
     location: string = '';
-    hostName: string = '';
+    owner: string = '';
     header: string = '';
     cost: number = 0;
     date: string = '';
@@ -33,19 +37,41 @@ export default class CardFullComponent extends Vue {
     imageUrls: string = '';
     duration: string = '';
     description: string = '';
+    cardLinkTo: Object = null;
+    tagList: Array<string> = null;
 
     created(): void {
-        this.id = this.listingDetail.id;
-        this.location = this.listingDetail.location;
-        this.header = this.listingDetail.header;
-        this.cost = this.listingDetail.cost;
-        this.hostName = this.listingDetail.primaryOwner;
-        this.imageUrls = this.listingDetail.imageUrls ? this.listingDetail.imageUrls.split(';') : '';
-        var startDatetime = this.listingDetail.schedules.length > 0 ? new Date(this.listingDetail.schedules[0].startDate) : new Date();
-        this.date = Utils.formatDate(startDatetime);
-        this.time = Utils.getTime(startDatetime);
+        this.id = this.cardDetail.id;
+        this.location = this.cardDetail.location;
+        this.header = this.cardDetail.header;
+        this.cost = this.cardDetail.cost;
+        this.owner = this.cardDetail.primaryOwner;
+        this.imageUrls = this.cardDetail.imageUrls ? this.cardDetail.imageUrls.split(';') : '';
         this.headerLink = this.header ? Utils.seorizeString(this.header) : '';
-        this.duration = this.listingDetail.schedules.length > 0 ? this.listingDetail.schedules[0].duration : 0;
-        this.description = this.listingDetail.description;
+        this.description = this.cardDetail.description;
+
+        if (!!this.cardDetail.schedules) {
+            var startDatetime = this.cardDetail.schedules.length > 0 ? new Date(this.cardDetail.schedules[0].startDate) : new Date();
+            this.date = Utils.formatDate(startDatetime);
+            this.time = Utils.getTime(startDatetime);            
+            this.duration = this.cardDetail.schedules.length > 0 ? this.cardDetail.schedules[0].duration : 0;
+        }
+
+        switch (this.cardType) {
+            case CardType.Listing:
+                this.cardLinkTo = { name: 'listingDetail', params: { seoString: this.headerLink, listingId: this.id } };
+                break;
+            case CardType.Article:
+                this.cardLinkTo = { name: 'aboutus', params: { seoString: this.headerLink, articleId: this.id } };
+                break;
+        }
+
+        if (!!this.cardDetail.tagList) {
+            this.tagList = this.cardDetail.tagList;
+        }
+    }
+
+    get isListingType() {
+        return this.cardType == CardType.Listing;
     }
 }

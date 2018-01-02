@@ -11,11 +11,11 @@
             <label class="tab-text">View Booking</label>
         </router-link>
 
-        <router-link :to="{ name: 'aboutus', params: { seoString: 'testing', articleId: 1 } }">
+        <input type="text" v-model="articleId" style="width: 50px;" />
+        <router-link :to="{ name: 'aboutus', params: { seoString: 'testing', articleId: articleId } }">
             <label class="tab-text">View Article</label>
         </router-link>
-
-        <router-link :to="{ name: 'editArticle', params: { seoString: 'testing', articleId: 1 } }">
+        <router-link :to="{ name: 'editArticle', params: { seoString: 'testing', articleId: articleId } }">
             <label class="tab-text">Edit Article</label>
         </router-link>
 

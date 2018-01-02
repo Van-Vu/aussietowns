@@ -36,6 +36,7 @@ var TestPage = /** @class */ (function (_super) {
         _this.currentView = 'listingcard';
         _this.listings = [];
         _this.hobbies = null;
+        _this.articleId = 0;
         _this.isValidating = false;
         _this.rawPassword = '';
         _this.email = '';
