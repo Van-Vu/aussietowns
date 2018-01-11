@@ -35,7 +35,7 @@ Vue.use(VeeValidate);
         "imageupload": ImageUploadComponent,
         "imagecrop": ImageCropComponent,
         "zoneloading": ZoneLoadingComponent,
-        'checkButton': CheckButton
+        "checkButton": CheckButton
     }
 })
 

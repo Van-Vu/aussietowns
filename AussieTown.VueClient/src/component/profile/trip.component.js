@@ -16,12 +16,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import { ListingType } from '../../model/enum';
+import { ListingType, CardType } from '../../model/enum';
 import CardFullComponent from '../shared/listingcard.component.vue';
 var TripComponent = /** @class */ (function (_super) {
     __extends(TripComponent, _super);
     function TripComponent() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.listingCardType = CardType.Listing;
+        return _this;
     }
     TripComponent.asyncData = function (_a) {
         var store = _a.store, route = _a.route;

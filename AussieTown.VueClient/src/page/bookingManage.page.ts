@@ -81,16 +81,22 @@ export default class BookingManagePage extends Vue {
     }
 
     onModify() {
+        this.$store.dispatch("ENABLE_LOADING");
+
         (new BookingService()).modifyBooking(this.model.id, this.constructBookingRequest())
             .then(() => {
                 this.isDateChoosen = true;
+                this.$store.dispatch("DISABLE_LOADING");
             });
     }
 
     onWithdraw() {
+        this.$store.dispatch("ENABLE_LOADING");
+
         (new BookingService()).withdrawBooking(this.model.id, this.model.participants.map((element) => element.name).join(","))
             .then(() => {
                 this.isDateChoosen = true;
+                this.$store.dispatch("DISABLE_LOADING");
             });
     }
 

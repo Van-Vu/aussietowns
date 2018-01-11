@@ -38,7 +38,7 @@ var ParticipantComponent = /** @class */ (function (_super) {
     ParticipantComponent.prototype.mounted = function () {
         this.buttonText = "Add " + this.participantType;
     };
-    ParticipantComponent.prototype.toggleProfileSearch = function (event) {
+    ParticipantComponent.prototype.toggleProfileSearch = function () {
         this.isAdding = !this.isAdding;
         if (this.isAdding) {
             this.buttonText = "Done";
@@ -46,10 +46,10 @@ var ParticipantComponent = /** @class */ (function (_super) {
         else {
             this.buttonText = "Add " + this.participantType;
         }
-        event.stopPropagation();
     };
     ParticipantComponent.prototype.onUserSelect = function (user) {
         this.$emit("userAdded", user);
+        this.toggleProfileSearch();
     };
     ParticipantComponent.prototype.onUserRemove = function (user) {
         //this.internalUsers.splice(this.internalUsers.indexOf(user), 1);

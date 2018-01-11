@@ -32,7 +32,7 @@
                     <div v-if="errorMsg" class="booking-error">
                         <span>{{errorMsg}}</span>
                     </div>
-                    <availability @bookingDateChanged="onBookingDateChanged" @bookingTimeChanged="onBookingTimeChanged">
+                    <availability :model="model.listing.schedules[0]" @bookingDateChanged="onBookingDateChanged" @bookingTimeChanged="onBookingTimeChanged">
                     </availability>
                 </tab-content>
                 <tab-content title="Participants" :before-change="validateParticipantInfo"

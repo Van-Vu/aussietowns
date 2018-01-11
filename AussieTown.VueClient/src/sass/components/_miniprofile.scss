@@ -22,8 +22,13 @@
         }
 
         span {
-            right: 0;
+            right: 3px;
             font-size: 1.5em;
+            @include absolutecenter("y");
+        }
+
+        p {
+            right: 3px;
             @include absolutecenter("y");
         }
     }

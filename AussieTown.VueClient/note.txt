@@ -44,6 +44,10 @@ router regex: https://github.com/vuejs/vue-router/blob/dev/examples/route-matchi
 token authentication: https://stormpath.com/blog/token-authentication-asp-net-core
 integrate with Google: https://www.npmjs.com/package/vue-google-signin-button
 	https://developers.google.com/identity/sign-in/web/devconsole-project
+	PROD ENVIRONMENT
+	clientID:  419604415623-a3n6uibchngji3f6opnufqit58398cdh.apps.googleusercontent.com 
+	client secret:  t_V7rMllVSYSpGc0ix_NhZQX 
+
 integrate with facebook: https://developers.facebook.com/docs/facebook-login/web
 	https://github.com/phanan/vue-facebook-signin-button
 
@@ -88,7 +92,7 @@ DONE Error handling:
 	DONE Log client
 DONE Refactor isSticky & showSecondSearchBar
 
-PROGRESS Page layout
+DONE Page layout
 
 Performance / Load test
 https://www.sparkpost.com/pricing/#addon-plans
@@ -155,7 +159,7 @@ DONE Image to cloudinary
 		desktop: w_362,h_204,c_fit,f_auto,q_auto
 
 Social pages
-Intermittent issue: async doesn't trigger
+DONE Intermittent issue: async doesn't trigger
 booking.participants. existingUserId: what happens to non-existed user
 secure userdetail info
 
@@ -173,12 +177,26 @@ DONE refresh home page --> go to listing --> refresh listing. Issue:
 		1- first time always return homepage
 		2- seems to add duplicate XHR calls
 	The fix: in main.server wait for router.push to complete before processing the request, otherwise it still picks up the old route
+BUG:
+FIXED service-worker: error
+FIXED my hobbies: error when null
+FIXED HttpPut is not allowed
+FIXED Create listing doesn't appear images placeholder
+FIXED Schedule date
+FIXED Your listing doesn't show up
+
+listing page: miniprofile click
+create article 
+	--> upload image: undefined Id
+	--> link image doesn't work on create
+	--> save draft create a new ID
+tranform iamge of article card
+article feature: publish status
 
 
-
-
-
-
+DEPLOYMENT:
+change GA id
+http_base
 
 
 
@@ -193,36 +211,4 @@ REFACTOR:
 fetch user / message / conversation / trips separatedly
 image crop modal
 SELECT LAST_INSERT_ID()
-
-
-Apple scrollbar:
-::-webkit-scrollbar {
-  width: 8px; /* 1px wider than Lion. */
-  /* This is more usable for users trying to click it. */
-  background-color: rgba(0,0,0,0);
-  -webkit-border-radius: 100px;
-}
-/* hover effect for both scrollbar area, and scrollbar 'thumb' */
-::-webkit-scrollbar:hover {
-  background-color: rgba(0, 0, 0, 0.09);
-}
-
-/* The scrollbar 'thumb' ...that marque oval shape in a scrollbar */
-::-webkit-scrollbar-thumb:vertical {
-  /* This is the EXACT color of Mac OS scrollbars. 
-     Yes, I pulled out digital color meter */
-  background: rgba(0,0,0,0.5);
-  -webkit-border-radius: 100px;
-}
-::-webkit-scrollbar-thumb:vertical:active {
-  background: rgba(0,0,0,0.61); /* Some darker color when you click it */
-  -webkit-border-radius: 100px;
-}
-------- END APPLE SCROLLBAR
-
-
-Bulma class:
-columns
-column
-is-gapless
-is-mobile
+listingCard: cartType pass in enum type in vue template

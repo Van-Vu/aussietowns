@@ -197,7 +197,7 @@ var UserDetailComponent = /** @class */ (function (_super) {
                 "imageupload": ImageUploadComponent,
                 "imagecrop": ImageCropComponent,
                 "zoneloading": ZoneLoadingComponent,
-                'checkButton': CheckButton
+                "checkButton": CheckButton
             }
         })
     ], UserDetailComponent);

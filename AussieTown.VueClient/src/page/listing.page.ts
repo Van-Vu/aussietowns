@@ -58,18 +58,6 @@ export default class ListingPage extends Vue{
         }
     }
 
-    //@Watch('$route.params')
-    //onRouteParamChanged(value: any, oldValue: any) {
-    //    console.log('from listing watch route param');
-    //    if (value.listingId) {
-    //        this.isEditing = false;
-    //        return this.$store.dispatch('FETCH_LISTING_BY_ID', value.listingId);
-    //    } else {
-    //        this.isEditing = true;
-    //        return this.$store.dispatch('CREATE_LISTING', value.listingType);
-    //    }
-    //}
-
     get model() {
         if (this.$store.state.listing instanceof ListingModel) {
             this.isOffer = this.$store.state.listing.type == ListingType.Offer;
@@ -109,6 +97,13 @@ export default class ListingPage extends Vue{
         return this.model.imageList.length > 0 ? this.model.imageList[0].url : '';
     }
 
+    get locationName() {
+        if (!!this.model.locationDetail && !!this.model.locationDetail.name)
+            return this.model.locationDetail.name;
+
+        return '';
+    }
+
     public metaInfo(): any {
         return {
             meta: [
@@ -125,7 +120,7 @@ export default class ListingPage extends Vue{
                 { vmid: 'twitterdescription', property: 'twitter:description', content: this.model.description },
                 { vmid: 'twitterimage', property: 'twitter:image', content: this.firstImageUrl }
             ],
-            title: `${this.model.header} in ${this.model.locationDetail.name}`,
+            title: `${this.model.header} in ${this.locationName}`,
         };
     }
 
@@ -182,23 +177,29 @@ export default class ListingPage extends Vue{
                     } else {
                         return this.$store.dispatch('INSERT_LISTING', this.contructBeforeSubmit(this.model))
                             .then(listingId => {
+                                this.model.id = listingId;
+
                                 this.$router.push({
                                     name: 'listingDetail',
-                                    params: { seoString: Utils.seorizeString(this.model.header), listingId: listingId }
+                                    params: { seoString: Utils.seorizeString(this.model.header), listingId: this.model.id }
                                 });
 
                                 this.$store.dispatch('ADD_NOTIFICATION',
                                 {
                                     title: "Insert success. Please upload listing images",
                                     type: NotificationType.Success
-                                });
+                                    });
+
+                                this.isEditing = false;
                             })
                             .catch(err => this.onCancelEdit())
                             .then(() => this.$store.dispatch("DISABLE_LOADING"));
                     }
                 }
-            }).catch(() => {
+            }).catch((err) => {
+                this.$store.dispatch("DISABLE_LOADING");
                 alert('Correct them errors!');
+                console.log(err);
             });
         }
     }
@@ -221,7 +222,7 @@ export default class ListingPage extends Vue{
     }
 
     onUserAdded(user: AutocompleteItem) {
-        this.$store.dispatch("INSERT_LISTING_OPERATOR", new MiniProfile(user.id, user.name, '', '', user.imageUrl, ''));
+        this.$store.dispatch("INSERT_LISTING_OPERATOR", new MiniProfile(user.id, user.name, '', '', user.imageUrl, '', false));
     }
 
     onUserRemoved(user) {
@@ -320,8 +321,7 @@ export default class ListingPage extends Vue{
         //  "type":"0",
         //  "tourOperators":[{"listingId": "0", "userId": "1", "isOwner": true}]
         //}
-
-
+        
         return {
             id: model.id,
             type: this.isOffer ? 0 : 1,

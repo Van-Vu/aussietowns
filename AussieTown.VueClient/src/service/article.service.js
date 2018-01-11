@@ -16,7 +16,7 @@ var ArticleService = /** @class */ (function () {
             .then(function (x) { return x; });
     };
     ArticleService.prototype.updateStatus = function (article) {
-        return http.put(this.baseUrl + article.id, article)
+        return http.post(this.baseUrl + article.id, article)
             .then(function (x) { return x; });
     };
     return ArticleService;

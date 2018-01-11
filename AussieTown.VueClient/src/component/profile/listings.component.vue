@@ -1,7 +1,7 @@
 ﻿<template>
     <div class="trip-content">
         <div>
-            <listingcard v-for="offer in listings" :key="offer.id" :cardDetail="offer"></listingcard>
+            <listingcard v-for="offer in listings" :key="offer.id" :cardDetail="offer" :cardType="listingCardType"></listingcard>
         </div>
     </div>
 </template>

@@ -47,7 +47,6 @@ export default class BookingPage extends Vue {
     isBooked: boolean = false;
     isLoading = false;
     errorMsg = '';
-    model: BookingModel = null;
     $mq: any;
 
     static asyncData({ store, route }) {
@@ -61,12 +60,8 @@ export default class BookingPage extends Vue {
         store.dispatch('ADD_BOOKING_PARTICIPANT', plainToClass(UserModel, this.generateParticipants(store))); 
     }
 
-    //get model() {
-    //    return this.$store.state.booking;
-    //}
-
-    created() {
-        this.model = this.$store.state.booking;
+    get model() {
+        return this.$store.state.booking;
     }
 
     mounted() {
@@ -88,15 +83,15 @@ export default class BookingPage extends Vue {
 
     confirmBooking() {
         return new Promise((resolve, reject) => {
+            this.$store.dispatch("ENABLE_LOADING");
+
             (new BookingService()).confirmBooking(this.constructBookingRequest())
                 .then(() => {
                     this.isBooked = true;
                     resolve(true);
                 })
-                .catch(() => reject('Please fill in participant information'));
-
-            //if ((this.model.bookingDate) && (this.model.bookingTime)) resolve(true);
-            
+                .catch(() => reject('Please fill in participant information'))
+                .then(() => this.$store.dispatch("DISABLE_LOADING"));
         });
         //alert('Form Submitted!');
     }
@@ -166,17 +161,10 @@ export default class BookingPage extends Vue {
                 }
                 reject('Please fill in required information');
             });
-
-
-            //this.$validator.validateAll().then(() => {
-            //    // Data is valid, so we can submit the form.
-            //    //document.querySelector('#myForm').submit();
-            //    alert('From Submitted!');
-            //    resolve(true);
-            //}).catch(() => {
-            //    reject('This is a custom validation error message. Click next again to get rid of the validation');
-            //});
         });
+
+
+
 
 
         //return new Promise((resolve, reject) => {
@@ -201,10 +189,17 @@ export default class BookingPage extends Vue {
     }
 
     validateBookingTime() {
-        return new Promise((resolve, reject) => {
-            if ((this.model.bookingDate) && (this.model.bookingTime)) resolve(true);
-            reject('Please choose your suitable date and time');
-        });
+        if (this.model.listing.schedules[0].repeatedType == 0) {
+            this.model.bookingDate = this.model.listing.schedules[0].startDate;
+            this.model.bookingTime = this.model.listing.schedules[0].startTime;
+
+            return new Promise((resolve, reject) => resolve(true));
+        } else {
+            return new Promise((resolve, reject) => {
+                if ((this.model.bookingDate) && (this.model.bookingTime)) resolve(true);
+                reject('Please choose your suitable date and time');
+            });
+        }
     }
     //validateBeforeSubmit(e) {
     //    e.preventDefault();

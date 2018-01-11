@@ -30,32 +30,6 @@ namespace FunWithLocal.WebApi.Auth
             }
             else
             {
-                // Role
-                switch (requirement.Name)
-                {
-                    case "Update":
-                        if (Convert.ToInt32(role) > (int)UserRole.User)
-                        {
-                            context.Succeed(requirement);
-                        }
-                        else
-                        {
-                            context.Fail();
-                        }
-                        break;
-                    case "Delete":
-                        if (Convert.ToInt32(role) == (int)UserRole.SuperAdmin)
-                        {
-                            context.Succeed(requirement);
-                        }
-                        else
-                        {
-                            context.Fail();
-                        }
-                        break;
-                }
-
-
                 // Author
                 var userIdInt = Convert.ToInt32(userId);
                 var tourOperator = booking.Listing.TourOperators.FirstOrDefault(x => x.Id == userIdInt && x.IsPrimary);
@@ -64,7 +38,30 @@ namespace FunWithLocal.WebApi.Auth
                     var tourGuest = booking.Participants.FirstOrDefault(x => x.ExistingUserId == userIdInt);
                     if (tourGuest == null)
                     {
-                        context.Fail();
+                        // Role
+                        switch (requirement.Name)
+                        {
+                            case "Update":
+                                if (Convert.ToInt32(role) > (int)UserRole.User)
+                                {
+                                    context.Succeed(requirement);
+                                }
+                                else
+                                {
+                                    context.Fail();
+                                }
+                                break;
+                            case "Delete":
+                                if (Convert.ToInt32(role) == (int)UserRole.SuperAdmin)
+                                {
+                                    context.Succeed(requirement);
+                                }
+                                else
+                                {
+                                    context.Fail();
+                                }
+                                break;
+                        }
                     }
                     else
                     {

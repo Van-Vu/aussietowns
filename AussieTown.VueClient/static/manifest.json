@@ -1,6 +1,6 @@
 {
   "name": "Fun With Local",
-  "short_name": "FWL",
+  "short_name": "Fun With Local",
   "icons": [
     {
       "src": "/static/images/pwa.png",

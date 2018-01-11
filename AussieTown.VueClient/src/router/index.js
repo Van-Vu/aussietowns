@@ -351,6 +351,10 @@ var router = new VueRouter({
         {
             path: "",
             redirect: { name: 'home' }
+        },
+        {
+            path: "*",
+            redirect: { name: 'home' }
         }
     ]
 });

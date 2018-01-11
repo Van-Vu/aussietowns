@@ -17,6 +17,8 @@ namespace FunWithLocal.WebApi.Repository
         Task<IEnumerable<User>> SearchUser(string searchTerm);
         Task<int> Insert(User user);
         Task<int> Update(UserRequest profile);
+
+        Task<int> ConfirmEmail(UserRequest profile);
         Task<int> ChangePassword(User user, bool isChangePassword);
         Task<int> Deactivate(int id);
 

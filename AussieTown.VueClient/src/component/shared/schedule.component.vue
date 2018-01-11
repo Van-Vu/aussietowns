@@ -1,5 +1,5 @@
 ﻿<template>
-    <form class="tile is-vertical" @submit.prevent="validateBeforeSubmit" v-if="model">
+    <form class="tile is-vertical schedule-wrapper" @submit.prevent="validateBeforeSubmit" v-if="model">
         <div class="tile is-parent">
             <div class="tile is-3">Start date</div>
             <div class="tile is-9">
@@ -32,23 +32,9 @@
                         <label :for="period.display">{{period.display}}</label>
                     </li>
                 </ul>
-                <div class="" v-if="model.repeatedType == 2 && isRepeated">
-                    <input type="checkbox" id="monday" value="1" v-model="repeatedDay">
-                    <label for="monday">Mon</label>
-                    <input type="checkbox" id="tuesday" value="2" v-model="repeatedDay">
-                    <label for="tuesday">Tue</label>
-                    <input type="checkbox" id="wednesday" value="4" v-model="repeatedDay">
-                    <label for="wednesday">Wed</label>
-                    <input type="checkbox" id="thursday" value="8" v-model="repeatedDay">
-                    <label for="thursday">Thu</label>
-                    <input type="checkbox" id="friday" value="16" v-model="repeatedDay">
-                    <label for="friday">Fri</label>
-                    <input type="checkbox" id="saturday" value="32" v-model="repeatedDay">
-                    <label for="saturday">Sat</label>
-                    <input type="checkbox" id="sunday" value="64" v-model="repeatedDay">
-                    <label for="sunday">Sun</label>
+                <div v-if="model.repeatedType == 2 && isRepeated">
+                    <checkButton :model="weekdayList" :checked="model.repeatedDay" :isEditing="true" @onChange="onUpdatedWeekdayList"></checkButton>
                 </div>
-
             </div>
         </div>
         <div class="tile is-parent">

@@ -42,7 +42,6 @@ var BookingPage = /** @class */ (function (_super) {
         _this.isBooked = false;
         _this.isLoading = false;
         _this.errorMsg = '';
-        _this.model = null;
         return _this;
         //validateBeforeSubmit(e) {
         //    e.preventDefault();
@@ -64,12 +63,13 @@ var BookingPage = /** @class */ (function (_super) {
         //}
         store.dispatch('ADD_BOOKING_PARTICIPANT', plainToClass(UserModel, this.generateParticipants(store)));
     };
-    //get model() {
-    //    return this.$store.state.booking;
-    //}
-    BookingPage.prototype.created = function () {
-        this.model = this.$store.state.booking;
-    };
+    Object.defineProperty(BookingPage.prototype, "model", {
+        get: function () {
+            return this.$store.state.booking;
+        },
+        enumerable: true,
+        configurable: true
+    });
     BookingPage.prototype.mounted = function () {
         var screenSize = detectScreenSize(this.$mq);
         switch (screenSize) {
@@ -87,13 +87,14 @@ var BookingPage = /** @class */ (function (_super) {
     BookingPage.prototype.confirmBooking = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
+            _this.$store.dispatch("ENABLE_LOADING");
             (new BookingService()).confirmBooking(_this.constructBookingRequest())
                 .then(function () {
                 _this.isBooked = true;
                 resolve(true);
             })
-                .catch(function () { return reject('Please fill in participant information'); });
-            //if ((this.model.bookingDate) && (this.model.bookingTime)) resolve(true);
+                .catch(function () { return reject('Please fill in participant information'); })
+                .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); });
         });
         //alert('Form Submitted!');
     };
@@ -151,14 +152,6 @@ var BookingPage = /** @class */ (function (_super) {
                 }
                 reject('Please fill in required information');
             });
-            //this.$validator.validateAll().then(() => {
-            //    // Data is valid, so we can submit the form.
-            //    //document.querySelector('#myForm').submit();
-            //    alert('From Submitted!');
-            //    resolve(true);
-            //}).catch(() => {
-            //    reject('This is a custom validation error message. Click next again to get rid of the validation');
-            //});
         });
         //return new Promise((resolve, reject) => {
         //    setTimeout(() => {
@@ -180,11 +173,18 @@ var BookingPage = /** @class */ (function (_super) {
     };
     BookingPage.prototype.validateBookingTime = function () {
         var _this = this;
-        return new Promise(function (resolve, reject) {
-            if ((_this.model.bookingDate) && (_this.model.bookingTime))
-                resolve(true);
-            reject('Please choose your suitable date and time');
-        });
+        if (this.model.listing.schedules[0].repeatedType == 0) {
+            this.model.bookingDate = this.model.listing.schedules[0].startDate;
+            this.model.bookingTime = this.model.listing.schedules[0].startTime;
+            return new Promise(function (resolve, reject) { return resolve(true); });
+        }
+        else {
+            return new Promise(function (resolve, reject) {
+                if ((_this.model.bookingDate) && (_this.model.bookingTime))
+                    resolve(true);
+                reject('Please choose your suitable date and time');
+            });
+        }
     };
     BookingPage = __decorate([
         Component({

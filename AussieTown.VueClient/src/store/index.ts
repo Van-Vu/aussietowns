@@ -114,7 +114,7 @@ export default new Vuex.Store({
             let newListing = new ListingModel();
             let user = state.loggedInUser as any;
             
-            newListing.tourOperators.push(new MiniProfile(user.id, Utils.getProfileFullName(user), user.email, '', Utils.getProfileImage(user.photoUrl), ''));
+            newListing.tourOperators.push(new MiniProfile(user.id, Utils.getProfileFullName(user), user.email, '', Utils.getProfileImage(user.photoUrl), '',true));
             if (listingType) {
                 newListing.type = listingType.toUpperCase() === ListingType[ListingType.Offer].toUpperCase() ? 0 : 1;
             }
@@ -134,7 +134,6 @@ export default new Vuex.Store({
         INSERT_LISTING({ commit, state }, listing) {
             return (new ListingService()).addListing(listing)
                 .then(response => response);
-            //commit('UPDATE_LISTING', listing);
         },
         INSERT_LISTING_OPERATOR({ commit, state }, operator) {
             commit('INSERT_OPERATOR', operator);

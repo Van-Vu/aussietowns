@@ -382,6 +382,12 @@ export class Utils {
             : GlobalConfig.accessControl.dev;
     }
 
+    public static getCookiesDomain() {
+        return process.env.NODE_ENV == 'production'
+            ? GlobalConfig.cookiesDomain.prod
+            : GlobalConfig.cookiesDomain.dev;
+    }
+
     public static openWindow(url, options) {
         window.open(url, "_blank", options);
     }

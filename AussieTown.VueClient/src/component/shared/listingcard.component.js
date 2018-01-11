@@ -63,11 +63,12 @@ var CardFullComponent = /** @class */ (function (_super) {
             this.duration = this.cardDetail.schedules.length > 0 ? this.cardDetail.schedules[0].duration : 0;
         }
         switch (this.cardType) {
-            case CardType.Listing:
-                this.cardLinkTo = { name: 'listingDetail', params: { seoString: this.headerLink, listingId: this.id } };
-                break;
             case CardType.Article:
                 this.cardLinkTo = { name: 'aboutus', params: { seoString: this.headerLink, articleId: this.id } };
+                break;
+            case CardType.Listing:
+            default:
+                this.cardLinkTo = { name: 'listingDetail', params: { seoString: this.headerLink, listingId: this.id } };
                 break;
         }
         if (!!this.cardDetail.tagList) {
@@ -76,7 +77,7 @@ var CardFullComponent = /** @class */ (function (_super) {
     };
     Object.defineProperty(CardFullComponent.prototype, "isListingType", {
         get: function () {
-            return this.cardType == CardType.Listing;
+            return this.cardType === CardType.Listing;
         },
         enumerable: true,
         configurable: true

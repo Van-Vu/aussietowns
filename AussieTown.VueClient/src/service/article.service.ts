@@ -19,7 +19,7 @@ export default class ArticleService {
     }
 
     updateStatus(article) {
-        return http.put(this.baseUrl + article.id, article)
+        return http.post(this.baseUrl + article.id, article)
             .then(x => x);
     }
 }

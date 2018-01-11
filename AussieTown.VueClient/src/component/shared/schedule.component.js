@@ -19,8 +19,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Watch, Prop } from "vue-property-decorator";
+import ScheduleModel from '../../model/schedule.model';
+import CheckButtonModel from '../../model/checkbutton.model';
 import vuetimepicker from './external/vuetimepicker.vue';
 import datepicker from './external/datepicker.vue';
+import CheckButton from './checkbutton.component.vue';
+import { RepeatedDay } from '../../model/enum';
 import VeeValidate from 'vee-validate';
 Vue.use(VeeValidate);
 var ScheduleComponent = /** @class */ (function (_super) {
@@ -31,13 +35,22 @@ var ScheduleComponent = /** @class */ (function (_super) {
         _this.repeatedDay = [];
         //model: ScheduleModel = null;
         _this.repeatPeriods = [
-            { value: '1', display: 'Daily' },
-            { value: '2', display: 'Weekly' },
-            { value: '3', display: 'Monthly' }
+            { value: 1, display: 'Daily' },
+            { value: 2, display: 'Weekly' }
+            //{ value: '3', display: 'Monthly' }
+        ];
+        _this.weekdayList = [
+            new CheckButtonModel(RepeatedDay[1], '1', RepeatedDay[1]),
+            new CheckButtonModel(RepeatedDay[2], '2', RepeatedDay[2]),
+            new CheckButtonModel(RepeatedDay[3], '3', RepeatedDay[3]),
+            new CheckButtonModel(RepeatedDay[4], '4', RepeatedDay[4]),
+            new CheckButtonModel(RepeatedDay[5], '5', RepeatedDay[5]),
+            new CheckButtonModel(RepeatedDay[6], '6', RepeatedDay[6]),
+            new CheckButtonModel(RepeatedDay[0], '0', RepeatedDay[0]),
         ];
         _this.disableDays = {
-            to: new Date(),
-            days: [6, 0] // Disable Saturday's and Sunday's
+            to: new Date()
+            //days: [6, 0] // Disable Saturday's and Sunday's
         };
         return _this;
     }
@@ -50,6 +63,8 @@ var ScheduleComponent = /** @class */ (function (_super) {
     //}
     ScheduleComponent.prototype.onRepeatedChanged = function (value, oldValue) {
         console.log("isRepeated: " + value);
+        this.model.repeatedDay = [];
+        this.model.repeatedType = 0;
     };
     ScheduleComponent.prototype.validateBeforeSubmit = function () {
         var _this = this;
@@ -62,9 +77,12 @@ var ScheduleComponent = /** @class */ (function (_super) {
             alert('Correct them errors!');
         });
     };
+    ScheduleComponent.prototype.onUpdatedWeekdayList = function (value) {
+        this.repeatedDay = value;
+    };
     __decorate([
         Prop(),
-        __metadata("design:type", Object)
+        __metadata("design:type", ScheduleModel)
     ], ScheduleComponent.prototype, "model", void 0);
     __decorate([
         Watch('isRepeated'),
@@ -77,7 +95,8 @@ var ScheduleComponent = /** @class */ (function (_super) {
             name: "Schedule",
             components: {
                 "vue-timepicker": vuetimepicker,
-                "datepicker": datepicker
+                "datepicker": datepicker,
+                "checkButton": CheckButton
             }
         })
     ], ScheduleComponent);

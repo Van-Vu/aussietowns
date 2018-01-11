@@ -1,4 +1,5 @@
 import { RepeatedType, RepeatedDay } from './enum';
+import { Utils } from '../component/utils';
 var ScheduleModel = /** @class */ (function () {
     function ScheduleModel(startDate, startTime, duration, endDate, repeatedType, repeatedDay) {
         this.startDate = startDate;
@@ -31,7 +32,7 @@ var ScheduleModel = /** @class */ (function () {
                     ret = "Monthly on " + new Date(this.startDate).getDay();
                     break;
                 default:
-                    ret = '';
+                    ret = Utils.formatDate(new Date(this.startDate));
             }
             return ret;
         },

@@ -4,11 +4,11 @@ import { Utils } from '../component/utils';
 export default class ScheduleModel {
     id: number;
     startDate: string;
-    startTime: Object;
+    startTime: string;
     duration: Object;
     endDate: string;
     repeatedType: RepeatedType;
-    repeatedDay: Array<number>;
+    repeatedDay: Array<string>;
 
     constructor(startDate, startTime, duration, endDate, repeatedType, repeatedDay) {
         this.startDate = startDate;
@@ -42,7 +42,7 @@ export default class ScheduleModel {
                 ret = `Monthly on ${new Date(this.startDate).getDay()}`;
                 break;
             default:
-                ret = '';
+                ret = Utils.formatDate(new Date(this.startDate));
         }
 
         return ret;

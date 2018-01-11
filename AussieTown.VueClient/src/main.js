@@ -14,7 +14,7 @@ Vue.use(VueAnalytics, {
     // [Required] The version of your app.
     appVersion: '1.0',
     // [Required] Your Google Analytics tracking ID.
-    trackingId: 'UA-110375519-1'
+    trackingId: 'UA-110375519-2'
 });
 // a global mixin that calls `asyncData` when a route component's params change
 Vue.mixin({

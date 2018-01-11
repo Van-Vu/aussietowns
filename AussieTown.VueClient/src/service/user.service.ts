@@ -1,5 +1,7 @@
 ﻿import http from './http-base';
 
+import axios from 'axios';
+
 export default class UserService {
 
     getAll() {
@@ -49,7 +51,7 @@ export default class UserService {
     }
 
     update(user: any) {
-        return http.put('api/user/' + user.id, user)
+        return http.post('api/user/' + user.id, user)
             .then(response => response);
     }
 

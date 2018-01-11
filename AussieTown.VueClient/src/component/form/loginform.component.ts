@@ -8,8 +8,8 @@ import LoginModel from '../../model/login.model';
 import { UserSource, UserRole } from '../../model/enum';
 
 import { fetchPublicKey, decryptTextFromServer, requestPasswordReset, encryptText } from '../../service/auth.service';
-import { GlobalConfig } from '../../GlobalConfig';
 import { NotificationType } from '../../model/enum';
+import { Utils } from '../utils';
 
 Vue.use(VeeValidate);
 
@@ -45,7 +45,7 @@ export default class LoginForm extends Vue {
     isLogin: boolean = true;
 
     googleSignInParams: any = {
-        client_id: '865729199339-hclqajg0re388bm6t9pje61gsglat3rr.apps.googleusercontent.com'
+        client_id: '419604415623-a3n6uibchngji3f6opnufqit58398cdh.apps.googleusercontent.com'
     };
     fbSignInParams: any = {
         scope: 'public_profile,email',
@@ -144,7 +144,7 @@ export default class LoginForm extends Vue {
     }
 
     setCookies(accessToken) {
-        this.$cookie.set('mtltk', accessToken);    
+        this.$cookie.set('mtltk', accessToken, { domain: Utils.getCookiesDomain() });    
     }
 
     onResetPassword() {

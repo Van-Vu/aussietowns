@@ -16,12 +16,14 @@ export default class MiniProfileComponent extends Vue{
     fullName: string;
     shortDescription: string;
     profileLink: string;
+    isPrimary: boolean;
 
     created() {
         this.userId = this.data.id;
         this.profileImageUrl = this.data.photoUrl;
         this.profileUrl = '';
         this.fullName = this.data.fullname == ' ' ? this.data.email : this.data.fullname;
+        this.isPrimary = this.data.isPrimary ? this.data.isPrimary : false;
         this.shortDescription = this.data.shortDescription;        
         this.profileLink = Utils.seorizeString(this.fullName);
     }

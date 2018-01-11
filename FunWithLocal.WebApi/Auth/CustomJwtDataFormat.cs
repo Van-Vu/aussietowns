@@ -43,17 +43,17 @@ namespace FunWithLocal.WebApi.Auth
 
                 if (validJwt == null)
                 {
-                    throw new ArgumentException("Invalid JWT");
+                    throw new ArgumentException("JWT is null");
                 }
 
                 if (validJwt.Issuer != TokenAuthOption.Issuer)
                 {
-                    throw new ArgumentException("Invalid JWT");
+                    throw new ArgumentException("Invalid Issuer:" + validJwt.Issuer);
                 }
 
                 if (validJwt.Audiences.FirstOrDefault() != TokenAuthOption.Audience)
                 {
-                    throw new ArgumentException("Invalid JWT");
+                    throw new ArgumentException("Invalid Audiences:" + validJwt.Audiences.FirstOrDefault());
                 }
 
                 return new AuthenticationTicket(principal, "Cookie");

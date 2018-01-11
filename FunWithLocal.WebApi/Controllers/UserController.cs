@@ -194,12 +194,12 @@ namespace FunWithLocal.WebApi.Controllers
 
                 if (existingUser == null) throw new ArgumentNullException(nameof(user));
 
-                var updatedStatus = await _userService.Update(new UserRequest
+                var updatedStatus = await _userService.ConfirmEmail(new UserRequest
                 {
                     Id = existingUser.Id,
                     FirstName = existingUser.FirstName,
                     LastName = existingUser.LastName,
-                    IsConfirm = true
+                    UpdatedDate = DateTime.Now
                 });
 
                 return updatedStatus;
@@ -353,12 +353,14 @@ namespace FunWithLocal.WebApi.Controllers
             return (await _userService.SearchUser(search)).Select(user => _mapper.Map<User, AutoCompleteItem>(user));
         }
 
-        [HttpPut("{id}")]
+        [HttpPost("{id}")]
         //[Authorize("Bearer")]
         public async Task<int> Update(int id,[FromBody] UserRequest user)
         {
             try
             {
+                _logger.LogError("IsAuthenticated:" + User.Identity.IsAuthenticated);
+
                 if (!(await _authorizationService.AuthorizeAsync(User, new User {Id = user.Id}, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
@@ -401,21 +403,10 @@ namespace FunWithLocal.WebApi.Controllers
             var expiresIn = DateTime.Now + TokenAuthOption.ExpiresSpan;
             var token = _securityTokenService.CreateTokenString(user, expiresIn);
 
-            //var claims = new List<Claim>
-            //{
-            //    new Claim(ClaimTypes.Email, user.Email)
-            //};
-
-            //var userIdentity = new ClaimsIdentity(claims, "login");
-
-            //ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
-            //await HttpContext.SignInAsync(principal);
-
-
-            return new 
+            return new
             {
                 accessToken = token,
-                loggedInUser = _mapper.Map<User,UserLoggedIn>(user, opts => opts.BeforeMap((x, y) =>
+                loggedInUser = _mapper.Map<User, UserLoggedIn>(user, opts => opts.BeforeMap((x, y) =>
                 {
                     x.TransformImageUrls(_imageStorageService, _device);
                     x.Images = _imageStorageService.TransformImageUrls(x.Images, ImageType.UserProfile, _device);

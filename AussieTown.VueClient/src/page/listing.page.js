@@ -57,17 +57,6 @@ var ListingPage = /** @class */ (function (_super) {
         }
     };
     Object.defineProperty(ListingPage.prototype, "model", {
-        //@Watch('$route.params')
-        //onRouteParamChanged(value: any, oldValue: any) {
-        //    console.log('from listing watch route param');
-        //    if (value.listingId) {
-        //        this.isEditing = false;
-        //        return this.$store.dispatch('FETCH_LISTING_BY_ID', value.listingId);
-        //    } else {
-        //        this.isEditing = true;
-        //        return this.$store.dispatch('CREATE_LISTING', value.listingType);
-        //    }
-        //}
         get: function () {
             if (this.$store.state.listing instanceof ListingModel) {
                 this.isOffer = this.$store.state.listing.type == ListingType.Offer;
@@ -118,6 +107,15 @@ var ListingPage = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(ListingPage.prototype, "locationName", {
+        get: function () {
+            if (!!this.model.locationDetail && !!this.model.locationDetail.name)
+                return this.model.locationDetail.name;
+            return '';
+        },
+        enumerable: true,
+        configurable: true
+    });
     ListingPage.prototype.metaInfo = function () {
         return {
             meta: [
@@ -133,7 +131,7 @@ var ListingPage = /** @class */ (function (_super) {
                 { vmid: 'twitterdescription', property: 'twitter:description', content: this.model.description },
                 { vmid: 'twitterimage', property: 'twitter:image', content: this.firstImageUrl }
             ],
-            title: this.model.header + " in " + this.model.locationDetail.name,
+            title: this.model.header + " in " + this.locationName,
         };
     };
     ListingPage.prototype.created = function () {
@@ -184,21 +182,25 @@ var ListingPage = /** @class */ (function (_super) {
                     else {
                         return _this.$store.dispatch('INSERT_LISTING', _this.contructBeforeSubmit(_this.model))
                             .then(function (listingId) {
+                            _this.model.id = listingId;
                             _this.$router.push({
                                 name: 'listingDetail',
-                                params: { seoString: Utils.seorizeString(_this.model.header), listingId: listingId }
+                                params: { seoString: Utils.seorizeString(_this.model.header), listingId: _this.model.id }
                             });
                             _this.$store.dispatch('ADD_NOTIFICATION', {
                                 title: "Insert success. Please upload listing images",
                                 type: NotificationType.Success
                             });
+                            _this.isEditing = false;
                         })
                             .catch(function (err) { return _this.onCancelEdit(); })
                             .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); });
                     }
                 }
-            }).catch(function () {
+            }).catch(function (err) {
+                _this.$store.dispatch("DISABLE_LOADING");
                 alert('Correct them errors!');
+                console.log(err);
             });
         }
     };
@@ -217,7 +219,7 @@ var ListingPage = /** @class */ (function (_super) {
         this.model.locationDetail = item;
     };
     ListingPage.prototype.onUserAdded = function (user) {
-        this.$store.dispatch("INSERT_LISTING_OPERATOR", new MiniProfile(user.id, user.name, '', '', user.imageUrl, ''));
+        this.$store.dispatch("INSERT_LISTING_OPERATOR", new MiniProfile(user.id, user.name, '', '', user.imageUrl, '', false));
     };
     ListingPage.prototype.onUserRemoved = function (user) {
         this.$store.dispatch("REMOVE_LISTING_OPERATOR", user);

@@ -306,6 +306,11 @@ var Utils = /** @class */ (function () {
             ? GlobalConfig.accessControl.prod
             : GlobalConfig.accessControl.dev;
     };
+    Utils.getCookiesDomain = function () {
+        return process.env.NODE_ENV == 'production'
+            ? GlobalConfig.cookiesDomain.prod
+            : GlobalConfig.cookiesDomain.dev;
+    };
     Utils.openWindow = function (url, options) {
         window.open(url, "_blank", options);
     };

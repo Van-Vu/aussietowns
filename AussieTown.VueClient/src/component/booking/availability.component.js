@@ -19,41 +19,65 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import Vue from "vue";
 import { Component, Prop, Watch } from "vue-property-decorator";
+import { Utils } from '../utils';
+import ScheduleModel from '../../model/schedule.model';
+import { RepeatedType } from '../../model/enum';
 import datepicker from '../shared/external/datepicker.vue';
-import numberchooser from '../shared/numberchooser.component.vue';
 var AvailabilityComponent = /** @class */ (function (_super) {
     __extends(AvailabilityComponent, _super);
     function AvailabilityComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.bookingTime = '';
-        _this.disableDays = {
-            to: new Date(),
-            days: [6, 0] // Disable Saturday's and Sunday's
-        };
+        //disableDays = {
+        //    to: new Date()
+        //    //days: [6, 0] // Disable Saturday's and Sunday's
+        //};
+        _this.days = ["0", "1", "2", "3", "4", "5", "6"];
         _this.availableTimeslot = null;
         return _this;
     }
+    Object.defineProperty(AvailabilityComponent.prototype, "disableDays", {
+        get: function () {
+            var _this = this;
+            switch (this.model.repeatedType) {
+                case RepeatedType.Daily:
+                    return {
+                        to: new Date()
+                    };
+                case RepeatedType.Weekly:
+                    var disableDays = this.days.filter(function (x) { return _this.model.repeatedDay.indexOf(x) == -1; }).map(function (x) { return +x; });
+                    return {
+                        to: new Date(),
+                        days: disableDays
+                    };
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(AvailabilityComponent.prototype, "startDateFormated", {
+        get: function () {
+            return Utils.formatDate(new Date(this.model.startDate));
+        },
+        enumerable: true,
+        configurable: true
+    });
     AvailabilityComponent.prototype.created = function () {
     };
     AvailabilityComponent.prototype.onBookingTimeChanged = function (value, oldValue) {
         this.$emit('bookingTimeChanged', value);
     };
     AvailabilityComponent.prototype.onBookingDateChanged = function (value) {
-        var currentListing = this.$store.state.booking.listing;
         var timeslots = new Array();
-        timeslots.push(currentListing.schedules[0].startTime);
+        timeslots.push(this.model.startTime);
         this.availableTimeslot = timeslots;
         this.bookingTime = '';
         this.$emit('bookingDateChanged', value);
     };
     __decorate([
         Prop(),
-        __metadata("design:type", String)
-    ], AvailabilityComponent.prototype, "bookingDate", void 0);
-    __decorate([
-        Prop(),
-        __metadata("design:type", Array)
-    ], AvailabilityComponent.prototype, "availableDays", void 0);
+        __metadata("design:type", ScheduleModel)
+    ], AvailabilityComponent.prototype, "model", void 0);
     __decorate([
         Watch('bookingTime'),
         __metadata("design:type", Function),
@@ -64,8 +88,7 @@ var AvailabilityComponent = /** @class */ (function (_super) {
         Component({
             name: "AvailabilityComponent",
             components: {
-                "datepicker": datepicker,
-                "numberchooser": numberchooser
+                "datepicker": datepicker
             }
         })
     ], AvailabilityComponent);

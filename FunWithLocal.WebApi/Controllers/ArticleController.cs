@@ -115,7 +115,7 @@ namespace FunWithLocal.WebApi.Controllers
             }
         }
 
-        [HttpPut("{articleId}")]
+        [HttpPost("{articleId}")]
         public async Task<int> UpdateStatus(int articleId, [FromBody] ArticleRequest article)
         {
             try

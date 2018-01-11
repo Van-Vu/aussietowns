@@ -94,16 +94,24 @@ export default class BookingDetailPage extends Vue {
     }
 
     onModify() {
+        this.$store.dispatch("ENABLE_LOADING");
+
         (new BookingService()).modifyBooking(this.model.id, this.constructBookingRequest())
             .then(() => {
                 this.isBooked = true;
+                this.$store.dispatch("DISABLE_LOADING");
+                this.$store.dispatch('ADD_NOTIFICATION',{ title: "Update success", type: NotificationType.Success });
             });
     }
 
     onWithdraw() {
+        this.$store.dispatch("ENABLE_LOADING");
+
         (new BookingService()).withdrawBooking(this.model.id, this.model.participants.map((element) => element.firstName).join(","))
             .then(() => {
                 this.isBooked = true;
+                this.$store.dispatch("DISABLE_LOADING");
+                this.$store.dispatch('ADD_NOTIFICATION', { title: "Update success", type: NotificationType.Success });
             });        
     }
 

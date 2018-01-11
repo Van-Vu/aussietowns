@@ -58,12 +58,14 @@ export default class CardFullComponent extends Vue {
         }
 
         switch (this.cardType) {
-            case CardType.Listing:
-                this.cardLinkTo = { name: 'listingDetail', params: { seoString: this.headerLink, listingId: this.id } };
-                break;
             case CardType.Article:
                 this.cardLinkTo = { name: 'aboutus', params: { seoString: this.headerLink, articleId: this.id } };
                 break;
+            case CardType.Listing:
+            default:
+                this.cardLinkTo = { name: 'listingDetail', params: { seoString: this.headerLink, listingId: this.id } };
+                break;
+
         }
 
         if (!!this.cardDetail.tagList) {
@@ -72,6 +74,6 @@ export default class CardFullComponent extends Vue {
     }
 
     get isListingType() {
-        return this.cardType == CardType.Listing;
+        return this.cardType === CardType.Listing;
     }
 }

@@ -23,6 +23,7 @@ import UserModel from '../model/user.model';
 import BookingService from '../service/booking.service';
 import { plainToClass, classToPlain } from "class-transformer";
 import AvailabilityComponent from '../component/booking/availability.component.vue';
+import { NotificationType } from '../model/enum';
 import UserSearchComponent from '../component/shared/search/usersearch.component.vue';
 import RingLoader from '../component/shared/external/ringloader.vue';
 import vMediaQuery from '../component/shared/external/v-media-query';
@@ -87,16 +88,22 @@ var BookingDetailPage = /** @class */ (function (_super) {
     };
     BookingDetailPage.prototype.onModify = function () {
         var _this = this;
+        this.$store.dispatch("ENABLE_LOADING");
         (new BookingService()).modifyBooking(this.model.id, this.constructBookingRequest())
             .then(function () {
             _this.isBooked = true;
+            _this.$store.dispatch("DISABLE_LOADING");
+            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Update success", type: NotificationType.Success });
         });
     };
     BookingDetailPage.prototype.onWithdraw = function () {
         var _this = this;
+        this.$store.dispatch("ENABLE_LOADING");
         (new BookingService()).withdrawBooking(this.model.id, this.model.participants.map(function (element) { return element.firstName; }).join(","))
             .then(function () {
             _this.isBooked = true;
+            _this.$store.dispatch("DISABLE_LOADING");
+            _this.$store.dispatch('ADD_NOTIFICATION', { title: "Update success", type: NotificationType.Success });
         });
     };
     BookingDetailPage.prototype.constructBookingRequest = function () {

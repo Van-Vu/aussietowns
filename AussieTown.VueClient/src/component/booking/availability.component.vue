@@ -1,23 +1,24 @@
 ﻿<template>
     <div>
         <div class="tile is-parent">
-            <div class="tile is-4">Choose your suitable day</div>
+            <div class="tile is-4">Booking date</div>
             <div class="tile">
-                <datepicker id="availDay" :disabled="disableDays" :range="false"
-                            :availableDays="availableDays"
-                            :value="bookingDate" @input="onBookingDateChanged"></datepicker>
+                <datepicker v-if="model.repeatedType > 0" id="availDay" :disabled="disableDays" :range="false"
+                            @input="onBookingDateChanged"></datepicker>
+                <p v-else>{{startDateFormated}}</p>
             </div>
 
         </div>
         <div class="tile is-parent">
             <div class="tile is-4">Time</div>
             <div class="tile">
-                <select class="select" v-model="bookingTime" style="width:100%;">
+                <select v-if="model.repeatedType > 0" class="select" v-model="bookingTime" style="width:100%;">
                     <option value="" selected="selected">Choose time</option>
                     <option v-for="timeslot in availableTimeslot" v-bind:value="timeslot">
                         {{ timeslot }}
                     </option>
                 </select>
+                <p v-else>{{model.duration}}</p>
             </div>
         </div>
     </div>

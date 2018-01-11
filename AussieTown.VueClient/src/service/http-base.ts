@@ -16,9 +16,9 @@ import { GlobalConfig } from '../GlobalConfig';
 //    baseURL: `http://localhost/meetthelocal/`
 //})
 
-const http = axios.create({
-    baseURL: `http://localhost:8888/`,
-})
+//const http = axios.create({
+//    baseURL: `http://localhost:8888/`,
+//})
 
 //const http = axios.create({
 //    baseURL: `http://10.0.0.98/meetthelocal/`,
@@ -28,15 +28,15 @@ const http = axios.create({
 //    baseURL: `http://10.0.0.98:8000/`,
 //})
 
-//export const http = axios.create({
-//    baseURL: `https://api.funwithlocal.com/`
-//})
+export const http = axios.create({
+    baseURL: `https://api.funwithlocal.com/`
+})
 
 http.defaults.withCredentials = true;
 http.defaults.headers.common['Access-Control-Allow-Origin'] = Utils.getCurrentHost();
 //axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
 //axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Authorization';
-//axios.defaults.headers.common['Access-Control-Request-Method'] = "GET, POST, PUT, DELETE, OPTIONS";
+//axios.defaults.headers.common['Access-Control-Request-Method'] = "GET, POST, OPTIONS";
 
 
 // Add a request interceptor
@@ -52,7 +52,6 @@ http.interceptors.request.use(function (config) {
 
         http.defaults.headers.common['Cookie'] = `mtltk=${store.getters.token}`;
     }
-
     //console.log('Whole Config:' + store.getters.token);
 
     return config;

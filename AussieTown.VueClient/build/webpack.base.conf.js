@@ -22,7 +22,9 @@ module.exports = {
     extensions: ['.js', '.css', '.scss', '.vue', '.json', '.ts'],
     alias: {
         'public': path.resolve(__dirname, '../public'),
-        vue: 'vue/dist/vue.js'
+        vue: isProd
+            ? 'vue/dist/vue.min.js'
+            : 'vue/dist/vue.js'
     }
   },
   module: {

@@ -25,6 +25,7 @@ import VeeValidate from 'vee-validate';
 import LoginModel from '../../model/login.model';
 import { UserSource, UserRole } from '../../model/enum';
 import { fetchPublicKey, decryptTextFromServer, requestPasswordReset, encryptText } from '../../service/auth.service';
+import { Utils } from '../utils';
 Vue.use(VeeValidate);
 import GSignInButton from 'vue-google-signin-button';
 Vue.use(GSignInButton);
@@ -44,7 +45,7 @@ var LoginForm = /** @class */ (function (_super) {
         // Login or Signup
         _this.isLogin = true;
         _this.googleSignInParams = {
-            client_id: '865729199339-hclqajg0re388bm6t9pje61gsglat3rr.apps.googleusercontent.com'
+            client_id: '419604415623-a3n6uibchngji3f6opnufqit58398cdh.apps.googleusercontent.com'
         };
         _this.fbSignInParams = {
             scope: 'public_profile,email',
@@ -137,7 +138,7 @@ var LoginForm = /** @class */ (function (_super) {
         }
     };
     LoginForm.prototype.setCookies = function (accessToken) {
-        this.$cookie.set('mtltk', accessToken);
+        this.$cookie.set('mtltk', accessToken, { domain: Utils.getCookiesDomain() });
     };
     LoginForm.prototype.onResetPassword = function () {
         requestPasswordReset(this.model.email)

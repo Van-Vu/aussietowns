@@ -70,7 +70,7 @@ namespace FunWithLocal.WebApi.Repository
                 dbConnection.Open();
                 return  await dbConnection.QueryAsync<User, Image, User>(sql, (user, image) =>
                 {
-                    user.Images = new List<Image> {image};
+                    user.Images = image != null ? new List<Image> {image} : null;
                     return user;
                 }, new { term = searchTerm }, splitOn:"imageid");
             }
@@ -229,6 +229,18 @@ namespace FunWithLocal.WebApi.Repository
                 dbConnection.Open();
                 var user = await dbConnection.QueryAsync<User>(sql, new { email });
                 return user.FirstOrDefault();
+            }
+        }
+
+        public async Task<int> ConfirmEmail(UserRequest user)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "UPDATE User SET firstname = @firstname, lastname = @lastname, "
+                    + "updatedDate=@updatedDate, isConfirm=1 WHERE id = @Id";
+                dbConnection.Open();
+                user.UpdatedDate = DateTime.Now;
+                return await dbConnection.ExecuteAsync(sql, user);
             }
         }
     }

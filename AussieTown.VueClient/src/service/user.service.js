@@ -40,7 +40,7 @@ var UserService = /** @class */ (function () {
             .then(function (response) { return response; });
     };
     UserService.prototype.update = function (user) {
-        return http.put('api/user/' + user.id, user)
+        return http.post('api/user/' + user.id, user)
             .then(function (response) { return response; });
     };
     UserService.prototype.getToursByUserId = function (id) {

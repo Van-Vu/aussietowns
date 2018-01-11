@@ -38,19 +38,19 @@ export default class ParticipantComponent extends Vue {
         this.buttonText = "Add " + this.participantType;        
     }
 
-    toggleProfileSearch(event) {
+    toggleProfileSearch() {
         this.isAdding = !this.isAdding;
         if (this.isAdding) {
             this.buttonText = "Done";
         } else {
             this.buttonText = "Add " + this.participantType;
         }
-
-        event.stopPropagation();
     }
 
     onUserSelect(user) {
         this.$emit("userAdded", user);
+        this.toggleProfileSearch();
+
     }
 
     onUserRemove(user) {

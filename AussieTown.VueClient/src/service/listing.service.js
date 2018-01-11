@@ -20,7 +20,7 @@ var ListingService = /** @class */ (function () {
             .catch(this.handleError);
     };
     ListingService.prototype.updateListing = function (listing) {
-        return http.put(this.baseUrl + listing.id, listing)
+        return http.post(this.baseUrl + listing.id, listing)
             .then(function (response) { return response; })
             .catch(this.handleError);
     };

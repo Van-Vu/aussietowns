@@ -13,7 +13,7 @@ var SWPrecachePlugin = require('sw-precache-webpack-plugin')
 
 var isProd = process.env.NODE_ENV === 'production'
 
-console.log("Bodom environment:" + isProd)
+console.log("Bodom environment:" + process.env.NODE_ENV)
 
 var webpackConfig = merge(baseWebpackConfig, {
   entry: {
@@ -89,11 +89,7 @@ if (isProd) {
     new CompressionWebpackPlugin({
       asset: '[path].gz[query]',
       algorithm: 'gzip',
-      test: new RegExp(
-        '\\.(' +
-        config.build.productionGzipExtensions.join('|') +
-        ')$'
-      ),
+      test: /\.(js|css|json)$/,
       threshold: 10240,
       minRatio: 0.8
     }),

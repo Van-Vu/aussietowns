@@ -14,11 +14,11 @@ export var RepeatedDay;
 (function (RepeatedDay) {
     RepeatedDay[RepeatedDay["Monday"] = 1] = "Monday";
     RepeatedDay[RepeatedDay["Tuesday"] = 2] = "Tuesday";
-    RepeatedDay[RepeatedDay["Wednesday"] = 4] = "Wednesday";
-    RepeatedDay[RepeatedDay["Thursday"] = 8] = "Thursday";
-    RepeatedDay[RepeatedDay["Friday"] = 16] = "Friday";
-    RepeatedDay[RepeatedDay["Saturday"] = 32] = "Saturday";
-    RepeatedDay[RepeatedDay["Sunday"] = 64] = "Sunday";
+    RepeatedDay[RepeatedDay["Wednesday"] = 3] = "Wednesday";
+    RepeatedDay[RepeatedDay["Thursday"] = 4] = "Thursday";
+    RepeatedDay[RepeatedDay["Friday"] = 5] = "Friday";
+    RepeatedDay[RepeatedDay["Saturday"] = 6] = "Saturday";
+    RepeatedDay[RepeatedDay["Sunday"] = 0] = "Sunday";
 })(RepeatedDay = RepeatedDay || (RepeatedDay = {}));
 export var UserSource;
 (function (UserSource) {

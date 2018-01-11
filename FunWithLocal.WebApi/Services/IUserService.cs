@@ -19,6 +19,8 @@ namespace FunWithLocal.WebApi.Services
         Task<int> Register(User user);
         Task<int> Update(UserRequest user);
 
+        Task<int> ConfirmEmail(UserRequest user);
+
         Task<int> UpdatePassword(User user, bool isChangePassword);
         Task<int> Deactivate(int id);
 

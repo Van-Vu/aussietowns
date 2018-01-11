@@ -1,32 +1,54 @@
 ﻿import Vue from "vue";
 import { Component, Prop, Watch } from "vue-property-decorator";
 import ListingCardComponent from '../shared/listingcard.component.vue';
+import { Utils } from '../utils';
 import ListingModel from '../../model/listing.model';
 import UserModel from '../../model/user.model';
+import ScheduleModel from '../../model/schedule.model';
+import { RepeatedType } from '../../model/enum';
 import datepicker from '../shared/external/datepicker.vue';
-import numberchooser from '../shared/numberchooser.component.vue';
 
 @Component({
     name: "AvailabilityComponent",
     components: {
-        "datepicker": datepicker,
-        "numberchooser": numberchooser
+        "datepicker": datepicker
     }
 })
 
 export default class AvailabilityComponent extends Vue {
     //@Prop date: string;
     //@Prop time: string;
-    @Prop() bookingDate: string;
-    @Prop() availableDays: Array<Date>;
+    @Prop() model: ScheduleModel;
 
     bookingTime: string = '';
-    disableDays = {
-        to: new Date(),
-        days: [6, 0] // Disable Saturday's and Sunday's
-    };
+    //disableDays = {
+    //    to: new Date()
+    //    //days: [6, 0] // Disable Saturday's and Sunday's
+    //};
+
+    days = ["0","1","2","3","4","5","6"];
 
     availableTimeslot: string[] = null;
+
+    get disableDays() {
+        switch (this.model.repeatedType) {
+            case RepeatedType.Daily:
+                return {
+                    to: new Date()
+                };
+            case RepeatedType.Weekly:
+                let disableDays = this.days.filter(x => this.model.repeatedDay.indexOf(x) == -1).map(x => +x);
+
+                return {
+                    to: new Date(),
+                    days: disableDays
+                };
+        }
+    }
+
+    get startDateFormated() {
+        return Utils.formatDate(new Date(this.model.startDate));
+    }
 
     created(): void {
     }
@@ -37,9 +59,8 @@ export default class AvailabilityComponent extends Vue {
     }
 
     onBookingDateChanged(value) {
-        let currentListing = this.$store.state.booking.listing;
         let timeslots = new Array<string>();
-        timeslots.push(currentListing.schedules[0].startTime);
+        timeslots.push(this.model.startTime);
 
         this.availableTimeslot = timeslots;
         this.bookingTime = '';

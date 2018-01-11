@@ -78,16 +78,20 @@ var BookingManagePage = /** @class */ (function (_super) {
     };
     BookingManagePage.prototype.onModify = function () {
         var _this = this;
+        this.$store.dispatch("ENABLE_LOADING");
         (new BookingService()).modifyBooking(this.model.id, this.constructBookingRequest())
             .then(function () {
             _this.isDateChoosen = true;
+            _this.$store.dispatch("DISABLE_LOADING");
         });
     };
     BookingManagePage.prototype.onWithdraw = function () {
         var _this = this;
+        this.$store.dispatch("ENABLE_LOADING");
         (new BookingService()).withdrawBooking(this.model.id, this.model.participants.map(function (element) { return element.name; }).join(","))
             .then(function () {
             _this.isDateChoosen = true;
+            _this.$store.dispatch("DISABLE_LOADING");
         });
     };
     BookingManagePage.prototype.generateParticipants = function (store) {

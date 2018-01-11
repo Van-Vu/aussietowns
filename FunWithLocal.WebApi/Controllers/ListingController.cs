@@ -146,7 +146,7 @@ namespace FunWithLocal.WebApi.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPost("{id}")]
         public async Task<int> UpdateListing(int id,[FromBody] Listing listing)
         {
             try

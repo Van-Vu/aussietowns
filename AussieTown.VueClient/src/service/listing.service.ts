@@ -24,7 +24,7 @@ export default class ListingService {
     }
 
     updateListing(listing) {
-        return http.put(this.baseUrl + listing.id, listing)
+        return http.post(this.baseUrl + listing.id, listing)
             .then(response => response)
             .catch(this.handleError);
     }

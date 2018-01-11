@@ -7,6 +7,7 @@ export var GlobalConfig;
     GlobalConfig.listingImageSize = { maxWidth: 640, maxHeight: 360 };
     GlobalConfig.articleImageSize = { maxWidth: 630, maxHeight: 360 };
     GlobalConfig.accessControl = { dev: "http://localhost:3000", prod: "https://www.funwithlocal.com" };
+    GlobalConfig.cookiesDomain = { dev: "localhost", prod: ".funwithlocal.com" };
 })(GlobalConfig = GlobalConfig || (GlobalConfig = {}));
 //const install = (Vue, options) => {
 //    Vue.prototype.$config = Vue.$config = {base: 'asdfasdfasfda'}
