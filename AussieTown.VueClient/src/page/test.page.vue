@@ -2,6 +2,10 @@
     <div class="page-content container tile is-vertical">
         <checkButton :model="hobbies"></checkButton>
 
+        <router-link :to="{ name: 'confirmEmail', params: { confirmToken: 'CfDJ8OJ4GgDkb3RBn11xSNRLyGjyBelY9i9bB0htGW78or-2UPIWAuBiA2m7I1TsSCK-Lo4z5PqvK4li1pwKgrAhtkg5mafFlMtluFlTs3kjJpcWjXN-xj6TxSstQ7m3ho9jceSPCno2Lx9ZIK6docQXsWf62IdlXRUnT0WW4gzKBWA3' } }">
+            <label class="tab-text">Confirm email</label>
+        </router-link>
+
         <button @click="fetchHobbies"> get Hobbies</button>
         <router-link :to="{ name: 'bookingManage', params: { seoString: 'testing', listingId: '19' } }">
             <label class="tab-text">Manage Booking</label>

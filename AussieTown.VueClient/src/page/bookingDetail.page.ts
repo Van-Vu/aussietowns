@@ -48,9 +48,6 @@ export default class BookingDetailPage extends Vue {
     $mq: any;
 
     static asyncData({ store, route }) {
-
-        console.log('BookingDetailPage async');
-
         if (route.params.bookingId) {
             return store.dispatch('FETCH_BOOKING_DETAIL', route.params.bookingId);
         }

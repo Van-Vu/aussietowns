@@ -17,7 +17,9 @@ export default function (context) {
         // wait until router has resolved possible async components and hooks
         var routeReady = function () {
             var matchedComponents = router.getMatchedComponents();
-            console.log("hit the server " + context.url);
+            if (process.env.NODE_ENV !== 'production') {
+                console.log("hit the server " + context.url);
+            }
             // no matched routes, reject with 404
             if (!matchedComponents.length) {
                 reject({ code: 404 });

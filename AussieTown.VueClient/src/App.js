@@ -49,8 +49,10 @@ Vue.config.errorHandler = function (err, vm, info) {
     // handle error
     // `info` is a Vue-specific error info, e.g. which lifecycle hook
     // the error was found in. Only available in 2.2.0+
-    console.log(info);
-    console.log(err);
+    if (process.env.NODE_ENV !== 'production') {
+        console.log(info);
+        console.log(err);
+    }
     (new LogService()).logError(err.message, err.stack);
 };
 import { Validator } from 'vee-validate';
@@ -125,7 +127,7 @@ var App = /** @class */ (function (_super) {
                 }
             }
         };
-        Validator.updateDictionary(dictionary);
+        Validator.localize(dictionary);
         //  [App.vue specific] When App.vue is first loaded start the progress bar
         //  hook the progress bar to start before we move router-view
         this.$router.beforeEach(function (to, from, next) {

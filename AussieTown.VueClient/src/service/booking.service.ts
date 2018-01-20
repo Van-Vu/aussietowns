@@ -24,4 +24,8 @@ export default class BookingService {
     withdrawBooking(bookingId, tourGuestIds) {
         return http.post(`${this.baseUrl}${bookingId}/withdraw`, tourGuestIds);
     }
+
+    approveBooking(bookingApproval) {
+        return http.post(`${this.baseUrl}/approve`, bookingApproval);
+    }
 }

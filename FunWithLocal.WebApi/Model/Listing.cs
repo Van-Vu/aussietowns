@@ -27,5 +27,7 @@ namespace AussieTowns.Model
         public DateTime UpdatedDate { get; set; }
         public bool IsActive { get; set; }
         public List<Image> ImageList { get; set; }
+
+        public IEnumerable<BookingSlot> BookingSlots { get; set; }
     }
 }

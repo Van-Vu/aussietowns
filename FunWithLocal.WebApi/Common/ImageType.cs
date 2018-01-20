@@ -10,6 +10,7 @@ namespace FunWithLocal.WebApi.Common
         Listing,
         UserProfile,
         UserHeroImage,
-        ListingCard
+        ListingCard,
+        Article
     }
 }

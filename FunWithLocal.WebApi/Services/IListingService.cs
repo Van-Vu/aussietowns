@@ -16,6 +16,7 @@ namespace FunWithLocal.WebApi.Services
         Task<int> InsertListing(Listing listing);
         Task<int> UpdateListing(Listing listing);
         Task<int> DeActivateListing(int id);
+        Task<int> DeleteListing(int id);
         Task<IEnumerable<int>> MapListingHeaderToId(string header);
     }
 }

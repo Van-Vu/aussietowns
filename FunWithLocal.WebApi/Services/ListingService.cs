@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AussieTowns.Model;
-using FunWithLocal.WebApi.Common;
 using FunWithLocal.WebApi.Model;
 using FunWithLocal.WebApi.Repository;
 
@@ -59,6 +58,11 @@ namespace FunWithLocal.WebApi.Services
         public async Task<IEnumerable<ListingView>> GetFeatureListings()
         {
             return await _listingRepository.GetFeatureListings();
+        }
+
+        public async Task<int> DeleteListing(int id)
+        {
+            return await _listingRepository.DeleteListing(id);
         }
     }
 }

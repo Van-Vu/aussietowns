@@ -204,9 +204,12 @@ namespace FunWithLocal.WebApi.Repository
                         listing.IsActive = true;
                         updateTasks.Add(dbConnection.ExecuteAsync(sql, listing));
 
-                        var scheduleUpdate =
-                            "UPDATE Schedule SET Startdate = @startDate, Duration = @duration, Enddate = @endDate, RepeatedType = @repeatedType, RepeatedDay = @repeatedDayText WHERE Id=@id";
-                        updateTasks.Add(dbConnection.ExecuteAsync(scheduleUpdate, listing.Schedules));
+                        if (listing.Schedules != null && listing.Schedules.Any())
+                        {
+                            var scheduleUpdate =
+                                "UPDATE Schedule SET Startdate = @startDate, Duration = @duration, Enddate = @endDate, RepeatedType = @repeatedType, RepeatedDay = @repeatedDayText WHERE Id=@id";
+                            updateTasks.Add(dbConnection.ExecuteAsync(scheduleUpdate, listing.Schedules));
+                        }
 
                         var operatorSql = "SELECT * FROM TourOperator WHERE ListingId = @listingId";
                         var tourOperators = await dbConnection.QueryAsync<TourOperator>(operatorSql, new { listingId = listing.Id});
@@ -245,6 +248,16 @@ namespace FunWithLocal.WebApi.Repository
                 var sql = "UPDATE Listing SET IsActive = 0 WHERE id = @listingId";
                 dbConnection.Open();
                 return await dbConnection.ExecuteAsync(sql,new {listingId});
+            }
+        }
+
+        public async Task<int> DeleteListing(int listingId)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "DELETE FROM Listing WHERE id = @listingId";
+                dbConnection.Open();
+                return await dbConnection.ExecuteAsync(sql, new { listingId });
             }
         }
 

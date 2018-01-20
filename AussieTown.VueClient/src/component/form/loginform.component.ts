@@ -129,7 +129,7 @@ export default class LoginForm extends Vue {
     }
 
     handleLoginToken(response) {
-        var token = response.result;
+        let token = response.result;
         this.$store.dispatch('SET_CURRENT_USER', token.loggedInUser);
         this.$store.dispatch('SET_TOKEN', token.accessToken);
         this.setCookies(token.accessToken);
@@ -156,12 +156,16 @@ export default class LoginForm extends Vue {
         // `googleUser` is the GoogleUser object that represents the just-signed-in user. 
         // See https://developers.google.com/identity/sign-in/web/reference#users 
         const profile = googleUser.getBasicProfile(); // etc etc 
-        console.log('ID: ' + profile.getId());
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail());
+
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('ID: ' + profile.getId());
+            console.log('Full Name: ' + profile.getName());
+            console.log('Given Name: ' + profile.getGivenName());
+            console.log('Family Name: ' + profile.getFamilyName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail());
+        }
+
         this.$store.dispatch("ENABLE_LOADING");
         if (this.isLogin) {
             this.login({ email: profile.getEmail(), source: UserSource.Google, externalId: encryptText(profile.getId()) })
@@ -189,12 +193,14 @@ export default class LoginForm extends Vue {
         FB.api('/me',
             { "fields": "id,name,email,first_name,last_name,picture" },
             profile => {
-                console.log(`Id: ${profile.id}.`);
-                console.log(`Name: ${profile.name}.`);
-                console.log(`Email: ${profile.email}.`);
-                console.log(`First name: ${profile.first_name}.`);
-                console.log(`Last name: ${profile.last_name}.`);
-                console.log(`Picture: ${profile.picture.data.url}.`);
+                if (process.env.NODE_ENV !== 'production') {
+                    console.log(`Id: ${profile.id}.`);
+                    console.log(`Name: ${profile.name}.`);
+                    console.log(`Email: ${profile.email}.`);
+                    console.log(`First name: ${profile.first_name}.`);
+                    console.log(`Last name: ${profile.last_name}.`);
+                    console.log(`Picture: ${profile.picture.data.url}.`);
+                }
 
                 if (this.isLogin) {
                     this.login({ email: profile.email, source: UserSource.Facebook, externalId: encryptText(profile.id) })

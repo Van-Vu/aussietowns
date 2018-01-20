@@ -21,7 +21,6 @@ Vue.use(VueAnalytics, {
 // a global mixin that calls `asyncData` when a route component's params change
 Vue.mixin({
     beforeRouteUpdate(to, from, next) {
-        console.log('beforeRouteUpdate')
         store.dispatch("ENABLE_LOADING")
 
         if (this.asyncData) {
@@ -89,8 +88,10 @@ router.onReady(() => {
             next()
         }).catch((err) => {
             Utils.handleRouteError(store, to, err);
-            console.log('Bodom catch')
-            console.log(err)
+            if (process.env.NODE_ENV !== 'production') {
+                console.log('Bodom catch')
+                console.log(err)
+            }
             next()
         })
     })

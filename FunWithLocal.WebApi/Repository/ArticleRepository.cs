@@ -75,7 +75,7 @@ namespace FunWithLocal.WebApi.Repository
                 {
                     try
                     {
-                        var sql = "UPDATE Article SET category = @category, status = @status, title = @title, content = @content, imageUrl = @imageUrl, "
+                        var sql = "UPDATE Article SET category = @category, status = @status, title = @title, content = @content, "
                                   + "tags = @tags, updatedDate=@updatedDate WHERE Id = @id";
                         article.UpdatedDate = DateTime.Now;
                         var updatedRow = await dbConnection.ExecuteAsync(sql, article);

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AussieTowns.Model;
 using Microsoft.AspNetCore.Authorization;
 
-namespace AussieTowns.Common
+namespace FunWithLocal.WebApi.Common
 {
     public class MtlAuthorize : AuthorizeAttribute
     {

@@ -342,7 +342,9 @@ export class Utils {
     }
 
     public static handleRouteError(store, route, error: any) {
-        console.log(route);
+        if (process.env.NODE_ENV !== 'production') {
+            console.log(route);
+        }
 
         switch (error.status) {
             case 400:

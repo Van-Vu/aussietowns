@@ -13,10 +13,7 @@ export default class UserService {
     }
 
     signup(user) {
-        return http.post('api/user/register', user).then(response => {
-            let result = response;
-            return result;
-        });
+        return http.post('api/user/register', user).then(response => response);
     }
 
     login(user) {
@@ -25,7 +22,9 @@ export default class UserService {
     }
 
     verifyToken(token: string) {
-        console.log('Bodom verify Token:' + token);
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('Bodom verify Token:' + token);
+        }
         return http.get('api/user/verifyToken/' + token).then(response => {
                 return response;
             }

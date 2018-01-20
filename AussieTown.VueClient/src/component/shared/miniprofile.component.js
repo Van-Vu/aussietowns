@@ -37,6 +37,9 @@ var MiniProfileComponent = /** @class */ (function (_super) {
     MiniProfileComponent.prototype.onRemoveUser = function () {
         this.$emit("removeUser", this.data);
     };
+    MiniProfileComponent.prototype.onViewUserProfile = function () {
+        this.$router.push({ name: 'profileHome', params: { seoString: this.profileLink, profileId: this.userId.toString() } });
+    };
     __decorate([
         Prop(),
         __metadata("design:type", Object)

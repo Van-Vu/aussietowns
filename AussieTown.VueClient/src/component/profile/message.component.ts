@@ -61,7 +61,9 @@ export default class MessageComponent extends Vue {
             })
             .then(() => {
                 this.sendingMessage = '';
-                console.log('send message success!');
+                if (process.env.NODE_ENV !== 'production') {
+                    console.log('send message success!');
+                }
             });
     }
 

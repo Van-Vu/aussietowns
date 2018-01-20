@@ -23,7 +23,7 @@ namespace FunWithLocal.WebApi.Model
         public ICollection<MiniProfile> TourGuests { get; set; }
 
         public ICollection<Image> ImageList { get; set; }
-        
 
+        public ICollection<BookingSlotResponse> BookingSlots { get; set; }
     }
 }

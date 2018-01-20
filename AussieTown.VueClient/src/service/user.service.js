@@ -9,17 +9,16 @@ var UserService = /** @class */ (function () {
         return http.get('api/user/' + _id).then(function (response) { return response; });
     };
     UserService.prototype.signup = function (user) {
-        return http.post('api/user/register', user).then(function (response) {
-            var result = response;
-            return result;
-        });
+        return http.post('api/user/register', user).then(function (response) { return response; });
     };
     UserService.prototype.login = function (user) {
         return http.post('api/user/login', { email: user.email, password: user.password, source: user.source, externalid: user.externalId })
             .then(function (response) { return response; });
     };
     UserService.prototype.verifyToken = function (token) {
-        console.log('Bodom verify Token:' + token);
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('Bodom verify Token:' + token);
+        }
         return http.get('api/user/verifyToken/' + token).then(function (response) {
             return response;
         });

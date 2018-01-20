@@ -3,8 +3,8 @@
         <div class="overlay" @click="onRemoveUser()" v-if="isRemovable && !isPrimary">
             <span class="icon icon-minus-circle"></span>
         </div>
-        <div class="overlay" v-if="isPrimary">
-            <p>Primary</p>
+        <div class="overlay" v-if="isPrimary" @click="onViewUserProfile()">
+            <p>Main host</p>
         </div>
         <router-link :to="{ name: 'profileHome', params: { seoString: profileLink, profileId: userId }}">
             <div class="photo_wrapper">

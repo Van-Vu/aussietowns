@@ -9,9 +9,9 @@ namespace FunWithLocal.WebApi.Services
         Task<Image> InsertListingImage(int listingId, IFormFile file);
         Task<string> InsertProfileImage(int profileId, IFormFile file);
         Task<string> InsertHeroImage(int profileId, IFormFile file);
-        Task<Image> FetchImageByUrl(int listingId, string url);
+        Task<Image> FetchListingImageByUrl(int listingId, string url);
         Task<string> InsertArticleImage(int articleId, IFormFile file);
-        Task<int> DeleteImage(int imageId);
+        Task<int> DeleteImage(int imageId, string url);
 
     }
 }

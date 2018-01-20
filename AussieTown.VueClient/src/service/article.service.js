@@ -12,11 +12,11 @@ var ArticleService = /** @class */ (function () {
             .then(function (x) { return x; });
     };
     ArticleService.prototype.updateArticle = function (article) {
-        return http.post(this.baseUrl, article)
+        return http.post("" + this.baseUrl + article.id, article)
             .then(function (x) { return x; });
     };
     ArticleService.prototype.updateStatus = function (article) {
-        return http.post(this.baseUrl + article.id, article)
+        return http.post("" + this.baseUrl + article.id + "/status", article)
             .then(function (x) { return x; });
     };
     return ArticleService;

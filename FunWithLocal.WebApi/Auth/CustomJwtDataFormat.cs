@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FunWithLocal.WebApi.Auth
@@ -13,17 +17,19 @@ namespace FunWithLocal.WebApi.Auth
         private readonly TokenValidationParameters validationParameters;
         private readonly IDataSerializer<AuthenticationTicket> ticketSerializer;
         private readonly IDataProtector dataProtector;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
 
         public CustomJwtDataFormat(string algorithm, TokenValidationParameters validationParameters,
                     IDataSerializer<AuthenticationTicket> ticketSerializer,
-                     IDataProtector dataProtector)
+                     IDataProtector dataProtector, IHostingEnvironment hostingEnvironment)
 
         {
             this.algorithm = algorithm;
             this.validationParameters = validationParameters;
             this.ticketSerializer = ticketSerializer;
             this.dataProtector = dataProtector;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public AuthenticationTicket Unprotect(string protectedText)
@@ -36,6 +42,19 @@ namespace FunWithLocal.WebApi.Auth
 
             try
             {
+                if (_hostingEnvironment.IsEnvironment("Testing"))
+                {
+                    var identity = new ClaimsIdentity(
+                        new GenericIdentity("test@intgration.com", "TokenAuth"),
+                        new[] {
+                            new Claim("userId", "1",null,TokenAuthOption.Issuer),
+                            new Claim("role", "8",null,TokenAuthOption.Issuer)
+                        }
+                    );
+                    var claimsPrincipal = new ClaimsPrincipal(identity);
+                    return new AuthenticationTicket(claimsPrincipal, "Cookie");
+                }
+
                 SecurityToken validToken;
                 var principal = handler.ValidateToken(protectedText, this.validationParameters, out validToken);
 

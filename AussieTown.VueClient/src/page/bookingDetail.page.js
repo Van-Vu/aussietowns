@@ -42,7 +42,6 @@ var BookingDetailPage = /** @class */ (function (_super) {
     }
     BookingDetailPage.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
-        console.log('BookingDetailPage async');
         if (route.params.bookingId) {
             return store.dispatch('FETCH_BOOKING_DETAIL', route.params.bookingId);
         }

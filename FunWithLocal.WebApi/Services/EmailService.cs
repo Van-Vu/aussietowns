@@ -120,7 +120,6 @@ namespace FunWithLocal.WebApi.Services
 
             if (_appSettings.Environment != "prod")
             {
-                receivers = "bodom0911@gmail.com";
                 emailLogs.Add(new EmailLog
                 {
                     ListingId = 0,

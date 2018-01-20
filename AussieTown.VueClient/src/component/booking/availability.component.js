@@ -36,20 +36,32 @@ var AvailabilityComponent = /** @class */ (function (_super) {
         _this.availableTimeslot = null;
         return _this;
     }
+    Object.defineProperty(AvailabilityComponent.prototype, "availableDays", {
+        get: function () {
+            if (this.availableBookings) {
+                return this.availableBookings.map(function (x) { return new Date(x.bookingDate); });
+            }
+            return '';
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(AvailabilityComponent.prototype, "disableDays", {
         get: function () {
             var _this = this;
-            switch (this.model.repeatedType) {
-                case RepeatedType.Daily:
-                    return {
-                        to: new Date()
-                    };
-                case RepeatedType.Weekly:
-                    var disableDays = this.days.filter(function (x) { return _this.model.repeatedDay.indexOf(x) == -1; }).map(function (x) { return +x; });
-                    return {
-                        to: new Date(),
-                        days: disableDays
-                    };
+            if (this.model) {
+                switch (this.model.repeatedType) {
+                    case RepeatedType.Daily:
+                        return {
+                            to: new Date()
+                        };
+                    case RepeatedType.Weekly:
+                        var disableDays = this.days.filter(function (x) { return _this.model.repeatedDay.indexOf(x) == -1; }).map(function (x) { return +x; });
+                        return {
+                            to: new Date(),
+                            days: disableDays
+                        };
+                }
             }
         },
         enumerable: true,
@@ -68,8 +80,17 @@ var AvailabilityComponent = /** @class */ (function (_super) {
         this.$emit('bookingTimeChanged', value);
     };
     AvailabilityComponent.prototype.onBookingDateChanged = function (value) {
+        if (value == "")
+            return;
         var timeslots = new Array();
-        timeslots.push(this.model.startTime);
+        if (this.model) {
+            timeslots.push(this.model.startTime);
+        }
+        else {
+            var dateString_1 = (new Date(value)).toDateString();
+            var booking = this.availableBookings.find(function (x) { return (new Date(x.bookingDate)).toDateString() === dateString_1; });
+            timeslots.push(booking.startTime);
+        }
         this.availableTimeslot = timeslots;
         this.bookingTime = '';
         this.$emit('bookingDateChanged', value);
@@ -78,6 +99,10 @@ var AvailabilityComponent = /** @class */ (function (_super) {
         Prop(),
         __metadata("design:type", ScheduleModel)
     ], AvailabilityComponent.prototype, "model", void 0);
+    __decorate([
+        Prop(),
+        __metadata("design:type", Array)
+    ], AvailabilityComponent.prototype, "availableBookings", void 0);
     __decorate([
         Watch('bookingTime'),
         __metadata("design:type", Function),

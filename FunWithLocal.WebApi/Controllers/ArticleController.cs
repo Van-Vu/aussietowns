@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Wangkanai.Detection;
 
 
 namespace FunWithLocal.WebApi.Controllers
@@ -30,15 +31,20 @@ namespace FunWithLocal.WebApi.Controllers
         private readonly IAuthorizationService _authorizationService;
         private readonly IImageService _imageService;
         private readonly IMapper _mapper;
+        private readonly IDevice _device;
+        private readonly IImageStorageService _imageStorageService;
 
         public ArticleController(ILogger<ArticleController> logger, IArticleService articleService,
-            IAuthorizationService authorizationService, IImageService imageService, IMapper mapper)
+            IAuthorizationService authorizationService, IImageService imageService, IMapper mapper,
+            IDeviceResolver deviceResolver, IImageStorageService imageStorageService)
         {
             _logger = logger;
             _articleService = articleService;
             _authorizationService = authorizationService;
             _imageService = imageService;
             _mapper = mapper;
+            _device = deviceResolver.Device;
+            _imageStorageService = imageStorageService;
         }
 
         [HttpGet("{articleId}")]
@@ -47,16 +53,18 @@ namespace FunWithLocal.WebApi.Controllers
             try
             {
                 var article = await _articleService.GetArticle(articleId);
-                if ((await _authorizationService.AuthorizeAsync(User, article, Operations.Read)).Succeeded)
-                {
-                    return _mapper.Map<Article, ArticleResponse>(article); ;
-                }   
 
-                if (User.Identity.IsAuthenticated)
+                if (article == null)
                 {
-                    throw new UnauthorizedAccessException();
+                    _logger.LogInformation("Can't find article with id: {articleId}", articleId);
+                    throw new ArgumentOutOfRangeException(nameof(articleId), "Can't find article");
                 }
-                throw new ValidationException();
+
+                return _mapper.Map<Article, ArticleResponse>(article, opts => opts.BeforeMap((x, y) =>
+                {
+                    x.ImageUrl = _imageStorageService.TransformImageUrls(x.ImageUrl, ImageType.Article, _device);
+                }));
+
             }
             catch (Exception e)
             {
@@ -70,7 +78,7 @@ namespace FunWithLocal.WebApi.Controllers
         {
             try
             {
-                var article = await _articleService.GetFeatureArticles();
+                var article = await _articleService.GetFeatureArticles(_device);
                 return _mapper.Map<IEnumerable<Article>, IEnumerable<ArticleCard>>(article);
             }
             catch (Exception e)
@@ -80,9 +88,9 @@ namespace FunWithLocal.WebApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("{articleId}")]
         [HtmlSanitizerActionFilter]
-        public async Task<int> InsertOrUpdateArticle([FromBody] Article article)
+        public async Task<int> InsertOrUpdateArticle(int articleId, [FromBody] Article article)
         {
             try
             {
@@ -91,9 +99,9 @@ namespace FunWithLocal.WebApi.Controllers
                 if (!(await _authorizationService.AuthorizeAsync(User, article, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
-                if (article.Id > 0)
+                if (articleId > 0)
                 {
-                    var existingArticle = await _articleService.GetArticle(article.Id);
+                    var existingArticle = await _articleService.GetArticle(articleId);
 
                     if (existingArticle == null)
                         throw new UnauthorizedAccessException();
@@ -115,7 +123,7 @@ namespace FunWithLocal.WebApi.Controllers
             }
         }
 
-        [HttpPost("{articleId}")]
+        [HttpPost("{articleId}/status")]
         public async Task<int> UpdateStatus(int articleId, [FromBody] ArticleRequest article)
         {
             try
@@ -140,12 +148,18 @@ namespace FunWithLocal.WebApi.Controllers
             }
         }
 
-        [HttpPost("{id}/addImage")]
-        public async Task<string> UploadImage(int id, IList<IFormFile> files)
+        [HttpPost("{articleId}/addImage")]
+        public async Task<string> UploadImage(int articleId, IList<IFormFile> files)
         {
             try
             {
-                var article = await _articleService.GetArticle(id);
+                var article = await _articleService.GetArticle(articleId);
+
+                if (article == null)
+                {
+                    _logger.LogInformation("Can't find article with id: {articleId}", articleId);
+                    throw new ArgumentOutOfRangeException(nameof(articleId), "Can't find article");
+                }
 
                 if (!(await _authorizationService.AuthorizeAsync(User, article, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
@@ -154,7 +168,7 @@ namespace FunWithLocal.WebApi.Controllers
                 var file = files.FirstOrDefault();
                 if (file != null && file.Length <= 0) throw new ArgumentNullException(nameof(file));
 
-                var newImageUrl = await _imageService.InsertArticleImage(id, file);
+                var newImageUrl = await _imageService.InsertArticleImage(articleId, file);
 
                 return !string.IsNullOrEmpty(newImageUrl) ? newImageUrl : string.Empty;
             }

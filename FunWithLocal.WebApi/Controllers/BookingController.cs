@@ -72,7 +72,13 @@ namespace FunWithLocal.WebApi.Controllers
         {
             try
             {
-                var listing = _listingService.GetListingViewById(listingId);
+                var listing = await _listingService.GetListingDetail(listingId);
+                if (listing == null)
+                {
+                    _logger.LogInformation("Can't find listing with id: {listingId}", listingId);
+                    throw new ArgumentOutOfRangeException(nameof(listingId), "Can't find listing");
+                }
+
                 if (!(await _authorizationService.AuthorizeAsync(User, listing, Operations.Read)).Succeeded)
                     throw new UnauthorizedAccessException();
 
@@ -95,7 +101,7 @@ namespace FunWithLocal.WebApi.Controllers
 
                 //var jsonBookingRequest = JsonConvert.SerializeObject(request);
 
-                var bookingId = await _bookingService.ConfirmBooking(request);
+                var bookingId = await _bookingService.AddBooking(request);
 
                 var listingDetail = _listingService.GetListingViewById(request.ListingId).Result;
 
@@ -118,7 +124,7 @@ namespace FunWithLocal.WebApi.Controllers
                     ListingUrl = listingUrl,
                     BookingUrl = bookingUrl,
                     ManageBookingUrl = manageBookingUrl,
-                    MainImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.Listing, null, listingDetail.ImageUrls.Split(";").FirstOrDefault()), 
+                    MainImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.Listing, listingDetail.ImageUrls.Split(";").FirstOrDefault()), 
                     ListingHeader = listingDetail.Header,
                     ListingDescription = listingDetail.Description,
                     BookingDate = request.BookingDate.ToString("dddd dd-MMM-yyyy", CultureInfo.DefaultThreadCurrentUICulture),
@@ -193,6 +199,31 @@ namespace FunWithLocal.WebApi.Controllers
                     throw new UnauthorizedAccessException();
 
                 await _bookingService.WithdrawBooking(bookingId);
+                return 1;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                throw;
+            }
+        }
+
+        [HttpPost("approve")]
+        public async Task<int> ApproveBooking([FromBody] BookingApproval bookingApproval)
+        {
+            try
+            {
+                var listing = await _listingService.GetListingDetail(bookingApproval.ListingId);
+                if (listing == null)
+                {
+                    _logger.LogInformation("Can't find listing with id: {bookingApproval.ListingId}", bookingApproval.ListingId);
+                    throw new ArgumentOutOfRangeException(nameof(bookingApproval.ListingId), "Can't find listing");
+                }
+
+                if (!(await _authorizationService.AuthorizeAsync(User, listing, Operations.Update)).Succeeded)
+                    throw new UnauthorizedAccessException();
+
+                await _bookingService.ApproveBooking(bookingApproval.BookingIds);
                 return 1;
             }
             catch (Exception e)

@@ -41,8 +41,13 @@ namespace FunWithLocal.WebApi.Services
         {
             return await _bookingRepository.GetBookingSlotsByListingId(listingId);
         }
-        public async Task<int> ConfirmBooking(BookingRequest bookingRequest)
+        public async Task<int> AddBooking(BookingRequest bookingRequest)
         {
+            if (bookingRequest.Participants == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             var tourGuests = bookingRequest.Participants.Select(participant => new TourGuest()
             {
                 ExistingUserId = participant.Id,
@@ -64,7 +69,7 @@ namespace FunWithLocal.WebApi.Services
                 StartTime = bookingRequest.Time,
             };
             
-            return await _bookingRepository.ConfirmBooking(booking, tourGuests);
+            return await _bookingRepository.AddBooking(booking, tourGuests);
         }
 
         public async Task<int> UpdateBooking(int bookingId, BookingRequest bookingRequest)
@@ -72,9 +77,19 @@ namespace FunWithLocal.WebApi.Services
             return await _bookingRepository.UpdateBooking(bookingId, bookingRequest.Participants);
         }
 
+        public async Task<int> DeleteBooking(int bookingId)
+        {
+            return await _bookingRepository.DeleteBooking(bookingId);
+        }
+
         public async Task<int> WithdrawBooking(int bookingId)
         {
             return await _bookingRepository.WithdrawBooking(bookingId);
+        }
+
+        public async Task<int> ApproveBooking(IList<int> bookingIds)
+        {
+            return await _bookingRepository.ApproveBooking(bookingIds);
         }
     }
 }

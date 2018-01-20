@@ -1,4 +1,5 @@
 ﻿using System;
+using FunWithLocal.WebApi.Common;
 
 namespace FunWithLocal.WebApi.Model
 {
@@ -10,6 +11,8 @@ namespace FunWithLocal.WebApi.Model
         public TimeSpan StartTime { get; set; }
         public int GuestId { get; set; }
         public bool IsConfirmed { get; set; }
+
+        public BookingStatus Status { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
     }

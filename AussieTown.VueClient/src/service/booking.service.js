@@ -20,6 +20,9 @@ var BookingService = /** @class */ (function () {
     BookingService.prototype.withdrawBooking = function (bookingId, tourGuestIds) {
         return http.post("" + this.baseUrl + bookingId + "/withdraw", tourGuestIds);
     };
+    BookingService.prototype.approveBooking = function (bookingApproval) {
+        return http.post(this.baseUrl + "/approve", bookingApproval);
+    };
     return BookingService;
 }());
 export default BookingService;

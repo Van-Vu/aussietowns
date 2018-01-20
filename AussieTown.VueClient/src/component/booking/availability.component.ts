@@ -19,6 +19,7 @@ export default class AvailabilityComponent extends Vue {
     //@Prop date: string;
     //@Prop time: string;
     @Prop() model: ScheduleModel;
+    @Prop() availableBookings: Array<any>;
 
     bookingTime: string = '';
     //disableDays = {
@@ -30,19 +31,28 @@ export default class AvailabilityComponent extends Vue {
 
     availableTimeslot: string[] = null;
 
-    get disableDays() {
-        switch (this.model.repeatedType) {
-            case RepeatedType.Daily:
-                return {
-                    to: new Date()
-                };
-            case RepeatedType.Weekly:
-                let disableDays = this.days.filter(x => this.model.repeatedDay.indexOf(x) == -1).map(x => +x);
+    get availableDays() {
+        if (this.availableBookings) {
+            return this.availableBookings.map((x) => new Date(x.bookingDate));    
+        }
+        return '';
+    }
 
-                return {
-                    to: new Date(),
-                    days: disableDays
-                };
+    get disableDays() {
+        if (this.model) {
+            switch (this.model.repeatedType) {
+                case RepeatedType.Daily:
+                    return {
+                        to: new Date()
+                    };
+                case RepeatedType.Weekly:
+                    let disableDays = this.days.filter(x => this.model.repeatedDay.indexOf(x) == -1).map(x => +x);
+
+                    return {
+                        to: new Date(),
+                        days: disableDays
+                    };
+            }            
         }
     }
 
@@ -59,8 +69,16 @@ export default class AvailabilityComponent extends Vue {
     }
 
     onBookingDateChanged(value) {
+        if (value == "") return;
+
         let timeslots = new Array<string>();
-        timeslots.push(this.model.startTime);
+        if (this.model) {
+            timeslots.push(this.model.startTime);
+        } else {
+            let dateString = (new Date(value)).toDateString();
+            var booking = this.availableBookings.find(x => (new Date(x.bookingDate)).toDateString() === dateString);
+            timeslots.push(booking.startTime);
+        }
 
         this.availableTimeslot = timeslots;
         this.bookingTime = '';

@@ -113,7 +113,9 @@
         methods: {
             next() {
                 var page = this.currentPage;
-                console.log('isNextAvailable: ' + this.isNextAvailable());
+                if (process.env.NODE_ENV !== 'production') {
+                    console.log('isNextAvailable: ' + this.isNextAvailable());
+                }
                 if (this.isNextAvailable() || this.loop) {
                     this.setPage(page + 1);
                 } else {

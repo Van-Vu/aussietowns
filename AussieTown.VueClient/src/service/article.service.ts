@@ -14,12 +14,12 @@ export default class ArticleService {
     }
 
     updateArticle(article) {
-        return http.post(this.baseUrl, article)
+        return http.post(`${this.baseUrl}${article.id}`, article)
             .then(x => x);
     }
 
     updateStatus(article) {
-        return http.post(this.baseUrl + article.id, article)
+        return http.post(`${this.baseUrl}${article.id}/status`, article)
             .then(x => x);
     }
 }

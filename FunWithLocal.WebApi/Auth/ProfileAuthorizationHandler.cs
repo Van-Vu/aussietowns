@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AussieTowns.Common;
+using FunWithLocal.WebApi.Common;
 using FunWithLocal.WebApi.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;

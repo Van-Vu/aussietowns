@@ -22,7 +22,7 @@ export default class LogoutForm extends Vue {
         if (process.env.VUE_ENV === 'client') {
             setTimeout(() => {
                 window.location.href = '/';
-            }, 3000)
+            }, 2000)
         }
     }
 }

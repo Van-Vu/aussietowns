@@ -7,16 +7,19 @@ using System.Threading.Tasks;
 using FunWithLocal.WebApi.Common;
 using FunWithLocal.WebApi.Model;
 using FunWithLocal.WebApi.Repository;
+using Wangkanai.Detection;
 
 namespace FunWithLocal.WebApi.Services
 {
     public class ArticleService: IArticleService
     {
         private readonly IArticleRepository _articleRepository;
+        private readonly IImageStorageService _imageStorageService;
 
-        public ArticleService(IArticleRepository articleRepository)
+        public ArticleService(IArticleRepository articleRepository, IImageStorageService imageStorageService)
         {
             _articleRepository = articleRepository;
+            _imageStorageService = imageStorageService;
         }
 
         public async Task<Article> GetArticle(int articleId)
@@ -44,7 +47,7 @@ namespace FunWithLocal.WebApi.Services
             return await _articleRepository.UpdateStatus(articleId, status);
         }
 
-        public async Task<IEnumerable<Article>> GetFeatureArticles()
+        public async Task<IEnumerable<Article>> GetFeatureArticles(IDevice device)
         {
             var articles = (await _articleRepository.GetFeatureArticles()).ToList();
 
@@ -52,6 +55,7 @@ namespace FunWithLocal.WebApi.Services
             {
                 article.Title = WebUtility.HtmlDecode(article.Title);
                 article.Content = WebUtility.HtmlDecode(article.Content);
+                article.ImageUrl = _imageStorageService.TransformImageUrls(article.ImageUrl, ImageType.ListingCard, device);
             }
 
             return articles;

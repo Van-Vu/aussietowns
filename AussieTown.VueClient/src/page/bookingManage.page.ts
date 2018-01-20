@@ -1,14 +1,10 @@
 ﻿import Vue from "vue";
 import { Component, Prop, Watch } from "vue-property-decorator";
-import BookingModel from '../model/booking.model';
-import ListingModel from '../model/listing.model';
-import UserModel from '../model/user.model';
 import BookingService from '../service/booking.service';
 import { plainToClass, classToPlain } from "class-transformer";
 import AvailabilityComponent from '../component/booking/availability.component.vue';
-import { ScreenSize, NotificationType } from '../model/enum';
+import { ScreenSize, NotificationType, BookingStatus } from '../model/enum';
 import { detectScreenSize } from '../service/screen.service';
-import UserSearchComponent from '../component/shared/search/usersearch.component.vue';
 import { Utils } from '../component/utils';
 import RingLoader from '../component/shared/external/ringloader.vue';
 
@@ -18,10 +14,9 @@ import vMediaQuery from '../component/shared/external/v-media-query';
 Vue.use(vMediaQuery);
 
 @Component({
-    name: 'BookingDetailPage',
+    name: 'BookingManagePage',
     components: {
         'availability': AvailabilityComponent,
-        'usersearch': UserSearchComponent,
         'ringloader': RingLoader
     },
     beforeRouteEnter(to, from, next) {
@@ -34,17 +29,13 @@ Vue.use(vMediaQuery);
 })
 
 export default class BookingManagePage extends Vue {
-    @Prop() listingId: string;
-    @Prop() seoString: string;
-
-    isStickyBoxRequired: boolean = false;
     isDateChoosen: boolean = false;
     isLoading = false;
     errorMsg = '';
     $mq: any;
+    checkBooking: Array<number> = new Array<number>();
 
     static asyncData({ store, route }) {
-        console.log("Bodom fetchData: " + route.params.listingId);
         if (route.params.listingId) {
             return store.dispatch('FETCH_LISTING_WITH_BOOKING_DETAIL', route.params.listingId);
         }
@@ -53,11 +44,15 @@ export default class BookingManagePage extends Vue {
     }
 
     get model() {
-        return this.$store.state.booking;
+        return this.$store.state.listing;
     }
 
-    get availableDays() {
-        return this.$store.state.booking.slots.map((x) => new Date(x.bookingDate));
+    get availableBookings() {
+        return this.$store.state.listing.bookingSlots;
+    }
+
+    get bookingGroups() {
+        return this.$store.state.bookingGroups;
     }
 
     created() {
@@ -80,10 +75,10 @@ export default class BookingManagePage extends Vue {
         //}
     }
 
-    onModify() {
+    onApproveBooking() {
         this.$store.dispatch("ENABLE_LOADING");
 
-        (new BookingService()).modifyBooking(this.model.id, this.constructBookingRequest())
+        (new BookingService()).approveBooking(this.constructBookingApprove())
             .then(() => {
                 this.isDateChoosen = true;
                 this.$store.dispatch("DISABLE_LOADING");
@@ -99,18 +94,6 @@ export default class BookingManagePage extends Vue {
                 this.$store.dispatch("DISABLE_LOADING");
             });
     }
-
-    generateParticipants(store) {
-        let users = [plainToClass(UserModel, classToPlain(store.state.loggedInUser))];
-        if (store.state.booking != null && store.state.booking.participants > 0) {
-            for (var i = 0; i < store.state.booking.participants - 1; i++) {
-                users.push(new UserModel());
-            }
-        }
-
-        return users;
-    }
-
     onBookingDateChanged(value) {
         this.model.bookingDate = value;
     }
@@ -124,15 +107,34 @@ export default class BookingManagePage extends Vue {
             .then(() => {
                 this.isDateChoosen = true;
                 this.isLoading = false;
+                this.checkBooking = this.getApprovedBookings()
+
             });    
         }
     }
 
     constructBookingRequest() {
         return {
-            listingId: this.model.listing.id,
+            listingId: this.model.id,
             bookingDate: this.model.bookingDate,
             time: this.model.bookingTime
         };
+    }
+
+    constructBookingApprove() {
+        return {
+            listingId: this.model.id,
+            bookingIds: this.checkBooking
+        };        
+    }
+
+    getApprovedBookings() {
+        let bookingGroups = this.$store.state.bookingGroups;
+        if (bookingGroups) {
+            let confirmedBookingGroups = bookingGroups.filter(x => x.status === BookingStatus.Confirm);
+            return confirmedBookingGroups.map(x => x.id);
+        }
+
+        return new Array<number>();
     }
 }

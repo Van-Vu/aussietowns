@@ -48,7 +48,6 @@ var ListingPage = /** @class */ (function (_super) {
     }
     ListingPage.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
-        console.log('from listing asyncData');
         if (route.params.listingId) {
             return store.dispatch('FETCH_LISTING_BY_ID', route.params.listingId);
         }
@@ -233,10 +232,12 @@ var ListingPage = /** @class */ (function (_super) {
         }
     };
     ListingPage.prototype.onSaveSchedule = function (scheduleObject) {
-        console.log(scheduleObject);
     };
     ListingPage.prototype.onEditSchedule = function (scheduleObject) {
         this.$store.dispatch('SHOW_SCHEDULE_MODAL', scheduleObject);
+    };
+    ListingPage.prototype.onManageBooking = function () {
+        this.$router.push({ name: 'bookingManage', params: { seoString: this.seoString, listingId: this.model.id } });
     };
     ListingPage.prototype.onHideScheduleModal = function () {
         this.$store.dispatch('HIDE_SCHEDULE_MODAL');
@@ -323,6 +324,10 @@ var ListingPage = /** @class */ (function (_super) {
         Prop(),
         __metadata("design:type", String)
     ], ListingPage.prototype, "listingType", void 0);
+    __decorate([
+        Prop(),
+        __metadata("design:type", String)
+    ], ListingPage.prototype, "seoString", void 0);
     ListingPage = __decorate([
         Component({
             name: 'ListingPage',

@@ -51,7 +51,7 @@ namespace FunWithLocal.WebApi.Repository
             }
         }
 
-        public async Task<int> ConfirmBooking(Booking booking, IList<TourGuest> tourGuests)
+        public async Task<int> AddBooking(Booking booking, IList<TourGuest> tourGuests)
         {
             using (IDbConnection dbConnection = Connection)
             {
@@ -132,6 +132,35 @@ namespace FunWithLocal.WebApi.Repository
             }
         }
 
+        public async Task<int> DeleteBooking(int bookingId)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+                using (var tran = dbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        var deleteTasks = new List<Task<int>>();
+
+                        var bookingSql = "DELETE FROM Booking WHERE id=@bookingId;";
+                        deleteTasks.Add(dbConnection.ExecuteAsync(bookingSql, new { bookingId }));
+
+                        await Task.WhenAll(deleteTasks);
+
+                        //Bodom
+                        tran.Commit();
+                        return 1;
+                    }
+                    catch (Exception e)
+                    {
+                        tran.Rollback();
+                        _logger.LogCritical(e.Message, e);
+                        throw;
+                    }
+                }
+            }
+        }
         public async Task<int> WithdrawBooking(int bookingId)
         {
             // Booking Status:
@@ -184,6 +213,16 @@ namespace FunWithLocal.WebApi.Repository
                     new {listingId, bookingDate, startTime}))
                     .Distinct()
                     .ToList();
+            }
+        }
+
+        public async Task<int> ApproveBooking(IList<int> bookingIds)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                var sql = "UPDATE booking SET status=1 WHERE id IN @bookingIds";
+                dbConnection.Open();
+                return await dbConnection.ExecuteAsync(sql, new { bookingIds });
             }
         }
     }

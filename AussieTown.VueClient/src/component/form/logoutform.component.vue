@@ -1,6 +1,6 @@
 ﻿<template>
     <div>
-        <zoneloading :isLoading="true" :loadingText="'Logging out and redirect to home'"></zoneloading>
+        <zoneloading :isLoading="true" :loadingText="'Logging out'"></zoneloading>
     </div>
 </template>
 

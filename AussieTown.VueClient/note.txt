@@ -28,14 +28,6 @@ Cascade: https://codepen.io/grayghostvisuals/pen/ByLYam
 http://blog.grayghostvisuals.com/sass/real-sass-real-maps/
 wave text: https://codepen.io/lbebber/pen/EVxvWN
 
-DEPLOYMENT:
-Node:
-server.js: switch on IsProd
-vue-persistedState: change script
-Net core:
-connstring
-
-404 vuejs
 
 retain Vuex state afer refresh: https://stackoverflow.com/questions/43027499/vuex-state-on-page-refresh
 
@@ -68,17 +60,28 @@ http://docs.servicestack.net/deploy-netcore-docker-aws-ecs
 http://jaliyaudagedara.blogspot.com.au/2017/05/running-aspnet-core-mvc-application.html
 http://jaliyaudagedara.blogspot.com.au/2017/06/creating-docker-container-running.html
 
-Spin up AWS instance
-Create Docker image
-Setup Application (template, nginx, install node)
-Deploy image to AWS
-Redeploy
+Performance / Load test
+https://www.sparkpost.com/pricing/#addon-plans
 
-Task:
+image guide: https://images.guide/
+	https://cloudinary.com/pricing
+	https://imageoptim.com/mac
+
+--------------------------- BLOG POST ---------------------------
+- Authentication
+- CORS: startup line 177
+- Resize and Crop image
+- AutoMapper beforemap
+- Cookies in Node server
+- Unit test throw exception: let it fail
+- Let's encrypt: https://weblog.west-wind.com/posts/2017/Sep/09/Configuring-LetsEncrypt-for-ASPNET-Core-and-IIS (pickup 2, update)
+	https://github.com/rauchg/slackin/pull/211/files?diff=split (iisnode)
+
+---------------------------TASK ------------------------------
 image & video
-transition
-route guard
-final integration
+DONE transition
+DONE route guard
+DONE final integration
 DONE about / T&C
 DONE Serve Root with dev server
 DONE encrypt password
@@ -91,56 +94,9 @@ DONE Error handling:
 	DONE - Log server
 	DONE Log client
 DONE Refactor isSticky & showSecondSearchBar
-
-DONE Page layout
-
-Performance / Load test
-https://www.sparkpost.com/pricing/#addon-plans
-Unit test
 DONE Booking process
-DONE Fix v-lazy when no image
-NO NEED Progress bar
-DONE Icons
-Email template
-DONE Listing card
-Profile layout like: http://groupselling.com/members/testdemopro/settings/
-DONE Font
-DONE Create new listing
-Server Authorization
-DONE Route with random text
-DONE Google & Facebook button
-
-Font: Monsterratt (alternative of ProximaNova)
-
-DONE bug: protect profile route
-DONE bug: in a listing --> click "create experience"
 DONE modal layout
-
-DONE bug: mobile broken layout
-DONE Run Audit
-Upload listing & profile image
-
-DONE bug: check availability when not Login
-
-DONE bug can't load font, facebookapi, google api network error
-DONE bug profileLink when wrong when user not log in (loggedInUser is null)
-DONE dynamic loading module
-
-Refactor booking, bookingdetail, bookingManage page
-DONE Custom / Async validation: http://vee-validate.logaretm.com/examples.html#validate-form
-DONE Transition
-
-image guide: https://images.guide/
-	https://cloudinary.com/pricing
-	https://imageoptim.com/mac
-
-Blog post:
-- Authentication
-- CORS: startup line 177
-- Resize and Crop image
-- AutoMapper beforemap
-- Cookies in Node server
-
+DONE Page layout
 DONE Image to cloudinary
 	listing:
 		mobile: h_212,c_fit,f_auto,q_auto
@@ -170,6 +126,29 @@ DONE Error pages: background image
 DONE BookingDetail acl issue
 DONE Access direct http://localhost:3000/booking/testing-11 doesn't have cookies since it requests from node
 DONE Title
+DONE Custom / Async validation: http://vee-validate.logaretm.com/examples.html#validate-form
+DONE Transition
+
+DONE Icons
+Email template
+DONE Listing card
+Profile layout like: http://groupselling.com/members/testdemopro/settings/
+DONE Font
+DONE Create new listing
+DONE Server Authorization: Resource
+DONE Route with random text
+DONE Google & Facebook button
+DONE dynamic loading module
+DONE swagger
+DONE(but disable for now) CSFR
+
+Font: Monsterratt (alternative of ProximaNova)
+Unit test
+Run Audit
+vue unit test
+
+
+--------------------------- BUG ---------------------------
 DONE BUG: locationid on listing page: required
 
 CRITICAL BUG:
@@ -178,37 +157,69 @@ DONE refresh home page --> go to listing --> refresh listing. Issue:
 		2- seems to add duplicate XHR calls
 	The fix: in main.server wait for router.push to complete before processing the request, otherwise it still picks up the old route
 BUG:
+DONE bug: protect profile route
+DONE bug: in a listing --> click "create experience"
 FIXED service-worker: error
 FIXED my hobbies: error when null
 FIXED HttpPut is not allowed
 FIXED Create listing doesn't appear images placeholder
 FIXED Schedule date
-FIXED Your listing doesn't show up
+FIXED Your listings doesn't show up
+DONE Fix v-lazy when no image
+DONE bug: mobile broken layout
+DONE bug: check availability when not Login
 
-listing page: miniprofile click
+DONE bug can't load font, facebookapi, google api network error
+DONE bug profileLink when wrong when user not log in (loggedInUser is null)
+
+
+++++ Version 1.1.0
+FIXED listing page: miniprofile click
+FIXED tranform image of article card
+FIXED article feature: publish status
+FIXED delete image is not working
+FIXED change ListingWithBookingSlot object, Add Manage Booking
+
+++++ Version 1.....
 create article 
 	--> upload image: undefined Id
 	--> link image doesn't work on create
 	--> save draft create a new ID
-tranform iamge of article card
-article feature: publish status
+Existing gmail, facebook user
+Booking step 2: phone / emergency contact
+Listing card duration home page
 
-
-DEPLOYMENT:
+--------------------------- DEPLOYMENT ---------------------------
 change GA id
 http_base
 
 
+DEPLOYMENT:
+Node:
+server.js: switch on IsProd
+vue-persistedState: change script
+Net core:
+connstring
 
-Tech debt:
+Docker
+Spin up AWS instance
+Create Docker image
+Setup Application (template, nginx, install node)
+Deploy image to AWS
+Redeploy
+
+--------------------------- TECH DEBT ---------------------------
 DONE use: https://github.com/weilao/vue-swiper but imitate https://github.com/warpcgd/vue-slider
 Mobile first: https://varvy.com/mobile/mobile-first.html
 DONE split CSS from index
 a-frame ?
 
 
-REFACTOR:
+--------------------------- REFACTOR ---------------------------
 fetch user / message / conversation / trips separatedly
+Refactor booking, bookingdetail, bookingManage page
 image crop modal
 SELECT LAST_INSERT_ID()
 listingCard: cartType pass in enum type in vue template
+BeforeMap everywhere
+listing & user controller: authorize before hitting database

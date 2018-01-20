@@ -29,7 +29,7 @@ var LogoutForm = /** @class */ (function (_super) {
         if (process.env.VUE_ENV === 'client') {
             setTimeout(function () {
                 window.location.href = '/';
-            }, 3000);
+            }, 2000);
         }
     };
     LogoutForm = __decorate([

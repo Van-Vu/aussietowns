@@ -66,11 +66,11 @@ namespace FunWithLocal.WebApi.Repository
             }
         }
 
-        public async Task<Image> GetImageByUrl(int listingId, string url)
+        public async Task<Image> GetListingImageByUrl(int listingId, string url)
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT i.* FROM Image i INNER JOIN Listing l ON l.id = i.listingid WHERE i.listingid=@listingid AND i.url=@url";
+                var sql = "SELECT i.* FROM Image i INNER JOIN Listing l ON l.id = i.listingid WHERE i.listingid=@listingid AND @url like CONCAT('%',i.url,'%') ";
                 dbConnection.Open();
                 var image = await dbConnection.QueryAsync<Image>(sql, new { listingId, url });
                 return image.FirstOrDefault();

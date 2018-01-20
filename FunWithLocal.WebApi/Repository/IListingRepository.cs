@@ -15,6 +15,7 @@ namespace FunWithLocal.WebApi.Repository
         Task<int> InsertListing(Listing listing);
         Task<int> UpdateListing(Listing listing);
         Task<int> DeActivateListing(int listingId);
+        Task<int> DeleteListing(int listingId);
         Task<IEnumerable<int>> GetListingIdByHeader(string header);
 
         Task<IEnumerable<ListingView>> GetFeatureListings();

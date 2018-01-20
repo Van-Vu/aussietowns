@@ -14,16 +14,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
-import UserModel from '../model/user.model';
+import { Component } from "vue-property-decorator";
 import BookingService from '../service/booking.service';
-import { plainToClass, classToPlain } from "class-transformer";
 import AvailabilityComponent from '../component/booking/availability.component.vue';
-import UserSearchComponent from '../component/shared/search/usersearch.component.vue';
+import { BookingStatus } from '../model/enum';
 import RingLoader from '../component/shared/external/ringloader.vue';
 import store from '../store';
 import vMediaQuery from '../component/shared/external/v-media-query';
@@ -32,15 +27,14 @@ var BookingManagePage = /** @class */ (function (_super) {
     __extends(BookingManagePage, _super);
     function BookingManagePage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.isStickyBoxRequired = false;
         _this.isDateChoosen = false;
         _this.isLoading = false;
         _this.errorMsg = '';
+        _this.checkBooking = new Array();
         return _this;
     }
     BookingManagePage.asyncData = function (_a) {
         var store = _a.store, route = _a.route;
-        console.log("Bodom fetchData: " + route.params.listingId);
         if (route.params.listingId) {
             return store.dispatch('FETCH_LISTING_WITH_BOOKING_DETAIL', route.params.listingId);
         }
@@ -48,14 +42,21 @@ var BookingManagePage = /** @class */ (function (_super) {
     };
     Object.defineProperty(BookingManagePage.prototype, "model", {
         get: function () {
-            return this.$store.state.booking;
+            return this.$store.state.listing;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(BookingManagePage.prototype, "availableDays", {
+    Object.defineProperty(BookingManagePage.prototype, "availableBookings", {
         get: function () {
-            return this.$store.state.booking.slots.map(function (x) { return new Date(x.bookingDate); });
+            return this.$store.state.listing.bookingSlots;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BookingManagePage.prototype, "bookingGroups", {
+        get: function () {
+            return this.$store.state.bookingGroups;
         },
         enumerable: true,
         configurable: true
@@ -76,10 +77,10 @@ var BookingManagePage = /** @class */ (function (_super) {
         //        break;
         //}
     };
-    BookingManagePage.prototype.onModify = function () {
+    BookingManagePage.prototype.onApproveBooking = function () {
         var _this = this;
         this.$store.dispatch("ENABLE_LOADING");
-        (new BookingService()).modifyBooking(this.model.id, this.constructBookingRequest())
+        (new BookingService()).approveBooking(this.constructBookingApprove())
             .then(function () {
             _this.isDateChoosen = true;
             _this.$store.dispatch("DISABLE_LOADING");
@@ -94,15 +95,6 @@ var BookingManagePage = /** @class */ (function (_super) {
             _this.$store.dispatch("DISABLE_LOADING");
         });
     };
-    BookingManagePage.prototype.generateParticipants = function (store) {
-        var users = [plainToClass(UserModel, classToPlain(store.state.loggedInUser))];
-        if (store.state.booking != null && store.state.booking.participants > 0) {
-            for (var i = 0; i < store.state.booking.participants - 1; i++) {
-                users.push(new UserModel());
-            }
-        }
-        return users;
-    };
     BookingManagePage.prototype.onBookingDateChanged = function (value) {
         this.model.bookingDate = value;
     };
@@ -115,30 +107,36 @@ var BookingManagePage = /** @class */ (function (_super) {
                 .then(function () {
                 _this.isDateChoosen = true;
                 _this.isLoading = false;
+                _this.checkBooking = _this.getApprovedBookings();
             });
         }
     };
     BookingManagePage.prototype.constructBookingRequest = function () {
         return {
-            listingId: this.model.listing.id,
+            listingId: this.model.id,
             bookingDate: this.model.bookingDate,
             time: this.model.bookingTime
         };
     };
-    __decorate([
-        Prop(),
-        __metadata("design:type", String)
-    ], BookingManagePage.prototype, "listingId", void 0);
-    __decorate([
-        Prop(),
-        __metadata("design:type", String)
-    ], BookingManagePage.prototype, "seoString", void 0);
+    BookingManagePage.prototype.constructBookingApprove = function () {
+        return {
+            listingId: this.model.id,
+            bookingIds: this.checkBooking
+        };
+    };
+    BookingManagePage.prototype.getApprovedBookings = function () {
+        var bookingGroups = this.$store.state.bookingGroups;
+        if (bookingGroups) {
+            var confirmedBookingGroups = bookingGroups.filter(function (x) { return x.status === BookingStatus.Confirm; });
+            return confirmedBookingGroups.map(function (x) { return x.id; });
+        }
+        return new Array();
+    };
     BookingManagePage = __decorate([
         Component({
-            name: 'BookingDetailPage',
+            name: 'BookingManagePage',
             components: {
                 'availability': AvailabilityComponent,
-                'usersearch': UserSearchComponent,
                 'ringloader': RingLoader
             },
             beforeRouteEnter: function (to, from, next) {

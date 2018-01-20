@@ -23,7 +23,10 @@ export default context => {
         const routeReady = () => {
             const matchedComponents = router.getMatchedComponents()
 
-            console.log(`hit the server ${context.url}`);
+            if (process.env.NODE_ENV !== 'production') {
+                console.log(`hit the server ${context.url}`);
+            }
+
             // no matched routes, reject with 404
             if (!matchedComponents.length) {
                 reject({ code: 404 })

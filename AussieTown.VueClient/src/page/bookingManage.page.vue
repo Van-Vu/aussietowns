@@ -4,15 +4,15 @@
             <div class="tile is-vertical box">
                 <div class="box-header-strip"></div>
                 <availability :bookingDate="model.bookingDate" :bookingTime="model.bookingTime"
-                              :availableDays="availableDays"
+                              :availableBookings="availableBookings"
                               @bookingDateChanged="onBookingDateChanged" @bookingTimeChanged="onBookingTimeChanged">
                 </availability>
             </div>
             <div class="tile is-vertical box booking-detail-panel">
                 <div class="box-header-strip"></div>
                 <ul class="wrap-collabsible" v-if="isDateChoosen">
-                    <li class="tile is-vertical is-parent list" v-for="(group, index) in model.bookingGroups">
-                        <input :id="group.id" type="checkbox" class="approveCheck" title='Approve this booking'>
+                    <li class="tile is-vertical is-parent list" v-for="(group, index) in bookingGroups">
+                        <input :id="group.id" :value="group.id" v-model="checkBooking" type="checkbox" class="approveCheck" title='Approve this booking'>
                         <input :id="index" class="toggle" type="checkbox">
                         <label :for="index" class="lbl-toggle">Group booked by {{group.participants[0].firstName}}</label>
                         <div class="collapsible-content">
@@ -47,7 +47,7 @@
                         </div>
                     </li>
                     <li class="tile is-parent">
-                        <button class="tile is-half button mtl_button-no-round" @click="onModify">Update</button>
+                        <button class="tile is-half button mtl_button-no-round" @click="onApproveBooking">Update</button>
                     </li>
                 </ul>
                 <div v-else>
@@ -62,8 +62,8 @@
         <div class="tile is-parent">
             <div class="tile is-child is-vertical box">
                 <div class="box-header-strip"></div>
-                <router-link :to="{ name: 'listingDetail', params: { seoString: model.listing.headerLink, listingId: model.listing.id }}">
-                    <h2 class="tile is-child listing-headertext">{{ model.listing.header }}</h2>
+                <router-link :to="{ name: 'listingDetail', params: { seoString: model.headerLink, listingId: model.id }}">
+                    <h2 class="tile is-child listing-headertext">{{ model.header }}</h2>
                 </router-link>
                 <div class="tile is-child">
                     <div class="tile is-2" for="firstName">Date</div>
@@ -74,7 +74,7 @@
                     <div class="tile">{{ model.bookingTime }}</div>
                 </div>
                 <div class="tile is-child">
-                    {{ model.listing.description }}
+                    {{ model.description }}
                 </div>
             </div>
         </div>

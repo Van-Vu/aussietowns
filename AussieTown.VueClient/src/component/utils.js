@@ -270,7 +270,9 @@ var Utils = /** @class */ (function () {
         }
     };
     Utils.handleRouteError = function (store, route, error) {
-        console.log(route);
+        if (process.env.NODE_ENV !== 'production') {
+            console.log(route);
+        }
         switch (error.status) {
             case 400:
                 router.push('home');

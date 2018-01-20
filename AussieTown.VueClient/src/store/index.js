@@ -46,6 +46,7 @@ export default new Vuex.Store({
         message: '',
         notifications: [],
         booking: {},
+        bookingGroups: [],
         isLoading: '',
         featureListings: [],
         dynamicModal: {},
@@ -289,8 +290,10 @@ export default new Vuex.Store({
         },
         HANDLE_ERROR: function (_a, error) {
             var dispatch = _a.dispatch, commit = _a.commit;
-            console.log('bodom handle error in store');
-            console.log(error);
+            if (process.env.NODE_ENV !== 'production') {
+                console.log('bodom handle error in store');
+                console.log(error);
+            }
             dispatch("DISABLE_LOADING");
             switch (error.status) {
                 case 400:
@@ -315,7 +318,7 @@ export default new Vuex.Store({
         FETCH_LISTING_WITH_BOOKING_DETAIL: function (_a, listingId) {
             var commit = _a.commit;
             return (new ListingService()).getListingWithBookingDetailById(listingId).then(function (response) {
-                commit('UPDATE_BOOKING_LISTING_DETAIL', response);
+                commit('UPDATE_LISTING', response);
             });
         },
         FETCH_ALL_BOOKING_BY_DATE: function (_a, payload) {
@@ -458,13 +461,8 @@ export default new Vuex.Store({
             //payload.listing = listingObject;
             Vue.set(state, 'booking', payload);
         },
-        UPDATE_BOOKING_LISTING_DETAIL: function (state, payload) {
-            var listingObject = plainToClass(ListingModel, payload.listing);
-            payload.listing = listingObject;
-            Vue.set(state, 'booking', payload);
-        },
         UPDATE_BOOKING_GROUPS_DETAIL: function (state, payload) {
-            Vue.set(state.booking, 'bookingGroups', payload);
+            Vue.set(state, 'bookingGroups', payload);
         },
         ADD_BOOKING_PARTICIPANT: function (state, user) {
             //var participants = (state.booking as any).participants;

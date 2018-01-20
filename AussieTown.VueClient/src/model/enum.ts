@@ -19,3 +19,5 @@ export enum ArticleCategory { Blog, WhatsOn, Introduction }
 export enum ArticleStatus { Draft, Publish, Archive }
 
 export enum CardType { Listing, Article }
+
+export enum BookingStatus { Pending, Confirm, Withdraw }

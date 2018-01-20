@@ -99,13 +99,19 @@ namespace FunWithLocal.WebApi.Services
             throw new Exception($"Can not upload hero image {file.FileName}: Database error");
         }
 
-        public async Task<Image> FetchImageByUrl(int listingId, string url)
+        public async Task<Image> FetchListingImageByUrl(int listingId, string url)
         {
-            return await _imageRepository.GetImageByUrl(listingId, url);
+            return await _imageRepository.GetListingImageByUrl(listingId, url);
         }
 
-        public async Task<int> DeleteImage(int imageId)
+        public async Task<int> DeleteImage(int imageId, string url)
         {
+            var cloudinaryResult = await _imageStorageService.DeleteImage(url);
+
+            if (cloudinaryResult.StatusCode != HttpStatusCode.OK)
+                throw new Exception($"Can not upload listing image {url}: {cloudinaryResult.Error.Message}");
+
+
             return await _imageRepository.DeleteImage(imageId);
         }
     }

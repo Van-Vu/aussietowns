@@ -37,6 +37,7 @@ Vue.use(vMediaQuery);
 
 export default class ListingPage extends Vue{
     @Prop() listingType: string;
+    @Prop() seoString: string;
 
     selectedLocation: AutocompleteItem;
     isOffer: boolean = false;
@@ -49,8 +50,6 @@ export default class ListingPage extends Vue{
     modelCache: any = null;
 
     static asyncData({ store, route }) {
-
-        console.log('from listing asyncData');
         if (route.params.listingId) {
             return store.dispatch('FETCH_LISTING_BY_ID', route.params.listingId);
         } else {
@@ -238,11 +237,14 @@ export default class ListingPage extends Vue{
     }
 
     onSaveSchedule(scheduleObject) {
-        console.log(scheduleObject);
     }
 
     onEditSchedule(scheduleObject) {
         this.$store.dispatch('SHOW_SCHEDULE_MODAL', scheduleObject);
+    }
+
+    onManageBooking() {
+        this.$router.push({ name: 'bookingManage', params: { seoString: this.seoString, listingId: this.model.id } })    
     }
 
     onHideScheduleModal() {

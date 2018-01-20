@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using AussieTowns.Common;
 using AussieTowns.Model;
 using AutoMapper;
 using FunWithLocal.WebApi.Common;
 using FunWithLocal.WebApi.Model;
+using FunWithLocal.WebApi.Services;
 using Newtonsoft.Json;
 
 namespace FunWithLocal.WebApi
@@ -39,7 +38,7 @@ namespace FunWithLocal.WebApi
                 .ForMember(dest => dest.PrimaryOwner,
                     opts => opts.MapFrom(src => src.TourOperators.Any(x => x.IsPrimary) ? src.TourOperators.SingleOrDefault(x => x.IsPrimary).User.FirstName : string.Empty))
                 .ForMember(dest => dest.MinParticipant,
-                    opts => opts.MapFrom(src => src.Type == ListingType.Offer ? src.MinParticipant : src.TourGuests.Count()));
+                    opts => opts.MapFrom(src => src.Type == ListingType.Offer ? src.MinParticipant : src.TourGuests.Count));
 
             CreateMap<ListingView, ListingSummary>()
                 .ForMember(dest => dest.Location,
@@ -67,9 +66,11 @@ namespace FunWithLocal.WebApi
                 .ForMember(dest => dest.LocationDetail,
                     opts => opts.MapFrom(src => Mapper.Map<SuburbDetail, AutoCompleteItem>(src.Location)))
                 .ForMember(dest => dest.Schedules,
-                    opts => opts.MapFrom(src => src.Schedules.Select(x => Mapper.Map<Schedule, ScheduleResponse>(x))))
+                    opts => opts.MapFrom(src => src.Schedules.Select(Mapper.Map<Schedule, ScheduleResponse>)))
                 .ForMember(dest => dest.TourOperators,
-                    opts => opts.ResolveUsing<TourOperatorResolver>());
+                    opts => opts.ResolveUsing<TourOperatorResolver>())
+                .ForMember(dest => dest.BookingSlots,
+                    opts => opts.MapFrom(src => src.BookingSlots != null ? src.BookingSlots.Select(Mapper.Map<BookingSlot, BookingSlotResponse>) : null));
 
             CreateMap<User, UserResponse>()
                 .ForMember(dest => dest.LocationDetail,
@@ -142,6 +143,8 @@ namespace FunWithLocal.WebApi
     {
         public ICollection<MiniProfile> Resolve(Listing source, ListingResponse dest, ICollection<MiniProfile> miniProfiles, ResolutionContext context)
         {
+            if (source.TourOperators == null) return null;
+
             var profiles = new List<MiniProfile>();
 
             foreach (var tourOperator in source.TourOperators)

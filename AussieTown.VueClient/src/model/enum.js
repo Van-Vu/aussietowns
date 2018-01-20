@@ -69,3 +69,9 @@ export var CardType;
     CardType[CardType["Listing"] = 0] = "Listing";
     CardType[CardType["Article"] = 1] = "Article";
 })(CardType = CardType || (CardType = {}));
+export var BookingStatus;
+(function (BookingStatus) {
+    BookingStatus[BookingStatus["Pending"] = 0] = "Pending";
+    BookingStatus[BookingStatus["Confirm"] = 1] = "Confirm";
+    BookingStatus[BookingStatus["Withdraw"] = 2] = "Withdraw";
+})(BookingStatus = BookingStatus || (BookingStatus = {}));

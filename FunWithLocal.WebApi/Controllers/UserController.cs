@@ -94,16 +94,7 @@ namespace FunWithLocal.WebApi.Controllers
                     
                 await _emailService.SendWelcomeEmail(new WelcomeEmailViewModel{EmailConfirmationToken = confirmEmailToken},  user.Email);
 
-                return new
-                {
-                    accessToken = _securityTokenService.CreateTokenString(user, expiresIn),
-                    loggedInUser = _mapper.Map<User, UserLoggedIn>(user, opts => opts.BeforeMap((x, y) =>
-                    {
-                        x.TransformImageUrls(_imageStorageService, _device);
-                        x.Images = _imageStorageService.TransformImageUrls(x.Images, ImageType.UserProfile, _device);
-                        x.HeroImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.UserHeroImage, _device, x.HeroImageUrl);
-                    }))
-                };
+                return GenerateToken(user);
             }
             catch (Exception e)
             {
@@ -174,7 +165,7 @@ namespace FunWithLocal.WebApi.Controllers
                     {
                         x.TransformImageUrls(_imageStorageService, _device);
                         x.Images = _imageStorageService.TransformImageUrls(x.Images, ImageType.UserProfile, _device);
-                        x.HeroImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.UserHeroImage, _device, x.HeroImageUrl);
+                        x.HeroImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.UserHeroImage, x.HeroImageUrl, _device);
                     }));
             }
             catch (Exception e)
@@ -186,7 +177,7 @@ namespace FunWithLocal.WebApi.Controllers
         }
 
         [HttpPost("confirm")]
-        public async Task<dynamic> Confirm([FromBody] User user)
+        public async Task<dynamic> ConfirmEmail([FromBody] User user)
         {
             try
             {
@@ -284,7 +275,7 @@ namespace FunWithLocal.WebApi.Controllers
                     {
                         x.TransformImageUrls(_imageStorageService, _device);
                         x.Images = _imageStorageService.TransformImageUrls(x.Images,ImageType.UserProfile, _device);
-                        x.HeroImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.UserHeroImage, _device,x.HeroImageUrl);
+                        x.HeroImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.UserHeroImage, x.HeroImageUrl, _device);
                     }));
             }
             catch (Exception e)
@@ -410,7 +401,7 @@ namespace FunWithLocal.WebApi.Controllers
                 {
                     x.TransformImageUrls(_imageStorageService, _device);
                     x.Images = _imageStorageService.TransformImageUrls(x.Images, ImageType.UserProfile, _device);
-                    x.HeroImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.UserHeroImage, _device, x.HeroImageUrl);
+                    x.HeroImageUrl = _imageStorageService.GetCloudinaryImageUrl(ImageType.UserHeroImage, x.HeroImageUrl, _device);
                 }))
             };
         }

@@ -84,7 +84,7 @@ const router = new VueRouter({
             name: "confirmEmail",
             component: ConfirmEmailPage,
             meta: {
-                permission: UserRole.User,
+                permission: UserRole.Anonymous,
                 fail: '/login'
             }
         },

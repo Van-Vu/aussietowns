@@ -12,10 +12,10 @@ namespace FunWithLocal.WebApi.Services
 {
     public interface IImageStorageService
     {
-        string GetCloudinaryImageUrl(ImageType imageType, IDevice device, string publicId);
-        List<Image> TransformImageUrls(List<Image> images, ImageType imageType, IDevice device);
-        string TransformImageUrls(string imageUrls, ImageType imageType, IDevice device);
+        string GetCloudinaryImageUrl(ImageType imageType, string publicId, IDevice device = null);
+        List<Image> TransformImageUrls(List<Image> images, ImageType imageType, IDevice device = null);
+        string TransformImageUrls(string imageUrls, ImageType imageType, IDevice device = null);
         Task<ImageUploadResult> UploadImage(IFormFile file, string folderPath);
-        Task<DelResResult> DeleteResource(string publicId);
+        Task<DelResResult> DeleteImage(string publicId);
     }
 }

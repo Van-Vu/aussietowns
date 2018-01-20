@@ -67,7 +67,9 @@ var MessageComponent = /** @class */ (function (_super) {
         })
             .then(function () {
             _this.sendingMessage = '';
-            console.log('send message success!');
+            if (process.env.NODE_ENV !== 'production') {
+                console.log('send message success!');
+            }
         });
     };
     MessageComponent.prototype.messageBubble = function (message) {

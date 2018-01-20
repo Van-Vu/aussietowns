@@ -9,7 +9,7 @@ namespace FunWithLocal.WebApi.Repository
         Task<int> InsertProfileImage(int profileId, string url);
         Task<int> InsertHeroImage(int profileId, string url);
         Task<int> InsertArticleImage(int articleId, string url);
-        Task<Image> GetImageByUrl(int listingId, string url);
+        Task<Image> GetListingImageByUrl(int listingId, string url);
         Task<int> DeleteImage(int imageId);
 
     }

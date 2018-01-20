@@ -149,12 +149,14 @@ var LoginForm = /** @class */ (function (_super) {
         // `googleUser` is the GoogleUser object that represents the just-signed-in user. 
         // See https://developers.google.com/identity/sign-in/web/reference#users 
         var profile = googleUser.getBasicProfile(); // etc etc 
-        console.log('ID: ' + profile.getId());
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail());
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('ID: ' + profile.getId());
+            console.log('Full Name: ' + profile.getName());
+            console.log('Given Name: ' + profile.getGivenName());
+            console.log('Family Name: ' + profile.getFamilyName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail());
+        }
         this.$store.dispatch("ENABLE_LOADING");
         if (this.isLogin) {
             this.login({ email: profile.getEmail(), source: UserSource.Google, externalId: encryptText(profile.getId()) })
@@ -179,12 +181,14 @@ var LoginForm = /** @class */ (function (_super) {
         var _this = this;
         this.$store.dispatch("ENABLE_LOADING");
         FB.api('/me', { "fields": "id,name,email,first_name,last_name,picture" }, function (profile) {
-            console.log("Id: " + profile.id + ".");
-            console.log("Name: " + profile.name + ".");
-            console.log("Email: " + profile.email + ".");
-            console.log("First name: " + profile.first_name + ".");
-            console.log("Last name: " + profile.last_name + ".");
-            console.log("Picture: " + profile.picture.data.url + ".");
+            if (process.env.NODE_ENV !== 'production') {
+                console.log("Id: " + profile.id + ".");
+                console.log("Name: " + profile.name + ".");
+                console.log("Email: " + profile.email + ".");
+                console.log("First name: " + profile.first_name + ".");
+                console.log("Last name: " + profile.last_name + ".");
+                console.log("Picture: " + profile.picture.data.url + ".");
+            }
             if (_this.isLogin) {
                 _this.login({ email: profile.email, source: UserSource.Facebook, externalId: encryptText(profile.id) })
                     .then(function () { return _this.$store.dispatch("DISABLE_LOADING"); });

@@ -42,7 +42,10 @@ http.defaults.headers.common['Access-Control-Allow-Origin'] = Utils.getCurrentHo
 // Add a request interceptor
 http.interceptors.request.use(function (config) {
     // Do something before request is sent
-    console.log('XHR request:' + config.url);
+    if (process.env.NODE_ENV !== 'production') {
+        console.log('XHR request:' + config.url);    
+    }
+    
 
     if (process.env.VUE_ENV === 'server') {
         http.defaults.headers.common = {}

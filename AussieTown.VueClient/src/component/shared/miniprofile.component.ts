@@ -31,4 +31,8 @@ export default class MiniProfileComponent extends Vue{
     onRemoveUser() {
         this.$emit("removeUser", this.data);
     }
+
+    onViewUserProfile() {
+        this.$router.push({ name: 'profileHome', params: { seoString: this.profileLink, profileId: this.userId.toString() } });
+    }
 }

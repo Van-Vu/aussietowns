@@ -32,10 +32,8 @@ namespace FunWithLocal.WebApi.Controllers
         private readonly IListingService _listingService;
         private readonly IBookingService _bookingService;
         private readonly IImageStorageService _imageStorageService;
-        private readonly IImageStorageService _cloudinaryService;
         private readonly IMapper _mapper;
         private readonly ILogger<ListingController> _logger;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppSettings _appSettings;
         private readonly IImageService _imageService;
         private readonly IDevice _device;
@@ -43,14 +41,12 @@ namespace FunWithLocal.WebApi.Controllers
         readonly IAuthorizationService _authorizationService;
 
         public ListingController(IListingService listingService, IMapper mapper, IOptions<AppSettings> appSettings,
-            ILogger<ListingController> logger, IHttpContextAccessor httpContextAccessor, IEmailService emailService, 
-            IAuthorizationService authorizationService, IImageService imageService, IBookingService bookingService,
+            ILogger<ListingController> logger, IAuthorizationService authorizationService, IImageService imageService, IBookingService bookingService,
             IDeviceResolver deviceResolver, IImageStorageService imageStorageService) 
         {
             _listingService = listingService;
             _mapper = mapper;
             _logger = logger;
-            _httpContextAccessor = httpContextAccessor;
             _authorizationService = authorizationService;
             _imageService = imageService;
             _bookingService = bookingService;
@@ -61,6 +57,8 @@ namespace FunWithLocal.WebApi.Controllers
 
         [HttpGet("{id}")]
         [HttpGet("summary/{id}")]
+        // Bodom: CSRF
+        //[ValidateAntiForgeryToken]
         public async Task<ListingResponse> GetListingDetail(int id)
         {
             try
@@ -74,11 +72,6 @@ namespace FunWithLocal.WebApi.Controllers
                     _logger.LogInformation("Can't find listing with id: {id}", id);
                     throw new ArgumentOutOfRangeException(nameof(id), "Can't find listing");
                 }
-
-                //if (Request.Path.Value.IndexOf("listingsummary", 0, StringComparison.CurrentCultureIgnoreCase) > 0)
-                //{
-                //    return _mapper.Map<Listing, ListingSummary>(listing);
-                //}
 
                 return _mapper.Map<Listing, ListingResponse>(listing,
                         opts => opts.BeforeMap((x, y) =>
@@ -94,7 +87,7 @@ namespace FunWithLocal.WebApi.Controllers
         }
 
         [HttpGet("{id}/booking")]
-        public async Task<dynamic> GetListingWithBookingDetail(int id)
+        public async Task<ListingResponse> GetListingWithBookingDetail(int id)
         {
             try
             {
@@ -108,16 +101,35 @@ namespace FunWithLocal.WebApi.Controllers
                     throw new ArgumentOutOfRangeException(nameof(id), "Can't find listing");
                 }
 
-                var bookingSlots = await _bookingService.GetBookingSlotsByListingId(id);
+                listing.BookingSlots = await _bookingService.GetBookingSlotsByListingId(id);
 
-                return new 
-                {
-                    listing= _mapper.Map<Listing, ListingResponse>(listing, opts => opts.BeforeMap((x, y) =>
+                return _mapper.Map<Listing, ListingResponse>(listing, opts => opts.BeforeMap((x, y) =>
                         {
                             x.ImageList = _imageStorageService.TransformImageUrls(x.ImageList, ImageType.Listing, _device);
-                        })),
-                    slots = bookingSlots.Select(x => _mapper.Map<BookingSlot,BookingSlotResponse>(x))
-                };
+                        }));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                throw;
+            }
+        }
+
+        [HttpGet("feature")]
+        //[Authorize(Policy = "ListingPolicy")]
+        public async Task<IEnumerable<ListingSummary>> GetFeatureListings()
+        {
+            try
+            {
+                var listingsView = await _listingService.GetFeatureListings();
+
+                var listingSummary = listingsView.Select(listing => _mapper.Map<ListingView, ListingSummary>(listing,
+                    opts => opts.BeforeMap((x, y) =>
+                    {
+                        x.ImageUrls = _imageStorageService.TransformImageUrls(x.ImageUrls, ImageType.ListingCard, _device);
+                    })));
+
+                return listingSummary;
             }
             catch (Exception e)
             {
@@ -168,12 +180,12 @@ namespace FunWithLocal.WebApi.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<int> DeleteListing(int id)
+        [HttpPost("{id}/remove")]
+        public async Task<int> DeactivateListing(int id)
         {
             try
             {
-                if (id < 100000 || id > 1000000) throw new ValidationException(nameof(id));
+                if (id < 1 || id > 1000000) throw new ValidationException(nameof(id));
 
                 if (!(await _authorizationService.AuthorizeAsync(User, new Listing { Id = id }, Operations.Delete)).Succeeded)
                     throw new UnauthorizedAccessException();
@@ -237,28 +249,18 @@ namespace FunWithLocal.WebApi.Controllers
                     throw new ArgumentOutOfRangeException(nameof(listingId), "Can't find listing");
                 }
 
-
                 if (!(await _authorizationService.AuthorizeAsync(User, listing, Operations.Update)).Succeeded)
                     throw new UnauthorizedAccessException();
 
-                var image = await _imageService.FetchImageByUrl(listingId, url);
+                var image = await _imageService.FetchListingImageByUrl(listingId, url);
 
                 if (image == null)
                 {
                     _logger.LogInformation("Can't find image with listingId: {listingId}, url: {url}", listingId, url);
-                    throw new ArgumentOutOfRangeException(nameof(listingId), "Can't find image");
+                    throw new ArgumentOutOfRangeException(nameof(url), "Can't find image");
                 }
 
-                var filename = image.Url.Split('/').LastOrDefault();
-
-                // Bodom hack: deal with this later
-                var result = await AwsS3Extensions.DeleteObjectS3Async(
-                    AwsS3Extensions.GetS3Client(_appSettings.AwsS3SecretKey, _appSettings.AwsS3AccessKey,
-                        _appSettings.AwsS3Region), "meetthelocal-development", $"images/listings/{listingId}/{filename}");
-
-
-
-                return await _imageService.DeleteImage(image.ImageId);
+                return await _imageService.DeleteImage(image.ImageId, image.Url);
             }
             catch (Exception e)
             {
@@ -281,29 +283,6 @@ namespace FunWithLocal.WebApi.Controllers
                         {
                             x.ImageList = _imageStorageService.TransformImageUrls(x.ImageList, ImageType.Listing, _device);
                         })));
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message, e);
-                throw;
-            }
-        }
-
-        [HttpGet("feature")]
-        //[Authorize(Policy = "ListingPolicy")]
-        public async Task<IEnumerable<ListingSummary>> GetFeatureListings(string adfadfasdf)
-        {
-            try
-            {
-                var listingsView = await _listingService.GetFeatureListings();
-
-                var listingSummary = listingsView.Select(listing => _mapper.Map<ListingView, ListingSummary>(listing,
-                    opts => opts.BeforeMap((x, y) =>
-                    {
-                        x.ImageUrls = _imageStorageService.TransformImageUrls(x.ImageUrls, ImageType.ListingCard, _device);
-                    })));
-
-                return listingSummary;
             }
             catch (Exception e)
             {

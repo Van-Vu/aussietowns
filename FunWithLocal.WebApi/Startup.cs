@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AussieTowns.Auth;
 using AussieTowns.Repository;
 using AussieTowns.Services;
 using AutoMapper;
 using FunWithLocal.WebApi.Auth;
+using FunWithLocal.WebApi.Filters;
 using FunWithLocal.WebApi.Repository;
 using FunWithLocal.WebApi.Services;
 using Ganss.XSS;
@@ -31,11 +33,14 @@ using RazorLight;
 using Serilog;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.RollingFile;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace FunWithLocal.WebApi
 {
     public class Startup
     {
+        private IHostingEnvironment CurrentEnvironment { get; set; }
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -67,6 +72,8 @@ namespace FunWithLocal.WebApi
                     .WriteTo.Sink(jsonSink)
                     .CreateLogger();
             }
+
+            CurrentEnvironment = env;
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -110,11 +117,30 @@ namespace FunWithLocal.WebApi
             // https://github.com/wangkanai/Detection
             services.AddDetection().AddDevice();
 
+            // http://www.dotnetcurry.com/aspnet/1343/aspnet-core-csrf-antiforgery-token
+            // Setup options with DI
+            services.AddOptions();
+            services.Configure<ValidateOriginOptions>(Configuration);
+
+            // Bodom: CSRF
+            //services.AddAntiforgery(opts => opts.HeaderName = "X-XSRF-Token");
+
             // Add framework services with JSON loop ignore: http://stackoverflow.com/a/38382021/1284688
-            services.AddMvc()
+            services.AddMvc(opts =>
+                {
+                    // Bodom: CSRF
+                    //opts.Filters.AddService(typeof(AntiforgeryCookieResultFilter));
+                    //opts.Filters.AddService(typeof(ValidateOriginAuthorizationFilter));
+                })
                 .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 );
+
+            // Register the Swagger generator, defining one or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "FunWithLocal API", Version = "v1" });
+            });
 
             services.AddAutoMapper();
 
@@ -167,7 +193,7 @@ namespace FunWithLocal.WebApi
                         options.TicketDataFormat = new CustomJwtDataFormat(
                             SecurityAlgorithms.RsaSha256Signature,
                             tokenValidationParameters, serialiser,
-                                                  dataProtector);
+                                                  dataProtector, CurrentEnvironment);
                     });
 
 
@@ -247,6 +273,10 @@ namespace FunWithLocal.WebApi
             services.AddSingleton<IAuthorizationHandler, ArticleAuthorizationHandler>();
             
             services.AddSingleton(new HtmlSanitizer());
+
+
+            services.AddTransient<AntiforgeryCookieResultFilter>();
+            services.AddTransient<ValidateOriginAuthorizationFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -362,6 +392,27 @@ namespace FunWithLocal.WebApi
                     var file = Path.Combine(env.WebRootPath, ".well-known", "acme-challenge", id);
                     await response.SendFileAsync(file);
                 });
+            });
+
+            //if (env.IsEnvironment("Testing"))
+            //{
+            //    var claims = new List<Claim>()
+            //            {
+            //                new Claim(ClaimTypes.Name, "UserName"),
+            //                new Claim(ClaimTypes.Role, "Admin")
+            //            };
+            //    var identity = new ClaimsIdentity(claims, "TestAuth");
+            //    var claimsPrincipal = new ClaimsPrincipal(identity);
+            //    return new AuthenticationTicket(claimsPrincipal, "Cookie");
+            //}
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "FunWithLocal API V1");
             });
 
             app.UseMvc(routes =>

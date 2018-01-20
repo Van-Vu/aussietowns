@@ -20,5 +20,6 @@ namespace FunWithLocal.WebApi.Common
         public ImageSettings UserProfile { get; set; }
         public ImageSettings UserHeroImage { get; set; }
         public ImageSettings ListingCard { get; set; }
+        public ImageSettings Article { get; set; }
     }
 }

@@ -44,13 +44,13 @@ namespace FunWithLocal.WebApi.Services
             return null;
         }
 
-        public async Task<DelResResult> DeleteResource(string publicId)
+        public async Task<DelResResult> DeleteImage(string publicId)
         {
             var delParams = new DelResParams { PublicIds = new List<string> { publicId }, Invalidate = true };
             return _cloudinary.DeleteResources(delParams);
         }
 
-        public string GetCloudinaryImageUrl(ImageType imageType, IDevice device, string publicId)
+        public string GetCloudinaryImageUrl(ImageType imageType, string publicId, IDevice device = null)
         {
             if (string.IsNullOrEmpty(publicId)) return string.Empty;
             //In case of fb / gg profile picture
@@ -90,6 +90,9 @@ namespace FunWithLocal.WebApi.Services
                 case ImageType.ListingCard:
                     imageSetting = getImageSettingsFunc(device, _appSettings.CloudinarySettings.ListingCard);
                     break;
+                case ImageType.Article:
+                    imageSetting = getImageSettingsFunc(device, _appSettings.CloudinarySettings.Article);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(imageType), imageType, null);
             }
@@ -97,23 +100,23 @@ namespace FunWithLocal.WebApi.Services
             return $"{_appSettings.CloudinarySettings.BaseUrl}{imageSetting}/{publicId}";
         }
 
-        public List<Image> TransformImageUrls(List<Image> images, ImageType imageType, IDevice device)
+        public List<Image> TransformImageUrls(List<Image> images, ImageType imageType, IDevice device = null)
         {
             if (images == null) return null;
 
             foreach (var image in images)
             {
-                image.Url = GetCloudinaryImageUrl(imageType, device, image.Url);
+                image.Url = GetCloudinaryImageUrl(imageType, image.Url, device);
             }
 
             return images;
         }
 
-        public string TransformImageUrls(string imageUrls, ImageType imageType, IDevice device)
+        public string TransformImageUrls(string imageUrls, ImageType imageType, IDevice device = null)
         {
             if (string.IsNullOrEmpty(imageUrls)) return string.Empty;
 
-            var urls = imageUrls.Split(";").Select(imageUrl => GetCloudinaryImageUrl(imageType, device, imageUrl)).ToList();
+            var urls = imageUrls.Split(";").Select(imageUrl => GetCloudinaryImageUrl(imageType, imageUrl, device)).ToList();
 
             return string.Join(";",urls);
 

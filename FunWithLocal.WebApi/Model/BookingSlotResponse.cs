@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AussieTowns.Common;
+﻿using FunWithLocal.WebApi.Common;
 
-namespace AussieTowns.Model
+namespace FunWithLocal.WebApi.Model
 {
     public class BookingSlotResponse
     {
