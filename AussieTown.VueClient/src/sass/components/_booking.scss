@@ -21,27 +21,34 @@
     position: relative;
 }
 
+.booking-page {
 // From https://alligator.io/css/collapsible/?utm_campaign=Alligator.io&utm_medium=email&utm_source=Alligator.io_35
-.wrap-collabsible {
-  margin-bottom: 1.2rem 0;
+    .wrap-collabsible {
+        margin-bottom: 1.2rem 0;
 
-  .list {
-      position: relative;
-  }
+        .list {
+            position: relative;
+        }
 
-  .approveCheck {
-        display: block !important;
-        position: absolute;
-        top: 11px;
-        left: -2px;
-        width: 2rem;
-        height: 2rem;
-  }
+        .participant-list {
+            padding: 0.75rem 0;
+        }
 
-  input[type="checkbox"] {
-        display:none;
-  }
+        .approveCheck {
+            display: block !important;
+            position: absolute;
+            top: 11px;
+            left: -2px;
+            width: 2rem;
+            height: 2rem;
+        }
+
+        input[type="checkbox"] {
+            display:none;
+        }
+    }
 }
+
 
 .toggle {
   display: none;

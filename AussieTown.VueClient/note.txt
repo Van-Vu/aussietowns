@@ -142,10 +142,13 @@ DONE dynamic loading module
 DONE swagger
 DONE(but disable for now) CSFR
 
+
+https://www.a2hosting.com/blog/test-loading-times/
 Font: Monsterratt (alternative of ProximaNova)
 Unit test
 Run Audit
 vue unit test
+review H1, H2 ...
 
 
 --------------------------- BUG ---------------------------
@@ -181,13 +184,19 @@ FIXED delete image is not working
 FIXED change ListingWithBookingSlot object, Add Manage Booking
 
 ++++ Version 1.....
+FIXED Listing card duration home page
+FIXED ListingView Schedule json is empty when any value is null
+FIXED Create listing --> Insert listing: schedule repeatedday = '' (should be NULL)
+FIXED Booking step 2: phone / emergency contact / layout in mobile
+Booking add remove participant 
+
 create article 
 	--> upload image: undefined Id
 	--> link image doesn't work on create
 	--> save draft create a new ID
 Existing gmail, facebook user
-Booking step 2: phone / emergency contact
-Listing card duration home page
+
+
 
 --------------------------- DEPLOYMENT ---------------------------
 change GA id

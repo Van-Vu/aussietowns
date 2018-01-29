@@ -17,6 +17,6 @@ namespace AussieTowns.Model
         public List<string> RepeatedDay { get; set; }
         public int ListingId { get; set; }
         [JsonIgnore]
-        public string RepeatedDayText => string.Join(",", RepeatedDay?.ToArray());
+        public string RepeatedDayText => RepeatedDay?.Count > 0 ? string.Join(",", RepeatedDay?.ToArray()) : null;
     }
 }
