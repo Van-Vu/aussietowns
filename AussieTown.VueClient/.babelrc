@@ -1,10 +1,14 @@
 {
   "presets": [
-    [
-      "env",{ "modules": false }
-    ]
+    "es2015"
   ],
-  "plugins": [
-    "syntax-dynamic-import"
-  ]
+  // add env specific configuration
+  "env": {
+    "test": {
+      "plugins": [
+        "transform-runtime",
+        "dynamic-import-node" // <-- this is the important line
+      ]
+    }
+  }
 }

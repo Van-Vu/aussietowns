@@ -47,6 +47,7 @@ export default class BookingPage extends Vue {
     isBooked: boolean = false;
     isLoading = false;
     errorMsg = '';
+    localParticipants: Array<UserModel> = [];
     $mq: any;
 
     static asyncData({ store, route }) {
@@ -62,6 +63,10 @@ export default class BookingPage extends Vue {
 
     get model() {
         return this.$store.state.booking;
+    }
+
+    created() {
+        this.localParticipants = this.model.participants;
     }
 
     mounted() {
@@ -132,11 +137,15 @@ export default class BookingPage extends Vue {
     addMoreParticipant() {
         //this.$store.dispatch('ADD_BOOKING_PARTICIPANT',new UserModel());
 
-        this.model.participants.push(new UserModel());
-        var model = Object.assign({}, this.model);
+        //this.model.participants.push(new UserModel());
+        //var model = Object.assign({}, this.model);
 
-        // Bodom hack: no way to push data to model.participants that trigger Vue state
-        Vue.set(this, 'model', model);
+        //// Bodom hack: no way to push data to model.participants that trigger Vue state
+        //Vue.set(this, 'model', model);
+
+        this.localParticipants.push(new UserModel());
+
+        //store.dispatch('ADD_BOOKING_PARTICIPANT', new UserModel()); 
     }
 
     removeParticipant(index) {

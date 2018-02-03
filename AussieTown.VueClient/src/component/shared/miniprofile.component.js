@@ -28,7 +28,6 @@ var MiniProfileComponent = /** @class */ (function (_super) {
     MiniProfileComponent.prototype.created = function () {
         this.userId = this.data.id;
         this.profileImageUrl = this.data.photoUrl;
-        this.profileUrl = '';
         this.fullName = this.data.fullname == ' ' ? this.data.email : this.data.fullname;
         this.isPrimary = this.data.isPrimary ? this.data.isPrimary : false;
         this.shortDescription = this.data.shortDescription;

@@ -42,6 +42,7 @@ var BookingPage = /** @class */ (function (_super) {
         _this.isBooked = false;
         _this.isLoading = false;
         _this.errorMsg = '';
+        _this.localParticipants = [];
         return _this;
         //validateBeforeSubmit(e) {
         //    e.preventDefault();
@@ -70,6 +71,9 @@ var BookingPage = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    BookingPage.prototype.created = function () {
+        this.localParticipants = this.model.participants;
+    };
     BookingPage.prototype.mounted = function () {
         var screenSize = detectScreenSize(this.$mq);
         switch (screenSize) {
@@ -127,10 +131,12 @@ var BookingPage = /** @class */ (function (_super) {
     //}
     BookingPage.prototype.addMoreParticipant = function () {
         //this.$store.dispatch('ADD_BOOKING_PARTICIPANT',new UserModel());
-        this.model.participants.push(new UserModel());
-        var model = Object.assign({}, this.model);
-        // Bodom hack: no way to push data to model.participants that trigger Vue state
-        Vue.set(this, 'model', model);
+        //this.model.participants.push(new UserModel());
+        //var model = Object.assign({}, this.model);
+        //// Bodom hack: no way to push data to model.participants that trigger Vue state
+        //Vue.set(this, 'model', model);
+        this.localParticipants.push(new UserModel());
+        //store.dispatch('ADD_BOOKING_PARTICIPANT', new UserModel()); 
     };
     BookingPage.prototype.removeParticipant = function (index) {
         if (confirm('Are you sure?')) {

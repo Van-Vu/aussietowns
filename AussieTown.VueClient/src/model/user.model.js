@@ -2,7 +2,7 @@ import { Utils } from '../component/utils';
 var UserModel = /** @class */ (function () {
     // Booking page needs to create empty object
     function UserModel() {
-        this.id = 50;
+        this.id = 0;
         this.firstName = '';
         this.lastName = '';
         this.email = '';

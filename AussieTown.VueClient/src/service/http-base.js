@@ -6,15 +6,15 @@ Vue.prototype.$http = axios;
 //export const http = axios.create({
 //    baseURL: `http://192.168.1.52/meetthelocal/`
 //})
-//export const http = axios.create({
-//    baseURL: `http://localhost/meetthelocal/`
-//})
+export var http = axios.create({
+    baseURL: "http://localhost/meetthelocal/"
+});
 //const http = axios.create({
 //    baseURL: `http://localhost:8888/`,
 //})
-var http = axios.create({
-    baseURL: "http://10.0.0.98/meetthelocal/",
-});
+//const http = axios.create({
+//    baseURL: `http://10.0.0.98/meetthelocal/`,
+//})
 //const http = axios.create({
 //    baseURL: `http://10.0.0.98:8000/`,
 //})
@@ -22,7 +22,9 @@ var http = axios.create({
 //    baseURL: `https://api.funwithlocal.com/`
 //})
 http.defaults.withCredentials = true;
-http.defaults.headers.common['Access-Control-Allow-Origin'] = Utils.getCurrentHost();
+if (process.env.NODE_ENV !== 'test') {
+    http.defaults.headers.common['Access-Control-Allow-Origin'] = Utils.getCurrentHost();
+}
 //axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
 //axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Authorization';
 //axios.defaults.headers.common['Access-Control-Request-Method'] = "GET, POST, OPTIONS";

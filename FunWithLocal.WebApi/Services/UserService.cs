@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AussieTowns.Common;
-using AussieTowns.Model;
-using AussieTowns.Repository;
-using AussieTowns.Services;
 using FunWithLocal.WebApi.Model;
 using FunWithLocal.WebApi.Repository;
 using Microsoft.Extensions.Logging;
@@ -108,6 +105,11 @@ namespace FunWithLocal.WebApi.Services
         public async Task<int> ConfirmEmail(UserRequest user)
         {
             return await _userRepository.ConfirmEmail(user);
+        }
+
+        public async Task<User> GetByEmailAndExternalId(string email, string externalId)
+        {
+            return await _userRepository.GetByEmailAndExternalId(email, externalId);
         }
 
         //public ICollection<User> SearchUsers(string term)

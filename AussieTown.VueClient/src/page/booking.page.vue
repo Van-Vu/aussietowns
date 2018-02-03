@@ -48,7 +48,7 @@
                             <span>{{errorMsg}}</span>
                         </div>
                         <ul class="wrap-collabsible">
-                            <li class="tile is-vertical participant-list" v-for="(user, index) in model.participants">
+                            <li class="tile is-vertical participant-list" v-for="(user, index) in localParticipants" :key="user.id">
                                 <input :id="index" class="toggle" type="checkbox">
                                 <label :for="index" class="lbl-toggle">Participant {{index +1}}</label>
                                 <div class="collapsible-content">

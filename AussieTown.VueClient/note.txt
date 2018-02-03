@@ -67,6 +67,11 @@ image guide: https://images.guide/
 	https://cloudinary.com/pricing
 	https://imageoptim.com/mac
 
+--------------------------- PROMOTION ---------------------------
+https://serpstat.com/blog/50-free-places-to-promote-your-website/
+https://www.wix.com/blog/2016/12/free-places-to-promote-your-website/
+
+
 --------------------------- BLOG POST ---------------------------
 - Authentication
 - CORS: startup line 177
@@ -147,7 +152,7 @@ https://www.a2hosting.com/blog/test-loading-times/
 Font: Monsterratt (alternative of ProximaNova)
 Unit test
 Run Audit
-vue unit test
+PROGRESS vue unit test
 review H1, H2 ...
 
 
@@ -188,19 +193,23 @@ FIXED Listing card duration home page
 FIXED ListingView Schedule json is empty when any value is null
 FIXED Create listing --> Insert listing: schedule repeatedday = '' (should be NULL)
 FIXED Booking step 2: phone / emergency contact / layout in mobile
-Booking add remove participant 
+FIXED Existing gmail, facebook user
+FIXED Sort weekday in schedule
+FIXED Booking add participant 
+FIXED Sticky bottom layout
 
 create article 
 	--> upload image: undefined Id
 	--> link image doesn't work on create
 	--> save draft create a new ID
-Existing gmail, facebook user
+
 
 
 
 --------------------------- DEPLOYMENT ---------------------------
 change GA id
 http_base
+Google verification
 
 
 DEPLOYMENT:
@@ -222,6 +231,7 @@ DONE use: https://github.com/weilao/vue-swiper but imitate https://github.com/wa
 Mobile first: https://varvy.com/mobile/mobile-first.html
 DONE split CSS from index
 a-frame ?
+Booking remove participant
 
 
 --------------------------- REFACTOR ---------------------------
@@ -232,3 +242,11 @@ SELECT LAST_INSERT_ID()
 listingCard: cartType pass in enum type in vue template
 BeforeMap everywhere
 listing & user controller: authorize before hitting database
+
+
+--------------------------- EXTERNAL TOOLS ---------------------------
+https://www.google.com/webmasters/tools/home?hl=en
+https://analytics.google.com
+https://www.bingplaces.com/DashBoard/Home/
+
+Online community where tourist can meet real local to create unforgettable memories

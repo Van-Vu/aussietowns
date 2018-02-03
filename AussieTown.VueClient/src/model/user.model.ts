@@ -50,7 +50,7 @@ export default class UserModel {
 
     // Booking page needs to create empty object
     constructor() {
-        this.id = 50;
+        this.id = 0;
         this.firstName = '';
         this.lastName = '';
         this.email = '';

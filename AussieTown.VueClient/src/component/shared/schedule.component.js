@@ -78,7 +78,9 @@ var ScheduleComponent = /** @class */ (function (_super) {
         });
     };
     ScheduleComponent.prototype.onUpdatedWeekdayList = function (value) {
-        this.repeatedDay = value;
+        //var clone = JSON.parse(JSON.stringify(value));
+        var clone = Object.assign([], value);
+        this.repeatedDay = clone.sort();
     };
     __decorate([
         Prop(),

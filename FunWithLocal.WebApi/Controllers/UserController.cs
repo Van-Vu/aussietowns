@@ -84,6 +84,9 @@ namespace FunWithLocal.WebApi.Controllers
                     user.ExternalId = user.ExternalId.RsaDecrypt();
                 }
 
+                var existingUser = await _userService.GetByEmailAndExternalId(user.Email, user.ExternalId);
+                if (existingUser != null) return GenerateToken(existingUser);
+
                 var userId = await _userService.Register(user);
                 if (userId <= 1) throw new ArgumentOutOfRangeException(nameof(user), "Can't register user");
 
@@ -91,8 +94,8 @@ namespace FunWithLocal.WebApi.Controllers
                 var expiresIn = DateTime.Now + TokenAuthOption.ExpiresSpan;
                 var userInfo = $"{user.Id}|{user.Email}|{expiresIn.Ticks}";
                 var confirmEmailToken = $"{Request.Headers["Access-Control-Allow-Origin"]}/confirmemail/{_securityTokenService.Encrypt(userInfo)}";
-                    
-                await _emailService.SendWelcomeEmail(new WelcomeEmailViewModel{EmailConfirmationToken = confirmEmailToken},  user.Email);
+
+                await _emailService.SendWelcomeEmail(new WelcomeEmailViewModel { EmailConfirmationToken = confirmEmailToken }, user.Email);
 
                 return GenerateToken(user);
             }

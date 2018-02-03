@@ -12,6 +12,7 @@ namespace FunWithLocal.WebApi.Repository
 
         Task<User> GetByIdAndEmail(int id, string email);
         Task<User> GetByEmail(string email);
+        Task<User> GetByEmailAndExternalId(string email, string externalId);
         Task<User> GetByEmailAndPassword(string email, string password);
         Task<User> GetByExternalInfo(string email, int source, string externalId);
         Task<IEnumerable<User>> SearchUser(string searchTerm);

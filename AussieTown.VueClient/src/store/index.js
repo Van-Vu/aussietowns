@@ -465,15 +465,15 @@ export default new Vuex.Store({
             Vue.set(state, 'bookingGroups', payload);
         },
         ADD_BOOKING_PARTICIPANT: function (state, user) {
-            //var participants = (state.booking as any).participants;
-            //participants.push(user);
-            //Vue.set(state.booking, 'participants', participants);
             if (!state.booking.participants) {
                 state.booking.participants = user;
             }
             else {
                 //(state.booking as any).participants.push(user);    
-                Vue.set(state.booking.participants, state.booking.participants.length, user);
+                //Vue.set((state.booking as any).participants, (state.booking as any).participants.length, user);
+                var participants = state.booking.participants;
+                participants.push(user);
+                Vue.set(state.booking, 'participants', participants);
             }
         },
         REMOVE_BOOKING_PARTICIPANT: function (state, index) {

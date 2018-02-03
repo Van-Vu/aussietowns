@@ -1,13 +1,9 @@
 ﻿import Vue from "vue";
-import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import AutoCompleteComponent from "../shared/autocomplete.vue";
+import { Component, Prop } from "vue-property-decorator";
 import { Utils } from '../utils';
-import ListingModel from '../../model/listing.model';
 import Swiper from './external/vue-swiper.vue';
 import { CardType } from '../../model/enum';
 import CheckButtonComponent from "../shared/checkbutton.component.vue";
-
-
 import lazy from 'vue-lazy-image';
 
 Vue.use(lazy, {
@@ -25,7 +21,7 @@ Vue.use(lazy, {
 
 export default class CardFullComponent extends Vue {
     @Prop() cardDetail: any;
-    @Prop() cardType: CardType;
+    @Prop() cardType: number;
     id:number = 0;
     location: string = '';
     owner: string = '';
@@ -65,7 +61,6 @@ export default class CardFullComponent extends Vue {
             default:
                 this.cardLinkTo = { name: 'listingDetail', params: { seoString: this.headerLink, listingId: this.id } };
                 break;
-
         }
 
         if (!!this.cardDetail.tagList) {

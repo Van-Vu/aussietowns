@@ -70,7 +70,7 @@
                         </div>
                     </div>
                 <div class="tile is-gapless is-flex is-sticky-bottom is-center">
-                    <button class="tile is-6 is-full-mobile button mtl_button-no-round" v-if="!canEdit" @click="onEnquire">Ask host a question</button>
+                    <button class="tile is-6 is-full-mobile button mtl_button-no-round" v-if="!canEdit" @click="onEnquire">Contact host</button>
                     <button class="tile is-6 is-half-mobile button mtl_button-no-round" v-if="!isEditing && canEdit" @click="onEdit">Edit</button>
                     <button class="tile is-6 is-half-mobile button mtl_button-no-round" v-if="!isEditing && canEdit" @click="onManageBooking">Manage Booking</button>
                     <button class="tile is-6 is-half-mobile is-child button mtl_button-no-round" v-if="isEditing" @click="onInsertorUpdate">Submit</button>

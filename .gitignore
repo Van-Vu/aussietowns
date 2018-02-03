@@ -10,3 +10,5 @@ ReleaseCandidate/
 FunWithLocal.WebApi/privatekey.pem
 FunWithLocal.WebApi.Test/bin/
 FunWithLocal.WebApi.Test/obj/
+AussieTown.VueClient/coverage/clover.xml
+AussieTown.VueClient/coverage/

@@ -23,7 +23,7 @@ namespace FunWithLocal.WebApi.Repository
 
         public async Task<User> GetByEmailAndPassword(string email, string password)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 var sql = "SELECT * FROM User WHERE email=@email AND password=@password";
                 dbConnection.Open();
@@ -34,7 +34,7 @@ namespace FunWithLocal.WebApi.Repository
 
         public async Task<User> GetById(int id)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 var sql = "SELECT * FROM User WHERE id=@id;"
                           + "SELECT sd.* FROM SuburbDetail sd INNER JOIN User u ON sd.id = u.locationId WHERE u.id = @id;"
@@ -64,7 +64,7 @@ namespace FunWithLocal.WebApi.Repository
 
         public async Task<IEnumerable<User>> SearchUser(string searchTerm)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 var sql = "SELECT * FROM User LEFT JOIN Image ON user.id=image.userid AND image.isActive = true WHERE firstname like CONCAT('%',@term,'%') OR lastname like CONCAT('%',@term,'%') OR email like CONCAT('%',@term,'%')";
                 dbConnection.Open();
@@ -78,7 +78,7 @@ namespace FunWithLocal.WebApi.Repository
 
         public async Task<int> Insert(User user)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 dbConnection.Open();
                 using (var tran = dbConnection.BeginTransaction())
@@ -117,7 +117,7 @@ namespace FunWithLocal.WebApi.Repository
 
         public async Task<int> Update(UserRequest user)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 var sql = "UPDATE User SET firstname = @firstname, lastname = @lastname, email = @email, gender= @gender, birthday= @birthday, phone = @phone, language= @language, "
                     + "hobbies=@hobbyText, locationId = @locationId, description = @description, address= @address, emergencycontact= @emergencycontact, updatedDate=@updatedDate, isConfirm=@isConfirm WHERE id = @Id";
@@ -129,7 +129,7 @@ namespace FunWithLocal.WebApi.Repository
 
         public async Task<int> Deactivate(int id)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 var sql = "UPDATE User SET IsActive = 0 WHERE id = @id";
                 dbConnection.Open();
@@ -140,7 +140,7 @@ namespace FunWithLocal.WebApi.Repository
 
         public async Task<User> GetByExternalInfo(string email, int source, string externalId)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 var sql = "SELECT * FROM User WHERE email=@email AND source=@source AND externalid=@externalId";
                 dbConnection.Open();
@@ -151,7 +151,7 @@ namespace FunWithLocal.WebApi.Repository
 
         public async Task<User> GetUserByResetToken(string resetToken)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 var sql = "SELECT U.* FROM User U INNER JOIN UserReset R ON R.userId = U.id WHERE R.resetToken = @resetToken AND R.isActive = 1;";
                 dbConnection.Open();
@@ -162,7 +162,7 @@ namespace FunWithLocal.WebApi.Repository
 
         public async Task<int> RequestPasswordReset(int userId, string resetToken, DateTime expiryDate)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 var sql = "INSERT INTO UserReset(UserId, ResetToken, ExpiryDate, IsActive)"
                         + "VALUES (@userId, @resetToken, @expiryDate, @isActive)";
@@ -174,7 +174,7 @@ namespace FunWithLocal.WebApi.Repository
 
         public async Task<int> ChangePassword(User user, bool isChangePassword)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 dbConnection.Open();
 
@@ -210,7 +210,7 @@ namespace FunWithLocal.WebApi.Repository
 
         public async Task<User> GetByIdAndEmail(int id, string email)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 var sql = "SELECT * FROM User WHERE id=@id AND email=@email AND isConfirm =0;";
 
@@ -222,7 +222,7 @@ namespace FunWithLocal.WebApi.Repository
 
         public async Task<User> GetByEmail(string email)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 var sql = "SELECT * FROM User WHERE email=@email;";
 
@@ -241,6 +241,18 @@ namespace FunWithLocal.WebApi.Repository
                 dbConnection.Open();
                 user.UpdatedDate = DateTime.Now;
                 return await dbConnection.ExecuteAsync(sql, user);
+            }
+        }
+
+        public async Task<User> GetByEmailAndExternalId(string email, string externalId)
+        {
+            using (var dbConnection = Connection)
+            {
+                var sql = "SELECT * FROM User WHERE email=@email AND externalId=@externalId;";
+
+                dbConnection.Open();
+                var user = await dbConnection.QueryAsync<User>(sql, new { email, externalId });
+                return user.FirstOrDefault();
             }
         }
     }
