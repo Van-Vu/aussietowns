@@ -13,7 +13,7 @@ namespace FunWithLocal.WebApi.Model
         public string Header { get; set; }
         public string Description { get; set; }
         public string ImageUrls { get; set; }
-
+        public string SeoUrl { get; set; }
         public List<string> TagList => string.IsNullOrEmpty(Tags) ? new List<string>() : Tags.Split(',').ToList();
 
         [JsonIgnore]

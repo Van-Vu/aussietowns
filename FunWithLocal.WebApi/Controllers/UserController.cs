@@ -82,10 +82,9 @@ namespace FunWithLocal.WebApi.Controllers
                 else
                 {
                     user.ExternalId = user.ExternalId.RsaDecrypt();
+                    var existingUser = await _userService.GetByEmailAndExternalId(user.Email, user.ExternalId);
+                    if (existingUser != null) return GenerateToken(existingUser);
                 }
-
-                var existingUser = await _userService.GetByEmailAndExternalId(user.Email, user.ExternalId);
-                if (existingUser != null) return GenerateToken(existingUser);
 
                 var userId = await _userService.Register(user);
                 if (userId <= 1) throw new ArgumentOutOfRangeException(nameof(user), "Can't register user");

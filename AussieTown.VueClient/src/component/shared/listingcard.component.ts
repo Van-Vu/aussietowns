@@ -43,7 +43,7 @@ export default class CardFullComponent extends Vue {
         this.cost = this.cardDetail.cost;
         this.owner = this.cardDetail.primaryOwner;
         this.imageUrls = this.cardDetail.imageUrls ? this.cardDetail.imageUrls.split(';') : '';
-        this.headerLink = this.header ? Utils.seorizeString(this.header) : '';
+        this.headerLink = this.cardDetail.seoUrl;
         this.description = this.cardDetail.description;
 
         if (!!this.cardDetail.schedules) {

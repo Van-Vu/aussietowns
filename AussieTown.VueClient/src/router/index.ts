@@ -183,7 +183,7 @@ const router = new VueRouter({
             }
         },
         {
-            path: "/article/create",
+            path: "/content/create",
             name: "createArticle",
             component: ArticlePage,
             props: true,
@@ -193,7 +193,7 @@ const router = new VueRouter({
             }
         },
         {
-            path: "/article/:seoString-:articleId(\\d+)",
+            path: "/content/:seoString-:articleId(\\d+)",
             name: "editArticle",
             component: ArticlePage,
             props: true,
@@ -203,7 +203,7 @@ const router = new VueRouter({
             }
         },
         {
-            path: "/whatson/:seoString-:articleId(\\d+)",
+            path: "/article/:seoString-:articleId(\\d+)",
             name: "whatson",
             component: ContentPage,
             props: true,
@@ -213,7 +213,7 @@ const router = new VueRouter({
             }
         },
         {
-            path: "/about/:seoString-:articleId(\\d+)",
+            path: "/article/:seoString-:articleId(\\d+)",
             name: "aboutus",
             component: ContentPage,
             props: true,
@@ -223,7 +223,7 @@ const router = new VueRouter({
             }
         },
         {
-            path: "/intro/:seoString-:articleId(\\d+)",
+            path: "/article/:seoString-:articleId(\\d+)",
             name: "introduction",
             component: ContentPage,
             props: true,
@@ -233,7 +233,7 @@ const router = new VueRouter({
             }
         },
         {
-            path: "/blog/:seoString-:articleId(\\d+)",
+            path: "/article/:seoString-:articleId(\\d+)",
             name: "blog",
             component: ContentPage,
             props: true,

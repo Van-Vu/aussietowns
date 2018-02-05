@@ -18,19 +18,19 @@
             <div class="tile is-2 left_panel">
                 <ul class="social-media">
                     <li>
-                        <a @click="onFacebookShare" class="social-medial-icon social-medial-icon_facebook"></a>
+                        <a @click="onFacebookShare" class="social-medial-icon social-medial-icon_facebook" rel="nofollow"></a>
                     </li>
                     <li>
-                        <a @click="onTwitterShare" class="social-medial-icon social-medial-icon_twitter"></a>
+                        <a @click="onTwitterShare" class="social-medial-icon social-medial-icon_twitter" rel="nofollow"></a>
                     </li>
                     <!--<li>
                         <a @click="onGooglePlusShare" class="social-medial-icon social-medial-icon_googlePlus"></a>
                     </li>-->
                     <li>
-                        <a class="social-medial-icon social-medial-icon_instagram"></a>
+                        <a class="social-medial-icon social-medial-icon_instagram" rel="nofollow"></a>
                     </li>
                     <li>
-                        <a class="social-medial-icon social-medial-icon_pinterest"></a>
+                        <a class="social-medial-icon social-medial-icon_pinterest" rel="nofollow"></a>
                     </li>
                 </ul>
             </div>

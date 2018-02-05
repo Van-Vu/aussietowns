@@ -8,7 +8,7 @@
                                    :class="{'input': true, 'is-danger': errors.has('header') }" type="text" placeholder="">
                             <i v-if="isEditing" class="icon icon-lock"></i>
                             <div v-show="errors.has('header')" class="help is-danger">{{ errors.first('header') }}</div>
-                            <label v-if="!isEditing" class="listing-headertext">{{ model.header }}</label>
+                            <h1 v-if="!isEditing" class="listing-headertext">{{ model.header }}</h1>
                         </div>
                     </div>
                     <div v-if="isOffer && model.id" class="field" style="text-align:center;">

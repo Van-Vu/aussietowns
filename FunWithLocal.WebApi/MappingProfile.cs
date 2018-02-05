@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AussieTowns.Model;
 using AutoMapper;
 using FunWithLocal.WebApi.Common;
@@ -51,6 +52,8 @@ namespace FunWithLocal.WebApi
                     opts => opts.MapFrom(src => src.Description.Substring(0, Math.Min(src.Description.Length, 160))))
                 .ForMember(dest => dest.Header,
                     opts => opts.MapFrom(src => src.Header.Substring(0, Math.Min(src.Header.Length, 55)) + " ..."))
+                .ForMember(dest => dest.SeoUrl,
+                    opts => opts.ResolveUsing<ListingSeoUrlResolver>())
                 .ForMember(dest => dest.Schedules,
                     opts => opts.MapFrom(src => JsonConvert.DeserializeObject<IEnumerable<Schedule>>(src.Schedules)));
 
@@ -103,6 +106,8 @@ namespace FunWithLocal.WebApi
                     opts => opts.MapFrom(src => src.Content.Substring(0, Math.Min(src.Content.Length, 160))))
                 .ForMember(dest => dest.Header,
                     opts => opts.MapFrom(src => src.Title.Substring(0, Math.Min(src.Title.Length, 55)) + " ..."))
+                .ForMember(dest => dest.SeoUrl,
+                    opts => opts.ResolveUsing<ArticleSeoUrlResolver>())
                 .ForMember(dest => dest.ImageUrls,
                     opts => opts.MapFrom(src => src.ImageUrl));
         }
@@ -155,6 +160,30 @@ namespace FunWithLocal.WebApi
             }
 
             return profiles;
+        }
+    }
+
+    public class ListingSeoUrlResolver : IValueResolver<ListingView, ListingSummary, string>
+    {
+        public string Resolve(ListingView source, ListingSummary dest, string destMember, ResolutionContext context)
+        {
+            var sanitizedHeader = Regex.Replace(source.Header.ToLower(), @"[ ](?=[ ])|[^A-Za-z0-9 ]+", "").Trim();
+
+            var url = string.Join("-", sanitizedHeader.Substring(0, Math.Min(source.Header.Length, 55)).Split(' '));
+
+            return url;
+        }
+    }
+
+    public class ArticleSeoUrlResolver : IValueResolver<Article, ArticleCard, string>
+    {
+        public string Resolve(Article source, ArticleCard dest, string destMember, ResolutionContext context)
+        {
+            var sanitizedHeader = Regex.Replace(source.Title.ToLower(), @"[ ](?=[ ])|[^A-Za-z0-9 ]+", "").Trim();
+
+            var url = string.Join("-", sanitizedHeader.Substring(0, Math.Min(source.Title.Length, 55)).Split(' '));
+
+            return url;
         }
     }
 }

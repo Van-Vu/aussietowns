@@ -54,7 +54,7 @@ var CardFullComponent = /** @class */ (function (_super) {
         this.cost = this.cardDetail.cost;
         this.owner = this.cardDetail.primaryOwner;
         this.imageUrls = this.cardDetail.imageUrls ? this.cardDetail.imageUrls.split(';') : '';
-        this.headerLink = this.header ? Utils.seorizeString(this.header) : '';
+        this.headerLink = this.cardDetail.seoUrl;
         this.description = this.cardDetail.description;
         if (!!this.cardDetail.schedules) {
             var startDatetime = this.cardDetail.schedules.length > 0 ? new Date(this.cardDetail.schedules[0].startDate) : new Date();

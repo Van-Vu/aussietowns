@@ -12,3 +12,6 @@ FunWithLocal.WebApi.Test/bin/
 FunWithLocal.WebApi.Test/obj/
 AussieTown.VueClient/coverage/clover.xml
 AussieTown.VueClient/coverage/
+FunWithLocal.SitemapGenerator/bin/Debug/netcoreapp2.0/appsettings.json
+FunWithLocal.SitemapGenerator/bin/
+FunWithLocal.SitemapGenerator/obj/
