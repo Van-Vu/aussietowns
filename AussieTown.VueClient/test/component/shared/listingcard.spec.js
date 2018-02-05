@@ -1,4 +1,4 @@
-﻿import { mount, shallow, createLocalVue } from "vue-test-utils";
+﻿import { mount, shallow, createLocalVue } from "@vue/test-utils";
 import CardFullComponent from "../../../src/component/shared/listingcard.component.vue";
 import { CardType, RepeatedType } from '../../../src/model/enum';
 import ScheduleModel from '../../../src/model/schedule.model';
@@ -26,6 +26,7 @@ describe("ListingCardComponent.test.js", () => {
         imageUrls: "imageUrls",
         description: "description",
         tagList: "tagList",
+        seoUrl: "seoUrl",
         schedules: new Array(new ScheduleModel('2000/01/01 12:00', '10:00', '10:00', '10:00', RepeatedType.None, ["0"]))
     };
 
@@ -64,8 +65,8 @@ describe("ListingCardComponent.test.js", () => {
         expect(wrapper.vm.imageUrls).toEqual(["imageUrls"]);
     });
 
-    it(".headerLink = 'header'", () => {
-        expect(wrapper.vm.headerLink).toEqual(sampleData.header);
+    it(".headerLink = 'seoUrl'", () => {
+        expect(wrapper.vm.headerLink).toEqual(sampleData.seoUrl);
     });
 
     it(".description = 'description'", () => {
@@ -77,7 +78,7 @@ describe("ListingCardComponent.test.js", () => {
     });
 
     it(".cardLinkTo= object", () => {
-        expect(wrapper.vm.cardLinkTo).toEqual({ name: 'listingDetail', path: "/listing", params: { seoString: sampleData.header, listingId: sampleData.id } });
+        expect(wrapper.vm.cardLinkTo).toEqual({ name: 'listingDetail', path: "/listing", params: { seoString: sampleData.seoUrl, listingId: sampleData.id } });
     });
 
     it(".date= '2000/01/01'", () => {

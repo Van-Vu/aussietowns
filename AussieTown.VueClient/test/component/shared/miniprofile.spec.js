@@ -1,4 +1,4 @@
-﻿import { mount, shallow, createLocalVue } from "vue-test-utils";
+﻿import { mount, shallow, createLocalVue } from "@vue/test-utils";
 import MiniProfileComponent from "../../../src/component/shared/miniprofile.component.vue";
 import VueRouter  from "vue-router";
 

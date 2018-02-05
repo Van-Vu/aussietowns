@@ -169,7 +169,7 @@ namespace FunWithLocal.WebApi
         {
             var sanitizedHeader = Regex.Replace(source.Header.ToLower(), @"[ ](?=[ ])|[^A-Za-z0-9 ]+", "").Trim();
 
-            var url = string.Join("-", sanitizedHeader.Substring(0, Math.Min(source.Header.Length, 55)).Split(' '));
+            var url = string.Join("-", sanitizedHeader.Substring(0, Math.Min(sanitizedHeader.Length, 55)).Split(' '));
 
             return url;
         }
@@ -181,7 +181,7 @@ namespace FunWithLocal.WebApi
         {
             var sanitizedHeader = Regex.Replace(source.Title.ToLower(), @"[ ](?=[ ])|[^A-Za-z0-9 ]+", "").Trim();
 
-            var url = string.Join("-", sanitizedHeader.Substring(0, Math.Min(source.Title.Length, 55)).Split(' '));
+            var url = string.Join("-", sanitizedHeader.Substring(0, Math.Min(sanitizedHeader.Length, 55)).Split(' '));
 
             return url;
         }

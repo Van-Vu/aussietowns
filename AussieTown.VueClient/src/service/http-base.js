@@ -9,18 +9,18 @@ Vue.prototype.$http = axios;
 //export const http = axios.create({
 //    baseURL: `http://localhost/meetthelocal/`
 //})
-var http = axios.create({
-    baseURL: "http://localhost:8888/",
-});
+//const http = axios.create({
+//    baseURL: `http://localhost:8888/`,
+//})
 //const http = axios.create({
 //    baseURL: `http://10.0.0.98/meetthelocal/`,
 //})
 //const http = axios.create({
 //    baseURL: `http://10.0.0.98:8000/`,
 //})
-//export const http = axios.create({
-//    baseURL: `https://api.funwithlocal.com/`
-//})
+export var http = axios.create({
+    baseURL: "https://api.funwithlocal.com/"
+});
 http.defaults.withCredentials = true;
 if (process.env.NODE_ENV !== 'test') {
     http.defaults.headers.common['Access-Control-Allow-Origin'] = Utils.getCurrentHost();
