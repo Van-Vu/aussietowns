@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FunWithLocal.SitemapGenerator
+﻿namespace FunWithLocal.SitemapLib
 {
     public class ContentView
     {

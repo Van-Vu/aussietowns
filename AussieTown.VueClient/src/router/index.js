@@ -335,7 +335,7 @@ var router = new VueRouter({
             name: "TestPage",
             component: TestPage,
             meta: {
-                permission: UserRole.Anonymous,
+                permission: UserRole.SuperAdmin,
                 fail: '/'
             }
         },

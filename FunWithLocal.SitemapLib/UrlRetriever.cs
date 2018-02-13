@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Text;
+using System.Threading.Tasks;
 using Dapper;
 using MySql.Data.MySqlClient;
 
-namespace FunWithLocal.SitemapGenerator
+namespace FunWithLocal.SitemapLib
 {
     public interface IUrlRetriever
     {
-        IEnumerable<ContentView> GetListingUrls();
-        IEnumerable<ContentView> GetArticleUrls();
+        Task<IEnumerable<ContentView>> GetListingUrls();
+        Task<IEnumerable<ContentView>> GetArticleUrls();
         IEnumerable<dynamic> Test();
     }
 
@@ -26,29 +25,29 @@ namespace FunWithLocal.SitemapGenerator
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT * FROM Listing";
+                var sql = "SELECT * FROM Listing WHERE is";
                 dbConnection.Open();
                 return dbConnection.Query<dynamic>(sql);
             }
         }
 
-        public IEnumerable<ContentView> GetListingUrls()
+        public async Task<IEnumerable<ContentView>> GetListingUrls()
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT id, header FROM ListingView";
+                var sql = "SELECT id, header FROM Listing WHERE isActive=1";
                 dbConnection.Open();
-                return dbConnection.Query<ContentView>(sql);
+                return await dbConnection.QueryAsync<ContentView>(sql);
             }
         }
 
-        public IEnumerable<ContentView> GetArticleUrls()
+        public async Task<IEnumerable<ContentView>> GetArticleUrls()
         {
             using (IDbConnection dbConnection = Connection)
             {
                 var sql = "SELECT id, title as header FROM article WHERE status=@status";
                 dbConnection.Open();
-                return dbConnection.Query<ContentView>(sql, new {status = 1});
+                return await dbConnection.QueryAsync<ContentView>(sql, new {status = 1});
             }
         }
     }

@@ -67,9 +67,9 @@ var ArticlePage = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(ArticlePage.prototype, "canEdit", {
+    Object.defineProperty(ArticlePage.prototype, "isNew", {
         get: function () {
-            return true;
+            return !(this.model && this.model.id > 0);
         },
         enumerable: true,
         configurable: true
@@ -104,12 +104,13 @@ var ArticlePage = /** @class */ (function (_super) {
         this.model.tags = this.model.tagList.join();
         return this.$store.dispatch('UPDATE_ARTICLE_CONTENT', this.model)
             .then(function (response) {
-            if (_this.model.id == 0) {
-                _this.$store.dispatch('ADD_NOTIFICATION', { title: "Save success", type: NotificationType.Success });
-                _this.model.id = response;
+            if (_this.model.id && _this.model.id > 0) {
+                _this.$store.dispatch('ADD_NOTIFICATION', { title: "Update success", type: NotificationType.Success });
             }
             else {
-                _this.$store.dispatch('ADD_NOTIFICATION', { title: "Update success", type: NotificationType.Success });
+                _this.$store.dispatch('ADD_NOTIFICATION', { title: "Save success", type: NotificationType.Success });
+                _this.$store.dispatch('UPDATE_ARTICLE_ID', { id: response });
+                //this.model.id = response;
             }
         })
             .catch(function (err) {

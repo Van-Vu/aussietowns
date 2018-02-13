@@ -63,8 +63,8 @@ export default class ArticlePage extends Vue {
         return this.$store.state.article;
     }
 
-    get canEdit() {
-        return true;
+    get isNew() {
+        return !(this.model && this.model.id > 0);
     }
 
     created() {
@@ -105,11 +105,12 @@ export default class ArticlePage extends Vue {
 
         return this.$store.dispatch('UPDATE_ARTICLE_CONTENT', this.model)
             .then((response) => {
-                if (this.model.id == 0) {
-                    this.$store.dispatch('ADD_NOTIFICATION', { title: "Save success", type: NotificationType.Success });
-                    this.model.id = response;
-                } else {
+                if (this.model.id && this.model.id > 0) {
                     this.$store.dispatch('ADD_NOTIFICATION', { title: "Update success", type: NotificationType.Success });    
+                } else {
+                    this.$store.dispatch('ADD_NOTIFICATION', { title: "Save success", type: NotificationType.Success });
+                    this.$store.dispatch('UPDATE_ARTICLE_ID', { id: response });
+                    //this.model.id = response;
                 }
             })
             .catch(err => {

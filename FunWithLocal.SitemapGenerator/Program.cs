@@ -2,6 +2,8 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
+using FunWithLocal.SitemapLib;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -26,8 +28,8 @@ namespace FunWithLocal.SitemapGenerator
 
                 IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
-                var sitemap = serviceProvider.GetService<ISitemapGenerator>();
-                sitemap.Run();
+                var sitemap = serviceProvider.GetService<ISitemapLib>();
+                Task.Run(() => sitemap.Run()).Wait();
 
                 Log.Information($"Finish: {DateTime.Now}");
             }
@@ -48,10 +50,10 @@ namespace FunWithLocal.SitemapGenerator
                     .ReadFrom.Configuration(configuration)
                     .CreateLogger();
 
-            var mySqlConnectionString = configuration.GetSection("ApplicationConfiguration:MySqlConnString").Value;
+            var mySqlConnectionString = configuration.GetSection("FwlSettings:MySqlConnString").Value;
 
             services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
-            services.AddSingleton<ISitemapGenerator, SitemapGenerator>();
+            services.AddSingleton<ISitemapLib, SitemapLib.SitemapLib>();
             services.AddSingleton<ISerializedXmlSaver<Sitemap>, SerializedXmlSaver<Sitemap>>();
             services.AddSingleton<IFileSystemWrapper, FileSystemWrapper>();
             services.AddSingleton<IUrlRetriever, UrlRetriever>(x => new UrlRetriever(mySqlConnectionString));

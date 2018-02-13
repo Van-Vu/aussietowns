@@ -5,26 +5,27 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace FunWithLocal.SitemapGenerator
+namespace FunWithLocal.SitemapLib
 {
-    public interface ISitemapGenerator
+    public interface ISitemapLib
     {
-        void Run();
+        Task<string> Run();
     }
 
-    public class SitemapGenerator: ISitemapGenerator
+    public class SitemapLib: ISitemapLib
     {
-        private readonly ILogger<SitemapGenerator> _logger;
+        private readonly ILogger<SitemapLib> _logger;
         private readonly IUrlRetriever _urlRetriever;
         private readonly ISerializedXmlSaver<Sitemap> _serializedXmlSaver;
         private readonly IConfiguration _configuration;
         public const int MaxNumberOfUrlsPerSitemap = 50000;
 
 
-        public SitemapGenerator(ILogger<SitemapGenerator> logger, IUrlRetriever urlRetriever, 
+        public SitemapLib(ILogger<SitemapLib> logger, IUrlRetriever urlRetriever, 
             ISerializedXmlSaver<Sitemap> serializedXmlSaver, IConfiguration configuration)
         {
             _logger = logger;
@@ -33,11 +34,11 @@ namespace FunWithLocal.SitemapGenerator
             _configuration = configuration;
         }
 
-        public void Run()
+        public async Task<string> Run()
         {
-            var listingContents = _urlRetriever.GetListingUrls();
+            var listingContents = await _urlRetriever.GetListingUrls();
 
-            var webRootUrl = _configuration.GetSection("ApplicationConfiguration:WebRoot").Value;
+            var webRootUrl = _configuration.GetSection("FwlSettings:WebRoot").Value;
 
             var allUrls = listingContents.ToList().Select(content => new Url
             {
@@ -47,7 +48,7 @@ namespace FunWithLocal.SitemapGenerator
                 Priority = .9
             }).ToList();
 
-            var articleContents = _urlRetriever.GetArticleUrls();
+            var articleContents = await _urlRetriever.GetArticleUrls();
             var articleUrls = articleContents.Select(content => new Url
             {
                 Location = $"{webRootUrl}/article/{GenerateUrl(content.Header, content.Id)}",
@@ -58,10 +59,12 @@ namespace FunWithLocal.SitemapGenerator
 
             allUrls.AddRange(articleUrls);
 
-            var targetSitemapDirectory = new DirectoryInfo(_configuration.GetSection("ApplicationConfiguration:SitemapFolder").Value);
+            var targetSitemapDirectory = new DirectoryInfo(_configuration.GetSection("FwlSettings:SitemapFolder").Value);
 
             GenerateSitemaps(allUrls, targetSitemapDirectory);
             _logger.LogInformation($"Sitemap generated in {targetSitemapDirectory} at {DateTime.Now}");
+
+            return $"Sitemap generated in {targetSitemapDirectory} at {DateTime.Now}";
         }
 
         private string GenerateUrl(string header, int id)
@@ -69,7 +72,7 @@ namespace FunWithLocal.SitemapGenerator
             // https://stackoverflow.com/questions/27041684/remove-special-characters-from-a-string-except-whitespace?rq=1
             var sanitizedHeader = Regex.Replace(header.ToLower(), @"[ ](?=[ ])|[^A-Za-z0-9 ]+", "").Trim();
 
-            var url = string.Join("-", sanitizedHeader.Substring(0, Math.Min(header.Length, 55)).Split(' '));
+            var url = string.Join("-", sanitizedHeader.Substring(0, Math.Min(sanitizedHeader.Length, 55)).Split(' '));
 
             return $"{url}-{id}";
         }

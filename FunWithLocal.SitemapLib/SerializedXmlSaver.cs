@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace FunWithLocal.SitemapGenerator
+namespace FunWithLocal.SitemapLib
 {
     public interface ISerializedXmlSaver<in T>
     {

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
-namespace FunWithLocal.SitemapGenerator
+namespace FunWithLocal.SitemapLib
 {
     [Serializable]
     public enum ChangeFrequency

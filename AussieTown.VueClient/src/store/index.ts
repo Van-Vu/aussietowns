@@ -314,14 +314,13 @@ export default new Vuex.Store({
             return commit('UPDATE_ARTICLE', new ArticleModel());
         },
         UPDATE_ARTICLE_CONTENT({ commit }, article) {
-            return (new ArticleService()).updateArticle(article).then(response => {
-                //commit('UPDATE_ARTICLE', response);
-            });
+            return (new ArticleService()).updateArticle(article).then(response => response);
+        },
+        UPDATE_ARTICLE_ID({ commit }, payload) {
+            return commit('UPDATE_ARTICLE_ID', payload);
         },
         UPDATE_ARTICLE_STATUS({ commit }, payload) {
-            return (new ArticleService()).updateStatus(payload).then(response => {
-                //commit('UPDATE_ARTICLE', response);
-            });
+            return (new ArticleService()).updateStatus(payload).then(response => response);
         },
         FETCH_FEATUREARTICLES({ commit }) {
             return (new ArticleService()).fetchFeatureArticles()
@@ -413,6 +412,9 @@ export default new Vuex.Store({
         },
         UPDATE_ARTICLE_IMAGE(state, articleImage) {
             Vue.set(state.article, 'imageUrl', articleImage);
+        },
+        UPDATE_ARTICLE_ID(state, payload) {
+            Vue.set(state.article, 'id', payload.id);
         },
         UPDATE_FEATUREARTICLE(state, articles) {
             Vue.set(state, 'featureArticles', articles);

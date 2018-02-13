@@ -9,6 +9,10 @@
         <div class="tile is-parent">
             <div class="tile is-6 is-vertical articleHeader_left">
                 <div class="tile is-parent">
+                    <h2 v-if="!isNew">Editing article {{model.id}}</h2>
+                    <h2 v-if="isNew">Create new article</h2>
+                </div>
+                <div class="tile is-parent">
                     <div class="tile is-2">Article Type</div>
                     <div class="tile">
                         <div class="tile is-1"></div>

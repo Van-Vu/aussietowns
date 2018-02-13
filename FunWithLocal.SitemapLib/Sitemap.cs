@@ -6,7 +6,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace FunWithLocal.SitemapGenerator
+namespace FunWithLocal.SitemapLib
 {
     public interface ISitemap : IList<Url>
     {

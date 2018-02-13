@@ -8,6 +8,7 @@ using FunWithLocal.WebApi.Common;
 using FunWithLocal.WebApi.Model;
 using FunWithLocal.WebApi.Repository;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Wangkanai.Detection;
 
 namespace FunWithLocal.WebApi.Services
@@ -16,16 +17,19 @@ namespace FunWithLocal.WebApi.Services
     {
         private readonly IImageRepository _imageRepository;
         private readonly IImageStorageService _imageStorageService;
-
-        public ImageService(IImageRepository imageRepository, IImageStorageService imageStorageService)
+        private readonly string _environment;
+        public ImageService(IImageRepository imageRepository, IImageStorageService imageStorageService, IOptions<AppSettings> appSettings)
         {
             _imageRepository = imageRepository;
             _imageStorageService = imageStorageService;
+
+            var appSetting = appSettings.Value;
+            _environment = appSetting.Environment == "prod" ? "prod" : "stage";
         }
 
         public async Task<Image> InsertListingImage(int listingId, IFormFile file)
         {
-            var folderPath = $"listing/{listingId}";
+            var folderPath = $"{_environment}/listing/{listingId}";
             var cloudinaryResult = await _imageStorageService.UploadImage(file, folderPath);
 
             if (cloudinaryResult.StatusCode != HttpStatusCode.OK)
@@ -43,7 +47,7 @@ namespace FunWithLocal.WebApi.Services
 
         public async Task<string> InsertProfileImage(int profileId, IFormFile file)
         {
-            var folderPath = $"profile/{profileId}";
+            var folderPath = $"{_environment}/profile/{profileId}";
             var cloudinaryResult = await _imageStorageService.UploadImage(file, folderPath);
 
             if (cloudinaryResult.StatusCode != HttpStatusCode.OK)
@@ -64,7 +68,7 @@ namespace FunWithLocal.WebApi.Services
 
         public async Task<string> InsertHeroImage(int profileId, IFormFile file)
         {
-            var folderPath = $"profile/{profileId}";
+            var folderPath = $"{_environment}/profile/{profileId}";
             var cloudinaryResult = await _imageStorageService.UploadImage(file, folderPath);
 
             if (cloudinaryResult.StatusCode != HttpStatusCode.OK)
@@ -83,7 +87,7 @@ namespace FunWithLocal.WebApi.Services
 
         public async Task<string> InsertArticleImage(int articleId, IFormFile file)
         {
-            var folderPath = $"article/{articleId}";
+            var folderPath = $"{_environment}/article/{articleId}";
             var cloudinaryResult = await _imageStorageService.UploadImage(file, folderPath);
 
             if (cloudinaryResult.StatusCode != HttpStatusCode.OK)

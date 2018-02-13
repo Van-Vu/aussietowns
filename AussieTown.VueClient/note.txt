@@ -198,12 +198,13 @@ FIXED Sort weekday in schedule
 FIXED Booking add participant 
 FIXED Sticky bottom layout
 FIXED Generate SEO url from server
-nofolow tag
 
 create article 
 	--> upload image: undefined Id
 	--> link image doesn't work on create
-	--> save draft create a new ID
+	--> FIXED save draft create a new ID
+	FIXED article can't publish
+	FIXED nofollow 
 
 
 

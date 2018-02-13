@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace FunWithLocal.SitemapGenerator
+namespace FunWithLocal.SitemapLib
 {
     public interface IFileSystemWrapper
     {

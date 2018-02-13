@@ -34,6 +34,12 @@ namespace FunWithLocal.WebApi.Common
 
                 var item = (Article) article.Value;
                 item.Content = WebUtility.HtmlEncode(_htmlSanitizer.Sanitize(item.Content));
+                var linkPosition = item.Content.IndexOf("a href=", StringComparison.InvariantCultureIgnoreCase);
+                if (linkPosition > 0)
+                {
+                    item.Content = item.Content.Insert(linkPosition + 2, "rel=\"nofollow\" ");
+                }
+
                 item.Title = WebUtility.HtmlEncode(_htmlSanitizer.Sanitize(item.Title));
             }
 

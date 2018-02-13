@@ -130,13 +130,13 @@ namespace FunWithLocal.WebApi.Controllers
             {
                 if (article == null) throw new ArgumentNullException(nameof(article));
 
-                if (!(await _authorizationService.AuthorizeAsync(User, article, Operations.Update)).Succeeded)
-                    throw new UnauthorizedAccessException();
-
-                var existingArticle = _articleService.GetArticle(articleId);
+                var existingArticle = await _articleService.GetArticle(articleId);
 
                 if (existingArticle == null) throw new ArgumentNullException(nameof(article));
 
+                if (!(await _authorizationService.AuthorizeAsync(User, existingArticle, Operations.Update)).Succeeded)
+                    throw new UnauthorizedAccessException();
+                
                 var updatedStatus = await _articleService.UpdateStatus(article.Id, article.Status);
 
                 return updatedStatus;

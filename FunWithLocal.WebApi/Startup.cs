@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using AussieTowns.Auth;
 using AussieTowns.Repository;
 using AussieTowns.Services;
 using AutoMapper;
+using FunWithLocal.SitemapLib;
 using FunWithLocal.WebApi.Auth;
 using FunWithLocal.WebApi.Filters;
 using FunWithLocal.WebApi.Repository;
@@ -18,21 +17,17 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using RazorLight;
 using Serilog;
-using Serilog.Formatting.Json;
-using Serilog.Sinks.RollingFile;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace FunWithLocal.WebApi
@@ -51,17 +46,12 @@ namespace FunWithLocal.WebApi
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 
-            //Log.Logger = new LoggerConfiguration()
-            //    .ReadFrom.Configuration(Configuration)
-            //    .CreateLogger();
-
-            var jsonSink = new RollingFileSink(@"..\logs\netcore\{Date}.json", new JsonFormatter(), 104857600, null);
             if (env.IsDevelopment())
             {
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
                     .MinimumLevel.Information()
-                    .WriteTo.Sink(jsonSink)
+                    .WriteTo.RollingFile(@"..\logs\netcore\{Date}.json", outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] {Message}{NewLine}{Exception}", fileSizeLimitBytes: 104857600)
                     .CreateLogger();
             }
             else
@@ -69,7 +59,7 @@ namespace FunWithLocal.WebApi
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
                     .MinimumLevel.Error()
-                    .WriteTo.Sink(jsonSink)
+                    .WriteTo.RollingFile(@"..\logs\netcore\{Date}.json", outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] {Message}{NewLine}{Exception}", fileSizeLimitBytes: 104857600)
                     .CreateLogger();
             }
 
@@ -277,30 +267,20 @@ namespace FunWithLocal.WebApi
 
             services.AddTransient<AntiforgeryCookieResultFilter>();
             services.AddTransient<ValidateOriginAuthorizationFilter>();
+
+            services.AddSingleton<ISitemapLib, SitemapLib.SitemapLib>();
+            services.AddSingleton<ISerializedXmlSaver<Sitemap>, SerializedXmlSaver<Sitemap>>();
+            services.AddSingleton<IFileSystemWrapper, FileSystemWrapper>();
+            services.AddSingleton<IUrlRetriever, UrlRetriever>(x => new UrlRetriever(mySqlConnectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            //loggerFactory.AddDebug();
             loggerFactory.AddSerilog();
 
             // Ensure any buffered events are sent at shutdown
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
-
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //    app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-            //    {
-            //        HotModuleReplacement = true
-            //    });
-            //}
-            //else
-            //{
-            //    app.UseExceptionHandler("/Home/Error");
-            //}
 
             app.UseStaticFiles(new StaticFileOptions
             {
