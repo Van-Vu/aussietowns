@@ -199,12 +199,21 @@ FIXED Booking add participant
 FIXED Sticky bottom layout
 FIXED Generate SEO url from server
 
-create article 
-	--> upload image: undefined Id
-	--> link image doesn't work on create
-	--> FIXED save draft create a new ID
-	FIXED article can't publish
-	FIXED nofollow 
+
+FIXED article upload image: undefined Id
+FIXED article link image doesn't work on create
+FIXED article save draft create a new ID
+FIXED article can't publish
+----------
+V1.1.2
+FIXED article nofollow: multiple nofollow / inner link should not include nofollow
+FIXED sitemap: change daily
+FIXED sitemap: image
+FIXED seo url generator: comma issue
+FIXED article: bring status & feature to content page FE
+
+html decode issue
+	 
 
 
 
@@ -245,7 +254,7 @@ SELECT LAST_INSERT_ID()
 listingCard: cartType pass in enum type in vue template
 BeforeMap everywhere
 listing & user controller: authorize before hitting database
-
+Regex of SeoUrl
 
 --------------------------- EXTERNAL TOOLS ---------------------------
 https://www.google.com/webmasters/tools/home?hl=en

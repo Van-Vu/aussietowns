@@ -86,7 +86,7 @@ export default class ArticlePage extends Vue {
     }
 
     onSave() {
-        this.model.status = ArticleStatus.Draft;
+        //this.model.status = ArticleStatus.Draft;
         this.updateArticle();
     }
 

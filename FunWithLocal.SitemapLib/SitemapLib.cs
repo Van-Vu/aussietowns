@@ -23,6 +23,7 @@ namespace FunWithLocal.SitemapLib
         private readonly ISerializedXmlSaver<Sitemap> _serializedXmlSaver;
         private readonly IConfiguration _configuration;
         public const int MaxNumberOfUrlsPerSitemap = 50000;
+        private readonly string _cloudinaryBaseUrl;
 
 
         public SitemapLib(ILogger<SitemapLib> logger, IUrlRetriever urlRetriever, 
@@ -32,6 +33,8 @@ namespace FunWithLocal.SitemapLib
             _urlRetriever = urlRetriever;
             _serializedXmlSaver = serializedXmlSaver;
             _configuration = configuration;
+
+            _cloudinaryBaseUrl = _configuration.GetSection("FwlSettings:CloudinarySettings:BaseUrl").Value;
         }
 
         public async Task<string> Run()
@@ -42,8 +45,9 @@ namespace FunWithLocal.SitemapLib
 
             var allUrls = listingContents.ToList().Select(content => new Url
             {
-                Location = $"{webRootUrl}/listing/{GenerateUrl(content.Header,content.Id)}",
-                ChangeFrequency = ChangeFrequency.Weekly,
+                Location = $"{webRootUrl}/listing/{GenerateSeoUrl(content.Header,content.Id)}",
+                ChangeFrequency = ChangeFrequency.Daily,
+                Image = string.IsNullOrEmpty(content.Url) ? null : new Image { Url = GenerateImageUrl(content.Url) },
                 TimeStamp = DateTime.UtcNow,
                 Priority = .9
             }).ToList();
@@ -51,8 +55,9 @@ namespace FunWithLocal.SitemapLib
             var articleContents = await _urlRetriever.GetArticleUrls();
             var articleUrls = articleContents.Select(content => new Url
             {
-                Location = $"{webRootUrl}/article/{GenerateUrl(content.Header, content.Id)}",
-                ChangeFrequency = ChangeFrequency.Weekly,
+                Location = $"{webRootUrl}/article/{GenerateSeoUrl(content.Header, content.Id)}",
+                ChangeFrequency = ChangeFrequency.Daily,
+                Image = string.IsNullOrEmpty(content.Url) ? null : new Image { Url = GenerateImageUrl(content.Url) },
                 TimeStamp = DateTime.UtcNow,
                 Priority = .7
             }).ToList();
@@ -67,20 +72,26 @@ namespace FunWithLocal.SitemapLib
             return $"Sitemap generated in {targetSitemapDirectory} at {DateTime.Now}";
         }
 
-        private string GenerateUrl(string header, int id)
+        private string GenerateSeoUrl(string header, int id)
         {
             // https://stackoverflow.com/questions/27041684/remove-special-characters-from-a-string-except-whitespace?rq=1
             var sanitizedHeader = Regex.Replace(header.ToLower(), @"[ ](?=[ ])|[^A-Za-z0-9 ]+", "").Trim();
 
-            var url = string.Join("-", sanitizedHeader.Substring(0, Math.Min(sanitizedHeader.Length, 55)).Split(' '));
+            var url = string.Join("-", sanitizedHeader.Substring(0, Math.Min(sanitizedHeader.Length, 55)).Split(' ')).TrimEnd('-');
 
             return $"{url}-{id}";
         }
 
+        private string GenerateImageUrl(string url)
+        {
+            if (url.StartsWith("http")) return url;
+
+            return $"{_cloudinaryBaseUrl}{url}";
+        }
+
         public void GenerateSitemaps(List<Url> urls, DirectoryInfo targetDirectory, string sitemapBaseFileNameWithoutExtension = "sitemap")
         {
-            var sitemap = new Sitemap();
-            sitemap.AddRange(urls);
+            var sitemap = new Sitemap {Urls = urls};
 
             SaveSitemaps(targetDirectory, sitemapBaseFileNameWithoutExtension, sitemap);
         }

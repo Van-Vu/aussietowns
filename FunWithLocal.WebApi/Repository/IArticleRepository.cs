@@ -13,6 +13,5 @@ namespace FunWithLocal.WebApi.Repository
         Task<IEnumerable<Article>> GetFeatureArticles();
         Task<int> InsertArticle(Article article);
         Task<int> UpdateArticle(Article article);
-        Task<int> UpdateStatus(int articleId, ArticleStatus status);
     }
 }

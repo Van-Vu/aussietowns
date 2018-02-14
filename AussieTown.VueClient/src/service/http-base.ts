@@ -16,9 +16,9 @@ import { GlobalConfig } from '../GlobalConfig';
 //    baseURL: `http://localhost/meetthelocal/`
 //})
 
-//const http = axios.create({
-//    baseURL: `http://localhost:8888/`,
-//})
+const http = axios.create({
+    baseURL: `http://localhost:8888/`,
+})
 
 //const http = axios.create({
 //    baseURL: `http://10.0.0.98/meetthelocal/`,
@@ -28,9 +28,9 @@ import { GlobalConfig } from '../GlobalConfig';
 //    baseURL: `http://10.0.0.98:8000/`,
 //})
 
-export const http = axios.create({
-    baseURL: `https://api.funwithlocal.com/`
-})
+//export const http = axios.create({
+//    baseURL: `https://api.funwithlocal.com/`
+//})
 
 http.defaults.withCredentials = true;
 if (process.env.NODE_ENV !== 'test') {

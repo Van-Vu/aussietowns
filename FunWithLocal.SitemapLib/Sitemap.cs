@@ -8,131 +8,27 @@ using System.Xml.Serialization;
 
 namespace FunWithLocal.SitemapLib
 {
-    public interface ISitemap : IList<Url>
-    {
-        bool Save(string path);
-        bool SaveToDirectory(string directory);
-        string ToXml();
-    }
-
     [Serializable]
-    [XmlRoot(ElementName = "urlset", Namespace = "http://www.sitemaps.org/schemas/sitemap/0.9")]
-    public class Sitemap : List<Url>, ISitemap
+    [XmlRoot(ElementName = "urlset")]
+    public class Sitemap
     {
-        public const string MimeType = "text/xml";
-
-        private const int LineCount = 1000;
-
-        public Sitemap()
+        [XmlNamespaceDeclarations]
+        public XmlSerializerNamespaces NameSpace
         {
+            get
+            {
+                XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+                ns.Add("", "http://www.sitemaps.org/schemas/sitemap/0.9");
+                ns.Add("image", "http://www.google.com/schemas/sitemap-image/1.1");
+
+                return ns;
+            }
+            set { NameSpace = value; }
         }
 
-        public virtual string ToXml()
-        {
-            var xmlSerializer = new XmlSerializer(typeof(Sitemap));
-
-            using (var textWriter = new StringWriterUtf8())
-            {
-                xmlSerializer.Serialize(textWriter, this);
-                return textWriter.ToString();
-            }
-        }
-
-        public virtual bool Save(String path)
-        {
-            try
-            {
-                var directory = Path.GetDirectoryName(path);
-
-                if (directory != null)
-                {
-                    if (!Directory.Exists(directory))
-                    {
-                        Directory.CreateDirectory(directory);
-                    }
-
-                    if (File.Exists(path))
-                    {
-                        File.Delete(path);
-                    }
-
-                    File.WriteAllText(path, ToXml());
-
-                    return true;
-                }
-
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Generate multiple sitemap files
-        /// </summary>
-        /// <param name="directory"></param>
-        /// <returns></returns>
-        public virtual bool SaveToDirectory(String directory)
-        {
-            try
-            {
-                if (!Directory.Exists(directory))
-                {
-                    Directory.CreateDirectory(directory);
-                }
-
-                var xml = ToXml();
-
-                var parts = (Count % LineCount == 0)
-                                ? Count / LineCount
-                                : (Count / LineCount) + 1;
-
-                for (var i = 0; i < parts; i++)
-                {
-                    var fileName = String.Format("sitemap{0}.xml", i);
-                    var path = Path.Combine(directory, fileName);
-
-                    if (File.Exists(path))
-                    {
-                        File.Delete(path);
-                    }
-
-                    var xmlDocument = new XmlDocument();
-                    xmlDocument.LoadXml(xml);
-
-                    var take = LineCount * i;
-
-                    var all = xmlDocument.ChildNodes[1].ChildNodes.Cast<XmlNode>().ToList();
-
-                    var top = all.Take(take).ToList();
-                    var bottom = all.Skip(take + LineCount).Take(Count - take - LineCount).ToList();
-
-                    var nodes = new List<XmlNode>();
-                    nodes.AddRange(top);
-                    nodes.AddRange(bottom);
-
-                    foreach (var node in nodes)
-                    {
-                        node.ParentNode.RemoveChild(node);
-                    }
-
-                    using (var writer = File.CreateText(path))
-                    {
-                        xmlDocument.Save(writer);
-                    }
-                }
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
+        [XmlElement("url")]
+        public List<Url> Urls { get; set; }
     }
-
 
 
     /// <summary>

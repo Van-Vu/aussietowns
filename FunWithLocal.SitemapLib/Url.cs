@@ -31,6 +31,9 @@ namespace FunWithLocal.SitemapLib
         [XmlElement("priority")]
         public double Priority { get; set; }
 
+        [XmlElement("image",Namespace = "http://www.google.com/schemas/sitemap-image/1.1")] 
+        public Image Image { get; set; }
+
         public Url()
         {
         }

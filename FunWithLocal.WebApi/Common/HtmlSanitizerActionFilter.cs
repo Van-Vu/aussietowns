@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using FunWithLocal.WebApi.Model;
 using Ganss.XSS;
@@ -15,10 +16,10 @@ namespace FunWithLocal.WebApi.Common
     public class HtmlSanitizerActionFilter : TypeFilterAttribute
     {
         public HtmlSanitizerActionFilter():base(typeof(HtmlSanitizerActionFilterImpl))
-    {
+        {
         }
 
-        private class HtmlSanitizerActionFilterImpl : IActionFilter
+        public class HtmlSanitizerActionFilterImpl : IActionFilter
         {
             private readonly HtmlSanitizer _htmlSanitizer;
             public HtmlSanitizerActionFilterImpl(HtmlSanitizer htmlSanitizer)
@@ -33,12 +34,23 @@ namespace FunWithLocal.WebApi.Common
                 if (article.Value == null) return;
 
                 var item = (Article) article.Value;
-                item.Content = WebUtility.HtmlEncode(_htmlSanitizer.Sanitize(item.Content));
-                var linkPosition = item.Content.IndexOf("a href=", StringComparison.InvariantCultureIgnoreCase);
-                if (linkPosition > 0)
+
+                var sanitizedContent = _htmlSanitizer.Sanitize(item.Content);
+                //https://www.regextester.com/27540
+                var regex = new Regex(@"<\s*a[^>]*>(.*?)<\s*/\s*a>", RegexOptions.IgnoreCase);
+                var matches = regex.Matches(sanitizedContent);
+                foreach (Match match in matches)
                 {
-                    item.Content = item.Content.Insert(linkPosition + 2, "rel=\"nofollow\" ");
+                    var matchValue = match.Value;
+                    var linkPosition = matchValue.IndexOf("href=\"https://www.funwithlocal.com", StringComparison.InvariantCultureIgnoreCase);
+                    if (linkPosition < 0)
+                    {
+                        matchValue = matchValue.Insert(3, "rel=\"nofollow\" ");
+                        sanitizedContent = sanitizedContent.Replace(match.Value, matchValue);
+                    }
                 }
+
+                item.Content = WebUtility.HtmlEncode(sanitizedContent);
 
                 item.Title = WebUtility.HtmlEncode(_htmlSanitizer.Sanitize(item.Title));
             }

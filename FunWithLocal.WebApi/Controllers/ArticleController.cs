@@ -123,31 +123,6 @@ namespace FunWithLocal.WebApi.Controllers
             }
         }
 
-        [HttpPost("{articleId}/status")]
-        public async Task<int> UpdateStatus(int articleId, [FromBody] ArticleRequest article)
-        {
-            try
-            {
-                if (article == null) throw new ArgumentNullException(nameof(article));
-
-                var existingArticle = await _articleService.GetArticle(articleId);
-
-                if (existingArticle == null) throw new ArgumentNullException(nameof(article));
-
-                if (!(await _authorizationService.AuthorizeAsync(User, existingArticle, Operations.Update)).Succeeded)
-                    throw new UnauthorizedAccessException();
-                
-                var updatedStatus = await _articleService.UpdateStatus(article.Id, article.Status);
-
-                return updatedStatus;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message, e);
-                throw;
-            }
-        }
-
         [HttpPost("{articleId}/addImage")]
         public async Task<string> UploadImage(int articleId, IList<IFormFile> files)
         {

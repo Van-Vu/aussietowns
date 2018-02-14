@@ -76,42 +76,12 @@ namespace FunWithLocal.WebApi.Repository
                     try
                     {
                         var sql = "UPDATE Article SET category = @category, status = @status, title = @title, content = @content, "
-                                  + "tags = @tags, updatedDate=@updatedDate WHERE Id = @id";
+                                  + "tags = @tags, status = @status, isFeatured=@isFeatured, updatedDate=@updatedDate WHERE Id = @id";
                         article.UpdatedDate = DateTime.Now;
                         var updatedRow = await dbConnection.ExecuteAsync(sql, article);
 
                         tran.Commit();
                         return updatedRow;
-                    }
-                    catch (Exception e)
-                    {
-                        tran.Rollback();
-                        _logger.LogCritical(e.Message, e);
-                        throw;
-                    }
-                }
-            }
-        }
-
-        public async Task<int> UpdateStatus(int articleId, ArticleStatus status)
-        {
-            using (IDbConnection dbConnection = Connection)
-            {
-                dbConnection.Open();
-                using (var tran = dbConnection.BeginTransaction())
-                {
-                    try
-                    {
-                        var updateTasks = new List<Task<int>>();
-
-                        var sql = "UPDATE Article SET status = @status, updatedDate=@updatedDate WHERE Id = @id";
-                        updateTasks.Add(dbConnection.ExecuteAsync(sql, new {id= articleId, status, updatedDate = DateTime.Now  }));
-
-                        await Task.WhenAll(updateTasks);
-
-                        //Bodom
-                        tran.Commit();
-                        return 1;
                     }
                     catch (Exception e)
                     {

@@ -15,6 +15,5 @@ namespace FunWithLocal.WebApi.Services
         Task<IEnumerable<Article>> GetFeatureArticles(IDevice device);
         Task<int> InsertArticle(Article article);
         Task<int> UpdateArticle(Article article);
-        Task<int> UpdateStatus(int articleId, ArticleStatus status);
     }
 }

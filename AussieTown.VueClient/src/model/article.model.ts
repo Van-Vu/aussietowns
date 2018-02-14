@@ -13,4 +13,5 @@ export default class ArticleModel {
     public imageUrl: string;
     public tags: string;
     public tagList: Array<string>;
+    public isFeatured: boolean;
 }

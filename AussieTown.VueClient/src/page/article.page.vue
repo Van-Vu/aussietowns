@@ -1,9 +1,12 @@
 ﻿<template>
     <div class="page-content container tile is-vertical article">
+        <div class="tile">
+            <router-link :to="{ name: 'TestPage' }"> Back to previous page </router-link>
+        </div>
         <div class="tile is-parent">
-            <button class="tile button mtl_button-no-round" @click="onPublish">Publish</button>
-            <button class="tile button mtl_button-no-round" @click="onArchive">Archive</button>
-            <button class="tile button mtl_button-no-round" @click="onSave">Save Draft</button>
+            <!--<button class="tile button mtl_button-no-round" @click="onPublish">Publish</button>
+            <button class="tile button mtl_button-no-round" @click="onArchive">Archive</button>-->
+            <button class="tile button mtl_button-no-round" @click="onSave">Save article</button>
             <button class="tile button mtl_button-no-round" @click="onCancel">Cancel</button>
         </div>
         <div class="tile is-parent">
@@ -11,6 +14,24 @@
                 <div class="tile is-parent">
                     <h2 v-if="!isNew">Editing article {{model.id}}</h2>
                     <h2 v-if="isNew">Create new article</h2>
+                </div>
+                <div class="tile is-parent">
+                    <div class="tile is-2">Status</div>
+                    <div class="tile">
+                        <div class="select">
+                            <select name="gender" v-model="model.status">
+                                <option value="0">Draft</option>
+                                <option value="1">Publish</option>
+                                <option value="2">Archive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="tile is-parent">
+                    <div class="tile is-2"><label for="isFeatured">Is Featured</label></div>
+                    <div class="tile">
+                        <input type="checkbox" id="isFeatured" v-model="model.isFeatured">
+                    </div>
                 </div>
                 <div class="tile is-parent">
                     <div class="tile is-2">Article Type</div>

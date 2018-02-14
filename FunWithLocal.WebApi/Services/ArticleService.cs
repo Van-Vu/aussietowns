@@ -42,11 +42,6 @@ namespace FunWithLocal.WebApi.Services
             return await _articleRepository.UpdateArticle(article);
         }
 
-        public async Task<int> UpdateStatus(int articleId, ArticleStatus status)
-        {
-            return await _articleRepository.UpdateStatus(articleId, status);
-        }
-
         public async Task<IEnumerable<Article>> GetFeatureArticles(IDevice device)
         {
             var articles = (await _articleRepository.GetFeatureArticles()).ToList();

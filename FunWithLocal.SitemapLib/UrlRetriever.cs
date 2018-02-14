@@ -35,7 +35,8 @@ namespace FunWithLocal.SitemapLib
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT id, header FROM Listing WHERE isActive=1";
+                var sql = "SELECT id, header, url FROM Listing INNER JOIN Image ON Image.listingid = Listing.id AND Image.isActive = 1 AND " + 
+                        "Image.imageid = (SELECT imageid FROM Image WHERE Image.ListingId = Listing.Id LIMIT 1) WHERE Listing.isActive = 1; ";
                 dbConnection.Open();
                 return await dbConnection.QueryAsync<ContentView>(sql);
             }
@@ -45,7 +46,7 @@ namespace FunWithLocal.SitemapLib
         {
             using (IDbConnection dbConnection = Connection)
             {
-                var sql = "SELECT id, title as header FROM article WHERE status=@status";
+                var sql = "SELECT id, title as header, imageUrl as url  FROM article WHERE status=@status";
                 dbConnection.Open();
                 return await dbConnection.QueryAsync<ContentView>(sql, new {status = 1});
             }
